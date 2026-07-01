@@ -1,0 +1,31 @@
+# 统一换行符策略（Windows + macOS 混合团队）
+
+# 源码文件 —— 入库用 LF，检出按系统自动转换
+*.java      text
+*.xml       text
+*.properties text
+*.yml       text
+*.yaml      text
+*.sql       text
+*.md        text
+*.json      text
+*.js        text
+*.vue       text
+*.css       text
+*.html      text
+
+# Maven wrapper —— 必须保留 LF（Linux/macOS 可执行）
+/mvnw       text eol=lf
+*.cmd       text eol=crlf
+
+# 二进制文件 —— 不要做任何转换
+*.jar       binary
+*.png       binary
+*.jpg       binary
+*.jpeg      binary
+*.gif       binary
+*.ico       binary
+*.woff      binary
+*.woff2     binary
+*.eot       binary
+*.ttf       binary
