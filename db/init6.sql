@@ -1,0 +1,1 @@
+UPDATE sys_user SET password = MD5('admin123') WHERE username = 'admin';

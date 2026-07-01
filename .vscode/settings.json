@@ -14,5 +14,6 @@
             "username": "root",
             "database": "mysql"
         }
-    ]
+    ],
+    "java.compile.nullAnalysis.mode": "disabled"
 }
