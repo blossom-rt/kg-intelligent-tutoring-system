@@ -2,10 +2,8 @@
   <div class="login-container" :class="themeClass">
     <div class="login-card">
 
-      <!-- 系统标题 -->
       <h1 class="system-title">智能导学系统</h1>
 
-      <!-- 角色滑动选择器：学生 / 教师 / 管理员 -->
       <div class="role-switcher">
         <div class="role-track">
           <div
@@ -21,14 +19,7 @@
         </div>
       </div>
 
-      <!-- 登录表单 -->
-      <el-form
-        ref="formRef"
-        :model="form"
-        :rules="rules"
-        class="login-form"
-        @keyup.enter="submit"
-      >
+      <el-form ref="formRef" :model="form" :rules="rules" class="login-form" @keyup.enter="submit">
         <el-form-item prop="username">
           <el-input
             v-model="form.username"
@@ -50,7 +41,6 @@
           />
         </el-form-item>
 
-        <!-- 记住账号 + 忘记密码 -->
         <div class="form-extra">
           <el-checkbox v-model="rememberAccount" class="remember-check">
             记住账号
@@ -58,19 +48,11 @@
           <span class="forgot-link" @click="goForgot">忘记密码</span>
         </div>
 
-        <!-- 登录按钮 -->
-        <el-button
-          type="primary"
-          size="large"
-          class="login-btn"
-          :loading="loading"
-          @click="submit"
-        >
+        <el-button type="primary" size="large" class="login-btn" :loading="loading" @click="submit">
           {{ btnText }}
         </el-button>
       </el-form>
 
-      <!-- 注册入口（仅学生角色显示） -->
       <div class="bottom-links">
         <span v-if="role === 'student'" class="register-link" @click="goRegister">
           注册新账号
@@ -80,7 +62,6 @@
         </span>
       </div>
 
-      <!-- 测试账号提示 -->
       <p class="test-tip">{{ testTip }}</p>
     </div>
   </div>
@@ -185,15 +166,8 @@ const submit = async () => {
   }
 }
 
-const goRegister = () => {
-  // 跳转注册页（后续实现）
-  router.push('/register')
-}
-
-const goForgot = () => {
-  // 跳转忘记密码页（后续实现）
-  router.push('/forgot-password')
-}
+const goRegister = () => router.push('/register')
+const goForgot = () => router.push('/forgot-password')
 
 // 初始化：回填记住的账号
 const remembered = localStorage.getItem('rememberedAccount')
@@ -299,7 +273,6 @@ if (remembered) {
   font-weight: 600;
 }
 
-/* 滑动块 — 弹簧缓动 + 阴影光晕 */
 .role-slider {
   position: absolute;
   top: 5px;
@@ -338,7 +311,6 @@ if (remembered) {
   margin-top: 4px;
 }
 
-/* 输入框 — 焦点光晕扩散 */
 .login-form :deep(.el-input__wrapper) {
   border-radius: 10px;
   transition:
@@ -453,7 +425,6 @@ if (remembered) {
   box-shadow: 0 4px 16px rgba(109, 63, 214, 0.30);
 }
 
-/* 按钮悬浮：上浮 + 光晕扩散 */
 .login-btn:hover {
   transform: translateY(-2px);
 }
@@ -462,13 +433,11 @@ if (remembered) {
 .theme-teacher .login-btn:hover { box-shadow: 0 8px 24px rgba(45, 138, 78, 0.42); }
 .theme-admin   .login-btn:hover { box-shadow: 0 8px 24px rgba(109, 63, 214, 0.42); }
 
-/* 按钮按下：回弹 */
 .login-btn:active {
   transform: scale(0.96);
   transition: transform 0.1s ease;
 }
 
-/* 按钮流光扫过 */
 .login-btn::before {
   content: '';
   position: absolute;
