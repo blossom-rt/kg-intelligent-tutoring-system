@@ -5,10 +5,12 @@ services:
       MYSQL_ROOT_PASSWORD: 983491037
       MYSQL_DATABASE: kg_tutoring_db
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./db:/docker-entrypoint-initdb.d
+      - ./db/init_all.sql:/docker-entrypoint-initdb.d/init_all.sql:ro
+      - ./db/seed_all.sql:/docker-entrypoint-initdb.d/seed_all.sql:ro
+      - ./db/docker-init.sql:/docker-entrypoint-initdb.d/docker-init.sql:ro
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
