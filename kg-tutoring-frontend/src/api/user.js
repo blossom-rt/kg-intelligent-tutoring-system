@@ -1,21 +1,39 @@
 import request from '../utils/request'
 
-// 登录
+// 账号密码登录
 export function login(data) {
-  return request.post('/user/login', data)
+  return request.post('/auth/login', data)
 }
 
-// 注册
+// 获取当前用户信息
+export function getUserInfo() {
+  return request.get('/auth/info')
+}
+
+// 学生自主注册
 export function register(data) {
-  return request.post('/user/register', data)
+  return request.post('/auth/register', data)
 }
 
 // 发送邮箱验证码（type: register | reset）
-export function sendEmailCode(email, type) {
-  return request.get('/user/send-code', { params: { email, type } })
+export function sendEmailCode(data) {
+  return request.post('/auth/send-code', data)
 }
 
-// 忘记密码-重置
+// 邮箱找回密码
 export function resetPassword(data) {
-  return request.post('/user/reset-password', data)
+  return request.post('/auth/reset-password', data)
+}
+
+// 修改登录密码
+export function updatePassword(data) {
+  return request.put('/user/update-password', data)
+}
+
+// 获取 / 修改个人信息
+export function getProfile() {
+  return request.get('/user/profile')
+}
+export function updateProfile(data) {
+  return request.put('/user/profile', data)
 }

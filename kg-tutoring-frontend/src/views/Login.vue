@@ -71,6 +71,7 @@
 import { ref, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { User, Lock } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
 import { login } from '../api/user'
 
 const router = useRouter()
@@ -141,7 +142,10 @@ const switchRole = (r) => {
 
 const submit = async () => {
   const valid = await formRef.value.validate().catch(() => false)
-  if (!valid) return
+  if (!valid) {
+    ElMessage.warning('请填写完整的账号和密码')
+    return
+  }
 
   loading.value = true
   try {
@@ -159,8 +163,8 @@ const submit = async () => {
     if (res.role === 'student') router.push('/student')
     else if (res.role === 'teacher') router.push('/teacher')
     else router.push('/admin')
-  } catch {
-    // 登录失败由 request 拦截器统一处理
+  } catch (e) {
+    ElMessage.error(e.message || '登录失败，请检查账号密码')
   } finally {
     loading.value = false
   }

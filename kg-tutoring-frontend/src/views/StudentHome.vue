@@ -75,7 +75,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { getStudentDashboard } from '../api/student'
+import { getPersonalAnalysis, getWeakAnalysis, getPathList } from '../api/student'
 
 const router = useRouter()
 const studentName = ref('同学')
@@ -85,21 +85,42 @@ const stats = ref({ studyDays: 0, totalMinutes: 0, masteredNodes: 0, correctRate
 
 const quickLinks = [
   { key: 'knowledge', label: '知识图谱', path: '/student/knowledge' },
-  { key: 'subjects', label: '跨学科主题', path: '/student/subjects' },
+  { key: 'themes', label: '跨学科主题', path: '/student/themes' },
   { key: 'exams', label: '测评中心', path: '/student/exams' },
-  { key: 'wrong', label: '错题本', path: '/student/wrong-questions' },
+  { key: 'wrong', label: '错题本', path: '/student/wrong' },
 ]
 
 onMounted(async () => {
+  // 获取个人分析数据
   try {
-    const res = await getStudentDashboard()
-    if (res) {
-      studentName.value = res.realName || '同学'
-      activePaths.value = res.activePaths || []
-      todos.value = res.todos || []
-      stats.value = res.stats || stats.value
+    const analysisRes = await getPersonalAnalysis()
+    if (analysisRes) {
+      stats.value.studyDays = analysisRes.studyDays || stats.value.studyDays
+      stats.value.totalMinutes = analysisRes.totalMinutes || stats.value.totalMinutes
+      stats.value.masteredNodes = analysisRes.masteredNodes || stats.value.masteredNodes
+      stats.value.correctRate = analysisRes.correctRate || stats.value.correctRate
     }
-  } catch { }
+  } catch { /* ignore */ }
+
+  // 获取弱点分析
+  try {
+    const weakRes = await getWeakAnalysis()
+    if (weakRes && weakRes.length) {
+      // 弱点数据可用于后续扩展展示
+    }
+  } catch { /* ignore */ }
+
+  // 获取学习路径列表作为备选
+  try {
+    const pathsRes = await getPathList()
+    if (pathsRes && pathsRes.length && activePaths.value.length === 0) {
+      activePaths.value = pathsRes.slice(0, 5).map(p => ({
+        id: p.id,
+        pathName: p.pathName || p.name,
+        progress: p.progress || 0
+      }))
+    }
+  } catch { /* ignore */ }
 })
 
 const logout = () => {

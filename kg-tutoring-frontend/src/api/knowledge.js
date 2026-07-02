@@ -1,0 +1,20 @@
+import request from '../utils/request'
+
+// ===== 课程管理 =====
+export function getCourseList(params) { return request.get('/courses', { params }) }
+export function getCourseById(id) { return request.get(`/courses/${id}`) }
+export function createCourse(data) { return request.post('/courses', data) }
+export function updateCourse(id, data) { return request.put(`/courses/${id}`, data) }
+export function deleteCourse(id) { return request.delete(`/courses/${id}`) }
+
+// ===== 知识点管理 =====
+export function getNodeList(params) { return request.get('/nodes', { params }) }
+export function getNodeById(id) { return request.get(`/nodes/${id}`) }
+export function createNode(data) { return request.post('/nodes', data) }
+export function updateNode(id, data) { return request.put(`/nodes/${id}`, data) }
+export function deleteNode(id) { return request.delete(`/nodes/${id}`) }
+
+// ===== 依赖边 =====
+export function getEdgeList(params) { return request.get('/edges', { params }) }
+export function createEdge(data) { return request.post('/edges', data) }
+export function deleteEdge(id) { return request.delete(`/edges/${id}`) }

@@ -4,48 +4,65 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.util.Base64;
 import java.util.Date;
 
 /**
  * JWT 工具类 —— 生成和校验 Token
  */
+@Component
 public class JwtUtil {
 
-    /** 密钥（至少 256 位，这里用 HMAC-SHA256） */
-    private static final SecretKey KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private final SecretKey key;
+    private final long expiration;
 
-    /** 过期时间：24 小时 */
-    private static final long EXPIRATION = 24 * 60 * 60 * 1000L;
+    public JwtUtil(
+            @Value("${jwt.secret:YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXowMTIzNDU2Nzg5QUJDREVGR0hJSktMTU5PUA==}") String secret,
+            @Value("${jwt.expiration:86400000}") long expiration
+    ) {
+        byte[] keyBytes = Base64.getDecoder().decode(secret);
+        this.key = Keys.hmacShaKeyFor(keyBytes);
+        this.expiration = expiration;
+    }
 
     /**
      * 生成 token
-     *
-     * @param userId   用户 ID
-     * @param username 用户名
-     * @param role     角色
-     * @return JWT token 字符串
      */
-    public static String generateToken(Integer userId, String username, String role) {
+    public String generateToken(Integer userId, String username, String role) {
         return Jwts.builder()
                 .setId(String.valueOf(userId))
                 .setSubject(username)
                 .claim("role", role)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
-                .signWith(KEY)
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(key)
                 .compact();
     }
 
     /**
-     * 解析 token，获取 Claims
+     * 解析 token
      */
-    public static Claims parseToken(String token) {
+    public Claims parseToken(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(KEY)
+                .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+    }
+
+    /**
+     * 校验 token 是否有效
+     */
+    public boolean validateToken(String token) {
+        try {
+            parseToken(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
