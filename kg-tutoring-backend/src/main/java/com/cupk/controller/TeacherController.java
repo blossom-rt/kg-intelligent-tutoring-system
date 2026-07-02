@@ -43,6 +43,19 @@ public class TeacherController {
         return ResponseEntity.ok(Map.of("message", "课程添加成功", "id", course.getId()));
     }
 
+    @PutMapping("/courses/{id}")
+    public ResponseEntity<?> updateCourse(@PathVariable Integer id, @RequestBody Course course) {
+        course.setId(id);
+        courseMapper.updateById(course);
+        return ResponseEntity.ok(Map.of("message", "课程更新成功"));
+    }
+
+    @DeleteMapping("/courses/{id}")
+    public ResponseEntity<?> deleteCourse(@PathVariable Integer id) {
+        courseMapper.deleteById(id);
+        return ResponseEntity.ok(Map.of("message", "课程已删除"));
+    }
+
     @GetMapping("/knowledge-nodes")
     public ResponseEntity<?> listNodes(@RequestParam(required = false) Integer courseId) {
         LambdaQueryWrapper<KnowledgeNode> q = new LambdaQueryWrapper<>();
