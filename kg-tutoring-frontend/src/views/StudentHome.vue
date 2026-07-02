@@ -86,7 +86,7 @@ const stats = ref({ studyDays: 0, totalMinutes: 0, masteredNodes: 0, correctRate
 const quickLinks = [
   { key: 'knowledge', label: '知识图谱', path: '/student/knowledge' },
   { key: 'subjects', label: '跨学科主题', path: '/student/subjects' },
-  { key: 'exams', label: '测评中心', path: '/student/exams' },
+  { key: 'paths', label: '学习路径', path: '/student/paths' },
   { key: 'wrong', label: '错题本', path: '/student/wrong-questions' },
 ]
 
