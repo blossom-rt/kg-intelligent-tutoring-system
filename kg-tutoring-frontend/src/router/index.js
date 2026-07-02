@@ -10,6 +10,7 @@ import CrossSubjects from '../views/CrossSubjects.vue'
 import StudyPath from '../views/StudyPath.vue'
 import WrongQuestions from '../views/WrongQuestions.vue'
 import TeacherKnowledge from '../views/TeacherKnowledge.vue'
+import TeacherCourses from '../views/TeacherCourses.vue'
 
 const routes = [
   { path: '/', redirect: '/login' },
@@ -23,6 +24,7 @@ const routes = [
   { path: '/student/wrong-questions', component: WrongQuestions },
   { path: '/teacher', component: TeacherHome },
   { path: '/teacher/knowledge', component: TeacherKnowledge },
+  { path: '/teacher/courses', component: TeacherCourses },
   { path: '/admin', component: AdminHome }
 ]
 
