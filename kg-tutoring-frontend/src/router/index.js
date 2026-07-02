@@ -9,6 +9,7 @@ import KnowledgeGraph from '../views/KnowledgeGraph.vue'
 import CrossSubjects from '../views/CrossSubjects.vue'
 import StudyPath from '../views/StudyPath.vue'
 import WrongQuestions from '../views/WrongQuestions.vue'
+import TeacherKnowledge from '../views/TeacherKnowledge.vue'
 
 const routes = [
   { path: '/', redirect: '/login' },
@@ -21,6 +22,7 @@ const routes = [
   { path: '/student/paths', component: StudyPath },
   { path: '/student/wrong-questions', component: WrongQuestions },
   { path: '/teacher', component: TeacherHome },
+  { path: '/teacher/knowledge', component: TeacherKnowledge },
   { path: '/admin', component: AdminHome }
 ]
 

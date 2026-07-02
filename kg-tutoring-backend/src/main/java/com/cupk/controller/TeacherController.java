@@ -1,11 +1,11 @@
 package com.cupk.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.cupk.mapper.*;
+import com.cupk.pojo.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -16,7 +16,8 @@ public class TeacherController {
 
     private final SysUserMapper userMapper;
     private final KnowledgeNodeMapper nodeMapper;
-    private final com.cupk.mapper.QuestionMapper questionMapper;
+    private final QuestionMapper questionMapper;
+    private final CourseMapper courseMapper;
 
     @GetMapping("/dashboard")
     public ResponseEntity<?> dashboard() {
@@ -29,5 +30,49 @@ public class TeacherController {
                 "totalNodes", (int) totalNodes,
                 "totalQuestions", (int) totalQuestions
         ));
+    }
+
+    @GetMapping("/courses")
+    public ResponseEntity<?> listCourses() {
+        return ResponseEntity.ok(courseMapper.selectList(null));
+    }
+
+    @PostMapping("/courses")
+    public ResponseEntity<?> addCourse(@RequestBody Course course) {
+        courseMapper.insert(course);
+        return ResponseEntity.ok(Map.of("message", "课程添加成功", "id", course.getId()));
+    }
+
+    @GetMapping("/knowledge-nodes")
+    public ResponseEntity<?> listNodes(@RequestParam(required = false) Integer courseId) {
+        LambdaQueryWrapper<KnowledgeNode> q = new LambdaQueryWrapper<>();
+        if (courseId != null) q.eq(KnowledgeNode::getCourseId, courseId);
+        return ResponseEntity.ok(nodeMapper.selectList(q));
+    }
+
+    @PostMapping("/knowledge-nodes")
+    public ResponseEntity<?> addNode(@RequestBody KnowledgeNode node) {
+        nodeMapper.insert(node);
+        return ResponseEntity.ok(Map.of("message", "知识点添加成功", "id", node.getId()));
+    }
+
+    @PutMapping("/knowledge-nodes/{id}")
+    public ResponseEntity<?> updateNode(@PathVariable Integer id, @RequestBody KnowledgeNode node) {
+        node.setId(id);
+        nodeMapper.updateById(node);
+        return ResponseEntity.ok(Map.of("message", "知识点更新成功"));
+    }
+
+    @DeleteMapping("/knowledge-nodes/{id}")
+    public ResponseEntity<?> deleteNode(@PathVariable Integer id) {
+        nodeMapper.deleteById(id);
+        return ResponseEntity.ok(Map.of("message", "知识点已删除"));
+    }
+
+    @GetMapping("/questions")
+    public ResponseEntity<?> listQuestions(@RequestParam(required = false) Integer nodeId) {
+        LambdaQueryWrapper<Question> q = new LambdaQueryWrapper<>();
+        if (nodeId != null) q.eq(Question::getNodeId, nodeId);
+        return ResponseEntity.ok(questionMapper.selectList(q));
     }
 }
