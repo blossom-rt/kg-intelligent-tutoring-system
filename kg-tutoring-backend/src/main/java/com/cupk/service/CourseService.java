@@ -10,7 +10,7 @@ import java.util.List;
 public interface CourseService {
 
     /** 查询课程列表 */
-    List<Course> list();
+    List<Course> list(String subject);
 
     /** 根据ID查询课程 */
     Course getById(Integer id);

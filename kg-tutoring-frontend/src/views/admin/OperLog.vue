@@ -6,7 +6,7 @@
 
     <!-- 筛选栏 -->
     <el-card class="filter-card">
-      <el-form :inline="true" :model="filterForm">
+      <el-form :inline="true" :model="filterForm" @submit.prevent>
         <el-form-item label="操作模块">
           <el-select v-model="filterForm.module" placeholder="全部模块" clearable style="width: 160px">
             <el-option label="用户管理" value="用户管理" />
@@ -37,9 +37,9 @@
     <!-- 表格 -->
     <el-card class="table-card">
       <el-table :data="logList" v-loading="loading" border stripe>
-        <el-table-column prop="operatorName" label="操作人" min-width="120" />
+        <el-table-column prop="userId" label="操作人ID" min-width="120" />
         <el-table-column prop="module" label="模块" min-width="120" />
-        <el-table-column prop="content" label="操作内容" min-width="280" show-overflow-tooltip />
+        <el-table-column prop="operation" label="操作内容" min-width="280" show-overflow-tooltip />
         <el-table-column prop="ip" label="IP" min-width="140" />
         <el-table-column prop="createTime" label="操作时间" min-width="160" />
       </el-table>
@@ -88,8 +88,8 @@ async function fetchList() {
       params.endDate = filterForm.dateRange[1]
     }
     const res = await getOperLogs(params)
-    logList.value = res.records || res.list || []
-    pagination.total = res.total || 0
+    if (Array.isArray(res)) { logList.value = res; pagination.total = res.length }
+    else if (res && res.records) { logList.value = res.records; pagination.total = res.total || 0 }
   } catch { /* ignore */ } finally {
     loading.value = false
   }

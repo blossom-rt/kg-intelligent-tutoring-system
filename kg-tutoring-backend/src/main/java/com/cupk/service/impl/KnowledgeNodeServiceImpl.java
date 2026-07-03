@@ -19,10 +19,13 @@ public class KnowledgeNodeServiceImpl implements KnowledgeNodeService {
     private final KnowledgeNodeMapper knowledgeNodeMapper;
 
     @Override
-    public List<KnowledgeNode> list(Integer courseId) {
+    public List<KnowledgeNode> list(Integer courseId, String name) {
         LambdaQueryWrapper<KnowledgeNode> wrapper = new LambdaQueryWrapper<>();
         if (courseId != null) {
             wrapper.eq(KnowledgeNode::getCourseId, courseId);
+        }
+        if (name != null && !name.isBlank()) {
+            wrapper.like(KnowledgeNode::getName, name);
         }
         wrapper.orderByDesc(KnowledgeNode::getCreateTime);
         return knowledgeNodeMapper.selectList(wrapper);

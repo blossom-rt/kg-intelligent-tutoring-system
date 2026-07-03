@@ -20,13 +20,13 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="userName" label="调用用户" min-width="120" />
+        <el-table-column prop="userId" label="用户ID" min-width="120" />
         <el-table-column prop="scene" label="场景" min-width="140">
           <template #default="{ row }">
             <el-tag type="info" size="small">{{ sceneLabel(row.scene) }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="costTime" label="耗时(ms)" min-width="100" />
+        <el-table-column prop="callDuration" label="耗时(ms)" min-width="100" />
         <el-table-column label="状态" min-width="80">
           <template #default="{ row }">
             <el-tag :type="row.status === 1 ? 'success' : 'danger'" size="small">
@@ -81,8 +81,8 @@ async function fetchList() {
   try {
     const params = { page: pagination.page, pageSize: pagination.pageSize }
     const res = await getAiLogs(params)
-    logList.value = res.records || res.list || []
-    pagination.total = res.total || 0
+    if (Array.isArray(res)) { logList.value = res; pagination.total = res.length }
+    else if (res && res.records) { logList.value = res.records; pagination.total = res.total || 0 }
   } catch { /* ignore */ } finally {
     loading.value = false
   }

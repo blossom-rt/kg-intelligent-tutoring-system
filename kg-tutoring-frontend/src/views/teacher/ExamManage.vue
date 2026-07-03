@@ -6,9 +6,9 @@
     </div>
 
     <el-card class="filter-card">
-      <el-form :inline="true" :model="filterForm">
+      <el-form :inline="true" :model="filterForm" @submit.prevent>
         <el-form-item label="关联课程">
-          <el-select v-model="filterForm.courseId" placeholder="全部课程" clearable @change="loadData">
+          <el-select v-model="filterForm.courseId" placeholder="全部课程" clearable @change="loadData" style="width:200px">
             <el-option v-for="c in courseList" :key="c.id" :label="c.courseName" :value="c.id" />
           </el-select>
         </el-form-item>
@@ -21,10 +21,10 @@
 
     <el-card>
       <el-table :data="tableData" v-loading="loading" stripe border>
-        <el-table-column prop="examName" label="测评名称" min-width="180" />
+        <el-table-column prop="id" label="测评ID" min-width="100" />
         <el-table-column prop="totalScore" label="总分" width="100" align="center" />
-        <el-table-column prop="courseName" label="关联课程" width="160" />
-        <el-table-column prop="questionCount" label="题目数" width="100" align="center" />
+        <el-table-column prop="userScore" label="成绩" width="100" align="center" />
+        <el-table-column prop="courseId" label="课程ID" width="100" align="center" />
         <el-table-column prop="createTime" label="创建时间" width="180" />
         <el-table-column label="操作" width="120" fixed="right" align="center">
           <template #default="{ row }">
@@ -145,7 +145,7 @@ const truncate = (str, len) => {
 const loadCourses = async () => {
   try {
     const res = await getCourseList({ page: 1, size: 999 })
-    courseList.value = res.records || res.data || []
+    courseList.value = Array.isArray(res) ? res : (res.records || res.data || [])
   } catch {
     courseList.value = []
   }

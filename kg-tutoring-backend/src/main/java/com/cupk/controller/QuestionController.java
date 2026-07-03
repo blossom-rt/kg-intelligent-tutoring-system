@@ -37,8 +37,9 @@ public class QuestionController {
     @GetMapping
     public Result<List<Question>> list(
             @RequestParam(required = false) Integer nodeId,
-            @RequestParam(required = false) Integer courseId) {
-        return Result.success(questionService.list(nodeId, courseId));
+            @RequestParam(required = false) Integer courseId,
+            @RequestParam(required = false) Integer difficulty) {
+        return Result.success(questionService.list(nodeId, courseId, difficulty));
     }
 
     /**

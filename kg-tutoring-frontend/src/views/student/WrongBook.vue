@@ -138,13 +138,7 @@ const fetchWrongList = async () => {
   loading.value = true
   try {
     const res = await getWrongQuestions()
-    if (Array.isArray(res)) {
-      wrongList.value = res
-    } else if (res && res.records) {
-      wrongList.value = res.records
-    } else if (res && res.list) {
-      wrongList.value = res.list
-    }
+    wrongList.value = Array.isArray(res) ? res : (res.records || res.list || [])
   } catch {
     ElMessage.error('加载错题本失败')
   } finally {

@@ -12,9 +12,9 @@
       highlight-current-row
       empty-text="暂无测评记录"
     >
-      <el-table-column prop="examName" label="测评名称" min-width="180">
+      <el-table-column prop="courseId" label="测评" min-width="180">
         <template #default="{ row }">
-          <span class="exam-name">{{ row.examName || row.name || row.title || '未命名测评' }}</span>
+          <span class="exam-name">课程{{ row.courseId || '-' }}测评</span>
         </template>
       </el-table-column>
       <el-table-column label="成绩" width="120" align="center">
@@ -85,13 +85,7 @@ const fetchExams = async () => {
   loading.value = true
   try {
     const res = await getStudentExams()
-    if (Array.isArray(res)) {
-      examList.value = res
-    } else if (res && res.records) {
-      examList.value = res.records
-    } else if (res && res.list) {
-      examList.value = res.list
-    }
+    examList.value = Array.isArray(res) ? res : (res.records || res.list || [])
   } catch {
     ElMessage.error('加载测评列表失败')
   } finally {

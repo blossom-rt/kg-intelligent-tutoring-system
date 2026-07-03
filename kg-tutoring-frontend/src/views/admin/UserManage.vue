@@ -176,8 +176,13 @@ async function fetchList() {
     if (searchForm.keyword) params.keyword = searchForm.keyword
     if (searchForm.roleId) params.roleId = searchForm.roleId
     const res = await getUserList(params)
-    userList.value = res.records || res.list || []
-    pagination.total = res.total || 0
+    if (Array.isArray(res)) {
+      userList.value = res
+      pagination.total = res.length
+    } else if (res && res.records) {
+      userList.value = res.records
+      pagination.total = res.total || 0
+    }
   } catch { /* ignore */ } finally {
     loading.value = false
   }

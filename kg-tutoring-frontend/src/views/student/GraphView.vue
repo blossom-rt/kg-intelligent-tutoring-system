@@ -1,246 +1,204 @@
 <template>
   <div class="graph-view">
     <div class="page-header">
-      <h2 class="page-title">知识图谱浏览</h2>
+      <h2 class="page-title">知识图谱</h2>
       <div class="header-actions">
-        <el-select
-          v-model="selectedCourseId"
-          placeholder="选择课程"
-          clearable
-          style="width: 220px"
-          @change="filterNodes"
-        >
-          <el-option
-            v-for="c in courses"
-            :key="c.id"
-            :label="c.courseName || c.name"
-            :value="c.id"
-          />
+        <el-select v-model="selectedCourseId" placeholder="选择课程" clearable style="width:220px" @change="onCourseChange">
+          <el-option v-for="c in courses" :key="c.id" :label="c.courseName" :value="c.id" />
         </el-select>
+        <el-button @click="fitGraph" :disabled="!chart">重置视图</el-button>
       </div>
     </div>
 
-    <div v-loading="loading" class="node-grid">
-      <el-empty v-if="!loading && filteredNodes.length === 0" description="暂无知识点数据" />
-      <el-card
-        v-for="node in filteredNodes"
-        :key="node.id"
-        class="node-card"
-        shadow="hover"
-        @click="openDetail(node)"
-      >
-        <div class="node-header">
-          <span class="node-name">{{ node.nodeName || node.name }}</span>
-          <el-tag :type="difficultyTagType(node.difficulty)" size="small">
-            {{ difficultyLabel(node.difficulty) }}
-          </el-tag>
-        </div>
-        <p class="node-desc">{{ truncate(node.description || node.desc || '暂无描述', 80) }}</p>
-        <div class="node-meta">
-          <span v-if="node.courseName" class="meta-course">{{ node.courseName }}</span>
-        </div>
-      </el-card>
-    </div>
+    <el-card class="graph-card" v-loading="loading">
+      <div ref="chartRef" class="chart-container"></div>
+      <el-empty v-if="!loading && nodes.length === 0" description="暂无知识点数据" />
+    </el-card>
 
-    <el-dialog
-      v-model="dialogVisible"
-      :title="currentNode?.nodeName || currentNode?.name || '知识点详情'"
-      width="560px"
-      destroy-on-close
-    >
+    <el-dialog v-model="dialogVisible" :title="currentNode?.name || '知识点详情'" width="560px" destroy-on-close>
       <template v-if="currentNode">
         <el-descriptions :column="1" border>
-          <el-descriptions-item label="知识点名称">
-            {{ currentNode.nodeName || currentNode.name }}
-          </el-descriptions-item>
-          <el-descriptions-item label="所属课程">
-            {{ currentNode.courseName || '未分类' }}
-          </el-descriptions-item>
+          <el-descriptions-item label="知识点名称">{{ currentNode.name }}</el-descriptions-item>
           <el-descriptions-item label="难度等级">
-            <el-tag :type="difficultyTagType(currentNode.difficulty)" size="small">
-              {{ difficultyLabel(currentNode.difficulty) }}
-            </el-tag>
+            <el-tag :type="diffTag(currentNode.difficulty)" size="small">{{ diffLabel(currentNode.difficulty) }}</el-tag>
           </el-descriptions-item>
-          <el-descriptions-item label="前置知识点" v-if="currentNode.prerequisites">
-            {{ currentNode.prerequisites }}
-          </el-descriptions-item>
+          <el-descriptions-item label="所属章节">{{ currentNode.chapter || '无' }}</el-descriptions-item>
+          <el-descriptions-item label="预计时长">{{ currentNode.expectedMinutes || '-' }} 分钟</el-descriptions-item>
         </el-descriptions>
         <div class="detail-desc">
           <h4>详细描述</h4>
-          <p>{{ currentNode.description || currentNode.desc || '暂无详细描述' }}</p>
+          <p>{{ currentNode.description || '暂无详细描述' }}</p>
         </div>
       </template>
       <template #footer>
         <el-button @click="dialogVisible = false">关闭</el-button>
-        <el-button type="primary" @click="goStudy(currentNode)">
-          开始学习
-        </el-button>
+        <el-button @click="goStudy(currentNode)">直接学习</el-button>
+        <el-button type="primary" :loading="genLoading" @click="handleGeneratePath(currentNode)">生成学习路径</el-button>
       </template>
     </el-dialog>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount, nextTick, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import * as echarts from 'echarts'
 import { ElMessage } from 'element-plus'
-import { getStudentGraph } from '../../api/student'
+import { getStudentGraph, generatePath } from '../../api/student'
 import { getCourseList } from '../../api/knowledge'
 
 const router = useRouter()
 const loading = ref(false)
 const nodes = ref([])
+const edges = ref([])
 const courses = ref([])
 const selectedCourseId = ref('')
 const dialogVisible = ref(false)
 const currentNode = ref(null)
+const genLoading = ref(false)
+const chartRef = ref(null)
+const chart = ref(null)
 
-const filteredNodes = computed(() => {
-  if (!selectedCourseId.value) return nodes.value
-  return nodes.value.filter(
-    (n) => n.courseId === selectedCourseId.value || n.course_id === selectedCourseId.value
-  )
-})
+const diffLabel = (v) => ({ 1: '入门', 2: '基础', 3: '进阶', 4: '困难', 5: '挑战' }[v] || '未知')
+const diffTag = (v) => ({ 1: 'success', 2: '', 3: 'warning', 4: 'danger', 5: 'danger' }[v] || 'info')
 
-const difficultyLabel = (level) => {
-  const map = { 1: '入门', 2: '基础', 3: '进阶', 4: '困难', 5: '挑战' }
-  return map[level] || '未知'
+function buildChartData() {
+  let list = nodes.value
+  if (selectedCourseId.value) {
+    list = nodes.value.filter(n => n.courseId === selectedCourseId.value)
+  }
+  // 只保留跟当前节点列表有关的边
+  const nodeIds = new Set(list.map(n => n.id))
+  const edgeList = edges.value.filter(e => nodeIds.has(e.fromNodeId) && nodeIds.has(e.toNodeId))
+
+  const chartNodes = list.map(n => ({
+    id: String(n.id),
+    name: n.name,
+    value: n.name,
+    symbolSize: n.difficulty === 3 ? 60 : n.difficulty === 2 ? 50 : 40,
+    itemStyle: {
+      color: n.difficulty === 3 ? '#e74c3c' : n.difficulty === 2 ? '#f39c12' : '#3498db'
+    },
+    category: n.courseId,
+    raw: n
+  }))
+
+  const chartEdges = edgeList.map(e => ({
+    source: String(e.fromNodeId),
+    target: String(e.toNodeId),
+    lineStyle: { color: '#999', width: 2, curveness: 0.2, type: 'solid' }
+  }))
+
+  return { chartNodes, chartEdges }
 }
 
-const difficultyTagType = (level) => {
-  const map = { 1: 'success', 2: '', 3: 'warning', 4: 'danger', 5: 'danger' }
-  return map[level] || 'info'
+function renderChart() {
+  if (!chartRef.value) return
+  const { chartNodes, chartEdges } = buildChartData()
+  if (!chart.value) chart.value = echarts.init(chartRef.value)
+
+  chart.value.setOption({
+    title: { show: false },
+    tooltip: {
+      formatter: (p) => {
+        if (p.dataType === 'node') return `<b>${p.name}</b><br/>难度: ${diffLabel(p.data.raw?.difficulty)}`
+        return ''
+      }
+    },
+    series: [{
+      type: 'graph',
+      layout: 'force',
+      force: { repulsion: 500, edgeLength: [120, 250], gravity: 0.05, friction: 0.15 },
+      roam: true,               // 可拖拽缩放
+      draggable: true,
+      data: chartNodes,
+      edges: chartEdges,
+      categories: [],
+      label: {
+        show: true,
+        position: 'bottom',
+        fontSize: 12,
+        color: '#333',
+        formatter: (p) => p.name.length > 6 ? p.name.slice(0, 6) + '..' : p.name
+      },
+      edgeLabel: { show: false },
+      lineStyle: { color: '#bbb', width: 2, curveness: 0.2 },
+      emphasis: {
+        focus: 'adjacency',
+        lineStyle: { width: 3, color: '#2c5eb5' }
+      }
+    }]
+  })
+
+  chart.value.on('click', (params) => {
+    if (params.dataType === 'node') {
+      const raw = params.data.raw
+      if (raw) { currentNode.value = raw; dialogVisible.value = true }
+    }
+  })
 }
 
-const truncate = (str, max) => {
-  if (!str) return ''
-  return str.length > max ? str.slice(0, max) + '...' : str
-}
+function fitGraph() { chart.value?.resize() }
 
-const filterNodes = () => {}
+const onCourseChange = () => { renderChart() }
 
-const openDetail = (node) => {
-  currentNode.value = node
-  dialogVisible.value = true
+const handleGeneratePath = async (node) => {
+  if (!node) return
+  genLoading.value = true
+  try {
+    await generatePath({ targetNodeId: node.id })
+    ElMessage.success('学习路径已生成，即将跳转')
+    dialogVisible.value = false
+    setTimeout(() => router.push('/student/path'), 500)
+  } catch { ElMessage.error('生成失败，请重试') }
+  finally { genLoading.value = false }
 }
 
 const goStudy = (node) => {
   dialogVisible.value = false
-  router.push('/student/study/' + (node.nodeId || node.id))
+  if (node) router.push('/student/study/' + node.id)
 }
 
 const fetchGraph = async () => {
   loading.value = true
   try {
     const res = await getStudentGraph()
-    if (res && res.nodes) {
-      nodes.value = res.nodes
-    } else if (Array.isArray(res)) {
-      nodes.value = res
-    }
-  } catch {
-    ElMessage.error('加载知识图谱失败')
-  } finally {
-    loading.value = false
-  }
+    if (res && res.nodes) { nodes.value = res.nodes; edges.value = res.edges || [] }
+  } catch { /* ignore */ }
+  finally { loading.value = false }
 }
 
 const fetchCourses = async () => {
   try {
     const res = await getCourseList()
-    if (res && res.records) {
-      courses.value = res.records
-    } else if (Array.isArray(res)) {
-      courses.value = res
-    }
-  } catch {
-    // 课程列表加载失败不影响主体功能
-  }
+    courses.value = Array.isArray(res) ? res : (res.records || [])
+  } catch { /* ignore */ }
 }
 
-onMounted(() => {
-  fetchGraph()
-  fetchCourses()
+onMounted(async () => {
+  await fetchGraph()
+  await fetchCourses()
+  await nextTick()
+  renderChart()
 })
+
+onBeforeUnmount(() => {
+  chart.value?.dispose()
+  chart.value = null
+})
+
+// 窗口改变时自适应
+watch(() => [dialogVisible.value], () => setTimeout(() => chart.value?.resize(), 300))
 </script>
 
 <style scoped>
-.graph-view {
-  min-height: 100vh;
-  background: #f5f7fa;
-  padding: 24px 32px;
-}
-
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-}
-
-.page-title {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 700;
-  color: #2c5eb5;
-}
-
-.node-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px;
-  min-height: 200px;
-}
-
-.node-card {
-  cursor: pointer;
-  border-radius: 12px;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.node-card:hover {
-  transform: translateY(-4px);
-}
-
-.node-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.node-name {
-  font-size: 16px;
-  font-weight: 600;
-  color: #303133;
-}
-
-.node-desc {
-  font-size: 13px;
-  color: #909399;
-  margin: 0 0 10px;
-  line-height: 1.6;
-}
-
-.node-meta {
-  font-size: 12px;
-  color: #c0c4cc;
-}
-
-.detail-desc {
-  margin-top: 20px;
-}
-
-.detail-desc h4 {
-  margin: 0 0 8px;
-  font-size: 15px;
-  color: #303133;
-}
-
-.detail-desc p {
-  font-size: 14px;
-  color: #606266;
-  line-height: 1.8;
-  white-space: pre-wrap;
-}
+.graph-view { min-height: 100vh; background: #f5f7fa; padding: 24px 32px; }
+.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.page-title { margin: 0; font-size: 22px; font-weight: 700; color: #2c5eb5; }
+.header-actions { display: flex; gap: 12px; align-items: center; }
+.graph-card { border-radius: 12px; min-height: 500px; position: relative; }
+.chart-container { width: 100%; height: 600px; }
+.detail-desc { margin-top: 20px; }
+.detail-desc h4 { margin: 0 0 8px; font-size: 15px; color: #303133; }
+.detail-desc p { font-size: 14px; color: #606266; line-height: 1.8; white-space: pre-wrap; }
 </style>

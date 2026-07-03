@@ -36,8 +36,9 @@ public class NodeController {
      */
     @GetMapping
     public Result<List<KnowledgeNode>> list(
-            @RequestParam(required = false) Integer courseId) {
-        return Result.success(knowledgeNodeService.list(courseId));
+            @RequestParam(required = false) Integer courseId,
+            @RequestParam(required = false) String name) {
+        return Result.success(knowledgeNodeService.list(courseId, name));
     }
 
     /**

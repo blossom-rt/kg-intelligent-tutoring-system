@@ -37,7 +37,7 @@ public interface SysUserService {
     // ===== 管理员方法 =====
 
     /** 查询用户列表 */
-    List<SysUser> listUsers();
+    List<SysUser> listUsers(String keyword, Integer roleId);
 
     /** 管理员创建用户 */
     void createUser(SysUser user);

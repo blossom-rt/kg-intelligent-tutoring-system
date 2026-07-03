@@ -10,7 +10,7 @@ import java.util.List;
 public interface CrossSubjectThemeService {
 
     /** 查询跨学科主题列表 */
-    List<CrossSubjectTheme> list();
+    List<CrossSubjectTheme> list(Integer difficulty, Integer status);
 
     /** 根据ID查询主题 */
     CrossSubjectTheme getById(Integer id);

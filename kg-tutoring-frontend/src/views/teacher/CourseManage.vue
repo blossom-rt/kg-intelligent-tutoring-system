@@ -6,7 +6,7 @@
     </div>
 
     <el-card class="filter-card">
-      <el-form :inline="true" :model="filterForm">
+      <el-form :inline="true" :model="filterForm" @submit.prevent>
         <el-form-item label="所属学科">
           <el-input v-model="filterForm.subject" placeholder="输入学科名称搜索" clearable @clear="loadData" @keyup.enter="loadData" />
         </el-form-item>
@@ -21,7 +21,7 @@
       <el-table :data="tableData" v-loading="loading" stripe border>
         <el-table-column prop="courseName" label="课程名称" min-width="160" />
         <el-table-column prop="subject" label="所属学科" width="140" />
-        <el-table-column prop="teacherName" label="负责教师" width="120" />
+        <el-table-column prop="teacherId" label="教师ID" width="120" />
         <el-table-column prop="createTime" label="创建时间" width="180" />
         <el-table-column label="操作" width="160" fixed="right">
           <template #default="{ row }">
@@ -111,8 +111,8 @@ const loadData = async () => {
     const params = { page: pagination.page, size: pagination.size }
     if (filterForm.subject) params.subject = filterForm.subject
     const res = await getCourseList(params)
-    tableData.value = res.records || res.data || []
-    pagination.total = res.total || 0
+    if (Array.isArray(res)) { tableData.value = res; pagination.total = res.length }
+    else if (res && res.records) { tableData.value = res.records; pagination.total = res.total || 0 }
   } catch {
     tableData.value = []
   } finally {

@@ -9,8 +9,8 @@ import java.util.List;
  */
 public interface KnowledgeNodeService {
 
-    /** 查询知识点列表（可按课程过滤） */
-    List<KnowledgeNode> list(Integer courseId);
+    /** 查询知识点列表（可按课程、名称过滤） */
+    List<KnowledgeNode> list(Integer courseId, String name);
 
     /** 根据ID查询知识点 */
     KnowledgeNode getById(Integer id);

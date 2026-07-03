@@ -231,13 +231,7 @@ const fetchQuestions = async () => {
   loading.value = true
   try {
     const res = await getPracticeQuestions({ nodeId, questionId })
-    if (Array.isArray(res)) {
-      questions.value = res
-    } else if (res && res.records) {
-      questions.value = res.records
-    } else if (res && res.questions) {
-      questions.value = res.questions
-    }
+    questions.value = Array.isArray(res) ? res : (res.records || res.questions || [])
     if (questions.value.length === 0) {
       ElMessage.info('暂无练习题')
     }

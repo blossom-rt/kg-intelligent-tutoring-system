@@ -10,8 +10,8 @@
       </div>
       <el-table :data="courseList" v-loading="loading" border stripe>
         <el-table-column prop="courseName" label="课程名称" min-width="180" />
-        <el-table-column prop="courseCode" label="课程编码" min-width="140" />
-        <el-table-column prop="teacherName" label="授课教师" min-width="120" />
+        <el-table-column prop="subject" label="所属学科" min-width="140" />
+        <el-table-column prop="teacherId" label="教师ID" min-width="120" />
         <el-table-column label="状态" min-width="80">
           <template #default="{ row }">
             <el-tag :type="row.status === 1 ? 'success' : 'info'" size="small">
@@ -110,8 +110,8 @@ async function fetchList() {
   try {
     const params = { page: pagination.page, pageSize: pagination.pageSize }
     const res = await getCourseList(params)
-    courseList.value = res.records || res.list || []
-    pagination.total = res.total || 0
+    if (Array.isArray(res)) { courseList.value = res; pagination.total = res.length }
+    else if (res && res.records) { courseList.value = res.records; pagination.total = res.total || 0 }
   } catch { /* ignore */ } finally {
     loading.value = false
   }

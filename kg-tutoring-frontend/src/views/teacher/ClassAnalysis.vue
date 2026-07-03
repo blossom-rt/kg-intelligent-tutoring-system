@@ -42,8 +42,8 @@
       <el-card class="panel-main">
         <template #header><span class="panel-title">学生学情明细</span></template>
         <el-table :data="tableData" v-loading="loading" stripe border>
-          <el-table-column prop="studentName" label="学生姓名" min-width="120" />
-          <el-table-column prop="masteredNodes" label="掌握知识点数" width="130" align="center" />
+          <el-table-column prop="userId" label="学生ID" min-width="120" />
+          <el-table-column prop="masteryLevel" label="掌握度" width="130" align="center" />
           <el-table-column label="正确率" width="100" align="center">
             <template #default="{ row }">
               <el-progress :percentage="row.correctRate || 0" :stroke-width="8" :show-text="false" />
@@ -126,7 +126,7 @@ const weakColor = (rate) => {
 const loadCourses = async () => {
   try {
     const res = await getCourseList({ page: 1, size: 999 })
-    courseList.value = res.records || res.data || []
+    courseList.value = Array.isArray(res) ? res : (res.records || res.data || [])
   } catch {
     courseList.value = []
   }
@@ -153,7 +153,7 @@ const loadData = async () => {
       stats.avgMastery = res.avgMastery || 0
       stats.avgCorrectRate = res.avgCorrectRate || 0
       stats.activeStudents = res.activeStudents || 0
-      tableData.value = res.studentList || res.records || res.data || []
+      tableData.value = Array.isArray(res) ? res : (res.studentList || res.records || res.data || [])
       pagination.total = res.studentTotal || res.total || 0
       weakNodes.value = (res.weakNodes || []).slice(0, 5)
     }

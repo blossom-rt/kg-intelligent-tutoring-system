@@ -33,8 +33,8 @@ public class CourseController {
      * 查询课程列表
      */
     @GetMapping
-    public Result<List<Course>> list() {
-        return Result.success(courseService.list());
+    public Result<List<Course>> list(@RequestParam(required = false) String subject) {
+        return Result.success(courseService.list(subject));
     }
 
     /**

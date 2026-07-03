@@ -235,10 +235,17 @@ public class SysUserServiceImpl implements SysUserService {
     // ===== 管理员方法 =====
 
     @Override
-    public List<SysUser> listUsers() {
-        return sysUserMapper.selectList(
-                new LambdaQueryWrapper<SysUser>().orderByDesc(SysUser::getCreateTime)
-        );
+    public List<SysUser> listUsers(String keyword, Integer roleId) {
+        LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<SysUser>()
+                .orderByDesc(SysUser::getCreateTime);
+        if (keyword != null && !keyword.isEmpty()) {
+            wrapper.and(w -> w.like(SysUser::getUsername, keyword)
+                    .or().like(SysUser::getRealName, keyword));
+        }
+        if (roleId != null) {
+            wrapper.eq(SysUser::getRoleId, roleId);
+        }
+        return sysUserMapper.selectList(wrapper);
     }
 
     @Override

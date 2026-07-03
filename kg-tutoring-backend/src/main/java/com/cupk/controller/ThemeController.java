@@ -33,8 +33,10 @@ public class ThemeController {
      * 查询所有主题
      */
     @GetMapping
-    public Result<List<CrossSubjectTheme>> list() {
-        return Result.success(crossSubjectThemeService.list());
+    public Result<List<CrossSubjectTheme>> list(
+            @RequestParam(required = false) Integer difficulty,
+            @RequestParam(required = false) Integer status) {
+        return Result.success(crossSubjectThemeService.list(difficulty, status));
     }
 
     /**

@@ -6,9 +6,9 @@
     </div>
 
     <el-card class="filter-card">
-      <el-form :inline="true" :model="filterForm">
+      <el-form :inline="true" :model="filterForm" @submit.prevent>
         <el-form-item label="所属课程">
-          <el-select v-model="filterForm.courseId" placeholder="全部课程" clearable @change="loadData">
+          <el-select v-model="filterForm.courseId" placeholder="全部课程" clearable style="width:220px" @change="loadData">
             <el-option v-for="c in courseList" :key="c.id" :label="c.courseName" :value="c.id" />
           </el-select>
         </el-form-item>
@@ -25,7 +25,7 @@
     <el-card>
       <el-table :data="tableData" v-loading="loading" stripe border>
         <el-table-column prop="name" label="知识点名称" min-width="160" />
-        <el-table-column prop="courseName" label="所属课程" width="160" />
+        <el-table-column prop="courseId" label="课程ID" width="160" />
         <el-table-column prop="difficulty" label="难度" width="80" align="center">
           <template #default="{ row }">
             <el-tag :type="diffTag(row.difficulty)" size="small">{{ diffLabel(row.difficulty) }}</el-tag>
@@ -45,7 +45,7 @@
         :page-size="pagination.size"
         :total="pagination.total"
         layout="total, prev, pager, next"
-        @current-change="loadData"
+        @current-change="applyFilter"
         style="margin-top: 16px; justify-content: flex-end"
       />
     </el-card>
@@ -148,7 +148,7 @@ const diffTag = (val) => {
 const loadCourses = async () => {
   try {
     const res = await getCourseList({ page: 1, size: 999 })
-    courseList.value = res.records || res.data || []
+    courseList.value = Array.isArray(res) ? res : (res.records || res.data || [])
   } catch {
     courseList.value = []
   }
@@ -157,18 +157,25 @@ const loadCourses = async () => {
 const loadData = async () => {
   loading.value = true
   try {
-    const params = { page: pagination.page, size: pagination.size }
+    const params = {}
     if (filterForm.courseId) params.courseId = filterForm.courseId
     if (filterForm.name) params.name = filterForm.name
     const res = await getNodeList(params)
-    tableData.value = res.records || res.data || []
-    pagination.total = res.total || 0
+    if (Array.isArray(res)) {
+      tableData.value = res
+      pagination.total = res.length
+    } else if (res && res.records) {
+      tableData.value = res.records
+      pagination.total = res.total || 0
+    }
   } catch {
     tableData.value = []
   } finally {
     loading.value = false
   }
 }
+
+// 无
 
 const resetFilter = () => {
   filterForm.courseId = null

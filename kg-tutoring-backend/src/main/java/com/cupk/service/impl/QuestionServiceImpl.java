@@ -19,13 +19,16 @@ public class QuestionServiceImpl implements QuestionService {
     private final QuestionMapper questionMapper;
 
     @Override
-    public List<Question> list(Integer nodeId, Integer courseId) {
+    public List<Question> list(Integer nodeId, Integer courseId, Integer difficulty) {
         LambdaQueryWrapper<Question> wrapper = new LambdaQueryWrapper<>();
         if (nodeId != null) {
             wrapper.eq(Question::getNodeId, nodeId);
         }
         if (courseId != null) {
             wrapper.inSql(Question::getNodeId, "SELECT id FROM knowledge_node WHERE course_id = " + courseId);
+        }
+        if (difficulty != null) {
+            wrapper.eq(Question::getDifficulty, difficulty);
         }
         wrapper.orderByDesc(Question::getCreateTime);
         return questionMapper.selectList(wrapper);

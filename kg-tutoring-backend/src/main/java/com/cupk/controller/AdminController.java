@@ -83,9 +83,11 @@ public class AdminController {
      * 查询用户列表
      */
     @GetMapping("/users")
-    public Result<List<SysUser>> listUsers() {
+    public Result<List<SysUser>> listUsers(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Integer roleId) {
         checkAdmin();
-        return Result.success(sysUserService.listUsers());
+        return Result.success(sysUserService.listUsers(keyword, roleId));
     }
 
     /**

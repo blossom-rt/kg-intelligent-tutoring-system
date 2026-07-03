@@ -17,9 +17,9 @@
           <span class="path-name-cell">{{ row.pathName || row.name || '未命名路径' }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="target" label="学习目标" min-width="140">
+      <el-table-column prop="targetNodeId" label="目标知识点ID" min-width="140">
         <template #default="{ row }">
-          {{ row.target || row.goal || '-' }}
+          {{ row.targetNodeId || '-' }}
         </template>
       </el-table-column>
       <el-table-column label="进度" width="180">
@@ -188,11 +188,7 @@ const onCourseChange = async (courseId) => {
   }
   try {
     const res = await getNodeList({ courseId })
-    if (res && res.records) {
-      courseNodes.value = res.records
-    } else if (Array.isArray(res)) {
-      courseNodes.value = res
-    }
+    courseNodes.value = Array.isArray(res) ? res : (res.records || [])
   } catch {
     ElMessage.error('加载知识点列表失败')
   }
@@ -226,11 +222,7 @@ const fetchPaths = async () => {
   loading.value = true
   try {
     const res = await getPathList()
-    if (Array.isArray(res)) {
-      pathList.value = res
-    } else if (res && res.records) {
-      pathList.value = res.records
-    }
+    pathList.value = Array.isArray(res) ? res : (res.records || [])
   } catch {
     ElMessage.error('加载学习路径失败')
   } finally {
@@ -241,11 +233,7 @@ const fetchPaths = async () => {
 const fetchCourses = async () => {
   try {
     const res = await getCourseList()
-    if (res && res.records) {
-      courses.value = res.records
-    } else if (Array.isArray(res)) {
-      courses.value = res
-    }
+    courses.value = Array.isArray(res) ? res : (res.records || [])
   } catch {
     // 静默失败
   }

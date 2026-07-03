@@ -9,8 +9,8 @@ import java.util.List;
  */
 public interface QuestionService {
 
-    /** 查询习题列表（可按知识点过滤） */
-    List<Question> list(Integer nodeId, Integer courseId);
+    /** 查询习题列表（可按知识点、学科、难度过滤） */
+    List<Question> list(Integer nodeId, Integer courseId, Integer difficulty);
 
     /** 根据ID查询习题 */
     Question getById(Integer id);

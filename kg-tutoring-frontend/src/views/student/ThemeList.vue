@@ -77,13 +77,7 @@ const fetchThemes = async () => {
   loading.value = true
   try {
     const res = await request.get('/themes')
-    if (Array.isArray(res)) {
-      themes.value = res
-    } else if (res && res.records) {
-      themes.value = res.records
-    } else if (res && res.list) {
-      themes.value = res.list
-    }
+    themes.value = Array.isArray(res) ? res : (res.records || res.list || [])
   } catch {
     ElMessage.error('加载跨学科主题失败')
   } finally {

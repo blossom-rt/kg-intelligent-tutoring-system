@@ -17,7 +17,7 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="publishTime" label="发布时间" min-width="160" />
+        <el-table-column prop="createTime" label="发布时间" min-width="160" />
         <el-table-column label="操作" min-width="160" fixed="right">
           <template #default="{ row }">
             <el-button type="primary" size="small" link @click="openEditDialog(row)">编辑</el-button>

@@ -6,14 +6,14 @@
     </div>
 
     <el-card class="filter-card">
-      <el-form :inline="true" :model="filterForm">
+      <el-form :inline="true" :model="filterForm" @submit.prevent>
         <el-form-item label="关联知识点">
-          <el-select v-model="filterForm.nodeId" placeholder="全部知识点" clearable @change="loadData" filterable>
+          <el-select v-model="filterForm.nodeId" placeholder="全部知识点" clearable @change="loadData" filterable style="width:200px">
             <el-option v-for="n in nodeList" :key="n.id" :label="n.name" :value="n.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="难度">
-          <el-select v-model="filterForm.difficulty" placeholder="全部难度" clearable @change="loadData">
+          <el-select v-model="filterForm.difficulty" placeholder="全部难度" clearable @change="loadData" style="width:200px">
             <el-option label="简单 (1)" :value="1" />
             <el-option label="中等 (2)" :value="2" />
             <el-option label="困难 (3)" :value="3" />
@@ -39,7 +39,7 @@
             <el-tag :type="diffTag(row.difficulty)" size="small">{{ diffLabel(row.difficulty) }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="nodeName" label="关联知识点" width="140" />
+        <el-table-column prop="nodeId" label="知识点ID" width="140" />
         <el-table-column label="操作" width="160" fixed="right">
           <template #default="{ row }">
             <el-button type="primary" size="small" link @click="openEdit(row)">编辑</el-button>
@@ -178,7 +178,7 @@ const diffTag = (val) => {
 const loadNodes = async () => {
   try {
     const res = await getNodeList({ page: 1, size: 999 })
-    nodeList.value = res.records || res.data || []
+    nodeList.value = Array.isArray(res) ? res : (res.records || res.data || [])
   } catch {
     nodeList.value = []
   }
@@ -191,8 +191,8 @@ const loadData = async () => {
     if (filterForm.nodeId) params.nodeId = filterForm.nodeId
     if (filterForm.difficulty) params.difficulty = filterForm.difficulty
     const res = await getQuestionList(params)
-    tableData.value = res.records || res.data || []
-    pagination.total = res.total || 0
+    if (Array.isArray(res)) { tableData.value = res; pagination.total = res.length }
+    else if (res && res.records) { tableData.value = res.records; pagination.total = res.total || 0 }
   } catch {
     tableData.value = []
   } finally {

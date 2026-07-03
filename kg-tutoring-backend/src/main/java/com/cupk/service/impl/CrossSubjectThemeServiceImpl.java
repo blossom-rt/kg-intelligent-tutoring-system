@@ -22,9 +22,16 @@ public class CrossSubjectThemeServiceImpl implements CrossSubjectThemeService {
     private final CrossThemeNodeMapper crossThemeNodeMapper;
 
     @Override
-    public List<CrossSubjectTheme> list() {
-        return crossSubjectThemeMapper.selectList(
-                new LambdaQueryWrapper<CrossSubjectTheme>().orderByDesc(CrossSubjectTheme::getCreateTime));
+    public List<CrossSubjectTheme> list(Integer difficulty, Integer status) {
+        LambdaQueryWrapper<CrossSubjectTheme> wrapper = new LambdaQueryWrapper<CrossSubjectTheme>()
+                .orderByDesc(CrossSubjectTheme::getCreateTime);
+        if (difficulty != null) {
+            wrapper.eq(CrossSubjectTheme::getDifficulty, difficulty);
+        }
+        if (status != null) {
+            wrapper.eq(CrossSubjectTheme::getStatus, status);
+        }
+        return crossSubjectThemeMapper.selectList(wrapper);
     }
 
     @Override

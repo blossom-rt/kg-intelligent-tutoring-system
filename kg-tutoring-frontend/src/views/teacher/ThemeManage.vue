@@ -6,16 +6,16 @@
     </div>
 
     <el-card class="filter-card">
-      <el-form :inline="true" :model="filterForm">
+      <el-form :inline="true" :model="filterForm" @submit.prevent>
         <el-form-item label="难度">
-          <el-select v-model="filterForm.difficulty" placeholder="全部难度" clearable @change="loadData">
+          <el-select v-model="filterForm.difficulty" placeholder="全部难度" clearable style="width:180px" @change="loadData">
             <el-option label="简单 (1)" :value="1" />
             <el-option label="中等 (2)" :value="2" />
             <el-option label="困难 (3)" :value="3" />
           </el-select>
         </el-form-item>
         <el-form-item label="状态">
-          <el-select v-model="filterForm.status" placeholder="全部状态" clearable @change="loadData">
+          <el-select v-model="filterForm.status" placeholder="全部状态" clearable style="width:180px" @change="loadData">
             <el-option label="已发布" value="1" />
             <el-option label="已下架" value="0" />
           </el-select>
@@ -42,7 +42,7 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="nodeCount" label="关联知识点数" width="120" align="center" />
+        <el-table-column prop="publisherId" label="发布教师ID" width="120" align="center" />
         <el-table-column label="操作" width="260" fixed="right">
           <template #default="{ row }">
             <el-button type="primary" size="small" link @click="openEdit(row)">编辑</el-button>
@@ -166,7 +166,7 @@ const diffTag = (val) => {
 const loadNodes = async () => {
   try {
     const res = await getNodeList({ page: 1, size: 999 })
-    nodeList.value = res.records || res.data || []
+    nodeList.value = Array.isArray(res) ? res : (res.records || res.data || [])
   } catch {
     nodeList.value = []
   }
@@ -179,8 +179,8 @@ const loadData = async () => {
     if (filterForm.difficulty) params.difficulty = filterForm.difficulty
     if (filterForm.status !== null && filterForm.status !== '') params.status = filterForm.status
     const res = await getThemeList(params)
-    tableData.value = res.records || res.data || []
-    pagination.total = res.total || 0
+    if (Array.isArray(res)) { tableData.value = res; pagination.total = res.length }
+    else if (res && res.records) { tableData.value = res.records; pagination.total = res.total || 0 }
   } catch {
     tableData.value = []
   } finally {

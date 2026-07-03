@@ -6,9 +6,9 @@
     </div>
 
     <el-card class="filter-card">
-      <el-form :inline="true" :model="filterForm">
+      <el-form :inline="true" :model="filterForm" @submit.prevent>
         <el-form-item label="所属课程">
-          <el-select v-model="filterForm.courseId" placeholder="全部课程" clearable @change="onCourseChange">
+          <el-select v-model="filterForm.courseId" placeholder="全部课程" clearable @change="onCourseChange" style="width:200px">
             <el-option v-for="c in courseList" :key="c.id" :label="c.courseName" :value="c.id" />
           </el-select>
         </el-form-item>
@@ -138,7 +138,7 @@ const diffTag = (val) => {
 const loadCourses = async () => {
   try {
     const res = await getCourseList({ page: 1, size: 999 })
-    courseList.value = res.records || res.data || []
+    courseList.value = Array.isArray(res) ? res : (res.records || res.data || [])
   } catch {
     courseList.value = []
   }
@@ -153,8 +153,8 @@ const loadData = async () => {
       getEdgeList(params),
       getNodeList({ page: 1, size: 999, ...(filterForm.courseId ? { courseId: filterForm.courseId } : {}) })
     ])
-    edgeList.value = edgeRes.records || edgeRes.data || []
-    nodeList.value = nodeRes.records || nodeRes.data || []
+    edgeList.value = Array.isArray(edgeRes) ? edgeRes : (edgeRes.records || edgeRes.data || [])
+    nodeList.value = Array.isArray(nodeRes) ? nodeRes : (nodeRes.records || nodeRes.data || [])
   } catch {
     edgeList.value = []
     nodeList.value = []
