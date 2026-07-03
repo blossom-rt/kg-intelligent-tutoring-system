@@ -1,0 +1,49 @@
+@startuml kg_seq_login
+' ============================================================
+' 顺序图 — 登录流程
+' 标准 UML：生命线、激活框、alt/else 片段、返回消息
+' ============================================================
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontSize 11
+skinparam sequenceMessageAlign center
+skinparam participant {
+    BackgroundColor #E3F2FD
+}
+skinparam actor {
+    BackgroundColor #FFF3E0
+}
+
+title 用户登录 — 顺序图
+
+actor "用户" as U
+participant "Vue 前端" as F
+participant "SpringBoot\n后端" as B
+database "MySQL" as D
+
+U -> F : 选择角色，输入账号密码
+activate F
+
+F -> B : POST /user/login\n{username, password, role}
+activate B
+
+B -> D : SELECT * FROM sys_user\nWHERE username = ?
+activate D
+D --> B : 用户记录
+deactivate D
+
+B -> B : MD5(密码) 比对\n+ role_id 校验
+
+alt 校验通过
+    B --> F : 200 OK\n{token, role, userInfo}
+    deactivate B
+    F -> F : 存入 localStorage\n路由跳转
+    F --> U : 跳转角色首页
+else 校验失败
+    B --> F : 401 Unauthorized\n{message: "账号或密码错误"}
+    deactivate B
+    F --> U : 提示错误信息
+end
+
+deactivate F
+
+@enduml

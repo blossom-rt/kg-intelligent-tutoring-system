@@ -1,0 +1,61 @@
+@startuml kg_activity_teacher
+' ============================================================
+' 活动图 — 教师工作流程
+' 标准 UML：起始/终止、泳道分区、活动、判断
+' ============================================================
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontSize 11
+skinparam activity {
+    BackgroundColor #E3F2FD
+    BorderColor #1565C0
+    FontSize 11
+}
+skinparam diamondBackgroundColor #FFF9C4
+skinparam diamondBorderColor #F57F17
+skinparam startColor #4CAF50
+skinparam endColor #F44336
+skinparam partitionBorderColor #333333
+skinparam partitionBackgroundColor #FAFAFA
+
+title 教师工作流程 — 活动图
+
+|教师|
+start
+:登录系统;
+:进入工作台看板;
+
+|教师|
+if (操作类型?) then (课程管理)
+    :创建/编辑课程;
+    :管理知识点;
+    :配置知识点难度;
+    :设定前置依赖关系\n(knowledge_edge);
+
+    :管理题库;
+    :题目关联知识点;
+
+    if (跨学科主题?) then (是)
+        :创建跨学科主题;
+        :关联多学科知识点;
+        :发布到学生端;
+    endif
+
+else (学情分析)
+    :选择班级/课程;
+
+    :查看整体掌握度;
+    note right
+        通过 study_record
+        统计各节点掌握度
+    end note
+
+    :查看学生个体详情;
+    :导出学情报表;
+
+endif
+
+|教师|
+:更新教学内容;
+stop
+
+@enduml
