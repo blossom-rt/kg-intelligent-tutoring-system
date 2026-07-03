@@ -130,17 +130,45 @@ CREATE TABLE IF NOT EXISTS path_detail (
     CONSTRAINT fk_path_detail_node FOREIGN KEY (node_id) REFERENCES knowledge_node(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='学习路径详情表';
 
+CREATE TABLE IF NOT EXISTS exam (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT '测评ID',
+    exam_name VARCHAR(100) NOT NULL COMMENT '测评名称',
+    course_id INT NOT NULL COMMENT '所属课程ID',
+    creator_id INT DEFAULT NULL COMMENT '发布教师ID',
+    total_score INT DEFAULT 100 COMMENT '试卷总分',
+    status TINYINT DEFAULT 1 COMMENT '状态：0草稿 1发布',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    KEY idx_course_id (course_id),
+    KEY idx_creator_id (creator_id),
+    CONSTRAINT fk_exam_course FOREIGN KEY (course_id) REFERENCES course(id),
+    CONSTRAINT fk_exam_creator FOREIGN KEY (creator_id) REFERENCES sys_user(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='测评定义表';
+
+CREATE TABLE IF NOT EXISTS exam_question (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT '关联ID',
+    exam_id INT NOT NULL COMMENT '测评ID',
+    question_id INT NOT NULL COMMENT '题目ID',
+    sort_order INT DEFAULT 1 COMMENT '题目顺序',
+    UNIQUE KEY uk_exam_question (exam_id, question_id),
+    KEY idx_question_id (question_id),
+    CONSTRAINT fk_exam_question_exam FOREIGN KEY (exam_id) REFERENCES exam(id),
+    CONSTRAINT fk_exam_question_question FOREIGN KEY (question_id) REFERENCES question(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='测评题目关联表';
+
 CREATE TABLE IF NOT EXISTS exam_record (
     id INT PRIMARY KEY AUTO_INCREMENT COMMENT '测评记录ID',
     user_id INT NOT NULL COMMENT '学生ID',
+    exam_id INT DEFAULT NULL COMMENT '测评ID',
     course_id INT DEFAULT NULL COMMENT '所属课程ID',
     total_score INT DEFAULT NULL COMMENT '试卷总分',
     user_score DECIMAL(5,2) DEFAULT NULL COMMENT '学生得分',
     ai_report TEXT DEFAULT NULL COMMENT '诊断报告',
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '完成时间',
     KEY idx_user_id (user_id),
+    KEY idx_exam_id (exam_id),
     KEY idx_course_id (course_id),
     CONSTRAINT fk_exam_record_user FOREIGN KEY (user_id) REFERENCES sys_user(id),
+    CONSTRAINT fk_exam_record_exam FOREIGN KEY (exam_id) REFERENCES exam(id),
     CONSTRAINT fk_exam_record_course FOREIGN KEY (course_id) REFERENCES course(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='测评记录表';
 

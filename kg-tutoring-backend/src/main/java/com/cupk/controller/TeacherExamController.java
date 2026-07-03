@@ -3,7 +3,7 @@ package com.cupk.controller;
 import com.cupk.common.BusinessException;
 import com.cupk.common.Result;
 import com.cupk.common.UserContext;
-import com.cupk.service.ExamRecordService;
+import com.cupk.service.ExamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +18,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class TeacherExamController {
 
-    private final ExamRecordService examRecordService;
+    private final ExamService examService;
 
     private void checkTeacher() {
         if (!"teacher".equals(UserContext.getRole())) {
@@ -28,9 +28,9 @@ public class TeacherExamController {
 
     /** 按课程查询测评列表 */
     @GetMapping
-    public Result<?> list(@RequestParam Integer courseId) {
+    public Result<?> list(@RequestParam(required = false) Integer courseId) {
         checkTeacher();
-        return Result.success(examRecordService.listByCourse(courseId));
+        return Result.success(examService.listForTeacher(courseId));
     }
 
     /** 创建测评 */
@@ -38,9 +38,10 @@ public class TeacherExamController {
     public Result<?> create(@RequestBody Map<String, Object> body) {
         checkTeacher();
         Integer courseId = (Integer) body.get("courseId");
+        String examName = (String) body.get("examName");
         List<Integer> questionIds = (List<Integer>) body.get("questionIds");
         Integer totalScore = (Integer) body.get("totalScore");
-        examRecordService.createExam(courseId, questionIds, totalScore);
+        examService.createExam(examName, courseId, questionIds, totalScore);
         return Result.success("创建测评成功");
     }
 
@@ -48,7 +49,7 @@ public class TeacherExamController {
     @PutMapping("/{id}")
     public Result<?> update(@PathVariable Integer id, @RequestBody Map<String, Object> body) {
         checkTeacher();
-        examRecordService.updateExam(id, body);
+        examService.updateExam(id, body);
         return Result.success("修改测评成功");
     }
 
@@ -56,7 +57,7 @@ public class TeacherExamController {
     @DeleteMapping("/{id}")
     public Result<?> delete(@PathVariable Integer id) {
         checkTeacher();
-        examRecordService.deleteExam(id);
+        examService.deleteExam(id);
         return Result.success("删除测评成功");
     }
 }

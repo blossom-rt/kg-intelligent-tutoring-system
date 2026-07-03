@@ -18,19 +18,5 @@ public interface ExamRecordService {
     List<ExamRecord> listByUser(Integer userId);
 
     /** 根据ID查询测评记录 */
-    ExamRecord getById(Integer id);
-
-    // ===== 教师管理方法 =====
-
-    /** 按课程查询测评列表 */
-    List<ExamRecord> listByCourse(Integer courseId);
-
-    /** 创建测评（含题目选取） */
-    void createExam(Integer courseId, List<Integer> questionIds, Integer totalScore);
-
-    /** 更新测评 */
-    void updateExam(Integer id, Map<String, Object> body);
-
-    /** 删除测评 */
-    void deleteExam(Integer id);
+    Map<String, Object> getById(Integer id);
 }

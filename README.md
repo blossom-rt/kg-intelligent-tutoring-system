@@ -27,7 +27,7 @@ db/                     ← 数据库初始化脚本（按顺序执行）
 
 ---
 
-## 数据库（17 张表）
+## 数据库（19 张表）
 
 ```
 sys_role              ← 角色（admin / teacher / student）
@@ -42,6 +42,8 @@ study_record          ← 学习记录（学生→知识点，掌握度）
 study_path            ← 学习路径
 path_detail           ← 路径详情（排序后的知识点序列）
 
+exam                  ← 测评定义
+exam_question         ← 测评-题目关联
 exam_record           ← 测评记录
 wrong_question        ← 错题本
 cross_subject_theme   ← 跨学科主题
@@ -73,12 +75,14 @@ ai_call_log           ← AI 调用日志
 按顺序执行初始化脚本：
 
 ```bash
-mysql -u root -p < db/init1.sql
-mysql -u root -p < db/init2.sql
-mysql -u root -p < db/init3.sql
-mysql -u root -p < db/init4.sql
-mysql -u root -p < db/init5.sql
-mysql -u root -p < db/init6.sql
+mysql -u root -p < db/init_all.sql
+mysql -u root -p < db/seed_all.sql
+```
+
+如果是已经初始化过的旧库，只需要补测评定义表，可执行：
+
+```bash
+mysql -u root -p < db/migrate_exam.sql
 ```
 
 ### 2. 后端
@@ -89,7 +93,7 @@ cp kg-tutoring-backend/src/main/resources/application-template.properties kg-tut
 
 # 启动（默认端口 8080）
 cd kg-tutoring-backend
-.\mvnw spring-boot:run
+./mvnw spring-boot:run
 ```
 
 ### 3. 前端

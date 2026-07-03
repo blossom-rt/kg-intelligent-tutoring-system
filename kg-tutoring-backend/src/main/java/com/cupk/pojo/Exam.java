@@ -5,37 +5,33 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
- * 测评记录
+ * 测评定义
  */
 @Data
-@TableName("exam_record")
-public class ExamRecord {
+@TableName("exam")
+public class Exam {
 
     @TableId(type = IdType.AUTO)
     private Integer id;
 
-    /** 学生ID */
-    private Integer userId;
-
-    /** 测评ID */
-    private Integer examId;
+    /** 测评名称 */
+    private String examName;
 
     /** 所属课程ID */
     private Integer courseId;
 
+    /** 发布教师ID */
+    private Integer creatorId;
+
     /** 试卷总分 */
     private Integer totalScore;
 
-    /** 学生得分 */
-    private BigDecimal userScore;
+    /** 状态：0草稿 1发布 */
+    private Integer status;
 
-    /** AI诊断报告 */
-    private String aiReport;
-
-    /** 完成时间 */
+    /** 创建时间 */
     private LocalDateTime createTime;
 }

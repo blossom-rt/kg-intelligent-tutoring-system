@@ -20,6 +20,7 @@ export function submitPractice(data) { return request.post('/student/practice/su
 
 // 测评
 export function getStudentExams() { return request.get('/student/exams') }
+export function getExamPaper(id) { return request.get(`/student/exam-paper/${id}`) }
 export function getExamResult(id) { return request.get(`/student/exam/${id}`) }
 export function submitExam(data) { return request.post('/student/exam/submit', data) }
 

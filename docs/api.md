@@ -722,21 +722,22 @@ nodeId 必填
 
 | 功能 | 方法 | 路径 | 前端函数 | 状态 |
 |---|---|---|---|---|
-| 查询测评 | GET | `/api/teacher/exams` | `getExamList(params)` | 占位，返回空列表 |
-| 创建测评 | POST | `/api/teacher/exams` | `createExam(data)` | 占位 |
-| 修改测评 | PUT | `/api/teacher/exams/{id}` | `updateExam(id, data)` | 占位 |
-| 删除测评 | DELETE | `/api/teacher/exams/{id}` | `deleteExam(id)` | 占位 |
+| 查询测评 | GET | `/api/teacher/exams` | `getExamList(params)` | 已完成 |
+| 创建测评 | POST | `/api/teacher/exams` | `createExam(data)` | 已完成 |
+| 修改测评 | PUT | `/api/teacher/exams/{id}` | `updateExam(id, data)` | 已完成基础字段 |
+| 删除测评 | DELETE | `/api/teacher/exams/{id}` | `deleteExam(id)` | 已完成，无学生提交记录时可删 |
 
 查询参数：
 
 ```text
-courseId 必填
+courseId 可选
 ```
 
 创建测评请求体示例：
 
 ```json
 {
+  "examName": "初中代数基础阶段测评",
   "courseId": 1,
   "questionIds": [1, 2, 3],
   "totalScore": 100
@@ -881,10 +882,9 @@ GET /teacher/questions
 | 题库管理 | 基本完成 |
 | 学生知识图谱 | 基本完成 |
 | 学习路径 | 基本完成，但详情接口只返回主表 |
-| 练习 | 可用，错题记录未接入练习提交 |
-| 测评 | 学生提交可用，教师测评管理未完成 |
+| 练习 | 可用，练习和测评提交都会写入错题本 |
+| 测评 | 教师发布测评、学生参加测评、成绩记录已形成基础闭环 |
 | 错题本 | 基本完成 |
 | 学情分析 | 有基础数据，班级分析较简化 |
 | 跨学科主题 | 基本完成 |
 | 扩展能力占位接口 | 仅占位 |
-

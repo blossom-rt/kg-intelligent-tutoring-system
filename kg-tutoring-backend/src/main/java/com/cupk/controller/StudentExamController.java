@@ -3,6 +3,7 @@ package com.cupk.controller;
 import com.cupk.common.Result;
 import com.cupk.common.UserContext;
 import com.cupk.dto.ExamSubmitDTO;
+import com.cupk.service.ExamService;
 import com.cupk.service.ExamRecordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ import java.util.Map;
 public class StudentExamController {
 
     private final ExamRecordService examRecordService;
+    private final ExamService examService;
 
     /**
      * 获取当前学生的考试列表及成绩
@@ -27,7 +29,15 @@ public class StudentExamController {
     @GetMapping("/exams")
     public Result<?> listMyExams() {
         Integer userId = UserContext.getUserId();
-        return Result.success(examRecordService.listByUser(userId));
+        return Result.success(examService.listForStudent(userId));
+    }
+
+    /**
+     * 获取已发布测评试卷
+     */
+    @GetMapping("/exam-paper/{id}")
+    public Result<?> examPaper(@PathVariable Integer id) {
+        return Result.success(examService.getPaper(id));
     }
 
     /**
@@ -55,12 +65,14 @@ public class StudentExamController {
     @PostMapping("/exam/submit")
     public Result<?> submitExam(@RequestBody Map<String, Object> body) {
         Integer userId = UserContext.getUserId();
+        Integer examId = (Integer) body.get("examId");
         Integer courseId = (Integer) body.get("courseId");
         @SuppressWarnings("unchecked")
         List<Map<String, Object>> answers = (List<Map<String, Object>>) body.get("answers");
 
         // 构建 ExamSubmitDTO
         ExamSubmitDTO dto = new ExamSubmitDTO();
+        dto.setExamId(examId);
         dto.setCourseId(courseId);
         List<ExamSubmitDTO.AnswerItem> answerItems = new ArrayList<>();
         if (answers != null) {

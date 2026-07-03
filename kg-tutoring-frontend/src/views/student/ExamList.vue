@@ -10,7 +10,6 @@
       style="width: 100%"
       stripe
       highlight-current-row
-      @row-click="goDetail"
       empty-text="暂无测评记录"
     >
       <el-table-column prop="examName" label="测评名称" min-width="180">
@@ -20,8 +19,8 @@
       </el-table-column>
       <el-table-column label="成绩" width="120" align="center">
         <template #default="{ row }">
-          <span class="score-value" :class="scoreClass(row.score)">
-            {{ row.score != null ? row.score : '-' }}
+          <span class="score-value" :class="scoreClass(row.userScore ?? row.score)">
+            {{ row.userScore ?? row.score ?? '-' }}
           </span>
         </template>
       </el-table-column>
@@ -33,13 +32,19 @@
       <el-table-column label="状态" width="100" align="center">
         <template #default="{ row }">
           <el-tag :type="row.passed ? 'success' : row.score != null ? 'danger' : 'info'" size="small">
-            {{ row.passed ? '已通过' : row.score != null ? '未通过' : '未参加' }}
+            {{ row.finished ? (row.passed ? '已通过' : '未通过') : '未参加' }}
           </el-tag>
         </template>
       </el-table-column>
       <el-table-column label="测评日期" width="180">
         <template #default="{ row }">
-          {{ formatTime(row.examDate || row.createTime || row.createdAt) }}
+          {{ formatTime(row.finishTime || row.createTime || row.createdAt) }}
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" width="140" align="center" fixed="right">
+        <template #default="{ row }">
+          <el-button v-if="row.finished" type="primary" link @click="goDetail(row)">查看结果</el-button>
+          <el-button v-else type="primary" link @click="goTake(row)">参加测评</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -69,7 +74,11 @@ const formatTime = (time) => {
 }
 
 const goDetail = (row) => {
-  router.push('/student/exam/' + row.id)
+  router.push('/student/exam/' + row.recordId)
+}
+
+const goTake = (row) => {
+  router.push('/student/exam/take/' + row.id)
 }
 
 const fetchExams = async () => {

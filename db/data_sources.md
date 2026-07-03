@@ -29,6 +29,8 @@
 | `study_record` | 学习记录 | 虚构学生学习行为数据，由脚本按固定规则生成，用于前端统计和学情页面展示。 |
 | `study_path` | 学习路径 | 项目学习路径功能的演示数据，由 `db/seed_all.sql` 写入。 |
 | `path_detail` | 路径详情 | 与 `study_path` 对应的路径节点顺序数据，由 `db/seed_all.sql` 写入。 |
+| `exam` | 测评定义 | 教师发布测评功能的演示试卷，由 `db/seed_all.sql` 写入，题目来自自编题库。 |
+| `exam_question` | 测评-题目关联 | 测评中题目的选择和排序数据，由 `db/seed_all.sql` 写入。 |
 | `exam_record` | 测评记录 | 虚构学生阶段测评数据，由脚本按固定规则生成；诊断文本为普通系统提示语。 |
 | `wrong_question` | 错题记录 | 虚构错题本数据，由脚本按固定规则从题库中抽取生成。 |
 | `cross_subject_theme` | 跨学科主题 | 根据校园数据分析、节能用电、体育测试等常见教学项目场景整理。 |
@@ -41,3 +43,4 @@
 
 - `db/init_all.sql`：数据库与表结构初始化脚本。
 - `db/seed_all.sql`：演示数据插入脚本。
+- `db/migrate_exam.sql`：旧库补测评定义表与演示测评数据的迁移脚本。

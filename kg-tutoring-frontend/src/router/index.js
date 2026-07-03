@@ -18,6 +18,7 @@ const routes = [
   { path: '/student/study/:nodeId', component: () => import('../views/student/NodeStudy.vue'), meta: { roles: ['student'] } },
   { path: '/student/practice', component: () => import('../views/student/Practice.vue'), meta: { roles: ['student'] } },
   { path: '/student/exams', component: () => import('../views/student/ExamList.vue'), meta: { roles: ['student'] } },
+  { path: '/student/exam/take/:id', component: () => import('../views/student/ExamTake.vue'), meta: { roles: ['student'] } },
   { path: '/student/exam/:id', component: () => import('../views/student/ExamResult.vue'), meta: { roles: ['student'] } },
   { path: '/student/wrong', component: () => import('../views/student/WrongBook.vue'), meta: { roles: ['student'] } },
   { path: '/student/themes', component: () => import('../views/student/ThemeList.vue'), meta: { roles: ['student'] } },

@@ -122,6 +122,32 @@ INSERT  IGNORE INTO `path_detail` (`id`, `path_id`, `node_id`, `sort_order`, `is
 UNLOCK TABLES;
 
 --
+-- Dumping data for table `exam`
+--
+
+LOCK TABLES `exam` WRITE;
+/*!40000 ALTER TABLE `exam` DISABLE KEYS */;
+INSERT IGNORE INTO `exam` (`id`, `exam_name`, `course_id`, `creator_id`, `total_score`, `status`, `create_time`) VALUES
+(1,'初中代数基础阶段测评',1,2,100,1,'2026-07-02 22:10:00'),
+(2,'运动和相互作用诊断测评',20,52,100,1,'2026-07-02 22:50:00'),
+(3,'数据与算法实践阶段测评',22,53,100,1,'2026-07-02 22:55:00');
+/*!40000 ALTER TABLE `exam` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `exam_question`
+--
+
+LOCK TABLES `exam_question` WRITE;
+/*!40000 ALTER TABLE `exam_question` DISABLE KEYS */;
+INSERT IGNORE INTO `exam_question` (`id`, `exam_id`, `question_id`, `sort_order`) VALUES
+(1,1,1,1),(2,1,2,2),(3,1,3,3),
+(4,2,88,1),(5,2,89,2),(6,2,90,3),(7,2,91,4),(8,2,92,5),
+(9,3,104,1),(10,3,105,2),(11,3,106,3),(12,3,107,4),(13,3,108,5);
+/*!40000 ALTER TABLE `exam_question` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Dumping data for table `exam_record`
 --
 

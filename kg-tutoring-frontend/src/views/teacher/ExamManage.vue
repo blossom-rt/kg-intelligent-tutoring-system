@@ -157,8 +157,8 @@ const loadData = async () => {
     const params = { page: pagination.page, size: pagination.size }
     if (filterForm.courseId) params.courseId = filterForm.courseId
     const res = await getExamList(params)
-    tableData.value = res.records || res.data || []
-    pagination.total = res.total || 0
+    tableData.value = Array.isArray(res) ? res : (res.records || res.data || [])
+    pagination.total = Array.isArray(res) ? res.length : (res.total || 0)
   } catch {
     tableData.value = []
   } finally {
@@ -181,7 +181,7 @@ const loadQuestions = async (courseId) => {
   if (!courseId) return
   try {
     const res = await getQuestionList({ page: 1, size: 999, courseId })
-    questionBank.value = res.records || res.data || []
+    questionBank.value = Array.isArray(res) ? res : (res.records || res.data || [])
   } catch {
     questionBank.value = []
   }

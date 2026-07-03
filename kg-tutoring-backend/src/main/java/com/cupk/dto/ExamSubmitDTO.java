@@ -13,6 +13,9 @@ public class ExamSubmitDTO {
     /** 所属课程ID */
     private Integer courseId;
 
+    /** 测评ID */
+    private Integer examId;
+
     /** 作答列表 */
     private List<AnswerItem> answers;
 

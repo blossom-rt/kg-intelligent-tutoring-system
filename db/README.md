@@ -10,6 +10,7 @@
 |---|---|
 | `init_all.sql` | 创建数据库、创建所有表、初始化基础角色和管理员账号 |
 | `seed_all.sql` | 导入课程、知识点、题库、学生、教师、学习记录、测评记录、错题和主题等演示数据 |
+| `migrate_exam.sql` | 旧库补测评定义表和演示测评数据，已全新初始化时不需要执行 |
 
 ## 全新数据库使用方式
 
@@ -40,6 +41,14 @@ mysql -u root -p < seed_all.sql
 
 `seed_all.sql` 会导入完整演示数据，并完成必要的数据清理。
 
+如果旧库还没有教师发布测评功能所需的 `exam`、`exam_question` 表，先执行：
+
+```bash
+cd kg-intelligent-tutoring-system/db
+
+mysql -u root -p < migrate_exam.sql
+```
+
 ## 测试账号
 
 | 账号 | 密码 | 角色 |
@@ -65,6 +74,8 @@ mysql -u root -p < seed_all.sql
 | `knowledge_edge` | 55 |
 | `question` | 56 |
 | `study_record` | 370 |
+| `exam` | 3 |
+| `exam_question` | 13 |
 | `exam_record` | 40 |
 | `wrong_question` | 66 |
 | `cross_subject_theme` | 3 |
@@ -79,6 +90,8 @@ UNION ALL SELECT 'course', COUNT(*) FROM course
 UNION ALL SELECT 'knowledge_node', COUNT(*) FROM knowledge_node
 UNION ALL SELECT 'question', COUNT(*) FROM question
 UNION ALL SELECT 'study_record', COUNT(*) FROM study_record
+UNION ALL SELECT 'exam', COUNT(*) FROM exam
+UNION ALL SELECT 'exam_question', COUNT(*) FROM exam_question
 UNION ALL SELECT 'exam_record', COUNT(*) FROM exam_record
 UNION ALL SELECT 'wrong_question', COUNT(*) FROM wrong_question;
 "
