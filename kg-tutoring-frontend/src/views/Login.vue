@@ -33,18 +33,18 @@
         </div>
 
         <el-form ref="formRef" :model="form" :rules="rules" @keyup.enter="submit">
-          <el-form-item prop="username">
+          <el-form-item prop="username" label="账号">
             <el-input
               v-model="form.username" :placeholder="placeholderText" :prefix-icon="User"
-              size="large" clearable
+              size="large" clearable autocomplete="username"
               @focus="isTyping = true" @blur="isTyping = false"
             />
           </el-form-item>
 
-          <el-form-item prop="password">
+          <el-form-item prop="password" label="密码">
             <el-input
               v-model="form.password" :type="showPassword ? 'text' : 'password'"
-              placeholder="密码" :prefix-icon="Lock" size="large"
+              placeholder="密码" :prefix-icon="Lock" size="large" autocomplete="current-password"
               @focus="isTyping = true" @blur="isTyping = false"
             >
               <template #suffix>
@@ -172,11 +172,11 @@ if (remembered) { form.username = remembered; rememberAccount.value = true }
    左侧 — 品牌 + 插画
    ============================================ */
 .brand-side {
-  flex: 1.15;
+  flex: 1;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  padding: 48px 64px 48px 48px;
+  justify-content: center;
+  padding: 48px;
   position: relative;
   z-index: 1;
   background: linear-gradient(
@@ -189,7 +189,7 @@ if (remembered) { form.username = remembered; rememberAccount.value = true }
 
 .brand-inner {
   max-width: 480px;
-  text-align: right;
+  text-align: center;
 }
 
 .brand-eyebrow {
@@ -221,9 +221,10 @@ if (remembered) { form.username = remembered; rememberAccount.value = true }
    右侧 — 表单卡片
    ============================================ */
 .form-side {
-  flex: 0.85;
+  flex: 1;
   display: flex;
   align-items: center;
+  justify-content: center;
   padding: 48px;
   position: relative;
   z-index: 1;
