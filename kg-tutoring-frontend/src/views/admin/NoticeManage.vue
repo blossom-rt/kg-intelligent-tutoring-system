@@ -117,10 +117,14 @@ onMounted(() => {
 async function fetchList() {
   loading.value = true
   try {
-    const params = { page: pagination.page, pageSize: pagination.pageSize }
-    const res = await getNoticeList(params)
-    noticeList.value = res.records || res.list || []
-    pagination.total = res.total || 0
+    const res = await getNoticeList()
+    if (Array.isArray(res)) {
+      noticeList.value = res
+      pagination.total = res.length
+    } else if (res && res.records) {
+      noticeList.value = res.records
+      pagination.total = res.total || 0
+    }
   } catch { /* ignore */ } finally {
     loading.value = false
   }

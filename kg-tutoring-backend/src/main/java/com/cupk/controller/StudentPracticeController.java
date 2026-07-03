@@ -2,17 +2,20 @@ package com.cupk.controller;
 
 import com.cupk.common.Result;
 import com.cupk.common.UserContext;
+import com.cupk.mapper.WrongQuestionMapper;
 import com.cupk.pojo.Question;
+import com.cupk.pojo.WrongQuestion;
 import com.cupk.service.QuestionService;
 import com.cupk.service.StudyRecordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
- * 学生练习控制器 —— 获取练习题、提交答案并自动评分
+ * 学生练习控制器
  */
 @RestController
 @RequestMapping("/api/student/practice")
@@ -21,30 +24,15 @@ public class StudentPracticeController {
 
     private final QuestionService questionService;
     private final StudyRecordService studyRecordService;
+    private final WrongQuestionMapper wrongQuestionMapper;
 
-    /**
-     * 根据知识点节点获取练习题目（随机抽取）
-     *
-     * @param nodeId 知识点节点 ID
-     */
+    /** 获取练习题目 */
     @GetMapping("/questions")
     public Result<?> getQuestions(@RequestParam Integer nodeId) {
-        // TODO: 后续可根据难度、历史做错记录等智能选题，当前返回该节点下所有题目
         return Result.success(questionService.listByNode(nodeId));
     }
 
-    /**
-     * 提交练习答案并计算得分
-     *
-     * 请求体示例：
-     * {
-     *   "nodeId": 1,
-     *   "answers": [
-     *     { "questionId": 1, "answer": "A" },
-     *     { "questionId": 2, "answer": "B" }
-     *   ]
-     * }
-     */
+    /** 提交答案并评分 */
     @PostMapping("/submit")
     public Result<?> submit(@RequestBody Map<String, Object> body) {
         Integer userId = UserContext.getUserId();
@@ -59,17 +47,34 @@ public class StudentPracticeController {
             Integer questionId = (Integer) ans.get("questionId");
             String userAnswer = (String) ans.get("answer");
 
-            // 获取正确答案并比对
             Question question = questionService.getById(questionId);
             String correctAnswer = question != null ? question.getAnswer() : null;
             boolean isCorrect = correctAnswer != null && correctAnswer.equals(userAnswer);
+
             if (isCorrect) {
                 correctCount++;
+            } else {
+                // 记录错题
+                WrongQuestion wq = wrongQuestionMapper.selectOne(
+                        new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<WrongQuestion>()
+                                .eq(WrongQuestion::getUserId, userId)
+                                .eq(WrongQuestion::getQuestionId, questionId));
+                if (wq != null) {
+                    wq.setWrongAnswer(userAnswer);
+                    wq.setWrongCount(wq.getWrongCount() + 1);
+                    wrongQuestionMapper.updateById(wq);
+                } else {
+                    wq = new WrongQuestion();
+                    wq.setUserId(userId);
+                    wq.setQuestionId(questionId);
+                    wq.setWrongAnswer(userAnswer);
+                    wq.setWrongCount(1);
+                    wq.setCreateTime(LocalDateTime.now());
+                    wrongQuestionMapper.insert(wq);
+                }
             }
-            // TODO: 记录错题 — WrongQuestionService 暂无 add/save 方法，待后续补充
         }
 
-        // 计算正确率并更新学习记录
         double correctRate = total > 0 ? (double) correctCount / total * 100 : 0;
         int masteryLevel = correctRate >= 80 ? 3 : (correctRate >= 60 ? 2 : 1);
         studyRecordService.updateRecord(userId, nodeId, masteryLevel, BigDecimal.valueOf(correctRate), null);

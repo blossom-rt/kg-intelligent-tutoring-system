@@ -31,6 +31,25 @@
         </el-card>
 
         <el-card class="section-card">
+          <template #header><span class="section-title">系统公告</span></template>
+          <div v-if="notices.length" class="todo-list">
+            <div v-for="n in notices" :key="n.id" class="todo-item" style="cursor:pointer;" @click="showNotice(n)">
+              <el-tag size="small" type="warning">公告</el-tag>
+              <span class="notice-link">{{ n.title }}</span>
+            </div>
+          </div>
+          <el-empty v-else description="暂无公告" :image-size="60" />
+        </el-card>
+
+        <!-- 公告详情弹窗 -->
+        <el-dialog v-model="noticeDialog" :title="currentNotice?.title || '公告详情'" width="560px">
+          <div style="font-size:14px;line-height:1.8;color:#333;white-space:pre-wrap;">{{ currentNotice?.content }}</div>
+          <template #footer>
+            <el-button @click="noticeDialog = false">关闭</el-button>
+          </template>
+        </el-dialog>
+
+        <el-card class="section-card">
           <template #header><span class="section-title">个性化推荐</span></template>
           <el-empty description="完成更多学习后为您精准推荐" :image-size="60" />
         </el-card>
@@ -76,12 +95,16 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { getPersonalAnalysis, getWeakAnalysis, getPathList } from '../api/student'
+import { getNoticeList } from '../api/admin'
 
 const router = useRouter()
 const studentName = ref('同学')
 const activePaths = ref([])
 const todos = ref([])
 const stats = ref({ studyDays: 0, totalMinutes: 0, masteredNodes: 0, correctRate: 0 })
+const notices = ref([])
+const noticeDialog = ref(false)
+const currentNotice = ref(null)
 
 const quickLinks = [
   { key: 'knowledge', label: '知识图谱', path: '/student/knowledge' },
@@ -110,6 +133,12 @@ onMounted(async () => {
     }
   } catch { /* ignore */ }
 
+  // 获取系统公告
+  try {
+    const noticeRes = await getNoticeList()
+    if (noticeRes && Array.isArray(noticeRes)) notices.value = noticeRes
+  } catch { /* ignore */ }
+
   // 获取学习路径列表作为备选
   try {
     const pathsRes = await getPathList()
@@ -122,6 +151,11 @@ onMounted(async () => {
     }
   } catch { /* ignore */ }
 })
+
+const showNotice = (n) => {
+  currentNotice.value = n
+  noticeDialog.value = true
+}
 
 const logout = () => {
   localStorage.removeItem('token')

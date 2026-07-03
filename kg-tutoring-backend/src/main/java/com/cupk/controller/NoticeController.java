@@ -3,6 +3,8 @@ package com.cupk.controller;
 import com.cupk.common.BusinessException;
 import com.cupk.common.Result;
 import com.cupk.common.UserContext;
+
+import java.time.LocalDateTime;
 import com.cupk.pojo.SysNotice;
 import com.cupk.service.SysNoticeService;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +43,8 @@ public class NoticeController {
     @PostMapping
     public Result<?> create(@RequestBody SysNotice notice) {
         checkAdmin();
+        notice.setPublisherId(UserContext.getUserId());
+        notice.setCreateTime(LocalDateTime.now());
         sysNoticeService.save(notice);
         return Result.success("新增公告成功");
     }

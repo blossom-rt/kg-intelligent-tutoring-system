@@ -52,6 +52,25 @@
         </el-table>
         <el-empty v-if="!examLoading && recentExams.length === 0" description="暂无测评数据" :image-size="60" />
       </el-card>
+
+      <el-card class="section-card" style="margin-top: 20px;">
+        <template #header><span class="section-title">系统公告</span></template>
+        <div v-if="notices.length">
+          <div v-for="n in notices" :key="n.id" class="todo-item" style="padding: 8px 0;cursor:pointer;" @click="showNotice(n)">
+            <el-tag size="small" type="warning">公告</el-tag>
+            <span style="margin-left: 8px;color:#3670e8;">{{ n.title }}</span>
+          </div>
+        </div>
+        <el-empty v-else description="暂无公告" :image-size="60" />
+      </el-card>
+
+      <!-- 公告详情弹窗 -->
+      <el-dialog v-model="noticeDialog" :title="currentNotice?.title || '公告详情'" width="560px">
+        <div style="font-size:14px;line-height:1.8;color:#333;white-space:pre-wrap;">{{ currentNotice?.content }}</div>
+        <template #footer>
+          <el-button @click="noticeDialog = false">关闭</el-button>
+        </template>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -59,12 +78,16 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { getNoticeList } from '../api/admin'
 
 const router = useRouter()
 const teacherName = ref('老师')
 const examLoading = ref(false)
 const recentExams = ref([])
+const notices = ref([])
 
+const noticeDialog = ref(false)
+const currentNotice = ref(null)
 const stats = reactive({
   courseCount: 0,
   studentCount: 0,
@@ -77,13 +100,10 @@ onMounted(() => {
 })
 
 async function loadDashboard() {
-  // 尝试从API获取数据，若不可用则使用占位数据
+  // 获取系统公告
   try {
-    const token = localStorage.getItem('token')
-    if (token) {
-      // 可在此调用 API 获取教师仪表盘数据
-      // 因 API 可能尚未就绪，使用占位数据
-    }
+    const noticeRes = await getNoticeList()
+    if (noticeRes && Array.isArray(noticeRes)) notices.value = noticeRes
   } catch { /* ignore */ }
 
   // 占位示例数据
@@ -97,6 +117,11 @@ async function loadDashboard() {
     { id: 2, examName: '算法基础单元测验', courseName: '算法设计', studentCount: 30, avgScore: 82.3, createTime: '2026-06-20 14:30' },
     { id: 3, examName: '计算机网络综合测试', courseName: '计算机网络', studentCount: 28, avgScore: 75.8, createTime: '2026-06-15 09:00' }
   ]
+}
+
+const showNotice = (n) => {
+  currentNotice.value = n
+  noticeDialog.value = true
 }
 
 const logout = () => {

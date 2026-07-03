@@ -7,11 +7,11 @@ import com.cupk.service.ExamRecordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
- * 教师考试管理控制器 —— 考试的创建与管理（教师操作）
+ * 教师考试管理控制器
  */
 @RestController
 @RequestMapping("/api/teacher/exams")
@@ -20,56 +20,43 @@ public class TeacherExamController {
 
     private final ExamRecordService examRecordService;
 
-    /**
-     * 检查当前用户是否为教师，否则抛出无权限异常
-     */
     private void checkTeacher() {
         if (!"teacher".equals(UserContext.getRole())) {
             throw new BusinessException("无权限");
         }
     }
 
-    /**
-     * 根据课程查询考试列表
-     *
-     * @param courseId 课程 ID
-     */
+    /** 按课程查询测评列表 */
     @GetMapping
     public Result<?> list(@RequestParam Integer courseId) {
         checkTeacher();
-        // TODO: ExamRecordService 暂不支持按课程查询，需扩展接口添加 listByCourse 方法
-        return Result.success(Collections.emptyList());
+        return Result.success(examRecordService.listByCourse(courseId));
     }
 
-    /**
-     * 创建考试
-     *
-     * 请求体示例：{ "courseId": 1, "questionIds": [1,2,3], "totalScore": 100 }
-     */
+    /** 创建测评 */
     @PostMapping
     public Result<?> create(@RequestBody Map<String, Object> body) {
         checkTeacher();
-        // TODO: ExamRecordService 暂不支持创建考试，需扩展接口添加 save 方法
-        return Result.success("功能待实现");
+        Integer courseId = (Integer) body.get("courseId");
+        List<Integer> questionIds = (List<Integer>) body.get("questionIds");
+        Integer totalScore = (Integer) body.get("totalScore");
+        examRecordService.createExam(courseId, questionIds, totalScore);
+        return Result.success("创建测评成功");
     }
 
-    /**
-     * 修改考试
-     */
+    /** 修改测评 */
     @PutMapping("/{id}")
     public Result<?> update(@PathVariable Integer id, @RequestBody Map<String, Object> body) {
         checkTeacher();
-        // TODO: ExamRecordService 暂不支持修改考试，需扩展接口添加 update 方法
-        return Result.success("功能待实现");
+        examRecordService.updateExam(id, body);
+        return Result.success("修改测评成功");
     }
 
-    /**
-     * 删除考试
-     */
+    /** 删除测评 */
     @DeleteMapping("/{id}")
     public Result<?> delete(@PathVariable Integer id) {
         checkTeacher();
-        // TODO: ExamRecordService 暂不支持删除考试，需扩展接口添加 delete 方法
-        return Result.success("功能待实现");
+        examRecordService.deleteExam(id);
+        return Result.success("删除测评成功");
     }
 }

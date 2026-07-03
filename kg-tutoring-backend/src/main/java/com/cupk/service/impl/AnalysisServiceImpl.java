@@ -39,11 +39,29 @@ public class AnalysisServiceImpl implements AnalysisService {
                         .eq(KnowledgeNode::getCourseId, courseId));
         result.put("totalNodes", totalNodes);
 
-        // 该课程下所有学生的掌握度统计
-        // TODO: 完善班级分析逻辑 —— 按课程关联学生、汇总掌握度
-        result.put("averageMastery", 0);
-        result.put("studentCount", 0);
-        result.put("message", "班级分析功能待完善");
+        // 该课程下所有学习记录的去重学生数
+        List<StudyRecord> allRecords = studyRecordMapper.selectList(
+                new LambdaQueryWrapper<StudyRecord>()
+                        .inSql(StudyRecord::getNodeId,
+                                "SELECT id FROM knowledge_node WHERE course_id = " + courseId));
+        long studentCount = allRecords.stream()
+                .map(StudyRecord::getUserId)
+                .distinct().count();
+        result.put("studentCount", studentCount);
+
+        // 平均掌握度
+        double avgMastery = allRecords.stream()
+                .filter(r -> r.getMasteryLevel() != null)
+                .mapToInt(StudyRecord::getMasteryLevel)
+                .average().orElse(0);
+        result.put("averageMastery", BigDecimal.valueOf(avgMastery).setScale(2, RoundingMode.HALF_UP));
+
+        // 平均正确率
+        double avgCorrect = allRecords.stream()
+                .filter(r -> r.getCorrectRate() != null)
+                .mapToDouble(r -> r.getCorrectRate().doubleValue())
+                .average().orElse(0);
+        result.put("averageCorrectRate", BigDecimal.valueOf(avgCorrect).setScale(2, RoundingMode.HALF_UP));
 
         return result;
     }
