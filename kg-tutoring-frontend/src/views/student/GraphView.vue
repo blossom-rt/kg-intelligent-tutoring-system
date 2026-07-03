@@ -1,14 +1,13 @@
 <template>
   <div class="graph-view">
-    <div class="page-header">
-      <h2 class="page-title">知识图谱</h2>
-      <div class="header-actions">
-        <el-select v-model="selectedCourseId" placeholder="选择课程" clearable style="width:220px" @change="onCourseChange">
+    <StudentHeader title="知识图谱" subtitle="点击节点查看详情，拖拽可自由探索">
+      <template #actions>
+        <el-select v-model="selectedCourseId" placeholder="选择课程" clearable size="default" style="width:200px" @change="onCourseChange">
           <el-option v-for="c in courses" :key="c.id" :label="c.courseName" :value="c.id" />
         </el-select>
-        <el-button @click="fitGraph" :disabled="!chart">重置视图</el-button>
-      </div>
-    </div>
+        <el-button @click="fitGraph" :disabled="!chart" round>重置视图</el-button>
+      </template>
+    </StudentHeader>
 
     <el-card class="graph-card" v-loading="loading">
       <div ref="chartRef" class="chart-container"></div>
@@ -44,6 +43,7 @@ import { ref, onMounted, onBeforeUnmount, nextTick, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import * as echarts from 'echarts'
 import { ElMessage } from 'element-plus'
+import StudentHeader from '../../components/StudentHeader.vue'
 import { getStudentGraph, generatePath } from '../../api/student'
 import { getCourseList } from '../../api/knowledge'
 
@@ -77,7 +77,7 @@ function buildChartData() {
     value: n.name,
     symbolSize: n.difficulty === 3 ? 60 : n.difficulty === 2 ? 50 : 40,
     itemStyle: {
-      color: n.difficulty === 3 ? '#e74c3c' : n.difficulty === 2 ? '#f39c12' : '#3498db'
+      color: n.difficulty === 3 ? '#e74c3c' : n.difficulty === 2 ? '#f39c12' : '#ff7b3d'
     },
     category: n.courseId,
     raw: n
@@ -86,7 +86,7 @@ function buildChartData() {
   const chartEdges = edgeList.map(e => ({
     source: String(e.fromNodeId),
     target: String(e.toNodeId),
-    lineStyle: { color: '#999', width: 2, curveness: 0.2, type: 'solid' }
+    lineStyle: { color: '#ccc', width: 2, curveness: 0.2, type: 'solid' }
   }))
 
   return { chartNodes, chartEdges }
@@ -118,14 +118,14 @@ function renderChart() {
         show: true,
         position: 'bottom',
         fontSize: 12,
-        color: '#333',
+        color: '#2d2a26',
         formatter: (p) => p.name.length > 6 ? p.name.slice(0, 6) + '..' : p.name
       },
       edgeLabel: { show: false },
       lineStyle: { color: '#bbb', width: 2, curveness: 0.2 },
       emphasis: {
         focus: 'adjacency',
-        lineStyle: { width: 3, color: '#2c5eb5' }
+        lineStyle: { width: 3, color: '#ff7b3d' }
       }
     }]
   })
@@ -192,13 +192,10 @@ watch(() => [dialogVisible.value], () => setTimeout(() => chart.value?.resize(),
 </script>
 
 <style scoped>
-.graph-view { min-height: 100vh; background: #f5f7fa; padding: 24px 32px; }
-.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-.page-title { margin: 0; font-size: 22px; font-weight: 700; color: #2c5eb5; }
-.header-actions { display: flex; gap: 12px; align-items: center; }
-.graph-card { border-radius: 12px; min-height: 500px; position: relative; }
+.graph-view { min-height: 100vh; background: #faf7f2; }
+.graph-card { border-radius: 12px; min-height: 500px; position: relative; margin: 0 32px 24px; }
 .chart-container { width: 100%; height: 600px; }
 .detail-desc { margin-top: 20px; }
-.detail-desc h4 { margin: 0 0 8px; font-size: 15px; color: #303133; }
-.detail-desc p { font-size: 14px; color: #606266; line-height: 1.8; white-space: pre-wrap; }
+.detail-desc h4 { margin: 0 0 8px; font-size: 15px; color: #2d2a26; }
+.detail-desc p { font-size: 14px; color: #6b655e; line-height: 1.8; white-space: pre-wrap; }
 </style>

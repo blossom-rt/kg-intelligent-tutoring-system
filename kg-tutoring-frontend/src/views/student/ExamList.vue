@@ -1,8 +1,6 @@
 <template>
   <div class="exam-list-page">
-    <div class="page-header">
-      <h2 class="page-title">我的测评</h2>
-    </div>
+    <StudentHeader title="测评中心" subtitle="检验学习成果，发现薄弱环节" />
 
     <el-table
       v-loading="loading"
@@ -55,6 +53,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
+import StudentHeader from '../../components/StudentHeader.vue'
 import { getStudentExams } from '../../api/student'
 
 const router = useRouter()
@@ -99,24 +98,13 @@ onMounted(fetchExams)
 <style scoped>
 .exam-list-page {
   min-height: 100vh;
-  background: #f5f7fa;
-  padding: 24px 32px;
-}
-
-.page-header {
-  margin-bottom: 24px;
-}
-
-.page-title {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 700;
-  color: #2c5eb5;
+  background: #faf7f2;
+  
 }
 
 .exam-name {
   font-weight: 500;
-  color: #303133;
+  color: #2d2a26;
 }
 
 .score-value {

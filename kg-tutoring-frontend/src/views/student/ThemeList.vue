@@ -1,8 +1,6 @@
 <template>
   <div class="theme-list-page">
-    <div class="page-header">
-      <h2 class="page-title">跨学科主题</h2>
-    </div>
+    <StudentHeader title="跨学科主题" subtitle="多学科融合，拓展思维边界" />
 
     <div v-loading="loading" class="theme-grid">
       <el-empty v-if="!loading && themes.length === 0" description="暂无跨学科主题" :image-size="60" />
@@ -48,6 +46,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { Clock } from '@element-plus/icons-vue'
+import StudentHeader from '../../components/StudentHeader.vue'
 import request from '../../utils/request'
 
 const router = useRouter()
@@ -91,19 +90,8 @@ onMounted(fetchThemes)
 <style scoped>
 .theme-list-page {
   min-height: 100vh;
-  background: #f5f7fa;
-  padding: 24px 32px;
-}
-
-.page-header {
-  margin-bottom: 24px;
-}
-
-.page-title {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 700;
-  color: #2c5eb5;
+  background: #faf7f2;
+  
 }
 
 .theme-grid {
@@ -135,12 +123,12 @@ onMounted(fetchThemes)
   margin: 0;
   font-size: 17px;
   font-weight: 600;
-  color: #303133;
+  color: #2d2a26;
 }
 
 .theme-desc {
   font-size: 14px;
-  color: #909399;
+  color: #a09a92;
   line-height: 1.7;
   margin: 0 0 16px;
 }
@@ -163,7 +151,7 @@ onMounted(fetchThemes)
 
 .theme-time {
   font-size: 13px;
-  color: #c0c4cc;
+  color: #bbb6ad;
   display: flex;
   align-items: center;
   gap: 4px;

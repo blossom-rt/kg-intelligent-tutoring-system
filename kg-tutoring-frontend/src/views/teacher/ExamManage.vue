@@ -76,7 +76,7 @@
               :value="q.id"
             />
           </el-select>
-          <div style="font-size: 12px; color: #999; margin-top: 4px;">
+          <div style="font-size: 12px; color: #a09a92; margin-top: 4px;">
             已选 {{ form.questionIds.length }} 道题目
           </div>
         </el-form-item>
@@ -233,8 +233,5 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.page-container { padding: 20px 24px; background: #f5f7fa; min-height: 100vh; }
-.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-.page-header h2 { margin: 0; font-size: 20px; color: #303133; }
-.filter-card { margin-bottom: 16px; }
+.page-container { padding: 20px 24px; background: #faf7f2; min-height: 100vh; }
 </style>

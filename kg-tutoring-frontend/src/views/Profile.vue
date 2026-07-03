@@ -169,8 +169,8 @@ async function handleUpdatePassword() {
 </script>
 
 <style scoped>
-.profile-page { padding: 20px; background: #f5f7fa; min-height: 100vh; }
-.page-header h2 { margin: 0 0 16px; font-size: 20px; color: #303133; }
+.profile-page { padding: 20px; background: #faf7f2; min-height: 100vh; }
+.page-header h2 { margin: 0 0 16px; font-size: 20px; color: #2d2a26; }
 .section-card { margin-bottom: 20px; }
-.section-title { font-weight: 600; color: #333; }
+.section-title { font-weight: 600; color: #2d2a26; }
 </style>

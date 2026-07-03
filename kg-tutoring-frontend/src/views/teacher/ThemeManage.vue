@@ -275,8 +275,5 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.page-container { padding: 20px 24px; background: #f5f7fa; min-height: 100vh; }
-.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-.page-header h2 { margin: 0; font-size: 20px; color: #303133; }
-.filter-card { margin-bottom: 16px; }
+.page-container { padding: 20px 24px; background: #faf7f2; min-height: 100vh; }
 </style>

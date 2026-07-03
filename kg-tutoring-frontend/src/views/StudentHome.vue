@@ -1,193 +1,264 @@
 <template>
   <div class="student-home">
     <header class="top-bar">
-      <h2 class="welcome">欢迎回来，{{ studentName }}</h2>
-      <el-button type="info" size="small" @click="logout">退出登录</el-button>
+      <div class="user-info">
+        <!-- 时间感知问候小组件 -->
+        <div class="greeting-widget" :class="timePeriod">
+          <div class="celestial">
+            <div class="sun-moon"></div>
+            <div class="orbit-ring"></div>
+          </div>
+        </div>
+        <div>
+          <h2>{{ timeGreeting }}，{{ studentName }}</h2>
+          <p>{{ motivationTip }}</p>
+        </div>
+      </div>
+      <el-button class="logout-btn" @click="logout">退出登录</el-button>
     </header>
 
     <div class="dashboard">
       <div class="main-col">
-        <el-card class="section-card">
-          <template #header><span class="section-title">快捷续学</span></template>
+        <div class="card">
+          <div class="card-header"><el-icon class="card-icon"><Clock /></el-icon>快捷续学</div>
           <div v-if="activePaths.length" class="path-list">
             <div v-for="p in activePaths" :key="p.id" class="path-item">
-              <span class="path-name">{{ p.pathName }}</span>
-              <el-progress :percentage="p.progress" :stroke-width="8" />
-              <el-button type="primary" size="small" link>继续学习</el-button>
+              <div class="path-info">
+                <span class="path-title">{{ p.pathName }}</span>
+                <el-progress :percentage="p.progress" :stroke-width="6" :show-text="false" />
+              </div>
+              <el-tag size="small" round>进行中</el-tag>
+              <el-button type="primary" size="small" round>继续</el-button>
             </div>
           </div>
-          <el-empty v-else description="暂无进行中的学习路径" :image-size="60" />
-        </el-card>
+          <div v-else class="empty-hint">暂无进行中的学习，去知识图谱开启一段旅程吧</div>
+        </div>
 
-        <el-card class="section-card">
-          <template #header><span class="section-title">待办提醒</span></template>
+        <div class="card">
+          <div class="card-header"><el-icon class="card-icon"><Bell /></el-icon>待办提醒</div>
           <div v-if="todos.length" class="todo-list">
             <div v-for="t in todos" :key="t.id" class="todo-item">
-              <el-tag :type="t.tagType" size="small">{{ t.label }}</el-tag>
+              <el-tag :type="t.tagType" size="small" round>{{ t.label }}</el-tag>
               <span>{{ t.content }}</span>
             </div>
           </div>
-          <el-empty v-else description="暂无待办事项" :image-size="60" />
-        </el-card>
+          <div v-else class="empty-hint">暂无待办，一切尽在掌握</div>
+        </div>
 
-        <el-card class="section-card">
-          <template #header><span class="section-title">系统公告</span></template>
-          <div v-if="notices.length" class="todo-list">
-            <div v-for="n in notices" :key="n.id" class="todo-item" style="cursor:pointer;" @click="showNotice(n)">
-              <el-tag size="small" type="warning">公告</el-tag>
-              <span class="notice-link">{{ n.title }}</span>
-            </div>
-          </div>
-          <el-empty v-else description="暂无公告" :image-size="60" />
-        </el-card>
-
-        <!-- 公告详情弹窗 -->
-        <el-dialog v-model="noticeDialog" :title="currentNotice?.title || '公告详情'" width="560px">
-          <div style="font-size:14px;line-height:1.8;color:#333;white-space:pre-wrap;">{{ currentNotice?.content }}</div>
-          <template #footer>
-            <el-button @click="noticeDialog = false">关闭</el-button>
-          </template>
-        </el-dialog>
-
-        <el-card class="section-card">
-          <template #header><span class="section-title">个性化推荐</span></template>
-          <el-empty description="完成更多学习后为您精准推荐" :image-size="60" />
-        </el-card>
+        <div class="card">
+          <div class="card-header"><el-icon class="card-icon"><Present /></el-icon>个性化推荐</div>
+          <div class="empty-hint">完成更多学习后，系统将为你精准推荐</div>
+        </div>
       </div>
 
       <div class="side-col">
-        <el-card class="section-card">
-          <template #header><span class="section-title">学情概览</span></template>
+        <div class="card">
+          <div class="card-header"><el-icon class="card-icon"><DataAnalysis /></el-icon>学情概览</div>
           <div class="stats-grid">
             <div class="stat-item">
-              <span class="stat-num">{{ stats.studyDays }}</span>
-              <span class="stat-label">累计学习天数</span>
+              <div class="stat-circle blue">{{ stats.studyDays }}</div>
+              <span>学习天数</span>
             </div>
             <div class="stat-item">
-              <span class="stat-num">{{ stats.totalMinutes }}</span>
-              <span class="stat-label">学习时长(分)</span>
+              <div class="stat-circle green">{{ stats.totalMinutes }}</div>
+              <span>学习分钟</span>
             </div>
             <div class="stat-item">
-              <span class="stat-num">{{ stats.masteredNodes }}</span>
-              <span class="stat-label">已掌握知识点</span>
+              <div class="stat-circle purple">{{ stats.masteredNodes }}</div>
+              <span>已掌握</span>
             </div>
             <div class="stat-item">
-              <span class="stat-num">{{ stats.correctRate }}%</span>
-              <span class="stat-label">总正确率</span>
+              <div class="stat-circle orange">{{ stats.correctRate }}%</div>
+              <span>正确率</span>
             </div>
           </div>
-        </el-card>
+        </div>
 
-        <el-card class="section-card">
-          <template #header><span class="section-title">快捷入口</span></template>
+        <div class="card">
+          <div class="card-header"><el-icon class="card-icon"><Compass /></el-icon>快捷入口</div>
           <div class="quick-links">
-            <el-button v-for="link in quickLinks" :key="link.key" @click="$router.push(link.path)">
-              {{ link.label }}
-            </el-button>
+            <div v-for="link in quickLinks" :key="link.key" class="quick-item" @click="$router.push(link.path)">
+              <span class="quick-icon"><el-icon :size="20"><component :is="link.icon" /></el-icon></span>
+              <span class="quick-label">{{ link.label }}</span>
+            </div>
           </div>
-        </el-card>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { getPersonalAnalysis, getWeakAnalysis, getPathList } from '../api/student'
-import { getNoticeList } from '../api/admin'
+import {
+  Clock, Bell, Present, DataAnalysis, Compass,
+  Grid, Connection, MapLocation, Notebook
+} from '@element-plus/icons-vue'
+import { getStudentDashboard } from '../api/student'
 
 const router = useRouter()
 const studentName = ref('同学')
 const activePaths = ref([])
 const todos = ref([])
 const stats = ref({ studyDays: 0, totalMinutes: 0, masteredNodes: 0, correctRate: 0 })
-const notices = ref([])
-const noticeDialog = ref(false)
-const currentNotice = ref(null)
 
 const quickLinks = [
-  { key: 'knowledge', label: '知识图谱', path: '/student/knowledge' },
-  { key: 'themes', label: '跨学科主题', path: '/student/themes' },
-  { key: 'exams', label: '测评中心', path: '/student/exams' },
-  { key: 'wrong', label: '错题本', path: '/student/wrong' },
+  { key: 'knowledge', label: '知识图谱', icon: Grid, path: '/student/knowledge' },
+  { key: 'subjects', label: '跨学科主题', icon: Connection, path: '/student/themes' },
+  { key: 'paths', label: '学习路径', icon: MapLocation, path: '/student/path' },
+  { key: 'wrong', label: '错题本', icon: Notebook, path: '/student/wrong' },
 ]
 
+// ── 时间感知问候 ──
+const tips = [
+  '每一步积累，都在靠近目标',
+  '今天的学习，是明天的底气',
+  '保持好奇心，知识自会生长',
+  '学得越深，世界越大',
+  '别怕慢，怕的是停下来',
+  '温故知新，可以为师矣',
+]
+const timeGreeting = computed(() => {
+  const h = new Date().getHours()
+  if (h < 6) return '夜深了'
+  if (h < 9) return '早上好'
+  if (h < 12) return '上午好'
+  if (h < 14) return '中午好'
+  if (h < 18) return '下午好'
+  return '晚上好'
+})
+const timePeriod = computed(() => {
+  const h = new Date().getHours()
+  if (h >= 6 && h < 18) return 'day'
+  return 'night'
+})
+const motivationTip = ref(tips[Math.floor(Math.random() * tips.length)])
+
 onMounted(async () => {
-  // 获取个人分析数据
+  motivationTip.value = tips[Math.floor(Math.random() * tips.length)]
   try {
-    const analysisRes = await getPersonalAnalysis()
-    if (analysisRes) {
-      stats.value.studyDays = analysisRes.studyDays || stats.value.studyDays
-      stats.value.totalMinutes = analysisRes.totalMinutes || stats.value.totalMinutes
-      stats.value.masteredNodes = analysisRes.masteredNodes || stats.value.masteredNodes
-      stats.value.correctRate = analysisRes.correctRate || stats.value.correctRate
+    const res = await getStudentDashboard()
+    if (res) {
+      studentName.value = res.realName || '同学'
+      activePaths.value = res.activePaths || []
+      todos.value = res.todos || []
+      stats.value = res.stats || stats.value
     }
-  } catch { /* ignore */ }
-
-  // 获取弱点分析
-  try {
-    const weakRes = await getWeakAnalysis()
-    if (weakRes && weakRes.length) {
-      // 弱点数据可用于后续扩展展示
-    }
-  } catch { /* ignore */ }
-
-  // 获取系统公告
-  try {
-    const noticeRes = await getNoticeList()
-    if (noticeRes && Array.isArray(noticeRes)) notices.value = noticeRes
-  } catch { /* ignore */ }
-
-  // 获取学习路径列表作为备选
-  try {
-    const pathsRes = await getPathList()
-    if (pathsRes && pathsRes.length && activePaths.value.length === 0) {
-      activePaths.value = pathsRes.slice(0, 5).map(p => ({
-        id: p.id,
-        pathName: p.pathName || p.name,
-        progress: p.progress || 0
-      }))
-    }
-  } catch { /* ignore */ }
+  } catch { }
 })
 
-const showNotice = (n) => {
-  currentNotice.value = n
-  noticeDialog.value = true
-}
-
-const logout = () => {
-  localStorage.removeItem('token')
-  localStorage.removeItem('role')
-  router.push('/login')
-}
+const logout = () => { localStorage.clear(); router.push('/login') }
 </script>
 
 <style scoped>
-.student-home { min-height: 100vh; background: #f5f7fa; }
+.student-home { min-height: 100vh; background: #faf7f2; }
+
+/* ── 顶栏 ── */
 .top-bar {
   display: flex; justify-content: space-between; align-items: center;
-  padding: 16px 32px; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  padding: 20px 36px;
+  background: linear-gradient(135deg, #f5f1ea, #f0ece4);
+  color: #2d2a26;
 }
-.welcome { margin: 0; font-size: 18px; color: #2c5eb5; }
-.dashboard { display: flex; gap: 20px; padding: 24px 32px; }
+.user-info { display: flex; align-items: center; gap: 16px; }
+.user-info h2 { margin: 0; font-size: 20px; font-weight: 600; }
+.user-info p { margin: 2px 0 0; font-size: 13px; color: #8a847e; }
+.logout-btn { background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.12); color: #6b655e; border-radius: 8px; }
+.logout-btn:hover { background: rgba(0,0,0,0.08); }
+
+/* ── 时间问候小组件 ── */
+.greeting-widget {
+  width: 48px; height: 48px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  flex-shrink: 0;
+}
+.greeting-widget.day { background: linear-gradient(135deg, #ffe0b2, #ffcc80); }
+.greeting-widget.night { background: linear-gradient(135deg, #37474f, #263238); }
+.celestial { position: relative; width: 28px; height: 28px; }
+.sun-moon {
+  width: 18px; height: 18px; border-radius: 50%;
+  position: absolute; top: 5px; left: 5px;
+  transition: background 0.6s ease, box-shadow 0.6s ease;
+}
+.day .sun-moon {
+  background: #ff9800;
+  box-shadow: 0 0 8px rgba(255,152,0,0.6), 0 0 16px rgba(255,152,0,0.3);
+}
+.night .sun-moon {
+  background: #e0e0e0;
+  box-shadow: 0 0 6px rgba(224,224,224,0.4);
+  clip-path: circle(65% at 35% 35%);
+}
+.orbit-ring {
+  width: 26px; height: 26px; border-radius: 50%;
+  border: 1.5px dashed rgba(255,255,255,0.35);
+  position: absolute; top: 1px; left: 1px;
+  animation: orbit 8s linear infinite;
+}
+@keyframes orbit { to { transform: rotate(360deg); } }
+
+/* ── 卡片 ── */
+.dashboard { display: flex; gap: 24px; padding: 24px 36px; }
 .main-col { flex: 2; display: flex; flex-direction: column; gap: 20px; }
 .side-col { flex: 1; display: flex; flex-direction: column; gap: 20px; }
-.section-card { border-radius: 12px; }
-.section-title { font-weight: 600; color: #333; }
 
-.path-item { display: flex; align-items: center; gap: 12px; padding: 8px 0; }
-.path-item:not(:last-child) { border-bottom: 1px solid #f0f0f0; }
-.path-name { flex: 1; font-size: 14px; color: #555; }
+.card {
+  background: #fffdf9; border-radius: 16px; padding: 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  transition: box-shadow 0.2s ease;
+}
+.card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+.card-header {
+  font-size: 16px; font-weight: 600; color: #2d2a26;
+  margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+}
+.card-icon { color: #ff7b3d; font-size: 16px; flex-shrink: 0; }
+.empty-hint { color: #a09a92; font-size: 14px; text-align: center; padding: 20px 0; }
 
-.todo-item { display: flex; align-items: center; gap: 10px; padding: 6px 0; font-size: 14px; color: #666; }
+/* ── 路径列表 ── */
+.path-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; }
+.path-item:not(:last-child) { border-bottom: 1px solid #e8e3db; }
+.path-info { flex: 1; }
+.path-title { font-size: 14px; color: #2d2a26; margin-bottom: 6px; font-weight: 500; display: block; }
 
-.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+/* ── 待办 ── */
+.todo-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; font-size: 14px; color: #6b655e; }
+
+/* ── 学情统计 ── */
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .stat-item { text-align: center; }
-.stat-num { display: block; font-size: 24px; font-weight: 700; color: #3670e8; }
-.stat-label { font-size: 12px; color: #999; }
+.stat-circle {
+  width: 56px; height: 56px; border-radius: 50%; margin: 0 auto 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 700; color: #fff;
+}
+.stat-circle.blue { background: linear-gradient(135deg, #ff7b3d, #e06830); }
+.stat-circle.green { background: linear-gradient(135deg, #5eaf83, #3d8a5e); }
+.stat-circle.purple { background: linear-gradient(135deg, #d4a853, #b89030); }
+.stat-circle.orange { background: linear-gradient(135deg, #f5a623, #d4881a); }
+.stat-item span { font-size: 12px; color: #a09a92; }
 
-.quick-links { display: flex; flex-direction: column; gap: 8px; }
-.quick-links .el-button { justify-content: flex-start; }
+/* ── 快捷入口 ── */
+.quick-links { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.quick-item {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  padding: 18px 8px; border-radius: 14px;
+  background: #f8f5f0; cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.quick-item:hover { background: #f3efe8; transform: translateY(-3px); }
+.quick-icon {
+  width: 40px; height: 40px; border-radius: 12px;
+  background: #fff; display: flex; align-items: center; justify-content: center;
+  color: #ff7b3d; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.quick-label { font-size: 13px; font-weight: 500; color: #6b655e; }
+
+/* ── 响应式 ── */
+@media (max-width: 900px) {
+  .dashboard { flex-direction: column; }
+  .user-info h2 { font-size: 17px; }
+}
 </style>

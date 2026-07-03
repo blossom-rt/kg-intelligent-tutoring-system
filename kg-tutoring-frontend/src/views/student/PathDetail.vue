@@ -110,7 +110,7 @@ const statusLabel = (status) => {
 }
 
 const timelineColor = (status) => {
-  const map = { completed: '#67c23a', learning: '#409eff', active: '#409eff', locked: '#c0c4cc' }
+  const map = { completed: '#67c23a', learning: '#ff7b3d', active: '#ff7b3d', locked: '#c0c4cc' }
   return map[status] || '#c0c4cc'
 }
 
@@ -154,7 +154,7 @@ onMounted(fetchDetail)
 <style scoped>
 .path-detail-page {
   min-height: 100vh;
-  background: #f5f7fa;
+  background: #faf7f2;
   padding: 24px 32px;
 }
 
@@ -172,7 +172,7 @@ onMounted(fetchDetail)
   margin: 0;
   font-size: 22px;
   font-weight: 700;
-  color: #2c5eb5;
+  color: #2d2a26;
 }
 
 .info-card {
@@ -188,13 +188,13 @@ onMounted(fetchDetail)
 
 .info-label {
   font-size: 14px;
-  color: #909399;
+  color: #a09a92;
   min-width: 90px;
 }
 
 .info-value {
   font-size: 15px;
-  color: #303133;
+  color: #2d2a26;
   font-weight: 500;
 }
 
@@ -206,7 +206,7 @@ onMounted(fetchDetail)
 
 .progress-text {
   font-size: 14px;
-  color: #3670e8;
+  color: #ff7b3d;
   font-weight: 600;
   min-width: 40px;
 }
@@ -217,24 +217,24 @@ onMounted(fetchDetail)
 
 .card-title {
   font-weight: 600;
-  color: #303133;
+  color: #2d2a26;
 }
 
 .timeline-node {
   padding: 10px 14px;
   border-radius: 10px;
-  background: #fafbfc;
+  background: #f8f5f0;
   transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .timeline-node.clickable {
   cursor: pointer;
-  background: #ecf5ff;
-  border: 1px solid #d9ecff;
+  background: #f3efe8;
+  border: 1px solid rgba(255,123,61,0.08);
 }
 
 .timeline-node.clickable:hover {
-  background: #d9ecff;
+  background: rgba(255,123,61,0.08);
   transform: translateX(4px);
 }
 
@@ -252,18 +252,18 @@ onMounted(fetchDetail)
 .node-title {
   font-size: 15px;
   font-weight: 600;
-  color: #303133;
+  color: #2d2a26;
   flex: 1;
 }
 
 .node-desc {
   font-size: 13px;
-  color: #909399;
+  color: #a09a92;
   margin: 0 0 6px;
 }
 
 .node-status-text {
   font-size: 12px;
-  color: #c0c4cc;
+  color: #bbb6ad;
 }
 </style>

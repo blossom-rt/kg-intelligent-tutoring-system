@@ -216,23 +216,8 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.page-container { padding: 20px 24px; background: #f5f7fa; min-height: 100vh; }
-.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-.page-header h2 { margin: 0; font-size: 20px; color: #303133; }
-.filter-card { margin-bottom: 16px; }
-
-.split-panels { display: flex; gap: 16px; }
-.panel-left { flex: 1; min-width: 240px; }
-.panel-right { flex: 2; }
-.panel-title { font-weight: 600; color: #333; }
-
-.node-list { display: flex; flex-wrap: wrap; gap: 8px; }
-.node-chip {
-  display: flex; align-items: center; gap: 6px;
-  padding: 6px 12px; border-radius: 8px; background: #f0f3f7;
-  cursor: pointer; transition: all 0.2s; user-select: none;
-}
+.page-container { padding: 20px 24px; background: #faf7f2; min-height: 100vh; }
 .node-chip:hover { background: #dce4f0; }
-.node-chip.node-selected { background: #d4e4fc; box-shadow: 0 0 0 2px #3670e8 inset; }
-.node-name { font-size: 13px; color: #555; }
+.node-chip.node-selected { background: rgba(255,123,61,0.1); box-shadow: 0 0 0 2px #ff7b3d inset; }
+.node-name { font-size: 13px; color: #6b655e; }
 </style>

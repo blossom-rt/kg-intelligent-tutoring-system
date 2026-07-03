@@ -248,7 +248,7 @@ onMounted(fetchQuestions)
 <style scoped>
 .practice-page {
   min-height: 100vh;
-  background: #f5f7fa;
+  background: #faf7f2;
   padding: 24px 32px;
 }
 
@@ -260,7 +260,7 @@ onMounted(fetchQuestions)
   margin: 0;
   font-size: 22px;
   font-weight: 700;
-  color: #2c5eb5;
+  color: #2d2a26;
 }
 
 .loading-area {
@@ -290,18 +290,18 @@ onMounted(fetchQuestions)
 .score-text {
   font-size: 20px;
   font-weight: 700;
-  color: #303133;
+  color: #2d2a26;
 }
 
 .result-title {
   margin: 0 0 8px;
   font-size: 22px;
-  color: #303133;
+  color: #2d2a26;
 }
 
 .result-summary {
   font-size: 15px;
-  color: #606266;
+  color: #6b655e;
   margin: 0 0 24px;
 }
 
@@ -326,7 +326,7 @@ onMounted(fetchQuestions)
 
 .progress-label {
   font-size: 14px;
-  color: #606266;
+  color: #6b655e;
   white-space: nowrap;
 }
 
@@ -343,7 +343,7 @@ onMounted(fetchQuestions)
 .question-no {
   font-weight: 600;
   font-size: 15px;
-  color: #303133;
+  color: #2d2a26;
 }
 
 .question-body {
@@ -352,7 +352,7 @@ onMounted(fetchQuestions)
 
 .question-text {
   font-size: 16px;
-  color: #303133;
+  color: #2d2a26;
   line-height: 1.8;
   margin: 0 0 24px;
 }
@@ -365,13 +365,13 @@ onMounted(fetchQuestions)
 
 .option-item {
   padding: 12px 16px;
-  border: 1px solid #e4e7ed;
+  border: 1px solid #e8e3db;
   border-radius: 10px;
   transition: border-color 0.2s ease, background 0.2s ease;
 }
 
 .option-item:hover:not(.option-correct):not(.option-wrong) {
-  border-color: #c0c4cc;
+  border-color: #bbb6ad;
 }
 
 .option-item :deep(.el-radio) {
@@ -380,7 +380,7 @@ onMounted(fetchQuestions)
 
 .option-correct {
   border-color: #67c23a;
-  background: #f0f9eb;
+  background: #edf2ec;
 }
 
 .option-wrong {
@@ -399,7 +399,7 @@ onMounted(fetchQuestions)
 .explanation {
   margin: 8px 0 0;
   font-size: 14px;
-  color: #606266;
+  color: #6b655e;
   line-height: 1.6;
 }
 

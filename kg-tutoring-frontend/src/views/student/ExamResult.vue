@@ -161,7 +161,7 @@ onMounted(fetchResult)
 <style scoped>
 .exam-result-page {
   min-height: 100vh;
-  background: #f5f7fa;
+  background: #faf7f2;
   padding: 24px 32px;
 }
 
@@ -179,7 +179,7 @@ onMounted(fetchResult)
   margin: 0;
   font-size: 22px;
   font-weight: 700;
-  color: #2c5eb5;
+  color: #2d2a26;
 }
 
 .score-card {
@@ -203,12 +203,12 @@ onMounted(fetchResult)
 .score-num {
   font-size: 36px;
   font-weight: 700;
-  color: #303133;
+  color: #2d2a26;
 }
 
 .score-total {
   font-size: 14px;
-  color: #909399;
+  color: #a09a92;
 }
 
 .score-meta {
@@ -218,7 +218,7 @@ onMounted(fetchResult)
 .exam-title {
   margin: 0 0 12px;
   font-size: 18px;
-  color: #303133;
+  color: #2d2a26;
 }
 
 .pass-tag {
@@ -233,12 +233,12 @@ onMounted(fetchResult)
 
 .card-title {
   font-weight: 600;
-  color: #303133;
+  color: #2d2a26;
 }
 
 .report-content {
   font-size: 15px;
-  color: #606266;
+  color: #6b655e;
   line-height: 1.9;
 }
 
@@ -254,7 +254,7 @@ onMounted(fetchResult)
 
 .wrong-question-text {
   font-size: 15px;
-  color: #303133;
+  color: #2d2a26;
   margin: 0 0 12px;
   line-height: 1.7;
 }
@@ -265,7 +265,7 @@ onMounted(fetchResult)
 }
 
 .label {
-  color: #909399;
+  color: #a09a92;
   margin-right: 4px;
 }
 
@@ -280,7 +280,7 @@ onMounted(fetchResult)
 }
 
 .wrong-explanation {
-  color: #606266;
+  color: #6b655e;
   line-height: 1.6;
 }
 </style>

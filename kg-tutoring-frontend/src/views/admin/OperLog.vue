@@ -109,8 +109,8 @@ function handleReset() {
 </script>
 
 <style scoped>
-.oper-log { padding: 20px; background: #f5f7fa; min-height: 100vh; }
-.page-header h2 { margin: 0 0 16px; font-size: 20px; color: #303133; }
+.oper-log { padding: 20px; background: #faf7f2; min-height: 100vh; }
+.page-header h2 { margin: 0 0 16px; font-size: 20px; color: #2d2a26; }
 .filter-card { margin-bottom: 16px; }
 .table-card { margin-bottom: 16px; }
 .pagination { margin-top: 16px; display: flex; justify-content: flex-end; }

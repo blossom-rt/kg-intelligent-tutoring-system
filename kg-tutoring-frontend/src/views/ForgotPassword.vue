@@ -1,44 +1,56 @@
 <template>
-  <div class="forgot-container">
-    <div class="forgot-card">
-      <h1 class="page-title">找回密码</h1>
-      <p class="page-subtitle">通过注册邮箱验证后重置密码</p>
+  <div class="forgot-root">
+    <section class="brand-side">
+      <div class="brand-inner">
+        <p class="brand-eyebrow">CUPK · 计算机系</p>
+        <h1 class="brand-title">找回密码</h1>
+        <p class="brand-desc">
+          通过注册邮箱验证<br />即可重置你的密码
+        </p>
+      </div>
+    </section>
 
-      <el-form ref="formRef" :model="form" :rules="rules" class="forgot-form" @keyup.enter="submit">
-        <el-form-item prop="email">
-          <el-input v-model="form.email" placeholder="请输入注册时绑定的邮箱"
-            :prefix-icon="Message" size="large" clearable />
-        </el-form-item>
+    <section class="form-side">
+      <div class="form-card">
+        <h2 class="form-heading">重置密码</h2>
 
-        <el-form-item prop="code">
-          <div class="code-row">
-            <el-input v-model="form.code" placeholder="邮箱验证码"
-              :prefix-icon="Key" size="large" maxlength="6" />
-            <el-button class="code-btn" size="large" :disabled="codeCountdown > 0" @click="sendCode">
-              {{ codeCountdown > 0 ? codeCountdown + 's 后重发' : '获取验证码' }}
-            </el-button>
-          </div>
-        </el-form-item>
+        <el-form ref="formRef" :model="form" :rules="rules" @keyup.enter="submit">
+          <el-form-item prop="email">
+            <el-input v-model="form.email" placeholder="注册时绑定的邮箱"
+              :prefix-icon="Message" size="large" clearable />
+          </el-form-item>
 
-        <el-form-item prop="password">
-          <el-input v-model="form.password" type="password" placeholder="新密码（至少6位）"
-            :prefix-icon="Lock" size="large" show-password />
-        </el-form-item>
+          <el-form-item prop="code">
+            <div class="code-row">
+              <el-input v-model="form.code" placeholder="邮箱验证码"
+                :prefix-icon="Key" size="large" maxlength="6" />
+              <button type="button" class="code-btn" :disabled="codeCountdown > 0" @click="sendCode">
+                {{ codeCountdown > 0 ? codeCountdown + 's 后重发' : '获取验证码' }}
+              </button>
+            </div>
+          </el-form-item>
 
-        <el-form-item prop="confirmPassword">
-          <el-input v-model="form.confirmPassword" type="password" placeholder="再次输入新密码"
-            :prefix-icon="Lock" size="large" show-password />
-        </el-form-item>
+          <el-form-item prop="password">
+            <el-input v-model="form.password" type="password" placeholder="新密码（至少6位）"
+              :prefix-icon="Lock" size="large" show-password />
+          </el-form-item>
 
-        <el-button type="primary" size="large" class="forgot-btn" :loading="loading" @click="submit">
-          重置密码
-        </el-button>
-      </el-form>
+          <el-form-item prop="confirmPassword">
+            <el-input v-model="form.confirmPassword" type="password" placeholder="再次输入新密码"
+              :prefix-icon="Lock" size="large" show-password />
+          </el-form-item>
 
-      <p class="back-link">
-        想起密码了？<span @click="$router.push('/login')">返回登录</span>
-      </p>
-    </div>
+          <button type="button" class="submit-btn" :disabled="loading" @click="submit">
+            <span v-if="loading" class="btn-loading"></span>
+            <span v-else>重置密码</span>
+          </button>
+        </el-form>
+
+        <p class="form-footer">
+          想起密码了？<a @click="$router.push('/login')">返回登录</a>
+        </p>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -104,34 +116,100 @@ const submit = async () => {
 </script>
 
 <style scoped>
-.forgot-container {
-  min-height: 100vh; display: flex; align-items: center; justify-content: center;
-  background: linear-gradient(135deg, #eef0f5 0%, #e4e7ef 50%, #d8dce8 100%);
+.forgot-root {
+  display: flex;
+  min-height: 100vh;
+  background: #faf7f2;
 }
-.forgot-card {
-  width: 440px; padding: 44px 44px 32px; border-radius: 20px; background: #fff;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.03);
+
+.brand-side {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 48px 64px 48px 48px;
+  background: linear-gradient(155deg, #f5f1ea 0%, #f8f4ed 40%, #f0ece4 100%);
 }
-.page-title { text-align: center; font-size: 24px; font-weight: 700; color: #4a5a78; margin: 0 0 8px; letter-spacing: 2px; }
-.page-subtitle { text-align: center; font-size: 13px; color: #9aa4b8; margin: 0 0 30px; }
-.forgot-form :deep(.el-form-item) { margin-bottom: 18px; }
-.forgot-form :deep(.el-input__wrapper) { border-radius: 10px; transition: box-shadow 0.3s ease; }
-.forgot-form :deep(.el-input__wrapper:focus-within) { box-shadow: 0 0 0 2px rgba(89,109,148,0.18) inset, 0 0 10px rgba(89,109,148,0.05); }
+.brand-inner {
+  max-width: 400px;
+  text-align: right;
+}
+.brand-eyebrow {
+  font-size: 12px; font-weight: 600; letter-spacing: 3px;
+  text-transform: uppercase; color: #ff7b3d; margin: 0 0 16px;
+}
+.brand-title {
+  font-size: 48px; font-weight: 800; letter-spacing: 2px;
+  line-height: 1.15; color: #2d2a26; margin: 0 0 16px;
+}
+.brand-desc {
+  font-size: 15px; line-height: 1.7; color: #6b655e; margin: 0;
+}
+
+.form-side {
+  flex: 0.9;
+  display: flex;
+  align-items: center;
+  padding: 48px;
+}
+.form-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 40px 36px;
+  background: #fffdf9;
+  border: 1px solid #e8e3db;
+  border-radius: 12px;
+}
+.form-heading {
+  font-size: 22px; font-weight: 700; color: #2d2a26; margin: 0 0 24px;
+}
+
+.form-card :deep(.el-input__wrapper) {
+  background: #f8f5f0; border: 1px solid #e8e3db; border-radius: 8px; box-shadow: none;
+}
+.form-card :deep(.el-input__wrapper:focus-within),
+.form-card :deep(.el-input__wrapper:hover) {
+  border-color: #ff7b3d; box-shadow: none;
+}
+.form-card :deep(.el-input__inner) { color: #2d2a26; }
+.form-card :deep(.el-input__inner::placeholder) { color: #bbb6ad; }
+.form-card :deep(.el-form-item) { margin-bottom: 16px; }
+.form-card :deep(.el-input__prefix) { color: #a09a92; }
+
 .code-row { display: flex; gap: 10px; }
-.code-row .el-input { flex: 1; }
-.code-btn { flex-shrink: 0; min-width: 120px; border-radius: 10px; border: 1px solid #5a6a90; color: #5a6a90; background: #fff; }
-.code-btn:hover:not(:disabled) { background: #eff1f6; }
-.code-btn:disabled { border-color: #d0d8e4; color: #bbb; }
-.forgot-btn {
-  width: 100%; height: 46px; font-size: 16px; font-weight: 600; letter-spacing: 3px;
-  border-radius: 10px; margin-top: 6px; border: none;
-  background: linear-gradient(135deg, #5a6a90, #4a5a78) !important;
-  box-shadow: 0 4px 16px rgba(74,90,120,0.25);
-  transition: transform 0.2s ease, box-shadow 0.3s ease;
+.code-row :deep(.el-input) { flex: 1; }
+
+.code-btn {
+  flex-shrink: 0; min-width: 110px;
+  padding: 0 12px; font-size: 13px; font-weight: 600;
+  border: 1px solid #ff7b3d; border-radius: 8px;
+  background: transparent; color: #ff7b3d; cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
 }
-.forgot-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(74,90,120,0.38); }
-.forgot-btn:active { transform: scale(0.96); }
-.back-link { text-align: center; margin: 18px 0 0; font-size: 14px; color: #aaa; }
-.back-link span { color: #5a6a90; cursor: pointer; }
-.back-link span:hover { color: #4a5a78; text-decoration: underline; }
+.code-btn:hover:not(:disabled) { background: rgba(255,123,61,0.1); }
+.code-btn:disabled { border-color: #d5cfc5; color: #bbb6ad; cursor: not-allowed; }
+
+.submit-btn {
+  width: 100%; padding: 12px 0; font-size: 15px; font-weight: 700;
+  letter-spacing: 1px; border: none; border-radius: 8px; cursor: pointer;
+  color: #fff; background: #ff7b3d;
+  transition: background 0.2s ease, transform 0.15s ease;
+  margin-top: 6px;
+}
+.submit-btn:hover:not(:disabled) { background: #ff9060; }
+.submit-btn:active:not(:disabled) { transform: scale(0.97); }
+.submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.btn-loading {
+  display: inline-block; width: 20px; height: 20px;
+  border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff;
+  border-radius: 50%; animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.form-footer {
+  text-align: center; margin-top: 20px; font-size: 13px; color: #a09a92;
+}
+.form-footer a { color: #ff7b3d; cursor: pointer; font-weight: 600; }
+.form-footer a:hover { color: #ff9060; }
 </style>

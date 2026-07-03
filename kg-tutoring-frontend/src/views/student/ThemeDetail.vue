@@ -159,7 +159,7 @@ onMounted(fetchTheme)
 <style scoped>
 .theme-detail-page {
   min-height: 100vh;
-  background: #f5f7fa;
+  background: #faf7f2;
   padding: 24px 32px;
 }
 
@@ -180,7 +180,7 @@ onMounted(fetchTheme)
   margin: 0;
   font-size: 22px;
   font-weight: 700;
-  color: #2c5eb5;
+  color: #2d2a26;
 }
 
 .info-card {
@@ -195,13 +195,13 @@ onMounted(fetchTheme)
 .desc-section h4 {
   margin: 0 0 8px;
   font-size: 15px;
-  color: #303133;
+  color: #2d2a26;
 }
 
 .desc-section p {
   margin: 0;
   font-size: 14px;
-  color: #606266;
+  color: #6b655e;
   line-height: 1.8;
 }
 
@@ -211,7 +211,7 @@ onMounted(fetchTheme)
 
 .card-title {
   font-weight: 600;
-  color: #303133;
+  color: #2d2a26;
 }
 
 .node-list {
@@ -225,14 +225,14 @@ onMounted(fetchTheme)
   justify-content: space-between;
   align-items: center;
   padding: 14px 18px;
-  background: #fafbfc;
+  background: #f8f5f0;
   border-radius: 10px;
   cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .node-item:hover {
-  background: #ecf5ff;
+  background: #f3efe8;
   transform: translateX(4px);
 }
 
@@ -245,12 +245,12 @@ onMounted(fetchTheme)
 .node-name {
   font-size: 15px;
   font-weight: 600;
-  color: #303133;
+  color: #2d2a26;
 }
 
 .node-course {
   font-size: 12px;
-  color: #c0c4cc;
+  color: #bbb6ad;
 }
 
 .node-actions {

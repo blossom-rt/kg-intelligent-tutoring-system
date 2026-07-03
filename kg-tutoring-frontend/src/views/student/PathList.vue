@@ -1,9 +1,10 @@
 <template>
   <div class="path-list-page">
-    <div class="page-header">
-      <h2 class="page-title">我的学习路径</h2>
-      <el-button type="primary" @click="openGenerateDialog">生成新路径</el-button>
-    </div>
+    <StudentHeader title="我的学习路径" subtitle="系统生成的个性化学习计划">
+      <template #actions>
+        <el-button type="primary" @click="openGenerateDialog" round>生成新路径</el-button>
+      </template>
+    </StudentHeader>
 
     <el-table
       v-loading="loading"
@@ -104,13 +105,14 @@
         </el-button>
       </template>
     </el-dialog>
-  </div>
+  
 </template>
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import StudentHeader from '../../components/StudentHeader.vue'
 import { getPathList, generatePath, deletePath } from '../../api/student'
 import { getCourseList, getNodeList } from '../../api/knowledge'
 
@@ -248,26 +250,12 @@ onMounted(() => {
 <style scoped>
 .path-list-page {
   min-height: 100vh;
-  background: #f5f7fa;
-  padding: 24px 32px;
-}
-
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-}
-
-.page-title {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 700;
-  color: #2c5eb5;
+  background: #faf7f2;
+  
 }
 
 .path-name-cell {
   font-weight: 500;
-  color: #303133;
+  color: #2d2a26;
 }
 </style>

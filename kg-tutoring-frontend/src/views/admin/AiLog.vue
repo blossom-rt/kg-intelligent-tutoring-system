@@ -90,16 +90,16 @@ async function fetchList() {
 </script>
 
 <style scoped>
-.ai-log { padding: 20px; background: #f5f7fa; min-height: 100vh; }
-.page-header h2 { margin: 0 0 16px; font-size: 20px; color: #303133; }
+.ai-log { padding: 20px; background: #faf7f2; min-height: 100vh; }
+.page-header h2 { margin: 0 0 16px; font-size: 20px; color: #2d2a26; }
 .table-card { margin-bottom: 16px; }
 .pagination { margin-top: 16px; display: flex; justify-content: flex-end; }
 
 .expand-content { padding: 16px 24px; }
 .expand-section { margin-bottom: 16px; }
-.expand-section h4 { margin: 0 0 8px; font-size: 14px; color: #606266; }
+.expand-section h4 { margin: 0 0 8px; font-size: 14px; color: #2d2a26; }
 .code-block {
-  background: #f5f7fa;
+  background: #faf7f2;
   padding: 12px 16px;
   border-radius: 6px;
   font-size: 13px;
@@ -108,7 +108,7 @@ async function fetchList() {
   word-break: break-all;
   max-height: 300px;
   overflow-y: auto;
-  color: #303133;
+  color: #2d2a26;
   margin: 0;
 }
 </style>

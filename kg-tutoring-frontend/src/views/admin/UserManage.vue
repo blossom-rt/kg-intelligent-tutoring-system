@@ -285,8 +285,8 @@ function handleDelete(row) {
 </script>
 
 <style scoped>
-.user-manage { padding: 20px; background: #f5f7fa; min-height: 100vh; }
-.page-header h2 { margin: 0 0 16px; font-size: 20px; color: #303133; }
+.user-manage { padding: 20px; background: #faf7f2; min-height: 100vh; }
+.page-header h2 { margin: 0 0 16px; font-size: 20px; color: #2d2a26; }
 .search-card { margin-bottom: 16px; }
 .table-card { margin-bottom: 16px; }
 .table-toolbar { margin-bottom: 16px; }

@@ -1,126 +1,163 @@
 <template>
   <div class="admin-home">
     <header class="top-bar">
-      <h2>系统管理后台</h2>
-      <div>
-        <span class="welcome">欢迎回来，{{ adminName }}</span>
-        <el-button type="info" size="small" @click="logout">退出登录</el-button>
+      <div class="user-info">
+        <div class="avatar-widget">
+          <el-icon :size="22"><Setting /></el-icon>
+        </div>
+        <div>
+          <h2>{{ greeting }}，管理员</h2>
+          <p>系统运行数据一览</p>
+        </div>
       </div>
+      <el-button class="logout-btn" @click="logout">退出登录</el-button>
     </header>
 
     <div class="content">
-      <!-- 统计卡片 -->
-      <div class="stats-row">
-        <el-card class="stat-card">
-          <div class="stat-num">{{ stats.userCount }}</div>
-          <div class="stat-label">总用户数</div>
-        </el-card>
-        <el-card class="stat-card">
-          <div class="stat-num">{{ stats.courseCount }}</div>
-          <div class="stat-label">课程数</div>
-        </el-card>
-        <el-card class="stat-card">
-          <div class="stat-num">{{ stats.todayLogCount }}</div>
-          <div class="stat-label">今日操作日志数</div>
-        </el-card>
-        <el-card class="stat-card">
-          <div class="stat-num">{{ stats.aiCallCount }}</div>
-          <div class="stat-label">AI调用次数</div>
-        </el-card>
+      <!-- 管理入口 -->
+      <div class="card full-width">
+        <div class="card-header">
+          <el-icon class="card-head-icon"><Menu /></el-icon>
+          管理入口
+        </div>
+        <div class="entry-grid">
+          <div
+            v-for="e in entries" :key="e.key"
+            class="entry-item" @click="$router.push(e.path)"
+          >
+            <div class="entry-icon" :style="{ background: e.bg, color: e.color }">
+              <el-icon :size="22"><component :is="e.icon" /></el-icon>
+            </div>
+            <span class="entry-label">{{ e.label }}</span>
+            <span class="entry-desc">{{ e.desc }}</span>
+          </div>
+        </div>
       </div>
 
-      <!-- 快捷入口 -->
-      <el-card class="section-card">
-        <template #header><span class="section-title">快捷入口</span></template>
-        <div class="quick-links">
-          <el-button type="primary" @click="router.push('/admin/users')">用户管理</el-button>
-          <el-button type="success" @click="router.push('/admin/roles')">角色管理</el-button>
-          <el-button type="warning" @click="router.push('/admin/courses')">课程管理</el-button>
-          <el-button @click="router.push('/admin/notices')">公告管理</el-button>
-          <el-button type="info" @click="router.push('/admin/logs')">操作日志</el-button>
-          <el-button type="danger" @click="router.push('/admin/ai-logs')">AI日志</el-button>
+      <!-- 运营区 -->
+      <div class="dual-row">
+        <div class="card" style="flex:1">
+          <div class="card-header">
+            <el-icon class="card-head-icon"><DataAnalysis /></el-icon>
+            运营数据
+          </div>
+          <div class="mini-stats">
+            <div class="mini-item">
+              <span class="mini-num">{{ stats.userCount }}</span>
+              <span class="mini-label">注册用户</span>
+            </div>
+            <div class="mini-item">
+              <span class="mini-num">{{ stats.todayLogin }}</span>
+              <span class="mini-label">今日登录</span>
+            </div>
+          </div>
         </div>
-      </el-card>
-
-      <!-- 最近操作日志 -->
-      <el-card class="section-card">
-        <template #header><span class="section-title">最近操作日志</span></template>
-        <el-table :data="recentLogs" border stripe>
-          <el-table-column prop="operatorName" label="操作人" min-width="120" />
-          <el-table-column prop="module" label="模块" min-width="120" />
-          <el-table-column prop="content" label="操作内容" min-width="280" show-overflow-tooltip />
-          <el-table-column prop="createTime" label="操作时间" min-width="160" />
-        </el-table>
-        <el-empty v-if="recentLogs.length === 0" description="暂无操作日志" :image-size="60" />
-      </el-card>
+        <div class="card" style="flex:1">
+          <div class="card-header">
+            <el-icon class="card-head-icon"><Document /></el-icon>
+            操作日志
+          </div>
+          <div class="empty-hint">查看详细日志</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import {
+  Setting, Menu, DataAnalysis, Document,
+  User, Lock, School, Bell, Files, Monitor
+} from '@element-plus/icons-vue'
+import request from '../utils/request'
 
 const router = useRouter()
-const adminName = ref('管理员')
+const stats = ref({ userCount: 0, todayLogin: 0 })
 
-const stats = reactive({
-  userCount: 0,
-  courseCount: 0,
-  todayLogCount: 0,
-  aiCallCount: 0
+const greeting = computed(() => {
+  const h = new Date().getHours()
+  if (h < 9) return '早上好'; if (h < 12) return '上午好'
+  if (h < 14) return '中午好'; if (h < 18) return '下午好'
+  return '晚上好'
 })
 
-const recentLogs = ref([])
+const entries = [
+  { key: 'users', icon: User, label: '用户管理', desc: '账号创建与维护', path: '/admin/users', bg: '#fff3e8', color: '#e06830' },
+  { key: 'roles', icon: Lock, label: '角色管理', desc: '权限与角色配置', path: '/admin/roles', bg: '#f0e8f5', color: '#7a5dba' },
+  { key: 'courses', icon: School, label: '课程管理', desc: '全局课程编排', path: '/admin/courses', bg: '#e8f5ec', color: '#2d8a4e' },
+  { key: 'notices', icon: Bell, label: '公告管理', desc: '发布系统通知', path: '/admin/notices', bg: '#eef2f8', color: '#3d5a8e' },
+  { key: 'logs', icon: Files, label: '操作日志', desc: '用户行为审计', path: '/admin/logs', bg: '#e8f0f8', color: '#5a7dba' },
+  { key: 'aiLogs', icon: Monitor, label: 'AI 调用日志', desc: '大模型调用追踪', path: '/admin/ai-logs', bg: '#fef3e8', color: '#c07830' },
+]
 
-onMounted(() => {
-  loadDashboard()
+onMounted(async () => {
+  try { const res = await request.get('/admin/dashboard'); if (res) stats.value = res } catch { }
 })
 
-function loadDashboard() {
-  // 尝试从API获取数据，若不可用则使用占位数据
-  adminName.value = localStorage.getItem('username') || '管理员'
-
-  // 占位示例数据
-  stats.userCount = 128
-  stats.courseCount = 8
-  stats.todayLogCount = 47
-  stats.aiCallCount = 2156
-  recentLogs.value = [
-    { operatorName: 'admin', module: '用户管理', content: '新增用户 student_zhang', createTime: '2026-07-02 15:30:22' },
-    { operatorName: 'admin', module: '课程管理', content: '修改课程「数据结构」信息', createTime: '2026-07-02 14:18:05' },
-    { operatorName: 'admin', module: '公告管理', content: '发布新公告「期末考试安排」', createTime: '2026-07-02 11:45:30' },
-    { operatorName: 'admin', module: '角色管理', content: '更新角色「teacher」权限', createTime: '2026-07-02 10:02:18' }
-  ]
-}
-
-const logout = () => {
-  localStorage.clear()
-  router.push('/login')
-}
+const logout = () => { localStorage.clear(); router.push('/login') }
 </script>
 
 <style scoped>
-.admin-home { min-height: 100vh; background: #f5f7fa; }
+.admin-home { min-height: 100vh; background: #faf7f2; }
 .top-bar {
   display: flex; justify-content: space-between; align-items: center;
-  padding: 16px 32px; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  padding: 20px 36px;
+  background: linear-gradient(135deg, #f5f1ea, #f0ece4); color: #2d2a26;
 }
-.top-bar h2 { margin: 0; font-size: 20px; color: #303133; }
-.welcome { font-size: 13px; color: #999; margin-right: 12px; }
-
-.content { padding: 24px 32px; }
-
-.stats-row {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
-  margin-bottom: 20px;
+.user-info { display: flex; align-items: center; gap: 16px; }
+.avatar-widget {
+  width: 44px; height: 44px; border-radius: 12px;
+  background: rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: center;
 }
-.stat-card { text-align: center; }
-.stat-num { font-size: 32px; font-weight: 700; color: #5b3e9e; }
-.stat-label { font-size: 14px; color: #909399; margin-top: 8px; }
+.user-info h2 { margin: 0; font-size: 20px; }
+.user-info p { margin: 2px 0 0; font-size: 13px; opacity: 0.7; }
+.logout-btn {
+  background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.12);
+  color: #6b655e; border-radius: 8px;
+}
+.logout-btn:hover { background: rgba(0,0,0,0.08); }
 
-.section-card { margin-bottom: 20px; }
-.section-title { font-weight: 600; color: #333; }
+.content { padding: 28px 36px; }
 
-.quick-links { display: flex; gap: 12px; flex-wrap: wrap; }
+/* 管理入口 */
+.full-width { margin-bottom: 24px; }
+.card {
+  background: #fffdf9; border-radius: 16px; padding: 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+.card-header {
+  font-size: 16px; font-weight: 600; color: #2d2a26; margin-bottom: 20px;
+  display: flex; align-items: center; gap: 8px;
+}
+.card-head-icon { color: #ff7b3d; }
+.entry-grid {
+  display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px;
+}
+.entry-item {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 20px 12px 16px; border-radius: 14px;
+  background: #f8f5f0; cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.entry-item:hover { background: #f3efe8; transform: translateY(-3px); }
+.entry-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+}
+.entry-label { font-size: 14px; font-weight: 600; color: #2d2a26; }
+.entry-desc { font-size: 11px; color: #a09a92; }
+
+/* 底部 */
+.dual-row { display: flex; gap: 20px; }
+.empty-hint { color: #a09a92; font-size: 14px; text-align: center; padding: 28px 0; }
+
+.mini-stats { display: flex; gap: 24px; justify-content: center; padding: 20px 0; }
+.mini-item { text-align: center; }
+.mini-num { font-size: 32px; font-weight: 700; color: #d4a853; display: block; }
+.mini-label { font-size: 13px; color: #a09a92; }
+
+@media (max-width: 1024px) { .entry-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 640px) { .entry-grid { grid-template-columns: 1fr 1fr; } .dual-row { flex-direction: column; } }
 </style>

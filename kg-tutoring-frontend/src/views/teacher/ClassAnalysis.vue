@@ -175,37 +175,11 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.page-container { padding: 20px 24px; background: #f5f7fa; min-height: 100vh; }
-.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-.page-header h2 { margin: 0; font-size: 20px; color: #303133; }
-.filter-card { margin-bottom: 16px; }
-
-.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
-.stat-card { text-align: center; border-radius: 12px; }
-.stat-value { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
-.stat-value.blue   { color: #3670e8; }
-.stat-value.green  { color: #2d8a4e; }
-.stat-value.orange { color: #e6943b; }
-.stat-value.purple { color: #7c3aed; }
-.stat-label { font-size: 13px; color: #999; }
-
-.data-panels { display: flex; gap: 16px; }
-.panel-main { flex: 2; }
-.panel-side { flex: 1; }
-.panel-title { font-weight: 600; color: #333; }
-
-.weak-list { display: flex; flex-direction: column; gap: 12px; }
-.weak-item { display: flex; align-items: center; gap: 12px; }
-.weak-rank {
-  width: 26px; height: 26px; line-height: 26px;
-  text-align: center; border-radius: 50%;
-  font-size: 12px; font-weight: 700; color: #fff;
-  flex-shrink: 0;
-}
+.page-container { padding: 20px 24px; background: #faf7f2; min-height: 100vh; }
 .rank-1 { background: #f56c6c; }
 .rank-2 { background: #e6943b; }
 .rank-3 { background: #e6a23c; }
 .rank-4, .rank-5 { background: #909399; }
 .weak-info { flex: 1; min-width: 0; }
-.weak-name { font-size: 13px; color: #555; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.weak-name { font-size: 13px; color: #6b655e; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 </style>

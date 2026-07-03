@@ -1,19 +1,12 @@
 <template>
   <div class="node-study-page">
-    <div class="page-header">
-      <div class="header-left">
-        <el-button @click="goBack" :icon="ArrowLeft" circle size="small" />
-        <h2 class="page-title">知识点学习 - {{ node?.nodeName || node?.name || '加载中...' }}</h2>
-      </div>
-      <el-button
-        type="success"
-        :loading="marking"
-        :disabled="nodeStatus === 'completed'"
-        @click="markComplete"
-      >
-        {{ nodeStatus === 'completed' ? '已标记完成' : '标记完成' }}
-      </el-button>
-    </div>
+    <StudentHeader :title="'知识点学习 - ' + (node?.nodeName || node?.name || '加载中...')" subtitle="仔细阅读内容，认真完成练习">
+      <template #actions>
+        <el-button type="success" round :loading="marking" :disabled="nodeStatus === 'completed'" @click="markComplete">
+          {{ nodeStatus === 'completed' ? '已标记完成' : '标记完成' }}
+        </el-button>
+      </template>
+    </StudentHeader>
 
     <div v-loading="loading" class="study-body">
       <template v-if="node">
@@ -41,7 +34,7 @@
             <el-card shadow="never" class="practice-card">
               <el-empty v-if="!hasExercises" description="暂无配套练习" :image-size="80">
                 <template #default>
-                  <p style="color: #909399; font-size: 14px">该知识点暂无预设练习，您仍可以去刷题中心进行练习</p>
+                  <p style="color: #a09a92; font-size: 14px">该知识点暂无预设练习，您仍可以去刷题中心进行练习</p>
                 </template>
               </el-empty>
               <div v-else class="exercise-list">
@@ -79,6 +72,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { ArrowLeft } from '@element-plus/icons-vue'
+import StudentHeader from '../../components/StudentHeader.vue'
 import { getNodeById } from '../../api/knowledge'
 import { updateStudyRecord } from '../../api/student'
 
@@ -166,28 +160,8 @@ onMounted(fetchNode)
 <style scoped>
 .node-study-page {
   min-height: 100vh;
-  background: #f5f7fa;
-  padding: 24px 32px;
-}
-
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-}
-
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.page-title {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 700;
-  color: #2c5eb5;
+  background: #faf7f2;
+  
 }
 
 .study-body {
@@ -207,12 +181,12 @@ onMounted(fetchNode)
 
 .meta-label {
   font-size: 14px;
-  color: #909399;
+  color: #a09a92;
 }
 
 .meta-value {
   font-size: 14px;
-  color: #303133;
+  color: #2d2a26;
   font-weight: 500;
 }
 
@@ -222,7 +196,7 @@ onMounted(fetchNode)
 
 .study-tabs :deep(.el-tabs__header) {
   margin-bottom: 0;
-  background: #fff;
+  background: #fffdf9;
   border-radius: 12px 12px 0 0;
   padding: 0 20px;
 }
@@ -236,12 +210,12 @@ onMounted(fetchNode)
 .content-body h3 {
   margin: 0 0 16px;
   font-size: 20px;
-  color: #303133;
+  color: #2d2a26;
 }
 
 .desc-section {
   font-size: 15px;
-  color: #606266;
+  color: #6b655e;
   line-height: 1.9;
 }
 
@@ -262,13 +236,13 @@ onMounted(fetchNode)
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
-  background: #f5f7fa;
+  background: #faf7f2;
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.2s ease;
 }
 
 .exercise-item:hover {
-  background: #ecf5ff;
+  background: #f3efe8;
 }
 </style>

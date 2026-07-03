@@ -1,8 +1,6 @@
 <template>
   <div class="wrong-book-page">
-    <div class="page-header">
-      <h2 class="page-title">我的错题本</h2>
-    </div>
+    <StudentHeader title="我的错题本" subtitle="温故知新，每次回顾都是进步" />
 
     <el-table
       v-loading="loading"
@@ -70,6 +68,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import StudentHeader from '../../components/StudentHeader.vue'
 import { getWrongQuestions, deleteWrongQuestion, aiWrongExplain } from '../../api/student'
 
 const router = useRouter()
@@ -152,24 +151,12 @@ onMounted(fetchWrongList)
 <style scoped>
 .wrong-book-page {
   min-height: 100vh;
-  background: #f5f7fa;
-  padding: 24px 32px;
-}
-
-.page-header {
-  margin-bottom: 24px;
-}
-
-.page-title {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 700;
-  color: #2c5eb5;
+  background: #faf7f2;
 }
 
 .question-snippet {
   font-size: 14px;
-  color: #606266;
+  color: #6b655e;
 }
 
 .wrong-count {
@@ -179,7 +166,7 @@ onMounted(fetchWrongList)
 
 .ai-content {
   font-size: 15px;
-  color: #303133;
+  color: #2d2a26;
   line-height: 1.9;
   min-height: 120px;
 }
