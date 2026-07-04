@@ -7,6 +7,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.util.Set;
 /**
  * JWT 认证过滤器 —— 校验 Token 并注入用户上下文
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtAuthFilter implements Filter {
@@ -71,6 +73,7 @@ public class JwtAuthFilter implements Filter {
             UserContext.set(userId, username, role);
             chain.doFilter(request, response);
         } catch (Exception e) {
+            log.error("JWT认证失败", e);
             res.setStatus(401);
             res.setContentType("application/json;charset=UTF-8");
             res.getWriter().write("{\"code\":401,\"message\":\"Token 无效或已过期\"}");

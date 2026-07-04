@@ -31,7 +31,7 @@
         <el-table-column prop="content" label="题干" min-width="240" show-overflow-tooltip />
         <el-table-column prop="questionType" label="题型" width="100" align="center">
           <template #default="{ row }">
-            <el-tag :type="typeTag(row.questionType)" size="small">{{ typeLabel(row.questionType) }}</el-tag>
+            <el-tag :type="typeTag(row?.questionType)" size="small">{{ typeLabel(row?.questionType) }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="difficulty" label="难度" width="80" align="center">
@@ -156,8 +156,8 @@ const typeLabel = (v) => {
   return v
 }
 const typeTag = (v) => {
-  if (v === 'single') return ''
-  if (v === 'multi') return 'success'
+  if (v === 'single') return 'success'
+  if (v === 'multi') return 'primary'
   if (v === 'judge') return 'warning'
   return 'info'
 }

@@ -45,7 +45,7 @@
         :page-size="pagination.size"
         :total="pagination.total"
         layout="total, prev, pager, next"
-        @current-change="applyFilter"
+        @current-change="loadData"
         style="margin-top: 16px; justify-content: flex-end"
       />
     </el-card>

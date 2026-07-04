@@ -19,7 +19,7 @@
         <div v-for="n in nodes" :key="n.id" class="node-card" @click="$router.push('/student/path/' + n.id)">
           <div class="node-top">
             <h3>{{ n.name }}</h3>
-            <el-tag size="small" :type="n.difficulty===3?'danger':n.difficulty===2?'warning':''" round>
+            <el-tag size="small" :type="n.difficulty===3?'danger':n.difficulty===2?'warning':'info'" round>
               {{ ['','基础','进阶','困难'][n.difficulty] || '基础' }}
             </el-tag>
           </div>

@@ -9,10 +9,7 @@ export default defineConfig({
         target: 'http://127.0.0.1:8080',
         changeOrigin: true,
         rewrite: path => {
-          // StudentController 和 TeacherController 没有 /api 前缀
-          if (path.startsWith('/api/kg/student') || path.startsWith('/api/kg/teacher')) {
-            return path.replace(/^\/api\/kg/, '')
-          }
+          // 统一将 /api/kg 替换为 /api (StudentController/TeacherController 也已改为 /api 前缀)
           return path.replace(/^\/api\/kg/, '/api')
         }
       }

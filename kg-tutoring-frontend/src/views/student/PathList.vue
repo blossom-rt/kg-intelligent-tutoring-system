@@ -105,7 +105,7 @@
         </el-button>
       </template>
     </el-dialog>
-  
+  </div>
 </template>
 
 <script setup>
@@ -139,7 +139,7 @@ const genRules = {
 }
 
 const statusTagType = (status) => {
-  const map = { active: 'success', completed: '', paused: 'warning', abandoned: 'danger' }
+  const map = { active: 'success', completed: 'info', paused: 'warning', abandoned: 'danger' }
   return map[status] || 'info'
 }
 

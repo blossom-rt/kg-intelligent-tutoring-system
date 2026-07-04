@@ -64,6 +64,24 @@
           <div class="empty-hint">暂无数据</div>
         </div>
       </div>
+
+      <el-card class="section-card">
+        <template #header><span class="section-title">系统公告</span></template>
+        <div v-if="notices.length">
+          <div v-for="n in notices" :key="n.id" style="padding:8px 0;cursor:pointer;" @click="showNotice(n)">
+            <el-tag size="small" type="warning">公告</el-tag>
+            <span style="margin-left:8px;color:#3670e8;">{{ n.title }}</span>
+          </div>
+        </div>
+        <el-empty v-else description="暂无公告" :image-size="60" />
+      </el-card>
+
+      <el-dialog v-model="noticeDialog" :title="currentNotice?.title || '公告详情'" width="560px">
+        <div style="font-size:14px;line-height:1.8;color:#333;white-space:pre-wrap;">{{ currentNotice?.content }}</div>
+        <template #footer>
+          <el-button @click="noticeDialog = false">关闭</el-button>
+        </template>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -77,10 +95,14 @@ import {
   School, Grid, Share, EditPen, Tickets, Connection, DataAnalysis
 } from '@element-plus/icons-vue'
 import request from '../utils/request'
+import { getNoticeList } from '../api/admin'
 
 const router = useRouter()
 const stats = ref({ activeStudents: 0, weekStudy: 0, totalNodes: 0, totalQuestions: 0 })
 const teacherName = ref('老师')
+const notices = ref([])
+const noticeDialog = ref(false)
+const currentNotice = ref(null)
 
 const greeting = computed(() => {
   const h = new Date().getHours()
@@ -115,9 +137,12 @@ const entries = [
 
 onMounted(async () => {
   try { const res = await request.get('/teacher/dashboard'); if (res) stats.value = res } catch { }
+  try { const res = await getNoticeList(); if (res && Array.isArray(res)) notices.value = res } catch { }
 })
 
-const logout = () => { localStorage.clear(); router.push('/login') }
+const showNotice = (n) => { currentNotice.value = n; noticeDialog.value = true }
+
+const logout = () => {localStorage.clear(); router.push('/login') }
 </script>
 
 <style scoped>

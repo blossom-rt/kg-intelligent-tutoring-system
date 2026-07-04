@@ -44,7 +44,6 @@
               :timestamp="node.completedTime ? formatTime(node.completedTime) : ''"
               placement="top"
               :color="timelineColor(node.status)"
-              :type="timelineColor(node.status)"
               :hollow="node.status !== 'completed' && node.status !== 'learning'"
             >
               <div
@@ -100,7 +99,7 @@ const difficultyLabel = (level) => {
 }
 
 const difficultyTagType = (level) => {
-  const map = { 1: 'success', 2: '', 3: 'warning', 4: 'danger', 5: 'danger' }
+  const map = { 1: 'success', 2: 'info', 3: 'warning', 4: 'danger', 5: 'danger' }
   return map[level] || 'info'
 }
 

@@ -161,7 +161,7 @@ const diffLabel = (level) => {
 }
 
 const diffTagType = (level) => {
-  const map = { 1: 'success', 2: '', 3: 'warning', 4: 'danger', 5: 'danger' }
+  const map = { 1: 'success', 2: 'info', 3: 'warning', 4: 'danger', 5: 'danger' }
   return map[level] || 'info'
 }
 

@@ -38,7 +38,7 @@
           <div class="card-header"><el-icon class="card-icon"><Bell /></el-icon>待办提醒</div>
           <div v-if="todos.length" class="todo-list">
             <div v-for="t in todos" :key="t.id" class="todo-item">
-              <el-tag :type="t.tagType" size="small" round>{{ t.label }}</el-tag>
+              <el-tag :type="t.tagType || 'info'" size="small" round>{{ t.label }}</el-tag>
               <span>{{ t.content }}</span>
             </div>
           </div>
@@ -48,6 +48,17 @@
         <div class="card">
           <div class="card-header"><el-icon class="card-icon"><Present /></el-icon>个性化推荐</div>
           <div class="empty-hint">完成更多学习后，系统将为你精准推荐</div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><el-icon class="card-icon"><Bell /></el-icon>系统公告</div>
+          <div v-if="notices.length" class="todo-list">
+            <div v-for="n in notices" :key="n.id" class="todo-item" style="cursor:pointer;" @click="showNotice(n)">
+              <el-tag size="small" type="warning" round>公告</el-tag>
+              <span style="color:#3670e8;">{{ n.title }}</span>
+            </div>
+          </div>
+          <div v-else class="empty-hint">暂无公告</div>
         </div>
       </div>
 
@@ -85,6 +96,13 @@
         </div>
       </div>
     </div>
+
+    <el-dialog v-model="noticeDialog" :title="currentNotice?.title || '公告详情'" width="560px">
+      <div style="font-size:14px;line-height:1.8;color:#333;white-space:pre-wrap;">{{ currentNotice?.content }}</div>
+      <template #footer>
+        <el-button @click="noticeDialog = false">关闭</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -96,9 +114,13 @@ import {
   Grid, Connection, MapLocation, Notebook
 } from '@element-plus/icons-vue'
 import { getStudentDashboard } from '../api/student'
+import { getNoticeList } from '../api/admin'
 
 const router = useRouter()
 const studentName = ref('同学')
+const notices = ref([])
+const noticeDialog = ref(false)
+const currentNotice = ref(null)
 const activePaths = ref([])
 const todos = ref([])
 const stats = ref({ studyDays: 0, totalMinutes: 0, masteredNodes: 0, correctRate: 0 })
@@ -146,7 +168,14 @@ onMounted(async () => {
       stats.value = res.stats || stats.value
     }
   } catch { }
+
+  try {
+    const noticeRes = await getNoticeList()
+    if (noticeRes && Array.isArray(noticeRes)) notices.value = noticeRes
+  } catch { }
 })
+
+const showNotice = (n) => { currentNotice.value = n; noticeDialog.value = true }
 
 const logout = () => { localStorage.clear(); router.push('/login') }
 </script>

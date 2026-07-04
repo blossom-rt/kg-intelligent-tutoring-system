@@ -106,7 +106,7 @@ function targetLabel(role) {
 }
 
 function tagType(role) {
-  const map = { all: '', student: 'success', teacher: 'warning' }
+  const map = { all: 'info', student: 'success', teacher: 'warning' }
   return map[role] || 'info'
 }
 

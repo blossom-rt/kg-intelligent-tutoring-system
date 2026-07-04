@@ -60,7 +60,7 @@ const chartRef = ref(null)
 const chart = ref(null)
 
 const diffLabel = (v) => ({ 1: '入门', 2: '基础', 3: '进阶', 4: '困难', 5: '挑战' }[v] || '未知')
-const diffTag = (v) => ({ 1: 'success', 2: '', 3: 'warning', 4: 'danger', 5: 'danger' }[v] || 'info')
+const diffTag = (v) => ({ 1: 'success', 2: 'info', 3: 'warning', 4: 'danger', 5: 'danger' }[v] || 'info')
 
 function buildChartData() {
   let list = nodes.value

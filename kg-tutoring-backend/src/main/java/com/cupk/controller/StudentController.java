@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @RestController
-@RequestMapping("/student")
+@RequestMapping("/api/student")
 @RequiredArgsConstructor
 public class StudentController {
 
@@ -21,7 +21,6 @@ public class StudentController {
     private final KnowledgeNodeMapper nodeMapper;
     private final StudyPathMapper pathMapper;
     private final StudyRecordMapper recordMapper;
-    private final WrongQuestionMapper wrongMapper;
     private final ExamRecordMapper examMapper;
     private final CrossSubjectThemeMapper themeMapper;
     private final JwtUtil jwtUtil;
@@ -93,14 +92,6 @@ public class StudentController {
         if (userId == null) return ResponseEntity.status(401).body(Map.of("error", "未登录"));
         return ResponseEntity.ok(recordMapper.selectList(
                 new LambdaQueryWrapper<StudyRecord>().eq(StudyRecord::getUserId, userId)));
-    }
-
-    @GetMapping("/wrong-questions")
-    public ResponseEntity<?> wrongQuestions(@RequestParam(required = false) Integer nodeId, HttpServletRequest req) {
-        Integer userId = getUserId(req);
-        if (userId == null) return ResponseEntity.status(401).body(Map.of("error", "未登录"));
-        LambdaQueryWrapper<WrongQuestion> q = new LambdaQueryWrapper<WrongQuestion>().eq(WrongQuestion::getUserId, userId);
-        return ResponseEntity.ok(wrongMapper.selectList(q));
     }
 
     @GetMapping("/exam-records")

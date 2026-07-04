@@ -19,7 +19,7 @@
         <el-table-column prop="courseName" label="所属课程" width="140" />
         <el-table-column label="难度" width="90">
           <template #default="{ row }">
-            <el-tag size="small" round :type="row.difficulty===3?'danger':row.difficulty===2?'warning':''">
+            <el-tag size="small" round :type="row.difficulty===3?'danger':row.difficulty===2?'warning':'info'">
               {{ ['','基础','进阶','困难'][row.difficulty] || '基础' }}
             </el-tag>
           </template>
