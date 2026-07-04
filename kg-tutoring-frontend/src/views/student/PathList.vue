@@ -11,8 +11,10 @@
       :data="pathList"
       style="width: 100%"
       stripe
-      empty-text="暂无学习路径"
     >
+      <template #empty>
+        <el-empty description="暂无学习路径" :image-size="60" />
+      </template>
       <el-table-column prop="pathName" label="路径名称" min-width="160">
         <template #default="{ row }">
           <span class="path-name-cell">{{ row.pathName || row.name || '未命名路径' }}</span>

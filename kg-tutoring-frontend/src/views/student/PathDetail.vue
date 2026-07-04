@@ -39,31 +39,34 @@
           <el-empty v-if="!nodes.length" description="暂无学习节点" :image-size="60" />
           <el-timeline v-else>
             <el-timeline-item
-              v-for="(node, index) in nodes"
+              v-for="(node, index) in computedNodes"
               :key="node.id || index"
               :timestamp="node.completedTime ? formatTime(node.completedTime) : ''"
               placement="top"
-              :color="timelineColor(node.status)"
-              :hollow="node.status !== 'completed' && node.status !== 'learning'"
+              :color="timelineColor(node.displayStatus)"
+              :hollow="node.displayStatus !== 'completed' && node.displayStatus !== 'learning'"
             >
               <div
                 class="timeline-node"
-                :class="{ clickable: node.status === 'learning' || node.status === 'active' }"
+                :class="{
+                  clickable: node.displayStatus === 'learning',
+                  'node-locked': node.displayStatus === 'locked'
+                }"
                 @click="goStudy(node)"
               >
                 <div class="node-title-row">
-                  <el-icon :size="18" class="status-icon">
-                    <CircleCheck v-if="node.status === 'completed'" />
-                    <Loading v-else-if="node.status === 'learning' || node.status === 'active'" />
-                    <Lock v-else />
+                  <el-icon :size="18" class="status-icon" :class="'icon-' + node.displayStatus">
+                    <CircleCheck v-if="node.displayStatus === 'completed'" style="color:#67c23a" />
+                    <Loading v-else-if="node.displayStatus === 'learning'" style="color:#ff7b3d" />
+                    <Lock v-else style="color:#c0c4cc" />
                   </el-icon>
-                  <span class="node-title">{{ node.nodeName || node.name || '未命名节点' }}</span>
+                  <span class="node-title" :class="{ 'text-locked': node.displayStatus === 'locked', 'text-completed': node.displayStatus === 'completed' }">{{ node.nodeName || node.name || '未命名节点' }}</span>
                   <el-tag :type="difficultyTagType(node.difficulty)" size="small">
                     {{ difficultyLabel(node.difficulty) }}
                   </el-tag>
                 </div>
                 <p class="node-desc">{{ truncate(node.description || node.desc || '', 60) }}</p>
-                <span class="node-status-text">{{ statusLabel(node.status) }}</span>
+                <span class="node-status-text" :class="'status-' + node.displayStatus">{{ statusLabel(node.displayStatus) }}</span>
               </div>
             </el-timeline-item>
           </el-timeline>
@@ -87,6 +90,29 @@ const loading = ref(false)
 const detail = ref(null)
 const nodes = ref([])
 
+// 根据 sortOrder 和完成状态推导每个节点的实际状态
+const computedNodes = computed(() => {
+  const sorted = [...nodes.value].sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0))
+  const result = []
+  for (let i = 0; i < sorted.length; i++) {
+    const node = { ...sorted[i] }
+    if (node.status === 'completed') {
+      node.displayStatus = 'completed'
+    } else if (i === 0) {
+      // 第一个未完成的节点 -> 学习中
+      node.displayStatus = 'learning'
+    } else if (result[i - 1].displayStatus === 'completed') {
+      // 前置节点已完成 -> 学习中
+      node.displayStatus = 'learning'
+    } else {
+      // 前置节点未完成 -> 待解锁
+      node.displayStatus = 'locked'
+    }
+    result.push(node)
+  }
+  return result
+})
+
 const progressPercent = computed(() => {
   if (!nodes.value.length) return 0
   const done = nodes.value.filter((n) => n.status === 'completed').length
@@ -103,14 +129,14 @@ const difficultyTagType = (level) => {
   return map[level] || 'info'
 }
 
-const statusLabel = (status) => {
-  const map = { completed: '已完成', learning: '学习中', active: '学习中', locked: '待解锁' }
-  return map[status] || '待解锁'
+const statusLabel = (displayStatus) => {
+  const map = { completed: '已完成', learning: '学习中', locked: '待解锁' }
+  return map[displayStatus] || '待解锁'
 }
 
-const timelineColor = (status) => {
-  const map = { completed: '#67c23a', learning: '#ff7b3d', active: '#ff7b3d', locked: '#c0c4cc' }
-  return map[status] || '#c0c4cc'
+const timelineColor = (displayStatus) => {
+  const map = { completed: '#67c23a', learning: '#ff7b3d', locked: '#c0c4cc' }
+  return map[displayStatus] || '#c0c4cc'
 }
 
 const truncate = (str, max) => {
@@ -126,7 +152,7 @@ const formatTime = (time) => {
 }
 
 const goStudy = (node) => {
-  if (node.status === 'learning' || node.status === 'active') {
+  if (node.displayStatus === 'learning') {
     router.push('/student/study/' + (node.nodeId || node.id))
   }
 }
@@ -235,6 +261,34 @@ onMounted(fetchDetail)
 .timeline-node.clickable:hover {
   background: rgba(255,123,61,0.08);
   transform: translateX(4px);
+}
+
+.timeline-node.node-locked {
+  opacity: 0.55;
+  cursor: not-allowed;
+  background: #f5f5f0;
+}
+
+.node-title.text-locked {
+  color: #bbb6ad;
+}
+
+.node-title.text-completed {
+  color: #67c23a;
+}
+
+.node-status-text.status-completed {
+  color: #67c23a;
+  font-weight: 500;
+}
+
+.node-status-text.status-locked {
+  color: #c0c4cc;
+}
+
+.node-status-text.status-learning {
+  color: #ff7b3d;
+  font-weight: 500;
 }
 
 .node-title-row {

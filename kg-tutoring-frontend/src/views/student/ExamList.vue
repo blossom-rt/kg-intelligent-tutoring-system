@@ -8,8 +8,10 @@
       style="width: 100%"
       stripe
       highlight-current-row
-      empty-text="暂无测评记录"
     >
+      <template #empty>
+        <el-empty description="暂无测评记录" :image-size="60" />
+      </template>
       <el-table-column prop="courseId" label="测评" min-width="180">
         <template #default="{ row }">
           <span class="exam-name">课程{{ row.courseId || '-' }}测评</span>

@@ -110,6 +110,33 @@ public class StudentAiController {
         return Result.success(result);
     }
 
+    @PostMapping("/chat")
+    public Result<Map<String, Object>> chat(@RequestBody Map<String, Object> body) {
+        long start = System.currentTimeMillis();
+        Integer nodeId = (Integer) body.get("nodeId");
+        String question = (String) body.get("question");
+        if (question == null || question.isBlank()) {
+            return Result.error("请输入问题");
+        }
+
+        String nodeContext = "";
+        if (nodeId != null) {
+            KnowledgeNode node = knowledgeNodeMapper.selectById(nodeId);
+            if (node != null) {
+                nodeContext = "\n\n相关知识点：" + (node.getName() != null ? node.getName() : "")
+                        + "\n内容：" + (node.getDescription() != null ? node.getDescription() : "");
+            }
+        }
+
+        String userPrompt = "请回答学生的以下问题，要求讲解清晰、通俗易懂。" + nodeContext + "\n\n学生提问：" + question;
+        String aiResult = deepSeekService.generate("你是一名称职的学科辅导老师，耐心细致，善于用通俗易懂的方式解答学生疑问。", userPrompt);
+        saveLog("chat", userPrompt, aiResult, start);
+
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("answer", aiResult);
+        return Result.success(result);
+    }
+
     private void saveLog(String scene, String prompt, String result, long startTime) {
         try {
             AiCallLog log = new AiCallLog();

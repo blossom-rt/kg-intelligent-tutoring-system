@@ -114,6 +114,43 @@
         <el-button @click="noticeDialog = false">关闭</el-button>
       </template>
     </el-dialog>
+
+    <!-- ---- 新手引导弹窗 ---- -->
+    <el-dialog v-model="guideDialogVisible" title="欢迎使用智能导学系统" width="600px" :close-on-click-modal="false" :show-close="false">
+      <div class="guide-body">
+        <div class="guide-item">
+          <div class="guide-icon">1</div>
+          <div class="guide-text">
+            <strong>知识图谱</strong><br/>
+            以可视化图谱呈现知识点之间的关联，帮助你构建系统化的知识体系。
+          </div>
+        </div>
+        <div class="guide-item">
+          <div class="guide-icon">2</div>
+          <div class="guide-text">
+            <strong>学习路径</strong><br/>
+            系统根据你的学习目标，自动生成个性化的学习路径，按顺序学习更高效。
+          </div>
+        </div>
+        <div class="guide-item">
+          <div class="guide-icon">3</div>
+          <div class="guide-text">
+            <strong>配套练习</strong><br/>
+            每个知识点都配有练习题目，学完即练，巩固所学内容。
+          </div>
+        </div>
+        <div class="guide-item">
+          <div class="guide-icon">4</div>
+          <div class="guide-text">
+            <strong>AI 助手</strong><br/>
+            AI 划重点、错题讲解、智能答疑，让学习更轻松高效。
+          </div>
+        </div>
+      </div>
+      <template #footer>
+        <el-button type="primary" size="large" style="width:100%;" @click="dismissGuide">我知道了，开始学习</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -136,6 +173,14 @@ const activePaths = ref([])
 const todos = ref([])
 const stats = ref({ studyDays: 0, totalMinutes: 0, masteredNodes: 0, correctRate: 0 })
 const weakNodes = ref([])
+
+// ── 新手引导 ──
+const guideDialogVisible = ref(false)
+
+const dismissGuide = () => {
+  localStorage.setItem('guide_done', 'true')
+  guideDialogVisible.value = false
+}
 
 const quickLinks = [
   { key: 'knowledge', label: '知识图谱', icon: Grid, path: '/student/knowledge' },
@@ -172,6 +217,12 @@ const motivationTip = ref(tips[Math.floor(Math.random() * tips.length)])
 
 onMounted(async () => {
   motivationTip.value = tips[Math.floor(Math.random() * tips.length)]
+
+  // 新手引导：仅首次登录时显示
+  if (!localStorage.getItem('guide_done')) {
+    guideDialogVisible.value = true
+  }
+
   try {
     const res = await getStudentDashboard()
     if (res) {
@@ -306,6 +357,19 @@ const logout = () => { localStorage.clear(); router.push('/login') }
   color: #ff7b3d; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 .quick-label { font-size: 13px; font-weight: 500; color: #6b655e; }
+
+/* ── 新手引导 ── */
+.guide-body { display: flex; flex-direction: column; gap: 20px; padding: 8px 0; }
+.guide-item { display: flex; align-items: flex-start; gap: 14px; }
+.guide-icon {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: linear-gradient(135deg, #ff7b3d, #ff9060);
+  color: #fff; font-size: 16px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 2px;
+}
+.guide-text { font-size: 14px; line-height: 1.7; color: #555; }
+.guide-text strong { color: #2d2a26; }
 
 /* ── 响应式 ── */
 @media (max-width: 900px) {

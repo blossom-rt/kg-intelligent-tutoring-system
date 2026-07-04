@@ -14,3 +14,6 @@ export function deleteExam(id) { return request.delete(`/teacher/exams/${id}`) }
 
 // 学情统计
 export function getClassAnalysis(params) { return request.get('/teacher/analysis/class', { params }) }
+
+// 学习路径督导
+export function getStudentPaths(studentId) { return request.get(`/teacher/analysis/student-paths?studentId=${studentId}`) }

@@ -1,5 +1,6 @@
 package com.cupk.controller;
 
+import com.cupk.aspect.OperLog;
 import com.cupk.common.BusinessException;
 import com.cupk.common.Result;
 import com.cupk.common.UserContext;
@@ -49,6 +50,7 @@ public class AdminController {
     /**
      * 新增角色
      */
+    @OperLog(module = "角色管理", operation = "新增角色")
     @PostMapping("/roles")
     public Result<?> createRole(@RequestBody SysRole role) {
         checkAdmin();
@@ -59,6 +61,7 @@ public class AdminController {
     /**
      * 修改角色
      */
+    @OperLog(module = "角色管理", operation = "修改角色")
     @PutMapping("/roles/{id}")
     public Result<?> updateRole(@PathVariable Integer id, @RequestBody SysRole role) {
         checkAdmin();
@@ -70,6 +73,7 @@ public class AdminController {
     /**
      * 删除角色
      */
+    @OperLog(module = "角色管理", operation = "删除角色")
     @DeleteMapping("/roles/{id}")
     public Result<?> deleteRole(@PathVariable Integer id) {
         checkAdmin();
@@ -93,6 +97,7 @@ public class AdminController {
     /**
      * 新增用户
      */
+    @OperLog(module = "用户管理", operation = "新增用户")
     @PostMapping("/users")
     public Result<?> createUser(@RequestBody SysUser user) {
         checkAdmin();
@@ -103,6 +108,7 @@ public class AdminController {
     /**
      * 修改用户信息
      */
+    @OperLog(module = "用户管理", operation = "修改用户")
     @PutMapping("/users/{id}")
     public Result<?> updateUser(@PathVariable Integer id, @RequestBody SysUser user) {
         checkAdmin();
@@ -114,6 +120,7 @@ public class AdminController {
     /**
      * 删除用户
      */
+    @OperLog(module = "用户管理", operation = "删除用户")
     @DeleteMapping("/users/{id}")
     public Result<?> deleteUser(@PathVariable Integer id) {
         checkAdmin();
@@ -126,6 +133,7 @@ public class AdminController {
      *
      * 请求体：{ "status": 1 }  1-启用 0-禁用
      */
+    @OperLog(module = "用户管理", operation = "启用/禁用用户")
     @PutMapping("/users/{id}/status")
     public Result<?> updateUserStatus(@PathVariable Integer id, @RequestBody Map<String, Object> body) {
         checkAdmin();

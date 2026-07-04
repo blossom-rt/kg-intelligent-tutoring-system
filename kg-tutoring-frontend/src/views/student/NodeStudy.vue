@@ -2,9 +2,8 @@
   <div class="node-study-page">
     <StudentHeader :title="'知识点学习 - ' + (node?.nodeName || node?.name || '加载中...')" subtitle="仔细阅读内容，认真完成练习">
       <template #actions>
-        <el-button type="success" round :loading="marking" :disabled="nodeStatus === 'completed'" @click="markComplete">
-          {{ nodeStatus === 'completed' ? '已标记完成' : '标记完成' }}
-        </el-button>
+        <el-tag v-if="nodeStatus === 'completed'" type="success" size="large" effect="dark" round>已掌握 ✓</el-tag>
+        <el-tag v-else type="info" size="large" effect="plain" round>完成练习后自动标记</el-tag>
       </template>
     </StudentHeader>
 
@@ -24,7 +23,12 @@
           <el-tab-pane label="学习内容" name="content">
             <el-card shadow="never" class="content-card">
               <div class="content-body">
-                <h3>{{ node.nodeName || node.name }}</h3>
+                <div class="content-header-row">
+                  <h3>{{ node.nodeName || node.name }}</h3>
+                  <el-button type="warning" plain size="small" :loading="aiSummaryLoading" @click="showAiSummary">
+                    <el-icon style="margin-right:4px"><Promotion /></el-icon>AI 划重点
+                  </el-button>
+                </div>
                 <div class="desc-section" v-html="formattedContent"></div>
               </div>
             </el-card>
@@ -60,10 +64,54 @@
               </div>
             </el-card>
           </el-tab-pane>
+
+          <el-tab-pane label="AI 答疑" name="aiQA">
+            <el-card shadow="never" class="qa-card">
+              <div class="qa-history" v-if="qaMessages.length">
+                <div
+                  v-for="(msg, idx) in qaMessages"
+                  :key="idx"
+                  class="qa-message"
+                  :class="msg.role === 'user' ? 'qa-user' : 'qa-assistant'"
+                >
+                  <div class="qa-avatar">{{ msg.role === 'user' ? '我' : 'AI' }}</div>
+                  <div class="qa-bubble">{{ msg.content }}</div>
+                </div>
+                <div v-if="qaLoading" class="qa-message qa-assistant">
+                  <div class="qa-avatar">AI</div>
+                  <div class="qa-bubble qa-thinking">思考中...</div>
+                </div>
+              </div>
+              <el-empty v-else description="向 AI 老师提问，获得即时解答" :image-size="60" />
+              <div class="qa-input-row">
+                <el-input
+                  v-model="qaInput"
+                  placeholder="输入你的问题..."
+                  size="large"
+                  :disabled="qaLoading"
+                  @keyup.enter="sendQuestion"
+                >
+                  <template #append>
+                    <el-button :loading="qaLoading" @click="sendQuestion">提问</el-button>
+                  </template>
+                </el-input>
+              </div>
+            </el-card>
+          </el-tab-pane>
         </el-tabs>
       </template>
       <el-empty v-else description="知识点不存在" :image-size="80" />
     </div>
+
+    <!-- AI 划重点弹窗 -->
+    <el-dialog v-model="aiSummaryVisible" :title="aiSummaryTitle" width="680px">
+      <div v-loading="aiSummaryLoading" style="min-height:100px;">
+        <div v-if="aiSummaryContent" class="ai-summary-body" v-html="aiSummaryContent"></div>
+      </div>
+      <template #footer>
+        <el-button @click="aiSummaryVisible = false">关闭</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -71,15 +119,14 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { ArrowLeft } from '@element-plus/icons-vue'
+import { Promotion } from '@element-plus/icons-vue'
 import StudentHeader from '../../components/StudentHeader.vue'
 import { getNodeById } from '../../api/knowledge'
-import { updateStudyRecord, getStudyRecords } from '../../api/student'
+import { updateStudyRecord, getStudyRecords, aiNodeSummary, aiChat } from '../../api/student'
 
 const router = useRouter()
 const route = useRoute()
 const loading = ref(false)
-const marking = ref(false)
 const node = ref(null)
 const nodeStatus = ref('')
 const activeTab = ref('content')
@@ -87,6 +134,58 @@ const activeTab = ref('content')
 const hasExercises = computed(() => {
   return node.value?.exercises && node.value.exercises.length > 0
 })
+
+// ---- AI 划重点 ----
+const aiSummaryVisible = ref(false)
+const aiSummaryLoading = ref(false)
+const aiSummaryTitle = ref('')
+const aiSummaryContent = ref('')
+
+const showAiSummary = async () => {
+  const nodeId = node.value?.nodeId || node.value?.id
+  if (!nodeId) {
+    ElMessage.warning('节点信息不完整')
+    return
+  }
+  aiSummaryLoading.value = true
+  aiSummaryVisible.value = true
+  aiSummaryTitle.value = 'AI 正在生成总结...'
+  aiSummaryContent.value = ''
+  try {
+    const res = await aiNodeSummary({ nodeId })
+    if (res) {
+      aiSummaryTitle.value = res.title || 'AI 学习总结'
+      aiSummaryContent.value = (res.summary || '').replace(/\n/g, '<br>')
+    }
+  } catch {
+    aiSummaryContent.value = 'AI 总结生成失败，请稍后重试'
+    aiSummaryTitle.value = '生成失败'
+  } finally {
+    aiSummaryLoading.value = false
+  }
+}
+
+// ---- AI 答疑 ----
+const qaInput = ref('')
+const qaLoading = ref(false)
+const qaMessages = ref([])
+
+const sendQuestion = async () => {
+  const text = qaInput.value.trim()
+  if (!text || qaLoading.value) return
+  qaMessages.value.push({ role: 'user', content: text })
+  qaInput.value = ''
+  qaLoading.value = true
+  const nodeId = node.value?.nodeId || node.value?.id
+  try {
+    const res = await aiChat({ nodeId, question: text })
+    qaMessages.value.push({ role: 'assistant', content: res?.answer || '抱歉，AI 暂时无法回答，请稍后重试。' })
+  } catch {
+    qaMessages.value.push({ role: 'assistant', content: '请求失败，请检查网络后重试。' })
+  } finally {
+    qaLoading.value = false
+  }
+}
 
 const formattedContent = computed(() => {
   const content = node.value?.content || node.value?.description || node.value?.desc || '暂无学习内容'
@@ -124,20 +223,6 @@ const goPractice = (questionId) => {
   router.push('/student/practice' + query)
 }
 
-const markComplete = async () => {
-  marking.value = true
-  try {
-    const nodeId = node.value?.nodeId || node.value?.id
-    // masteryLevel: 0未学 1学习中 2已掌握
-    await updateStudyRecord({ nodeId, masteryLevel: 2 })
-    nodeStatus.value = 'completed'
-    ElMessage.success('已标记为完成')
-  } catch {
-    ElMessage.error('标记失败，请重试')
-  } finally {
-    marking.value = false
-  }
-}
 
 const fetchNode = async () => {
   const nodeId = route.params.nodeId
@@ -250,5 +335,111 @@ onMounted(fetchNode)
 
 .exercise-item:hover {
   background: #f3efe8;
+}
+
+/* ── 内容头部（标题 + AI 按钮） ── */
+.content-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+.content-header-row h3 {
+  margin: 0;
+  font-size: 20px;
+  color: #2d2a26;
+}
+.content-header-row .el-button {
+  flex-shrink: 0;
+}
+
+/* ── AI 总结弹窗 ── */
+.ai-summary-body {
+  font-size: 15px;
+  line-height: 1.9;
+  color: #6b655e;
+  white-space: pre-wrap;
+}
+.ai-summary-body :deep(br) {
+  display: block;
+  content: '';
+  margin-bottom: 8px;
+}
+
+/* ── AI 答疑 ── */
+.qa-card {
+  min-height: 350px;
+  display: flex;
+  flex-direction: column;
+}
+.qa-history {
+  flex: 1;
+  max-height: 400px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-bottom: 16px;
+}
+.qa-message {
+  display: flex;
+  gap: 10px;
+  max-width: 85%;
+}
+.qa-user {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+.qa-assistant {
+  align-self: flex-start;
+}
+.qa-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.qa-user .qa-avatar {
+  background: #ff7b3d;
+  color: #fff;
+}
+.qa-assistant .qa-avatar {
+  background: #e8e3db;
+  color: #6b655e;
+}
+.qa-bubble {
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #2d2a26;
+}
+.qa-user .qa-bubble {
+  background: #ff7b3d;
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+.qa-assistant .qa-bubble {
+  background: #f3efe8;
+  border-bottom-left-radius: 4px;
+}
+.qa-thinking {
+  color: #a09a92;
+  font-style: italic;
+}
+.qa-input-row {
+  margin-top: 12px;
+}
+.qa-input-row :deep(.el-input-group__append) {
+  background-color: #ff7b3d;
+  border-color: #ff7b3d;
+}
+.qa-input-row :deep(.el-input-group__append .el-button) {
+  color: #fff;
 }
 </style>

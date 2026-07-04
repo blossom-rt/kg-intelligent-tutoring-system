@@ -88,7 +88,7 @@ async function fetchList() {
 </script>
 
 <style scoped>
-.ai-log { padding: 20px; background: #faf7f2; min-height: 100vh; }
+.ai-log { padding: 20px; background: #f5f7fa; min-height: 100vh; }
 .page-header h2 { margin: 0 0 16px; font-size: 20px; color: #2d2a26; }
 .table-card { margin-bottom: 16px; }
 .pagination { margin-top: 16px; display: flex; justify-content: flex-end; }

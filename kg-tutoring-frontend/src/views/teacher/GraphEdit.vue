@@ -41,7 +41,7 @@
       <!-- 右：依赖边列表 -->
       <el-card class="panel-right">
         <template #header><span class="panel-title">依赖边列表（{{ edgeList.length }} 条）</span></template>
-        <el-table :data="edgeList" v-loading="loading" size="small" max-height="500">
+        <el-table :data="edgeList" v-loading="loading" size="small" max-height="500" stripe border>
           <el-table-column label="前置节点" min-width="140">
             <template #default="{ row }">
               <span>{{ row.sourceName || '节点-' + row.sourceId }}</span>
@@ -217,7 +217,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.page-container { padding: 20px 24px; background: #faf7f2; min-height: 100vh; }
+.page-container { padding: 20px 24px; background: #f5f7fa; min-height: 100vh; }
 .node-chip:hover { background: #dce4f0; }
 .node-chip.node-selected { background: rgba(255,123,61,0.1); box-shadow: 0 0 0 2px #ff7b3d inset; }
 .node-name { font-size: 13px; color: #6b655e; }
