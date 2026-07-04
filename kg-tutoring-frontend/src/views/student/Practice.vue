@@ -213,7 +213,7 @@ const submitAnswer = () => {
   })
 }
 
-const nextQuestion = () => {
+const nextQuestion = async () => {
   if (currentIndex.value < questions.value.length - 1) {
     currentIndex.value++
     selectedAnswer.value = ''
