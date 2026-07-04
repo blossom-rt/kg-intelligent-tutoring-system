@@ -124,10 +124,10 @@ const goStudy = (node) => {
 const handleGeneratePath = async () => {
   genLoading.value = true
   try {
-    const res = await generatePathByTheme({ themeId: theme.value.id })
+    const pathId = await generatePathByTheme({ themeId: theme.value.id })
     ElMessage.success('学习路径生成成功')
-    if (res && res.id) {
-      router.push('/student/path/' + res.id)
+    if (pathId) {
+      router.push('/student/path/' + pathId)
     } else {
       router.push('/student/path')
     }

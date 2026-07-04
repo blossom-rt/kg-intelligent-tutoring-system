@@ -9,11 +9,11 @@ import java.util.List;
  */
 public interface StudyPathService {
 
-    /** 根据目标知识点生成学习路径 */
-    void generatePath(Integer userId, Integer targetNodeId);
+    /** 根据目标知识点生成学习路径，返回生成的路径ID */
+    Integer generatePath(Integer userId, Integer targetNodeId);
 
-    /** 根据跨学科主题生成学习路径 */
-    void generatePathByTheme(Integer userId, Integer themeId);
+    /** 根据跨学科主题生成学习路径，返回生成的路径ID */
+    Integer generatePathByTheme(Integer userId, Integer themeId);
 
     /** 查询某用户的所有学习路径 */
     List<StudyPath> listByUser(Integer userId);

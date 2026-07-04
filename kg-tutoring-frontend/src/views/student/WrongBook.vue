@@ -80,9 +80,10 @@ const aiLoading = ref(false)
 const aiContent = ref('')
 
 const formattedAiContent = computed(() => {
-  if (!aiContent.value) return ''
-  if (/<[^>]+>/.test(aiContent.value)) return aiContent.value
-  return aiContent.value.replace(/\n/g, '<br>')
+  const text = typeof aiContent.value === 'string' ? aiContent.value : ''
+  if (!text) return ''
+  if (/<[^>]+>/.test(text)) return text
+  return text.replace(/\n/g, '<br>')
 })
 
 const truncate = (str, max) => {
@@ -109,7 +110,7 @@ const handleAiExplain = async (row) => {
 
   try {
     const res = await aiWrongExplain({ questionId: row.questionId || row.id })
-    aiContent.value = res?.explanation || res?.content || res?.report || res || '暂无讲解'
+    aiContent.value = res?.aiExplain || res?.explanation || res || '暂无讲解'
   } catch {
     ElMessage.error('AI讲解请求失败')
   } finally {

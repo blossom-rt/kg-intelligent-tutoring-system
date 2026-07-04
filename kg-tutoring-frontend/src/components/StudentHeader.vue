@@ -25,7 +25,7 @@ defineProps({
 })
 
 const router = useRouter()
-const goBack = () => router.back()
+const goBack = () => router.push('/student')
 </script>
 
 <style scoped>

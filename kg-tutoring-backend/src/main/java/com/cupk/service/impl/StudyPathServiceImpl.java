@@ -32,7 +32,7 @@ public class StudyPathServiceImpl implements StudyPathService {
     private final CrossThemeNodeMapper crossThemeNodeMapper;
 
     @Override
-    public void generatePath(Integer userId, Integer targetNodeId) {
+    public Integer generatePath(Integer userId, Integer targetNodeId) {
         // 前置知识点集合（按拓扑顺序）
         List<KnowledgeNode> sortedNodes = topologicalSort(targetNodeId);
 
@@ -62,17 +62,18 @@ public class StudyPathServiceImpl implements StudyPathService {
             detail.setIsFinished(0);
             pathDetailMapper.insert(detail);
         }
+        return path.getId();
     }
 
     @Override
-    public void generatePathByTheme(Integer userId, Integer themeId) {
+    public Integer generatePathByTheme(Integer userId, Integer themeId) {
         // 查询主题关联的所有知识点
         List<CrossThemeNode> mappings = crossThemeNodeMapper.selectList(
                 new LambdaQueryWrapper<CrossThemeNode>()
                         .eq(CrossThemeNode::getThemeId, themeId));
 
         if (mappings.isEmpty()) {
-            return;
+            return null;
         }
 
         List<Integer> nodeIds = new ArrayList<>();
@@ -107,6 +108,7 @@ public class StudyPathServiceImpl implements StudyPathService {
             detail.setIsFinished(0);
             pathDetailMapper.insert(detail);
         }
+        return path.getId();
     }
 
     @Override

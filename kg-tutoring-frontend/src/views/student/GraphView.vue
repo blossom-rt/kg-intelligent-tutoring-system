@@ -146,10 +146,10 @@ const handleGeneratePath = async (node) => {
   if (!node) return
   genLoading.value = true
   try {
-    await generatePath({ targetNodeId: node.id })
-    ElMessage.success('学习路径已生成，即将跳转')
+    const pathId = await generatePath({ targetNodeId: node.id })
+    ElMessage.success('学习路径已生成')
     dialogVisible.value = false
-    setTimeout(() => router.push('/student/path'), 500)
+    router.push('/student/path/' + pathId)
   } catch { ElMessage.error('生成失败，请重试') }
   finally { genLoading.value = false }
 }
