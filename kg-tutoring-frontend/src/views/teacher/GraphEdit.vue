@@ -1,9 +1,10 @@
 <template>
   <div class="page-container">
-    <div class="page-header">
-      <h2>依赖边管理</h2>
-      <el-button type="primary" @click="openAddEdge">添加依赖</el-button>
-    </div>
+    <StudentHeader title="依赖边管理">
+      <template #actions>
+        <el-button type="primary" @click="openAddEdge">添加依赖</el-button>
+      </template>
+    </StudentHeader>
 
     <el-card class="filter-card">
       <el-form :inline="true" :model="filterForm" @submit.prevent>

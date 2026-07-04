@@ -1,8 +1,6 @@
 <template>
   <div class="ai-log">
-    <div class="page-header">
-      <h2>AI 调用日志</h2>
-    </div>
+    <StudentHeader title="AI 调用日志" />
 
     <el-card class="table-card">
       <el-table :data="logList" v-loading="loading" border stripe>

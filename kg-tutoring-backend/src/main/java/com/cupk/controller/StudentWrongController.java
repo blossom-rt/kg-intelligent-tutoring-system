@@ -4,6 +4,7 @@ import com.cupk.common.Result;
 import com.cupk.common.UserContext;
 import com.cupk.mapper.KnowledgeNodeMapper;
 import com.cupk.mapper.QuestionMapper;
+import com.cupk.mapper.WrongQuestionMapper;
 import com.cupk.pojo.KnowledgeNode;
 import com.cupk.pojo.Question;
 import com.cupk.pojo.WrongQuestion;
@@ -22,6 +23,7 @@ import java.util.*;
 public class StudentWrongController {
 
     private final WrongQuestionService wrongQuestionService;
+    private final WrongQuestionMapper wrongQuestionMapper;
     private final QuestionMapper questionMapper;
     private final KnowledgeNodeMapper knowledgeNodeMapper;
 
@@ -58,6 +60,34 @@ public class StudentWrongController {
             result.add(item);
         }
         return Result.success(result);
+    }
+
+    /**
+     * 添加错题（练习时答错自动收录）
+     */
+    @PostMapping("/wrong-questions")
+    public Result<?> addWrongQuestion(@RequestBody Map<String, Object> body) {
+        Integer userId = UserContext.getUserId();
+        Integer questionId = (Integer) body.get("questionId");
+        String wrongAnswer = (String) body.get("wrongAnswer");
+        // 检查是否已存在
+        List<WrongQuestion> existing = wrongQuestionService.listByUser(userId);
+        WrongQuestion exist = existing.stream()
+                .filter(w -> w.getQuestionId().equals(questionId))
+                .findFirst().orElse(null);
+        if (exist != null) {
+            exist.setWrongCount(exist.getWrongCount() + 1);
+            exist.setWrongAnswer(wrongAnswer);
+            wrongQuestionMapper.updateById(exist);
+        } else {
+            WrongQuestion wq = new WrongQuestion();
+            wq.setUserId(userId);
+            wq.setQuestionId(questionId);
+            wq.setWrongAnswer(wrongAnswer);
+            wq.setWrongCount(1);
+            wrongQuestionMapper.insert(wq);
+        }
+        return Result.success("已收录错题");
     }
 
     /**

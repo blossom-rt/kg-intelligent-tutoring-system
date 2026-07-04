@@ -82,8 +82,9 @@
               :closable="false"
               show-icon
             >
-              <template v-if="!isCorrect && currentQuestion.explanation">
-                <p class="explanation">{{ currentQuestion.explanation }}</p>
+              <template v-if="!isCorrect">
+                <p class="correct-answer">正确答案：{{ currentQuestion.answer || currentQuestion.correctAnswer }}</p>
+                <p v-if="explainText" class="explanation">{{ explainText }}</p>
               </template>
             </el-alert>
           </div>
@@ -106,7 +107,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { getPracticeQuestions, submitPractice } from '../../api/student'
+import { getPracticeQuestions, addWrongQuestion } from '../../api/student'
 
 const router = useRouter()
 const route = useRoute()
@@ -123,6 +124,9 @@ const userAnswers = ref([])
 
 const currentQuestion = computed(() => {
   return questions.value[currentIndex.value] || {}
+})
+const explainText = computed(() => {
+  return currentQuestion.value.explanation || currentQuestion.value.analysis || ''
 })
 
 const parsedOptions = computed(() => {
@@ -165,12 +169,20 @@ const diffTagType = (level) => {
   return map[level] || 'info'
 }
 
+// 将答案统一转为索引（A→0, B→1, C→2, D→3），兼容数字索引
+const normalizeAnswer = (ans) => {
+  if (!ans && ans !== 0) return ''
+  const s = String(ans).trim().toUpperCase()
+  const letterMap = { A: '0', B: '1', C: '2', D: '3', E: '4', F: '5' }
+  return letterMap[s] || s
+}
+
 const optionClass = (oi) => {
   if (!answered.value) return {}
   const key = parsedOptions.value[oi]?.key
-  const correctAnswer = currentQuestion.value.answer || currentQuestion.value.correctAnswer || ''
+  const correctKey = normalizeAnswer(currentQuestion.value.answer || currentQuestion.value.correctAnswer)
   return {
-    'option-correct': key === correctAnswer,
+    'option-correct': String(key) === correctKey,
     'option-wrong': !isCorrect.value && key === selectedAnswer.value
   }
 }
@@ -178,10 +190,15 @@ const optionClass = (oi) => {
 const submitAnswer = () => {
   if (!selectedAnswer.value) return
   answered.value = true
-  const correctAnswer = currentQuestion.value.answer || currentQuestion.value.correctAnswer || ''
-  isCorrect.value = String(selectedAnswer.value) === String(correctAnswer)
+  const correctKey = normalizeAnswer(currentQuestion.value.answer || currentQuestion.value.correctAnswer)
+  isCorrect.value = String(selectedAnswer.value) === correctKey
   if (isCorrect.value) {
     correctCount.value++
+  } else {
+    addWrongQuestion({
+      questionId: currentQuestion.value.id,
+      wrongAnswer: selectedAnswer.value
+    }).catch(() => {})
   }
   userAnswers.value.push({
     questionId: currentQuestion.value.id,
@@ -190,25 +207,14 @@ const submitAnswer = () => {
   })
 }
 
-const nextQuestion = async () => {
+const nextQuestion = () => {
   if (currentIndex.value < questions.value.length - 1) {
     currentIndex.value++
     selectedAnswer.value = ''
     answered.value = false
     isCorrect.value = false
   } else {
-    // 提交练习结果到后端（记录错题和学习记录）
     finished.value = true
-    try {
-      const nodeId = route.query.nodeId
-      await submitPractice({
-        nodeId: Number(nodeId),
-        answers: userAnswers.value.map(a => ({
-          questionId: a.questionId,
-          answer: a.answer
-        }))
-      })
-    } catch { /* 后台静默记录 */ }
   }
 }
 

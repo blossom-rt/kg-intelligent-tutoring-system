@@ -1,9 +1,10 @@
 <template>
   <div class="page-container">
-    <div class="page-header">
-      <h2>题库管理</h2>
-      <el-button type="primary" @click="openAdd">新增题目</el-button>
-    </div>
+    <StudentHeader title="题库管理">
+      <template #actions>
+        <el-button type="primary" @click="openAdd">新增题目</el-button>
+      </template>
+    </StudentHeader>
 
     <el-card class="filter-card">
       <el-form :inline="true" :model="filterForm" @submit.prevent>

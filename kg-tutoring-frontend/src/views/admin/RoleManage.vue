@@ -1,8 +1,6 @@
 <template>
   <div class="role-manage">
-    <div class="page-header">
-      <h2>角色管理</h2>
-    </div>
+    <StudentHeader title="角色管理" />
 
     <el-card class="table-card">
       <div class="table-toolbar">

@@ -1,8 +1,6 @@
 <template>
   <div class="user-manage">
-    <div class="page-header">
-      <h2>用户账号管理</h2>
-    </div>
+    <StudentHeader title="用户账号管理" />
 
     <!-- 搜索栏 -->
     <el-card class="search-card">

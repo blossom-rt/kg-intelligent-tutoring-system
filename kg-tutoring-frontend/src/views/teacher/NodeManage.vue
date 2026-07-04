@@ -1,9 +1,10 @@
 <template>
   <div class="page-container">
-    <div class="page-header">
-      <h2>知识点管理</h2>
-      <el-button type="primary" @click="openAdd">新增知识点</el-button>
-    </div>
+    <StudentHeader title="知识点管理">
+      <template #actions>
+        <el-button type="primary" @click="openAdd">新增知识点</el-button>
+      </template>
+    </StudentHeader>
 
     <el-card class="filter-card">
       <el-form :inline="true" :model="filterForm" @submit.prevent>

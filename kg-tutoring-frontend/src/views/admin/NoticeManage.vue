@@ -1,8 +1,6 @@
 <template>
   <div class="notice-manage">
-    <div class="page-header">
-      <h2>系统公告管理</h2>
-    </div>
+    <StudentHeader title="系统公告管理" />
 
     <el-card class="table-card">
       <div class="table-toolbar">

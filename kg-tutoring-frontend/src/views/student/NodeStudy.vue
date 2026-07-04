@@ -25,7 +25,7 @@
             <el-card shadow="never" class="content-card">
               <div class="content-body">
                 <h3>{{ node.nodeName || node.name }}</h3>
-                <div class="desc-section markdown-body" v-html="formattedContent"></div>
+                <div class="desc-section" v-html="formattedContent"></div>
               </div>
             </el-card>
           </el-tab-pane>
@@ -74,8 +74,7 @@ import { ElMessage } from 'element-plus'
 import { ArrowLeft } from '@element-plus/icons-vue'
 import StudentHeader from '../../components/StudentHeader.vue'
 import { getNodeById } from '../../api/knowledge'
-import { updateStudyRecord } from '../../api/student'
-import { renderMarkdown } from '../../utils/markdown'
+import { updateStudyRecord, getStudyRecords } from '../../api/student'
 
 const router = useRouter()
 const route = useRoute()
@@ -91,7 +90,11 @@ const hasExercises = computed(() => {
 
 const formattedContent = computed(() => {
   const content = node.value?.content || node.value?.description || node.value?.desc || '暂无学习内容'
-  return renderMarkdown(content)
+  // 保留换行转为 <br>，同时允许后端返回 HTML
+  if (/<[^>]+>/.test(content)) {
+    return content
+  }
+  return content.replace(/\n/g, '<br>')
 })
 
 const difficultyLabel = (level) => {
@@ -125,7 +128,8 @@ const markComplete = async () => {
   marking.value = true
   try {
     const nodeId = node.value?.nodeId || node.value?.id
-    await updateStudyRecord({ nodeId, status: 'completed' })
+    // masteryLevel: 0未学 1学习中 2已掌握
+    await updateStudyRecord({ nodeId, masteryLevel: 2 })
     nodeStatus.value = 'completed'
     ElMessage.success('已标记为完成')
   } catch {
@@ -143,7 +147,12 @@ const fetchNode = async () => {
   try {
     const res = await getNodeById(nodeId)
     node.value = res
-    nodeStatus.value = res.studyStatus || res.status || ''
+    // 从学习记录中获取当前掌握状态
+    try {
+      const records = await getStudyRecords()
+      const record = Array.isArray(records) ? records.find(r => r.nodeId === Number(nodeId)) : null
+      if (record && record.masteryLevel === 2) nodeStatus.value = 'completed'
+    } catch {}
   } catch {
     ElMessage.error('加载知识点失败')
   } finally {

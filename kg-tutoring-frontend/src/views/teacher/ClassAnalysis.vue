@@ -1,8 +1,6 @@
 <template>
   <div class="page-container">
-    <div class="page-header">
-      <h2>班级学情统计</h2>
-    </div>
+    <StudentHeader title="班级学情统计" />
 
     <el-card class="filter-card">
       <el-form :inline="true" :model="filterForm">

@@ -39,3 +39,9 @@ export function getWeakAnalysis() { return request.get('/student/analysis/weak')
 
 // 学生仪表盘
 export function getStudentDashboard() { return request.get('/student/dashboard') }
+
+// 添加错题
+export function addWrongQuestion(data) { return request.post('/student/wrong-questions', data) }
+
+// 获取学习记录
+export function getStudyRecords(params) { return request.get('/student/study-records', { params }) }

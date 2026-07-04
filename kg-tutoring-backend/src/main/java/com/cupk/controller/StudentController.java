@@ -3,6 +3,7 @@ package com.cupk.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.cupk.mapper.*;
 import com.cupk.pojo.*;
+import com.cupk.pojo.PathDetail;
 import com.cupk.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ public class StudentController {
     private final CourseMapper courseMapper;
     private final KnowledgeNodeMapper nodeMapper;
     private final StudyPathMapper pathMapper;
+    private final PathDetailMapper detailMapper;
     private final StudyRecordMapper recordMapper;
     private final ExamRecordMapper examMapper;
     private final CrossSubjectThemeMapper themeMapper;
@@ -54,7 +56,18 @@ public class StudentController {
             Map<String, Object> m = new HashMap<>();
             m.put("id", p.getId());
             m.put("pathName", p.getPathName());
-            m.put("progress", p.getTotalNodes() != null && p.getTotalNodes() > 0 ? 30 : 0);
+            // 从 study_record 计算实际进度（已掌握节点数 / 总节点数）
+            List<PathDetail> details = detailMapper.selectList(
+                new LambdaQueryWrapper<PathDetail>().eq(PathDetail::getPathId, p.getId()));
+            int total = details.size();
+            long finished = details.stream().filter(d -> {
+                StudyRecord sr = records.stream()
+                    .filter(r -> r.getNodeId().equals(d.getNodeId()))
+                    .findFirst().orElse(null);
+                return sr != null && sr.getMasteryLevel() != null && sr.getMasteryLevel() == 2;
+            }).count();
+            int progress = total > 0 ? (int) Math.round((double) finished / total * 100) : 0;
+            m.put("progress", progress);
             return m;
         }).toList());
         result.put("todos", List.of());

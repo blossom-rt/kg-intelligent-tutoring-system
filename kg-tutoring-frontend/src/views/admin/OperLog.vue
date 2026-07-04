@@ -1,8 +1,6 @@
 <template>
   <div class="oper-log">
-    <div class="page-header">
-      <h2>操作日志查询</h2>
-    </div>
+    <StudentHeader title="操作日志查询" />
 
     <!-- 筛选栏 -->
     <el-card class="filter-card">

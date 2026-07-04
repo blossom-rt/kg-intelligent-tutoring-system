@@ -1,8 +1,6 @@
 <template>
   <div class="course-manage">
-    <div class="page-header">
-      <h2>课程管理</h2>
-    </div>
+    <StudentHeader title="课程管理" />
 
     <el-card class="table-card">
       <div class="table-toolbar">
