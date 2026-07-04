@@ -25,7 +25,7 @@
             <el-card shadow="never" class="content-card">
               <div class="content-body">
                 <h3>{{ node.nodeName || node.name }}</h3>
-                <div class="desc-section" v-html="formattedContent"></div>
+                <div class="desc-section markdown-body" v-html="formattedContent"></div>
               </div>
             </el-card>
           </el-tab-pane>
@@ -75,6 +75,7 @@ import { ArrowLeft } from '@element-plus/icons-vue'
 import StudentHeader from '../../components/StudentHeader.vue'
 import { getNodeById } from '../../api/knowledge'
 import { updateStudyRecord } from '../../api/student'
+import { renderMarkdown } from '../../utils/markdown'
 
 const router = useRouter()
 const route = useRoute()
@@ -90,11 +91,7 @@ const hasExercises = computed(() => {
 
 const formattedContent = computed(() => {
   const content = node.value?.content || node.value?.description || node.value?.desc || '暂无学习内容'
-  // 保留换行转为 <br>，同时允许后端返回 HTML
-  if (/<[^>]+>/.test(content)) {
-    return content
-  }
-  return content.replace(/\n/g, '<br>')
+  return renderMarkdown(content)
 })
 
 const difficultyLabel = (level) => {

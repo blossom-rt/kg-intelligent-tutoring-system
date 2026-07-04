@@ -10,6 +10,7 @@
 |---|---|
 | `init_all.sql` | 创建数据库、创建所有表、初始化基础角色和管理员账号 |
 | `seed_all.sql` | 导入课程、知识点、题库、学生、教师、学习记录、测评记录、错题和主题等演示数据 |
+| `enrich_learning_materials.sql` | 为每个知识点补充结构化学习资料，可重复执行 |
 | `migrate_exam.sql` | 旧库补测评定义表和演示测评数据，已全新初始化时不需要执行 |
 
 ## 全新数据库使用方式
@@ -21,6 +22,7 @@ cd kg-intelligent-tutoring-system/db
 
 mysql -u root -p < init_all.sql
 mysql -u root -p < seed_all.sql
+mysql -u root -p < enrich_learning_materials.sql
 ```
 
 执行完成后会生成数据库：
@@ -37,9 +39,10 @@ kg_tutoring_db
 cd kg-intelligent-tutoring-system/db
 
 mysql -u root -p < seed_all.sql
+mysql -u root -p < enrich_learning_materials.sql
 ```
 
-`seed_all.sql` 会导入完整演示数据，并完成必要的数据清理。
+`seed_all.sql` 会导入完整演示数据，并完成必要的数据清理。`enrich_learning_materials.sql` 会把知识点的一句话简介扩展为“学习目标、核心概念、学习步骤、例题导学、常见误区、练习建议、自测清单”等结构化学习资料。
 
 如果旧库还没有教师发布测评功能所需的 `exam`、`exam_question` 表，先执行：
 

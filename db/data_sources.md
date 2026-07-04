@@ -14,6 +14,14 @@
   https://www.moe.gov.cn/srcsite/A26/s8001/202204/W020220420582357585169.pdf
 - 教育部：《义务教育课程方案和课程标准（2022年版）》通知页
   https://www.moe.gov.cn/srcsite/A26/s8001/202204/t20220420_619921.html
+- Python 官方教程：控制流工具
+  https://docs.python.org/3/tutorial/controlflow.html
+- Python 官方教程：数据结构
+  https://docs.python.org/3/tutorial/datastructures.html
+- OpenStax Physics：运动、力、功率、电路等基础物理主题
+  https://openstax.org/details/books/physics
+- Khan Academy：初中代数、几何、统计和物理学习主题
+  https://www.khanacademy.org/
 
 ## 逐表来源
 
@@ -23,7 +31,7 @@
 | `sys_user` | 登录账号 | 项目演示虚构账号，由 `db/seed_all.sql` 写入。姓名、邮箱均为测试数据。 |
 | `sys_email_code` | 邮箱验证码 | 当前未导入测试数据。运行注册/找回密码流程时由系统实时产生。 |
 | `course` | 课程 | 基础课程来自项目演示需求；扩展课程根据数学、物理、信息科技课程标准中的学习领域整理。 |
-| `knowledge_node` | 知识点 | 根据公开课程标准中的主题、内容领域和学习进阶关系整理成演示知识点。 |
+| `knowledge_node` | 知识点 | 根据公开课程标准中的主题、内容领域和学习进阶关系整理成演示知识点；学习资料由 `enrich_learning_materials.sql` 参考课程标准、Python 官方教程、公开物理/数学学习资料后原创整理，未直接复制原文。 |
 | `knowledge_edge` | 知识点关系 | 根据知识点学习先后顺序和跨学科支撑关系人工整理。 |
 | `question` | 题库 | 围绕每个知识点自编的单选演示题，未复制线上题库。 |
 | `study_record` | 学习记录 | 虚构学生学习行为数据，由脚本按固定规则生成，用于前端统计和学情页面展示。 |
@@ -43,4 +51,5 @@
 
 - `db/init_all.sql`：数据库与表结构初始化脚本。
 - `db/seed_all.sql`：演示数据插入脚本。
+- `db/enrich_learning_materials.sql`：知识点学习资料补充脚本，可重复执行。
 - `db/migrate_exam.sql`：旧库补测评定义表与演示测评数据的迁移脚本。

@@ -58,7 +58,7 @@
           <template #header>
             <span class="card-title">AI 学情报告</span>
           </template>
-          <div class="report-content" v-html="formattedReport"></div>
+          <div class="report-content markdown-body" v-html="formattedReport"></div>
         </el-card>
 
         <!-- 错题汇总 -->
@@ -105,6 +105,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { ArrowLeft } from '@element-plus/icons-vue'
 import { getExamResult } from '../../api/student'
+import { renderMarkdown } from '../../utils/markdown'
 
 const router = useRouter()
 const route = useRoute()
@@ -124,8 +125,7 @@ const scorePercent = computed(() => {
 
 const formattedReport = computed(() => {
   const report = result.value?.aiReport || result.value?.report || ''
-  if (/<[^>]+>/.test(report)) return report
-  return report.replace(/\n/g, '<br>')
+  return renderMarkdown(report)
 })
 
 const truncate = (str, max) => {

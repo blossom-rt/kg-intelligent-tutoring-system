@@ -54,7 +54,7 @@
       destroy-on-close
     >
       <div v-loading="aiLoading">
-        <div v-if="aiContent" class="ai-content" v-html="formattedAiContent"></div>
+        <div v-if="aiContent" class="ai-content markdown-body" v-html="formattedAiContent"></div>
         <el-empty v-if="!aiLoading && !aiContent" description="暂无讲解内容" :image-size="60" />
       </div>
       <template #footer>
@@ -70,6 +70,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import StudentHeader from '../../components/StudentHeader.vue'
 import { getWrongQuestions, deleteWrongQuestion, aiWrongExplain } from '../../api/student'
+import { renderMarkdown } from '../../utils/markdown'
 
 const router = useRouter()
 const loading = ref(false)
@@ -80,10 +81,7 @@ const aiLoading = ref(false)
 const aiContent = ref('')
 
 const formattedAiContent = computed(() => {
-  const text = typeof aiContent.value === 'string' ? aiContent.value : ''
-  if (!text) return ''
-  if (/<[^>]+>/.test(text)) return text
-  return text.replace(/\n/g, '<br>')
+  return renderMarkdown(aiContent.value)
 })
 
 const truncate = (str, max) => {

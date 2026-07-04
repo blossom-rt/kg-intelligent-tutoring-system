@@ -130,6 +130,7 @@ function renderChart() {
     }]
   })
 
+  chart.value.off('click')
   chart.value.on('click', (params) => {
     if (params.dataType === 'node') {
       const raw = params.data.raw
@@ -164,7 +165,11 @@ const fetchGraph = async () => {
   try {
     const res = await getStudentGraph()
     if (res && res.nodes) { nodes.value = res.nodes; edges.value = res.edges || [] }
-  } catch { /* ignore */ }
+  } catch {
+    ElMessage.error('知识图谱加载失败，请确认后端服务已启动')
+    nodes.value = []
+    edges.value = []
+  }
   finally { loading.value = false }
 }
 
