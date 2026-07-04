@@ -47,6 +47,7 @@ public class StudentController {
         double avgRate = correctSum > 0
                 ? records.stream().filter(r -> r.getCorrectRate() != null).mapToDouble(r -> r.getCorrectRate().doubleValue()).average().orElse(0)
                 : 0;
+        int displayCorrectRate = (int) Math.round(Math.max(0, Math.min(100, avgRate)));
 
         Map<String, Object> result = new HashMap<>();
         result.put("activePaths", paths.stream().map(p -> {
@@ -61,7 +62,7 @@ public class StudentController {
                 "studyDays", records.isEmpty() ? 0 : 1,
                 "totalMinutes", totalMin,
                 "masteredNodes", (int) mastered,
-                "correctRate", String.format("%.0f", avgRate * 100)
+                "correctRate", displayCorrectRate
         ));
         return ResponseEntity.ok(result);
     }
