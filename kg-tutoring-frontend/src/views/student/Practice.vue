@@ -7,6 +7,15 @@
     <!-- 加载中 -->
     <div v-if="loading" class="loading-area" v-loading="true" />
 
+    <!-- 空状态 -->
+    <div v-else-if="!questions.length" class="empty-area">
+      <el-empty description="暂无练习题" :image-size="80">
+        <template #default>
+          <el-button type="primary" @click="goBack">返回</el-button>
+        </template>
+      </el-empty>
+    </div>
+
     <!-- 已完成：显示成绩总结 -->
     <div v-else-if="finished" class="result-area">
       <el-card shadow="never" class="result-card">
@@ -108,7 +117,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { usePet } from '../../composables/usePet'
-import { getPracticeQuestions, addWrongQuestion } from '../../api/student'
+import { getPracticeQuestions, submitPractice } from '../../api/student'
 
 const router = useRouter()
 const route = useRoute()
@@ -192,8 +201,7 @@ const optionClass = (oi) => {
 const submitAnswer = () => {
   if (!selectedAnswer.value) return
   answered.value = true
-  const correctKey = normalizeAnswer(currentQuestion.value.answer || currentQuestion.value.correctAnswer)
-  isCorrect.value = String(selectedAnswer.value) === correctKey
+  isCorrect.value = String(selectedAnswer.value) === String(currentQuestion.value.answer || currentQuestion.value.correctAnswer || '')
   if (isCorrect.value) {
     correctCount.value++
     pet.celebrate()
@@ -220,17 +228,31 @@ const nextQuestion = async () => {
     answered.value = false
     isCorrect.value = false
   } else {
-    finished.value = true
+    // 所有题目已答完，提交并判断是否自动跳转
+    const nodeId = route.query.nodeId
+    const submitData = {
+      answers: userAnswers.value.map(a => ({
+        questionId: a.questionId,
+        answer: a.answer
+      }))
+    }
+    if (nodeId) submitData.nodeId = Number(nodeId)
+
+    let submitRes
     try {
-      const nodeId = route.query.nodeId
-      const submitData = { answers: userAnswers.value.map(a => ({
-          questionId: a.questionId,
-          answer: a.answer
-        }))
-      }
-      if (nodeId) submitData.nodeId = Number(nodeId)
-      await submitPractice(submitData)
+      submitRes = await submitPractice(submitData)
     } catch { /* 后台静默记录 */ }
+
+    // 正确率 >= 60% 时自动跳转，不展示结果页
+    const correctRate = submitRes?.correctRate ?? scorePercent.value
+    if (correctRate >= 60) {
+      ElMessage.success(submitRes?.message || '练习完成，继续加油！')
+      goBack()
+      return
+    }
+
+    // 正确率不足 60% 时展示结果页
+    finished.value = true
   }
 }
 
@@ -297,6 +319,13 @@ onMounted(fetchQuestions)
 }
 
 .loading-area {
+  min-height: 300px;
+}
+
+.empty-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   min-height: 300px;
 }
 

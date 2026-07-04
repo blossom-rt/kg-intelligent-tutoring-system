@@ -59,6 +59,16 @@
             <el-option v-for="c in courseList" :key="c.id" :label="c.courseName" :value="c.id" />
           </el-select>
         </el-form-item>
+        <el-form-item label="智能组卷" v-if="form.courseId">
+          <div style="display:flex; gap:12px; align-items:center; width:100%;">
+            <el-input-number v-model="autoQuestionCount" :min="1" :max="100" :disabled="!form.courseId" style="width:140px;" />
+            <span style="font-size:13px;color:#a09a92;">道题目</span>
+            <el-button type="success" plain :loading="autoLoading" :disabled="!form.courseId" @click="autoPickQuestions">
+              智能选题
+            </el-button>
+            <el-button size="small" @click="form.questionIds = []">清空已选</el-button>
+          </div>
+        </el-form-item>
         <el-form-item label="选择题目" prop="questionIds">
           <el-select
             v-model="form.questionIds"
@@ -78,7 +88,7 @@
             />
           </el-select>
           <div style="font-size: 12px; color: #a09a92; margin-top: 4px;">
-            已选 {{ form.questionIds.length }} 道题目
+            题库共 {{ questionBank.length }} 道，已选 {{ form.questionIds.length }} 道
           </div>
         </el-form-item>
         <el-form-item label="总分" prop="totalScore">
@@ -101,11 +111,13 @@ import { getCourseList } from '../../api/knowledge'
 
 const loading = ref(false)
 const submitLoading = ref(false)
+const autoLoading = ref(false)
 const dialogVisible = ref(false)
 const formRef = ref(null)
 const tableData = ref([])
 const courseList = ref([])
 const questionBank = ref([])
+const autoQuestionCount = ref(5)
 
 const filterForm = reactive({
   courseId: null
@@ -188,8 +200,30 @@ const loadQuestions = async (courseId) => {
   }
 }
 
+const autoPickQuestions = async () => {
+  if (!form.courseId) {
+    ElMessage.warning('请先选择关联课程')
+    return
+  }
+  if (!questionBank.value.length) {
+    await loadQuestions(form.courseId)
+  }
+  const bank = questionBank.value
+  if (!bank.length) {
+    ElMessage.warning('该课程暂无可用题目')
+    return
+  }
+  const count = Math.min(autoQuestionCount.value, bank.length)
+  // 随机打乱后取前 count 个
+  const shuffled = [...bank].sort(() => Math.random() - 0.5)
+  const picked = shuffled.slice(0, count)
+  form.questionIds = picked.map(q => q.id)
+  ElMessage.success(`已随机抽取 ${count} 道题目`)
+}
+
 const openCreate = () => {
   Object.assign(form, { examName: '', courseId: null, questionIds: [], totalScore: 100 })
+  autoQuestionCount.value = 5
   questionBank.value = []
   dialogVisible.value = true
 }
@@ -234,5 +268,5 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.page-container { padding: 20px 24px; background: #faf7f2; min-height: 100vh; }
+.page-container { padding: 20px 24px; background: #f5f7fa; min-height: 100vh; }
 </style>

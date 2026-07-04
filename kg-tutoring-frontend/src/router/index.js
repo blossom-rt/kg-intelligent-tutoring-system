@@ -34,6 +34,7 @@ const routes = [
   { path: '/teacher/exams', component: () => import('../views/teacher/ExamManage.vue'), meta: { roles: ['teacher'] } },
   { path: '/teacher/themes', component: () => import('../views/teacher/ThemeManage.vue'), meta: { roles: ['teacher'] } },
   { path: '/teacher/analysis', component: () => import('../views/teacher/ClassAnalysis.vue'), meta: { roles: ['teacher'] } },
+  { path: '/teacher/student-paths', component: () => import('../views/teacher/StudentPathList.vue'), meta: { roles: ['teacher'] } },
   { path: '/teacher/profile', component: () => import('../views/Profile.vue'), meta: { roles: ['teacher'] } },
 
   // 管理员端

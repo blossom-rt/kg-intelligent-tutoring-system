@@ -4,7 +4,7 @@
 
     <!-- 搜索栏 -->
     <el-card class="search-card">
-      <el-form :inline="true" :model="searchForm">
+      <el-form :inline="true" :model="searchForm" @submit.prevent>
         <el-form-item label="用户名/姓名">
           <el-input v-model="searchForm.keyword" placeholder="请输入用户名或姓名" clearable />
         </el-form-item>
@@ -283,7 +283,7 @@ function handleDelete(row) {
 </script>
 
 <style scoped>
-.user-manage { padding: 20px; background: #faf7f2; min-height: 100vh; }
+.user-manage { padding: 20px; background: #f5f7fa; min-height: 100vh; }
 .page-header h2 { margin: 0 0 16px; font-size: 20px; color: #2d2a26; }
 .search-card { margin-bottom: 16px; }
 .table-card { margin-bottom: 16px; }

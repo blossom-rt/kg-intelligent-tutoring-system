@@ -253,5 +253,5 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.page-container { padding: 20px 24px; background: #faf7f2; min-height: 100vh; }
+.page-container { padding: 20px 24px; background: #f5f7fa; min-height: 100vh; }
 </style>

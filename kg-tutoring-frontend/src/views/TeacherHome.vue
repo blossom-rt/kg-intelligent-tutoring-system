@@ -59,9 +59,8 @@
         <div class="card" style="flex:1">
           <div class="card-header">
             <el-icon class="card-head-icon"><Warning /></el-icon>
-            薄弱知识点 TOP5
+<div v-if="weakNodes.length" class="weak-list"><div v-for="(item, idx) in weakNodes" :key="idx" class="weak-item"><span class="weak-rank" :style="{ background: idx < 2 ? '#f56c6c' : idx < 4 ? '#e6a23c' : '#909399' }">{{ idx + 1 }}</span><span class="weak-name">{{ item.nodeName }}</span><span class="weak-rate">{{ item.masteryRate || 0 }}%</span></div></div><div v-else class="empty-hint">暂无数据</div>
           </div>
-          <div class="empty-hint">暂无数据</div>
         </div>
       </div>
 
@@ -96,6 +95,8 @@ import {
 } from '@element-plus/icons-vue'
 import request from '../utils/request'
 import { getNoticeList } from '../api/admin'
+import { getClassAnalysis } from '../api/teacher'
+import { getCourseList } from '../api/knowledge'
 
 const router = useRouter()
 const stats = ref({ activeStudents: 0, weekStudy: 0, totalNodes: 0, totalQuestions: 0 })
@@ -103,6 +104,7 @@ const teacherName = ref('老师')
 const notices = ref([])
 const noticeDialog = ref(false)
 const currentNotice = ref(null)
+const weakNodes = ref([])
 
 const greeting = computed(() => {
   const h = new Date().getHours()
@@ -133,11 +135,40 @@ const entries = [
   { key: 'exams', icon: Tickets, label: '测评管理', desc: '组卷与阅卷分析', path: '/teacher/exams', bg: '#fef3e8', color: '#c07830' },
   { key: 'themes', icon: Connection, label: '跨学科主题', desc: '多学科融合项目', path: '/teacher/themes', bg: '#f0e8f5', color: '#7a5dba' },
   { key: 'analysis', icon: DataAnalysis, label: '学情分析', desc: '班级与个体报告', path: '/teacher/analysis', bg: '#e8f5f0', color: '#3d7a5e' },
+  { key: 'student-paths', icon: Connection, label: '学习路径督导', desc: '学生路径与进度', path: '/teacher/student-paths', bg: '#fefde8', color: '#b89030' },
 ]
 
 onMounted(async () => {
+  // 从教师首页看板接口获取统计数据
   try { const res = await request.get('/teacher/dashboard'); if (res) stats.value = res } catch { }
+
+  // 补充：从现有接口统计课程数、知识点数
+  try {
+    const courses = await getCourseList()
+    if (Array.isArray(courses)) stats.value.courseCount = courses.length
+  } catch { }
+
+  try {
+    const nodes = await request.get('/nodes')
+    if (Array.isArray(nodes)) stats.value.totalNodes = nodes.length
+  } catch { }
+
+  try {
+    const questions = await request.get('/questions')
+    if (Array.isArray(questions)) stats.value.totalQuestions = questions.length
+  } catch { }
+
+  // 加载公告列表
   try { const res = await getNoticeList(); if (res && Array.isArray(res)) notices.value = res } catch { }
+
+  // 加载薄弱知识点
+  try {
+    const courses = await getCourseList()
+    if (Array.isArray(courses) && courses.length) {
+      const { weakNodes: wns } = await getClassAnalysis({ courseId: courses[0].id }) || {}
+      if (wns && wns.length) weakNodes.value = wns.slice(0, 5)
+    }
+  } catch { }
 })
 
 const showNotice = (n) => { currentNotice.value = n; noticeDialog.value = true }

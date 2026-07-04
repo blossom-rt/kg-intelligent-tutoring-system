@@ -65,11 +65,13 @@ import {
   Setting, User, Lock, School, Bell, Files, Monitor,
   TrendCharts, Finished, EditPen
 } from '@element-plus/icons-vue'
-import { getNoticeList } from '../api/admin'
+import { getNoticeList, getUserList, getRoleList, getOperLogs } from '../api/admin'
 
 const router = useRouter()
-const h = new Date().getHours()
-const greeting = computed(() => h < 12 ? '上午好' : h < 18 ? '下午好' : '晚上好')
+const greeting = computed(() => {
+  const h = new Date().getHours()
+  return h < 12 ? '上午好' : h < 18 ? '下午好' : '晚上好'
+})
 
 const notices = ref([])
 const noticeDialog = ref(false)
@@ -101,11 +103,52 @@ const logout = () => {
   router.push('/login')
 }
 
+/**
+ * 从 API 响应中安全提取数组
+ */
+const extractArray = (data) => {
+  if (Array.isArray(data)) return data
+  if (data && typeof data === 'object') {
+    if (Array.isArray(data.records)) return data.records
+    if (Array.isArray(data.data)) return data.data
+    if (Array.isArray(data.list)) return data.list
+  }
+  return []
+}
+
 onMounted(async () => {
-  try {
-    const res = await getNoticeList()
-    if (res && Array.isArray(res)) notices.value = res
-  } catch { /* ignore */ }
+  // 获取公告与统计数据（并行请求，避免重复调用）
+  const [noticeRes, userRes, roleRes, logRes] = await Promise.allSettled([
+    getNoticeList(),
+    getUserList(),
+    getRoleList(),
+    getOperLogs()
+  ])
+
+  // 公告列表（可正常显示）
+  if (noticeRes.status === 'fulfilled' && noticeRes.value) {
+    const list = extractArray(noticeRes.value)
+    notices.value = list
+    statsList.value[2].value = list.length
+  }
+
+  // 用户数
+  if (userRes.status === 'fulfilled' && userRes.value) {
+    const list = extractArray(userRes.value)
+    statsList.value[0].value = list.length
+  }
+
+  // 角色数
+  if (roleRes.status === 'fulfilled' && roleRes.value) {
+    const list = extractArray(roleRes.value)
+    statsList.value[1].value = list.length
+  }
+
+  // 操作日志数
+  if (logRes.status === 'fulfilled' && logRes.value) {
+    const list = extractArray(logRes.value)
+    statsList.value[3].value = list.length
+  }
 })
 </script>
 

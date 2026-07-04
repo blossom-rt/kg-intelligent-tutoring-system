@@ -2,7 +2,9 @@ package com.cupk.controller;
 
 import com.cupk.common.Result;
 import com.cupk.common.UserContext;
+import com.cupk.mapper.PathDetailMapper;
 import com.cupk.mapper.WrongQuestionMapper;
+import com.cupk.pojo.PathDetail;
 import com.cupk.pojo.Question;
 import com.cupk.pojo.WrongQuestion;
 import com.cupk.service.QuestionService;
@@ -25,6 +27,7 @@ public class StudentPracticeController {
     private final QuestionService questionService;
     private final StudyRecordService studyRecordService;
     private final WrongQuestionMapper wrongQuestionMapper;
+    private final PathDetailMapper pathDetailMapper;
 
     /** 获取练习题目 */
     @GetMapping("/questions")
@@ -89,6 +92,17 @@ public class StudentPracticeController {
         int masteryLevel = correctRate >= 80 ? 3 : (correctRate >= 60 ? 2 : 1);
         if (nodeId != null) {
             studyRecordService.updateRecord(userId, nodeId, masteryLevel, BigDecimal.valueOf(correctRate), null);
+            // 正确率达标时自动标记路径节点为已完成（>=60%）
+            if (masteryLevel >= 2) {
+                PathDetail detail = pathDetailMapper.selectOne(
+                        new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<PathDetail>()
+                                .eq(PathDetail::getNodeId, nodeId)
+                                .eq(PathDetail::getIsFinished, 0));
+                if (detail != null) {
+                    detail.setIsFinished(1);
+                    pathDetailMapper.updateById(detail);
+                }
+            }
         }
 
         Map<String, Object> result = new LinkedHashMap<>();
