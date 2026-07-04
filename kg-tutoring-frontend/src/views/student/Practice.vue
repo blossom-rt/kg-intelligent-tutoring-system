@@ -107,10 +107,12 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
+import { usePet } from '../../composables/usePet'
 import { getPracticeQuestions, addWrongQuestion } from '../../api/student'
 
 const router = useRouter()
 const route = useRoute()
+const pet = usePet()
 
 const loading = ref(false)
 const questions = ref([])
@@ -194,7 +196,11 @@ const submitAnswer = () => {
   isCorrect.value = String(selectedAnswer.value) === correctKey
   if (isCorrect.value) {
     correctCount.value++
+    pet.celebrate()
+    // 连击检测
+    if (correctCount.value % 5 === 0) pet.fireUp()
   } else {
+    pet.comfort()
     addWrongQuestion({
       questionId: currentQuestion.value.id,
       wrongAnswer: selectedAnswer.value

@@ -2,8 +2,25 @@
   <div class="app-shell">
     <div class="grain-global"></div>
     <router-view></router-view>
+    <StudyPet ref="petRef" v-if="showPet" />
   </div>
 </template>
+
+<script setup>
+import { computed, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import StudyPet from './components/StudyPet.vue'
+import { usePet } from './composables/usePet'
+
+const route = useRoute()
+const { register } = usePet()
+const petRef = ref(null)
+
+// 只在学生端显示宠物
+const showPet = computed(() => route.path.startsWith('/student'))
+
+watch(petRef, (el) => { if (el) register(el) })
+</script>
 
 <style>
 .app-shell {
