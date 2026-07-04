@@ -1,0 +1,304 @@
+@startuml kg_er_diagram
+' ============================================================
+' KG 智能导学系统 — 数据库 ER 图 (IE / Crow's Foot 记法)
+' 19 张表，5 大模块
+' ============================================================
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontName "Helvetica"
+skinparam roundCorner 10
+skinparam entity {
+    BackgroundColor #F5F5F5
+    BorderColor #333333
+    FontSize 11
+    AttributeFontSize 10
+}
+
+left to right direction
+
+' ==============================
+' 1. 权限 & 用户模块
+' ==============================
+
+entity "sys_role\n系统角色表" as sys_role {
+    * id : INT <<PK>>
+    --
+    * role_code : VARCHAR(30) <<UK>>
+    * role_name : VARCHAR(30)
+    description : VARCHAR(200)
+}
+
+entity "sys_user\n系统用户表" as sys_user {
+    * id : INT <<PK>>
+    --
+    * username : VARCHAR(50) <<UK>>
+    real_name : VARCHAR(30)
+    email : VARCHAR(50) <<UK>>
+    * password : VARCHAR(100)
+    * status : TINYINT
+    * create_time : DATETIME
+    --
+    ** role_id : INT <<FK>>
+}
+
+entity "sys_email_code\n邮箱验证码表" as sys_email_code {
+    * id : INT <<PK>>
+    --
+    * email : VARCHAR(50)
+    * code : VARCHAR(10)
+    * type : VARCHAR(20)
+    * expire_time : DATETIME
+    is_used : TINYINT
+    create_time : DATETIME
+}
+
+' ==============================
+' 2. 课程 & 知识图谱模块
+' ==============================
+
+entity "course\n课程表" as course {
+    * id : INT <<PK>>
+    --
+    * subject : VARCHAR(30)
+    * course_name : VARCHAR(50)
+    description : TEXT
+    create_time : DATETIME
+    --
+    ** teacher_id : INT <<FK>>
+}
+
+entity "knowledge_node\n知识点节点表" as knowledge_node {
+    * id : INT <<PK>>
+    --
+    * name : VARCHAR(50)
+    description : TEXT
+    difficulty : TINYINT
+    chapter : VARCHAR(50)
+    expected_minutes : INT
+    create_time : DATETIME
+    --
+    ** course_id : INT <<FK>>
+}
+
+entity "knowledge_edge\n知识点依赖边表" as knowledge_edge {
+    * id : INT <<PK>>
+    --
+    relation_type : VARCHAR(20)
+    is_cross_subject : TINYINT
+    --
+    ** from_node_id : INT <<FK>>
+    ** to_node_id : INT <<FK>>
+    --
+    == (from_node_id, to_node_id) <<UK>>
+}
+
+' ==============================
+' 3. 题库 & 测评模块
+' ==============================
+
+entity "question\n习题库表" as question {
+    * id : INT <<PK>>
+    --
+    * content : TEXT
+    options : TEXT
+    * answer : VARCHAR(200)
+    analysis : TEXT
+    difficulty : TINYINT
+    question_type : VARCHAR(20)
+    create_time : DATETIME
+    --
+    ** node_id : INT <<FK>>
+}
+
+entity "exam\n测评定义表" as exam {
+    * id : INT <<PK>>
+    --
+    * exam_name : VARCHAR(100)
+    total_score : INT
+    status : TINYINT
+    create_time : DATETIME
+    --
+    ** course_id : INT <<FK>>
+    ** creator_id : INT <<FK>>
+}
+
+entity "exam_question\n测评题目关联表" as exam_question {
+    * id : INT <<PK>>
+    --
+    sort_order : INT
+    --
+    ** exam_id : INT <<FK>>
+    ** question_id : INT <<FK>>
+    --
+    == (exam_id, question_id) <<UK>>
+}
+
+entity "exam_record\n测评记录表" as exam_record {
+    * id : INT <<PK>>
+    --
+    total_score : INT
+    user_score : DECIMAL(5,2)
+    ai_report : TEXT
+    create_time : DATETIME
+    --
+    ** user_id : INT <<FK>>
+    ** exam_id : INT <<FK>>
+    ** course_id : INT <<FK>>
+}
+
+' ==============================
+' 4. 学习记录 & 路径模块
+' ==============================
+
+entity "study_record\n学习记录表" as study_record {
+    * id : INT <<PK>>
+    --
+    mastery_level : TINYINT
+    correct_rate : DECIMAL(5,2)
+    study_minutes : INT
+    update_time : DATETIME
+    --
+    ** user_id : INT <<FK>>
+    ** node_id : INT <<FK>>
+    --
+    == (user_id, node_id) <<UK>>
+}
+
+entity "study_path\n学习路径主表" as study_path {
+    * id : INT <<PK>>
+    --
+    path_name : VARCHAR(100)
+    total_nodes : INT
+    total_minutes : INT
+    ai_summary : TEXT
+    status : TINYINT
+    create_time : DATETIME
+    --
+    ** user_id : INT <<FK>>
+    ** target_node_id : INT <<FK>>
+}
+
+entity "path_detail\n学习路径详情表" as path_detail {
+    * id : INT <<PK>>
+    --
+    * sort_order : INT
+    is_finished : TINYINT
+    --
+    ** path_id : INT <<FK>>
+    ** node_id : INT <<FK>>
+}
+
+entity "wrong_question\n错题本表" as wrong_question {
+    * id : INT <<PK>>
+    --
+    wrong_answer : VARCHAR(200)
+    wrong_count : INT
+    ai_explain : TEXT
+    create_time : DATETIME
+    --
+    ** user_id : INT <<FK>>
+    ** question_id : INT <<FK>>
+    --
+    == (user_id, question_id) <<UK>>
+}
+
+' ==============================
+' 5. 跨学科 & 运维模块
+' ==============================
+
+entity "cross_subject_theme\n跨学科主题表" as cross_subject_theme {
+    * id : INT <<PK>>
+    --
+    * theme_name : VARCHAR(100)
+    description : TEXT
+    difficulty : TINYINT
+    status : TINYINT
+    create_time : DATETIME
+    --
+    ** publisher_id : INT <<FK>>
+}
+
+entity "cross_theme_node\n主题-知识点关联表" as cross_theme_node {
+    * id : INT <<PK>>
+    --
+    ** theme_id : INT <<FK>>
+    ** node_id : INT <<FK>>
+    --
+    == (theme_id, node_id) <<UK>>
+}
+
+entity "sys_notice\n系统公告表" as sys_notice {
+    * id : INT <<PK>>
+    --
+    * title : VARCHAR(100)
+    content : TEXT
+    target_role : VARCHAR(20)
+    create_time : DATETIME
+    --
+    ** publisher_id : INT <<FK>>
+}
+
+entity "sys_oper_log\n操作日志表" as sys_oper_log {
+    * id : INT <<PK>>
+    --
+    user_id : INT
+    module : VARCHAR(50)
+    operation : VARCHAR(200)
+    ip : VARCHAR(50)
+    create_time : DATETIME
+}
+
+entity "ai_call_log\nAI调用日志表" as ai_call_log {
+    * id : INT <<PK>>
+    --
+    user_id : INT
+    scene : VARCHAR(50)
+    prompt : TEXT
+    result : TEXT
+    call_duration : INT
+    status : TINYINT
+    create_time : DATETIME
+}
+
+' ============================================================
+'  关 系 定 义
+' ============================================================
+
+' --- 权限模块 ---
+sys_role ||--o{ sys_user : "1 : N"
+
+' --- 课程 & 知识图谱 ---
+sys_user ||--o{ course : "teacher_id"
+course ||--o{ knowledge_node : "course_id"
+knowledge_node ||--o{ knowledge_edge : "from_node_id"
+knowledge_node ||--o{ knowledge_edge : "to_node_id"
+
+' --- 题库 & 测评 ---
+knowledge_node ||--o{ question : "node_id"
+sys_user ||--o{ exam : "creator_id"
+course ||--o{ exam : "course_id"
+exam ||--o{ exam_question : "exam_id"
+question ||--o{ exam_question : "question_id"
+sys_user ||--o{ exam_record : "user_id"
+exam ||--o{ exam_record : "exam_id"
+
+' --- 学习记录 & 路径 ---
+sys_user ||--o{ study_record : "user_id"
+knowledge_node ||--o{ study_record : "node_id"
+sys_user ||--o{ study_path : "user_id"
+knowledge_node ||--o{ study_path : "target_node_id"
+study_path ||--o{ path_detail : "path_id"
+knowledge_node ||--o{ path_detail : "node_id"
+sys_user ||--o{ wrong_question : "user_id"
+question ||--o{ wrong_question : "question_id"
+
+' --- 跨学科 & 运维 ---
+sys_user ||--o{ cross_subject_theme : "publisher_id"
+cross_subject_theme ||--o{ cross_theme_node : "theme_id"
+knowledge_node ||--o{ cross_theme_node : "node_id"
+sys_user ||--o{ sys_notice : "publisher_id"
+
+' --- 日志（弱关联） ---
+sys_user ||..o{ sys_oper_log : "user_id (非强制)"
+sys_user ||..o{ ai_call_log : "user_id (非强制)"
+
+@enduml
