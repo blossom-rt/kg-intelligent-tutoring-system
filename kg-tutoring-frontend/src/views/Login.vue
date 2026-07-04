@@ -49,7 +49,7 @@
             >
               <template #suffix>
                 <span class="pwd-eye" @mousedown.prevent @click.stop="showPassword = !showPassword">
-                  <component :is="showPassword ? View : Hide" />
+                  <el-icon :size="18"><component :is="showPassword ? View : Hide" /></el-icon>
                 </span>
               </template>
             </el-input>
