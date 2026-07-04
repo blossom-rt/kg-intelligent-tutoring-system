@@ -106,7 +106,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { getPracticeQuestions } from '../../api/student'
+import { getPracticeQuestions, submitPractice } from '../../api/student'
 
 const router = useRouter()
 const route = useRoute()
@@ -190,14 +190,25 @@ const submitAnswer = () => {
   })
 }
 
-const nextQuestion = () => {
+const nextQuestion = async () => {
   if (currentIndex.value < questions.value.length - 1) {
     currentIndex.value++
     selectedAnswer.value = ''
     answered.value = false
     isCorrect.value = false
   } else {
+    // 提交练习结果到后端（记录错题和学习记录）
     finished.value = true
+    try {
+      const nodeId = route.query.nodeId
+      await submitPractice({
+        nodeId: Number(nodeId),
+        answers: userAnswers.value.map(a => ({
+          questionId: a.questionId,
+          answer: a.answer
+        }))
+      })
+    } catch { /* 后台静默记录 */ }
   }
 }
 

@@ -28,7 +28,7 @@
                 <el-progress :percentage="p.progress" :stroke-width="6" :show-text="false" />
               </div>
               <el-tag size="small" round>进行中</el-tag>
-              <el-button type="primary" size="small" round>继续</el-button>
+              <el-button type="primary" size="small" round @click="$router.push('/student/path/' + p.id)">继续</el-button>
             </div>
           </div>
           <div v-else class="empty-hint">暂无进行中的学习，去知识图谱开启一段旅程吧</div>
