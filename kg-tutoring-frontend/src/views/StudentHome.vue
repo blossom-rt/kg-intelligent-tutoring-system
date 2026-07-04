@@ -85,6 +85,17 @@
           </div>
         </div>
 
+        <div class="card" v-if="weakNodes.length">
+          <div class="card-header"><el-icon class="card-icon"><Present /></el-icon>薄弱知识点</div>
+          <div class="weak-list">
+            <div v-for="(item, idx) in weakNodes.slice(0, 3)" :key="idx" class="weak-item">
+              <span class="weak-rank">{{ idx + 1 }}</span>
+              <span class="weak-name">{{ item.nodeName }}</span>
+              <el-progress :percentage="item.correctRate || 0" :stroke-width="4" :show-text="false" />
+            </div>
+          </div>
+        </div>
+
         <div class="card">
           <div class="card-header"><el-icon class="card-icon"><Compass /></el-icon>快捷入口</div>
           <div class="quick-links">
@@ -113,7 +124,7 @@ import {
   Clock, Bell, Present, DataAnalysis, Compass,
   Grid, Connection, MapLocation, Notebook
 } from '@element-plus/icons-vue'
-import { getStudentDashboard } from '../api/student'
+import { getStudentDashboard, getWeakAnalysis } from '../api/student'
 import { getNoticeList } from '../api/admin'
 
 const router = useRouter()
@@ -124,11 +135,13 @@ const currentNotice = ref(null)
 const activePaths = ref([])
 const todos = ref([])
 const stats = ref({ studyDays: 0, totalMinutes: 0, masteredNodes: 0, correctRate: 0 })
+const weakNodes = ref([])
 
 const quickLinks = [
   { key: 'knowledge', label: '知识图谱', icon: Grid, path: '/student/knowledge' },
-  { key: 'subjects', label: '跨学科主题', icon: Connection, path: '/student/themes' },
+  { key: 'themes', label: '跨学科主题', icon: Connection, path: '/student/themes' },
   { key: 'paths', label: '学习路径', icon: MapLocation, path: '/student/path' },
+  { key: 'exams', label: '测评中心', icon: Grid, path: '/student/exams' },
   { key: 'wrong', label: '错题本', icon: Notebook, path: '/student/wrong' },
 ]
 
@@ -172,6 +185,11 @@ onMounted(async () => {
   try {
     const noticeRes = await getNoticeList()
     if (noticeRes && Array.isArray(noticeRes)) notices.value = noticeRes
+  } catch { }
+
+  try {
+    const weakRes = await getWeakAnalysis()
+    if (weakRes && weakRes.weakNodes) weakNodes.value = weakRes.weakNodes
   } catch { }
 })
 
@@ -271,6 +289,10 @@ const logout = () => { localStorage.clear(); router.push('/login') }
 
 /* ── 快捷入口 ── */
 .quick-links { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.weak-list { display: flex; flex-direction: column; gap: 10px; }
+.weak-item { display: flex; align-items: center; gap: 8px; }
+.weak-rank { width: 20px; height: 20px; border-radius: 50%; background: #f56c6c; color: #fff; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.weak-name { flex: 1; font-size: 13px; color: #2d2a26; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .quick-item {
   display: flex; flex-direction: column; align-items: center; gap: 10px;
   padding: 18px 8px; border-radius: 14px;

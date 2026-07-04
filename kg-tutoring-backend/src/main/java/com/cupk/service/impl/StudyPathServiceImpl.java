@@ -148,15 +148,15 @@ public class StudyPathServiceImpl implements StudyPathService {
 
     @Override
     public void deletePath(Integer pathId, Integer userId) {
+        // 先删路径详情（子表），再删路径（父表）
+        pathDetailMapper.delete(
+                new LambdaQueryWrapper<PathDetail>()
+                        .eq(PathDetail::getPathId, pathId));
         // 只允许删除自己的路径
         studyPathMapper.delete(
                 new LambdaQueryWrapper<StudyPath>()
                         .eq(StudyPath::getId, pathId)
                         .eq(StudyPath::getUserId, userId));
-        // 级联删除路径详情
-        pathDetailMapper.delete(
-                new LambdaQueryWrapper<PathDetail>()
-                        .eq(PathDetail::getPathId, pathId));
     }
 
     /**

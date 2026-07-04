@@ -221,6 +221,16 @@ const nextQuestion = () => {
     isCorrect.value = false
   } else {
     finished.value = true
+    try {
+      const nodeId = route.query.nodeId
+      const submitData = { answers: userAnswers.value.map(a => ({
+          questionId: a.questionId,
+          answer: a.answer
+        }))
+      }
+      if (nodeId) submitData.nodeId = Number(nodeId)
+      await submitPractice(submitData)
+    } catch { /* 后台静默记录 */ }
   }
 }
 

@@ -2,6 +2,7 @@ package com.cupk.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.cupk.dto.ExamSubmitDTO;
+import com.cupk.ai.DeepSeekService;
 import com.cupk.mapper.ExamMapper;
 import com.cupk.mapper.ExamRecordMapper;
 import com.cupk.mapper.QuestionMapper;
@@ -11,7 +12,6 @@ import com.cupk.pojo.ExamRecord;
 import com.cupk.pojo.Question;
 import com.cupk.pojo.WrongQuestion;
 import com.cupk.service.ExamRecordService;
-import com.cupk.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +31,7 @@ public class ExamRecordServiceImpl implements ExamRecordService {
     private final WrongQuestionMapper wrongQuestionMapper;
     private final QuestionMapper questionMapper;
     private final ExamMapper examMapper;
+    private final DeepSeekService deepSeekService;
 
     @Override
     public void submitExam(Integer userId, ExamSubmitDTO dto) {
@@ -83,8 +84,17 @@ public class ExamRecordServiceImpl implements ExamRecordService {
                     .divide(BigDecimal.valueOf(totalScore), 2, java.math.RoundingMode.HALF_UP)
                 : BigDecimal.ZERO;
         record.setUserScore(score);
-        // TODO: 接入 AI 生成诊断报告
-        record.setAiReport("测评完成，共 " + totalScore + " 题，答对 " + userScore + " 题，得分 " + score + " 分。");
+        try {
+            String prompt = "请为以下测评成绩生成一份诊断报告，包含成绩分析、薄弱环节诊断和后续学习建议。\n\n"
+                    + "得分：" + userScore + " / " + totalScore
+                    + "（" + (totalScore > 0 ? String.format("%.1f", userScore * 100.0 / totalScore) : "0") + "%）";
+            String aiReport = deepSeekService.generate(
+                    "你是一个经验丰富的学业诊断分析师，善于根据测评成绩为学生提供个性化的学习建议。",
+                    prompt);
+            record.setAiReport(aiReport != null ? aiReport : "测评完成，共 " + totalScore + " 题，答对 " + userScore + " 题。");
+        } catch (Exception e) {
+            record.setAiReport("测评完成，共 " + totalScore + " 题，答对 " + userScore + " 题，得分 " + score + " 分。");
+        }
         record.setCreateTime(LocalDateTime.now());
         examRecordMapper.insert(record);
     }

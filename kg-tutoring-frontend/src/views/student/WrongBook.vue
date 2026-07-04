@@ -28,7 +28,7 @@
       </el-table-column>
       <el-table-column label="最近错误时间" width="180">
         <template #default="{ row }">
-          {{ formatTime(row.lastWrongTime || row.updateTime || row.createdAt) }}
+          {{ formatTime(row.lastWrongTime || row.updateTime || row.createTime) }}
         </template>
       </el-table-column>
       <el-table-column label="操作" width="260" fixed="right">
@@ -97,7 +97,7 @@ const formatTime = (time) => {
 }
 
 const goRedo = (row) => {
-  router.push('/student/practice?questionId=' + row.questionId + '&nodeId=' + (row.nodeId || ''))
+  router.push('/student/practice?questionId=' + (row.questionId || row.id))
 }
 
 const handleAiExplain = async (row) => {

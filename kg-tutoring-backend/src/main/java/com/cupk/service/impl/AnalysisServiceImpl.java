@@ -3,10 +3,12 @@ package com.cupk.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.cupk.mapper.ExamRecordMapper;
 import com.cupk.mapper.KnowledgeNodeMapper;
+import com.cupk.mapper.QuestionMapper;
 import com.cupk.mapper.StudyRecordMapper;
 import com.cupk.mapper.WrongQuestionMapper;
 import com.cupk.pojo.ExamRecord;
 import com.cupk.pojo.KnowledgeNode;
+import com.cupk.pojo.Question;
 import com.cupk.pojo.StudyRecord;
 import com.cupk.pojo.WrongQuestion;
 import com.cupk.service.AnalysisService;
@@ -28,6 +30,7 @@ public class AnalysisServiceImpl implements AnalysisService {
     private final ExamRecordMapper examRecordMapper;
     private final WrongQuestionMapper wrongQuestionMapper;
     private final KnowledgeNodeMapper knowledgeNodeMapper;
+    private final QuestionMapper questionMapper;
 
     @Override
     public Map<String, Object> classAnalysis(Integer courseId) {
@@ -135,9 +138,32 @@ public class AnalysisServiceImpl implements AnalysisService {
         result.put("weakNodes", weakNodes);
         result.put("weakCount", weakNodes.size());
 
-        // 高频错题知识点（按错题数量排序）
-        // TODO: 完善高频错题分析逻辑
-        result.put("frequentWrongTopics", new ArrayList<>());
+        // 高频错题知识点（按错题数量降序）
+        List<WrongQuestion> wrongQuestions = wrongQuestionMapper.selectList(
+                new LambdaQueryWrapper<WrongQuestion>()
+                        .eq(WrongQuestion::getUserId, userId));
+        Map<Integer, Integer> nodeErrorCount = new LinkedHashMap<>();
+        for (WrongQuestion wq : wrongQuestions) {
+            Question q = questionMapper.selectById(wq.getQuestionId());
+            if (q != null) {
+                nodeErrorCount.merge(q.getNodeId(), wq.getWrongCount(), Integer::sum);
+            }
+        }
+        List<Map<String, Object>> freqTopics = new ArrayList<>();
+        nodeErrorCount.entrySet().stream()
+                .sorted(Map.Entry.<Integer, Integer>comparingByValue().reversed())
+                .limit(5)
+                .forEach(entry -> {
+                    KnowledgeNode node = knowledgeNodeMapper.selectById(entry.getKey());
+                    if (node != null) {
+                        Map<String, Object> topic = new LinkedHashMap<>();
+                        topic.put("nodeId", node.getId());
+                        topic.put("nodeName", node.getName());
+                        topic.put("errorCount", entry.getValue());
+                        freqTopics.add(topic);
+                    }
+                });
+        result.put("frequentWrongTopics", freqTopics);
 
         return result;
     }

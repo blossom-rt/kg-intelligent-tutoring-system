@@ -28,7 +28,17 @@ public class StudentPracticeController {
 
     /** 获取练习题目 */
     @GetMapping("/questions")
-    public Result<?> getQuestions(@RequestParam Integer nodeId) {
+    public Result<?> getQuestions(
+            @RequestParam(required = false) Integer nodeId,
+            @RequestParam(required = false) Integer questionId) {
+        if (questionId != null) {
+            // 指定题目重做
+            Question q = questionService.getById(questionId);
+            return Result.success(q != null ? List.of(q) : List.of());
+        }
+        if (nodeId == null) {
+            return Result.error("请指定知识点或题目");
+        }
         return Result.success(questionService.listByNode(nodeId));
     }
 
@@ -77,7 +87,9 @@ public class StudentPracticeController {
 
         double correctRate = total > 0 ? (double) correctCount / total * 100 : 0;
         int masteryLevel = correctRate >= 80 ? 3 : (correctRate >= 60 ? 2 : 1);
-        studyRecordService.updateRecord(userId, nodeId, masteryLevel, BigDecimal.valueOf(correctRate), null);
+        if (nodeId != null) {
+            studyRecordService.updateRecord(userId, nodeId, masteryLevel, BigDecimal.valueOf(correctRate), null);
+        }
 
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("total", total);

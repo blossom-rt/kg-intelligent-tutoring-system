@@ -2,15 +2,19 @@ package com.cupk.controller;
 
 import com.cupk.ai.DeepSeekService;
 import com.cupk.common.Result;
+import com.cupk.common.UserContext;
+import com.cupk.mapper.AiCallLogMapper;
 import com.cupk.mapper.ExamRecordMapper;
 import com.cupk.mapper.KnowledgeNodeMapper;
 import com.cupk.mapper.QuestionMapper;
+import com.cupk.pojo.AiCallLog;
 import com.cupk.pojo.ExamRecord;
 import com.cupk.pojo.KnowledgeNode;
 import com.cupk.pojo.Question;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -26,9 +30,11 @@ public class StudentAiController {
     private final KnowledgeNodeMapper knowledgeNodeMapper;
     private final QuestionMapper questionMapper;
     private final ExamRecordMapper examRecordMapper;
+    private final AiCallLogMapper aiCallLogMapper;
 
     @PostMapping("/node-summary")
     public Result<Map<String, Object>> nodeSummary(@RequestBody Map<String, Object> body) {
+        long start = System.currentTimeMillis();
         Integer nodeId = (Integer) body.get("nodeId");
         KnowledgeNode node = knowledgeNodeMapper.selectById(nodeId);
         if (node == null) return Result.error("知识点不存在");
@@ -41,6 +47,7 @@ public class StudentAiController {
                 + "建议时长：" + (node.getExpectedMinutes() != null ? node.getExpectedMinutes() : 30) + " 分钟";
 
         String aiResult = deepSeekService.generate("你是一个专业的学科教师，擅长用通俗易懂的方式总结知识点，帮助学生快速理解和掌握。", userPrompt);
+        saveLog("node-summary", userPrompt, aiResult, start);
 
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("nodeId", node.getId());
@@ -52,6 +59,7 @@ public class StudentAiController {
 
     @PostMapping("/wrong-explain")
     public Result<Map<String, Object>> wrongExplain(@RequestBody Map<String, Object> body) {
+        long start = System.currentTimeMillis();
         Integer questionId = (Integer) body.get("questionId");
         Question question = questionMapper.selectById(questionId);
         if (question == null) return Result.error("题目不存在");
@@ -64,6 +72,7 @@ public class StudentAiController {
                 + "难度：" + (question.getDifficulty() != null ? question.getDifficulty() : "中等");
 
         String aiResult = deepSeekService.generate("你是一个耐心的学科辅导老师，擅长帮助学生分析错题原因，用易于理解的方式讲解题目。", userPrompt);
+        saveLog("wrong-explain", userPrompt, aiResult, start);
 
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("title", "AI 错题讲解");
@@ -76,6 +85,7 @@ public class StudentAiController {
 
     @PostMapping("/exam-report")
     public Result<Map<String, Object>> examReport(@RequestBody Map<String, Object> body) {
+        long start = System.currentTimeMillis();
         Integer examId = (Integer) body.get("examId");
         ExamRecord record = examRecordMapper.selectById(examId);
         if (record == null) return Result.error("测评记录不存在");
@@ -89,6 +99,7 @@ public class StudentAiController {
                 + (rate >= 60 ? "状态：已通过" : "状态：未通过");
 
         String aiResult = deepSeekService.generate("你是一个经验丰富的学业诊断分析师，善于根据测评成绩为学生提供个性化的学习建议和改进方案。", userPrompt);
+        saveLog("exam-report", userPrompt, aiResult, start);
 
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("title", "AI 测评诊断报告");
@@ -97,5 +108,22 @@ public class StudentAiController {
         result.put("passed", rate >= 60);
         result.put("aiReport", aiResult);
         return Result.success(result);
+    }
+
+    private void saveLog(String scene, String prompt, String result, long startTime) {
+        try {
+            AiCallLog log = new AiCallLog();
+            Integer uid = UserContext.getUserId();
+            if (uid != null) log.setUserId(uid);
+            log.setScene(scene);
+            log.setPrompt(prompt.length() > 500 ? prompt.substring(0, 500) : prompt);
+            log.setResult(result.length() > 500 ? result.substring(0, 500) : result);
+            log.setCallDuration((int) (System.currentTimeMillis() - startTime));
+            log.setStatus(1);
+            log.setCreateTime(LocalDateTime.now());
+            aiCallLogMapper.insert(log);
+        } catch (Exception e) {
+            // 日志记录失败不影响主流程
+        }
     }
 }

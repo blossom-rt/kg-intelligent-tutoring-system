@@ -49,12 +49,40 @@ public class StudentPathController {
     }
 
     /**
-     * 获取当前用户的所有学习路径
+     * 获取当前用户的所有学习路径（含进度和状态）
      */
     @GetMapping("/list")
-    public Result<?> list() {
+    public Result<List<Map<String, Object>>> list() {
         Integer userId = UserContext.getUserId();
-        return Result.success(studyPathService.listByUser(userId));
+        List<StudyPath> paths = studyPathService.listByUser(userId);
+
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (StudyPath p : paths) {
+            Map<String, Object> item = new LinkedHashMap<>();
+            item.put("id", p.getId());
+            item.put("pathName", p.getPathName());
+            item.put("targetNodeId", p.getTargetNodeId());
+            item.put("totalNodes", p.getTotalNodes());
+            item.put("createTime", p.getCreateTime());
+            item.put("aiSummary", p.getAiSummary());
+
+            // 计算进度：已完成节点数 / 总节点数
+            long finishedNodes = pathDetailMapper.selectCount(
+                    new LambdaQueryWrapper<PathDetail>()
+                            .eq(PathDetail::getPathId, p.getId())
+                            .eq(PathDetail::getIsFinished, 1));
+            int progress = p.getTotalNodes() != null && p.getTotalNodes() > 0
+                    ? (int) Math.round(finishedNodes * 100.0 / p.getTotalNodes())
+                    : 0;
+            item.put("progress", progress);
+
+            // 状态转换：0=学习中, 1=已完成
+            String status = p.getStatus() != null && p.getStatus() == 1 ? "completed" : "active";
+            item.put("status", status);
+
+            result.add(item);
+        }
+        return Result.success(result);
     }
 
     /**
