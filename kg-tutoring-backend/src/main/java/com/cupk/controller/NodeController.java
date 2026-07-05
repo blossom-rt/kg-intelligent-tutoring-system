@@ -1,5 +1,6 @@
 package com.cupk.controller;
 
+import com.cupk.aspect.OperLog;
 import com.cupk.common.BusinessException;
 import com.cupk.common.Result;
 import com.cupk.common.UserContext;
@@ -52,6 +53,7 @@ public class NodeController {
     /**
      * 新增知识点（仅教师）
      */
+    @OperLog(module = "知识点管理", operation = "新增知识点")
     @PostMapping
     public Result<?> create(@RequestBody KnowledgeNode node) {
         checkTeacher();
@@ -62,6 +64,7 @@ public class NodeController {
     /**
      * 修改知识点（仅教师）
      */
+    @OperLog(module = "知识点管理", operation = "修改知识点")
     @PutMapping("/{id}")
     public Result<?> update(@PathVariable Integer id, @RequestBody KnowledgeNode node) {
         checkTeacher();
@@ -73,6 +76,7 @@ public class NodeController {
     /**
      * 删除知识点（仅教师）
      */
+    @OperLog(module = "知识点管理", operation = "删除知识点")
     @DeleteMapping("/{id}")
     public Result<?> delete(@PathVariable Integer id) {
         checkTeacher();

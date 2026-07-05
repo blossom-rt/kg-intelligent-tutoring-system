@@ -29,7 +29,7 @@
     </el-card>
 
     <el-card>
-      <el-table :data="tableData" v-loading="loading" stripe border>
+      <el-table :data="paginatedTableData" v-loading="loading" stripe border>
         <el-table-column prop="themeName" label="主题名称" min-width="180" />
         <el-table-column prop="difficulty" label="难度" width="80" align="center">
           <template #default="{ row }">
@@ -64,7 +64,6 @@
         :page-size="pagination.size"
         :total="pagination.total"
         layout="total, prev, pager, next"
-        @current-change="loadData"
         style="margin-top: 16px; justify-content: flex-end"
       />
     </el-card>
@@ -114,7 +113,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 import StudentHeader from '../../components/StudentHeader.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { getThemeList, createTheme, updateTheme, deleteTheme, toggleThemeStatus } from '../../api/admin'
@@ -137,6 +136,11 @@ const pagination = reactive({
   page: 1,
   size: 10,
   total: 0
+})
+
+const paginatedTableData = computed(() => {
+  const start = (pagination.page - 1) * pagination.size
+  return tableData.value.slice(start, start + pagination.size)
 })
 
 const form = reactive({

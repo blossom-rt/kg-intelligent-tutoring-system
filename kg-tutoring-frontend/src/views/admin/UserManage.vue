@@ -25,7 +25,7 @@
       <div class="table-toolbar">
         <el-button type="primary" @click="openAddDialog">新增用户</el-button>
       </div>
-      <el-table :data="userList" v-loading="loading" border stripe>
+      <el-table :data="paginatedUserList" v-loading="loading" border stripe>
         <el-table-column prop="username" label="用户名" min-width="120" />
         <el-table-column prop="realName" label="姓名" min-width="100" />
         <el-table-column prop="email" label="邮箱" min-width="180" />
@@ -62,8 +62,6 @@
         v-model:page-size="pagination.pageSize"
         :total="pagination.total"
         layout="total, prev, pager, next"
-        @current-change="fetchList"
-        @size-change="fetchList"
         class="pagination"
       />
     </el-card>
@@ -121,6 +119,11 @@ const roleMap = computed(() => {
   const map = {}
   roleList.value.forEach(r => { map[r.id] = r.roleName })
   return map
+})
+
+const paginatedUserList = computed(() => {
+  const start = (pagination.page - 1) * pagination.pageSize
+  return userList.value.slice(start, start + pagination.pageSize)
 })
 
 const dialogTitle = computed(() => isEdit.value ? '编辑用户' : '新增用户')

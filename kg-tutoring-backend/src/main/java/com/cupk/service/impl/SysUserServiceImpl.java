@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.cupk.common.BusinessException;
 import com.cupk.common.UserContext;
 import com.cupk.dto.*;
+import com.cupk.email.EmailService;
 import com.cupk.mapper.SysEmailCodeMapper;
 import com.cupk.mapper.SysRoleMapper;
 import com.cupk.mapper.SysUserMapper;
@@ -31,6 +32,7 @@ public class SysUserServiceImpl implements SysUserService {
     private final SysRoleMapper sysRoleMapper;
     private final SysEmailCodeMapper sysEmailCodeMapper;
     private final JwtUtil jwtUtil;
+    private final EmailService emailService;
 
     @Override
     public LoginVO login(LoginDTO dto) {
@@ -57,6 +59,8 @@ public class SysUserServiceImpl implements SysUserService {
             return null;
         }
 
+        // 设置用户上下文，使 AOP 操作日志能记录 userId
+        UserContext.set(user.getId(), user.getUsername(), role.getRoleCode());
         String token = jwtUtil.generateToken(user.getId(), user.getUsername(), role.getRoleCode());
         return new LoginVO(token, role.getRoleCode());
     }
@@ -145,10 +149,7 @@ public class SysUserServiceImpl implements SysUserService {
         record.setIsUsed(0);
         sysEmailCodeMapper.insert(record);
 
-        // TODO: 生产环境替换为真实邮件发送
-        System.out.println("======== 验证码 ========");
-        System.out.println("邮箱: " + email + "  类型: " + type + "  验证码: " + code);
-        System.out.println("========================");
+        emailService.sendCode(email, code, type);
     }
 
     @Override

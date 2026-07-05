@@ -6,7 +6,7 @@
       <div class="table-toolbar">
         <el-button type="primary" @click="openAddDialog">新增公告</el-button>
       </div>
-      <el-table :data="noticeList" v-loading="loading" border stripe>
+      <el-table :data="paginatedNoticeList" v-loading="loading" border stripe>
         <el-table-column prop="title" label="标题" min-width="240" show-overflow-tooltip />
         <el-table-column label="推送对象" min-width="120">
           <template #default="{ row }">
@@ -28,8 +28,6 @@
         v-model:page-size="pagination.pageSize"
         :total="pagination.total"
         layout="total, prev, pager, next"
-        @current-change="fetchList"
-        @size-change="fetchList"
         class="pagination"
       />
     </el-card>
@@ -77,6 +75,10 @@ const isEdit = ref(false)
 const editingId = ref(null)
 const formRef = ref(null)
 const noticeList = ref([])
+const paginatedNoticeList = computed(() => {
+  const start = (pagination.page - 1) * pagination.pageSize
+  return noticeList.value.slice(start, start + pagination.pageSize)
+})
 
 const dialogTitle = computed(() => isEdit.value ? '编辑公告' : '新增公告')
 

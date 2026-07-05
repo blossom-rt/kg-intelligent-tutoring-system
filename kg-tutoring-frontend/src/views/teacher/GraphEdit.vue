@@ -41,7 +41,7 @@
       <!-- 右：依赖边列表 -->
       <el-card class="panel-right">
         <template #header><span class="panel-title">依赖边列表（{{ edgeList.length }} 条）</span></template>
-        <el-table :data="edgeList" v-loading="loading" size="small" max-height="500" stripe border>
+        <el-table :data="paginatedEdgeList" v-loading="loading" size="small" max-height="500" stripe border>
           <el-table-column label="前置节点" min-width="140">
             <template #default="{ row }">
               <span>{{ row.sourceName || '节点-' + row.sourceId }}</span>
@@ -63,6 +63,14 @@
             </template>
           </el-table-column>
         </el-table>
+        <el-pagination
+          v-model:current-page="pagination.page"
+          v-model:page-size="pagination.size"
+          :total="pagination.total"
+          layout="total, prev, pager, next, sizes"
+          :page-sizes="[5, 10, 20, 50]"
+          style="margin-top: 16px; justify-content: flex-end"
+        />
       </el-card>
     </div>
 
@@ -96,7 +104,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import StudentHeader from '../../components/StudentHeader.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { getEdgeList, createEdge, deleteEdge, getNodeList, getCourseList } from '../../api/knowledge'
@@ -106,6 +114,13 @@ const submitLoading = ref(false)
 const dialogVisible = ref(false)
 const formRef = ref(null)
 const edgeList = ref([])
+
+const pagination = reactive({ page: 1, size: 10, total: 0 })
+const paginatedEdgeList = computed(() => {
+  const start = (pagination.page - 1) * pagination.size
+  return edgeList.value.slice(start, start + pagination.size)
+})
+
 const nodeList = ref([])
 const courseList = ref([])
 const selectedNode = ref(null)
@@ -156,6 +171,7 @@ const loadData = async () => {
       getNodeList({ page: 1, size: 999, ...(filterForm.courseId ? { courseId: filterForm.courseId } : {}) })
     ])
     edgeList.value = Array.isArray(edgeRes) ? edgeRes : (edgeRes.records || edgeRes.data || [])
+    pagination.total = edgeList.value.length
     nodeList.value = Array.isArray(nodeRes) ? nodeRes : (nodeRes.records || nodeRes.data || [])
   } catch {
     edgeList.value = []

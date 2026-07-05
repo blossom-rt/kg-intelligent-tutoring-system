@@ -51,7 +51,7 @@
       <!-- 学生列表 -->
       <el-card class="panel-main">
         <template #header><span class="panel-title">学生学情明细</span></template>
-        <el-table :data="tableData" v-loading="loading" stripe border>
+        <el-table :data="paginatedTableData" v-loading="loading" stripe border>
           <el-table-column prop="userId" label="学生ID" min-width="120" />
           <el-table-column prop="masteryLevel" label="掌握度" width="130" align="center" />
           <el-table-column label="正确率" width="100" align="center">
@@ -72,7 +72,6 @@
           :page-size="pagination.size"
           :total="pagination.total"
           layout="total, prev, pager, next"
-          @current-change="loadData"
           style="margin-top: 16px; justify-content: flex-end"
         />
       </el-card>
@@ -100,7 +99,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, nextTick, watch } from 'vue'
+import { ref, reactive, onMounted, nextTick, watch, computed } from 'vue'
 import StudentHeader from '../../components/StudentHeader.vue'
 import { ElMessage } from 'element-plus'
 import * as echarts from 'echarts'
@@ -109,6 +108,7 @@ import { getCourseList } from '../../api/knowledge'
 
 const loading = ref(false)
 const tableData = ref([])
+const rawStudentList = ref([])
 const courseList = ref([])
 const weakNodes = ref([])
 const masteryDistribution = ref([])
@@ -122,6 +122,11 @@ const pagination = reactive({
   page: 1,
   size: 10,
   total: 0
+})
+
+const paginatedTableData = computed(() => {
+  const start = (pagination.page - 1) * pagination.size
+  return rawStudentList.value.slice(start, start + pagination.size)
 })
 
 const stats = reactive({
@@ -266,9 +271,8 @@ const loadData = async () => {
       stats.avgCorrectRate = res.avgCorrectRate || 0
       stats.activeStudents = res.activeStudents || 0
       const allStudents = Array.isArray(res) ? res : (res.studentList || res.records || res.data || [])
+      rawStudentList.value = allStudents
       pagination.total = allStudents.length
-      const start = (pagination.page - 1) * pagination.size
-      tableData.value = allStudents.slice(start, start + pagination.size)
       weakNodes.value = (res.weakNodes || []).slice(0, 5)
 
       // 图表数据
@@ -282,6 +286,7 @@ const loadData = async () => {
     }
   } catch {
     tableData.value = []
+    rawStudentList.value = []
     weakNodes.value = []
     masteryDistribution.value = []
     nodeCorrectRates.value = []

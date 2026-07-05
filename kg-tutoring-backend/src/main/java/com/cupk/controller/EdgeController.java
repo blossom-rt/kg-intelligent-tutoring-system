@@ -1,5 +1,6 @@
 package com.cupk.controller;
 
+import com.cupk.aspect.OperLog;
 import com.cupk.common.BusinessException;
 import com.cupk.common.Result;
 import com.cupk.common.UserContext;
@@ -45,6 +46,7 @@ public class EdgeController {
     /**
      * 新增边关系（仅教师）
      */
+    @OperLog(module = "知识图谱", operation = "新增依赖边")
     @PostMapping
     public Result<?> create(@RequestBody KnowledgeEdge edge) {
         checkTeacher();
@@ -55,6 +57,7 @@ public class EdgeController {
     /**
      * 删除边关系（仅教师）
      */
+    @OperLog(module = "知识图谱", operation = "删除依赖边")
     @DeleteMapping("/{id}")
     public Result<?> delete(@PathVariable Integer id) {
         checkTeacher();
