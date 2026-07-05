@@ -58,7 +58,6 @@
 <script setup>
 import { ref, reactive, onMounted, computed } from 'vue'
 import { getOperLogs } from '../../api/admin'
-import StudentHeader from '../../components/StudentHeader.vue'
 
 const loading = ref(false)
 const logList = ref([])

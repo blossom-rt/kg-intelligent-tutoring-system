@@ -48,7 +48,6 @@
 <script setup>
 import { ref, reactive, onMounted, computed } from 'vue'
 import { getAiLogs } from '../../api/admin'
-import StudentHeader from '../../components/StudentHeader.vue'
 
 const loading = ref(false)
 const logList = ref([])
