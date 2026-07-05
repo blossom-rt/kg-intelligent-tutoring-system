@@ -26,10 +26,14 @@ defineProps({
 
 const router = useRouter()
 const goBack = () => {
-  const role = localStorage.getItem('role')
-  if (role === 'teacher') router.push('/teacher')
-  else if (role === 'admin') router.push('/admin')
-  else router.push('/student')
+  if (window.history.length > 1) {
+    router.back()
+  } else {
+    const role = localStorage.getItem('role')
+    if (role === 'teacher') router.push('/teacher')
+    else if (role === 'admin') router.push('/admin')
+    else router.push('/student')
+  }
 }
 </script>
 

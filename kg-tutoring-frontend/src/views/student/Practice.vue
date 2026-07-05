@@ -255,7 +255,8 @@ const nextQuestion = async () => {
     const correctRate = submitRes?.correctRate ?? scorePercent.value
     if (correctRate >= 80) {
       ElMessage.success(submitRes?.message || '练习完成，继续加油！')
-      goBack()
+      // 直接回退到上一页（知识点学习），不产生新历史记录
+      router.go(-1)
       return
     }
 
