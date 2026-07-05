@@ -17,3 +17,6 @@ export function getClassAnalysis(params) { return request.get('/teacher/analysis
 
 // 学习路径督导
 export function getStudentPaths(studentId) { return request.get(`/teacher/analysis/student-paths?studentId=${studentId}`) }
+
+// 学生学情趋势
+export function getStudentTrend(userId) { return request.get(`/teacher/analysis/student-trend/${userId}`) }
