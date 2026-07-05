@@ -22,10 +22,10 @@
 
     <el-card>
       <el-table :data="tableData" v-loading="loading" stripe border>
-        <el-table-column prop="id" label="测评ID" min-width="100" />
-        <el-table-column prop="totalScore" label="总分" width="100" align="center" />
-        <el-table-column prop="userScore" label="成绩" width="100" align="center" />
-        <el-table-column prop="courseId" label="课程ID" width="100" align="center" />
+        <el-table-column prop="id" label="测评ID" min-width="80" />
+        <el-table-column prop="examName" label="测评名称" min-width="180" />
+        <el-table-column prop="totalScore" label="总分" width="80" align="center" />
+        <el-table-column prop="courseId" label="课程ID" width="80" align="center" />
         <el-table-column prop="createTime" label="创建时间" width="180" />
         <el-table-column label="操作" width="120" fixed="right" align="center">
           <template #default="{ row }">
@@ -105,6 +105,7 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
+import StudentHeader from '../../components/StudentHeader.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { getExamList, createExam, deleteExam, getQuestionList } from '../../api/teacher'
 import { getCourseList } from '../../api/knowledge'

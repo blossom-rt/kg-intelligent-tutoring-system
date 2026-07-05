@@ -10,6 +10,7 @@ import com.cupk.pojo.WrongQuestion;
 import com.cupk.service.QuestionService;
 import com.cupk.service.StudyRecordService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -19,6 +20,7 @@ import java.util.*;
 /**
  * 学生练习控制器
  */
+@Slf4j
 @RestController
 @RequestMapping("/api/student/practice")
 @RequiredArgsConstructor
@@ -91,16 +93,23 @@ public class StudentPracticeController {
         double correctRate = total > 0 ? (double) correctCount / total * 100 : 0;
         int masteryLevel = correctRate >= 80 ? 3 : (correctRate >= 60 ? 2 : 1);
         if (nodeId != null) {
-            studyRecordService.updateRecord(userId, nodeId, masteryLevel, BigDecimal.valueOf(correctRate), null);
-            // 正确率达标时自动标记路径节点为已完成（>=60%）
-            if (masteryLevel >= 2) {
-                PathDetail detail = pathDetailMapper.selectOne(
-                        new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<PathDetail>()
-                                .eq(PathDetail::getNodeId, nodeId)
-                                .eq(PathDetail::getIsFinished, 0));
-                if (detail != null) {
-                    detail.setIsFinished(1);
-                    pathDetailMapper.updateById(detail);
+            try {
+                studyRecordService.updateRecord(userId, nodeId, masteryLevel, BigDecimal.valueOf(correctRate), null);
+            } catch (Exception e) {
+                log.error("更新学习记录失败", e);
+            }
+            // 正确率达标时自动标记路径节点为已完成（>=80%）
+            if (masteryLevel >= 3) {
+                try {
+                    // 同一个节点可能属于多个学习路径，全部更新
+                    PathDetail pd = new PathDetail();
+                    pd.setIsFinished(1);
+                    pathDetailMapper.update(pd,
+                            new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<PathDetail>()
+                                    .eq(PathDetail::getNodeId, nodeId)
+                                    .eq(PathDetail::getIsFinished, 0));
+                } catch (Exception e) {
+                    log.error("更新路径节点状态失败", e);
                 }
             }
         }

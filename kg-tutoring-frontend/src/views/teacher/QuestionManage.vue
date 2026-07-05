@@ -108,6 +108,7 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
+import StudentHeader from '../../components/StudentHeader.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { getQuestionList, createQuestion, updateQuestion, deleteQuestion } from '../../api/teacher'
 import { getNodeList } from '../../api/knowledge'

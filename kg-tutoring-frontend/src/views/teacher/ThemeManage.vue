@@ -115,6 +115,7 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
+import StudentHeader from '../../components/StudentHeader.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { getThemeList, createTheme, updateTheme, deleteTheme, toggleThemeStatus } from '../../api/admin'
 import { getNodeList } from '../../api/knowledge'

@@ -53,6 +53,27 @@ public class TeacherAnalysisController {
     }
 
     /**
+     * 获取学生列表（供教师选择）
+     */
+    @GetMapping("/students")
+    public Result<List<Map<String, Object>>> listStudents() {
+        checkTeacher();
+        List<SysUser> students = sysUserMapper.selectList(
+                new LambdaQueryWrapper<SysUser>()
+                        .eq(SysUser::getRoleId, 3)
+                        .orderByAsc(SysUser::getId));
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (SysUser s : students) {
+            Map<String, Object> item = new LinkedHashMap<>();
+            item.put("id", s.getId());
+            item.put("username", s.getUsername());
+            item.put("realName", s.getRealName());
+            result.add(item);
+        }
+        return Result.success(result);
+    }
+
+    /**
      * 查询指定学生的学习路径列表（含进度）
      *
      * @param studentId 学生用户ID

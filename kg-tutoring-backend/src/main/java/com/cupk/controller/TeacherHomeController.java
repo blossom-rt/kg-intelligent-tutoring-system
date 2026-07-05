@@ -5,7 +5,9 @@ import com.cupk.common.Result;
 import com.cupk.mapper.CourseMapper;
 import com.cupk.mapper.KnowledgeNodeMapper;
 import com.cupk.mapper.QuestionMapper;
+import com.cupk.mapper.StudyRecordMapper;
 import com.cupk.mapper.SysUserMapper;
+import com.cupk.pojo.StudyRecord;
 import com.cupk.pojo.SysUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +29,7 @@ public class TeacherHomeController {
     private final KnowledgeNodeMapper knowledgeNodeMapper;
     private final QuestionMapper questionMapper;
     private final SysUserMapper sysUserMapper;
+    private final StudyRecordMapper studyRecordMapper;
 
     /**
      * 教师首页数据看板
@@ -46,9 +49,15 @@ public class TeacherHomeController {
         // 题目总数
         long questionCount = questionMapper.selectCount(null);
 
+        // 本周学习人次
+        long weekStudy = studyRecordMapper.selectCount(
+                new LambdaQueryWrapper<StudyRecord>()
+                        .ge(StudyRecord::getUpdateTime, java.time.LocalDateTime.now().minusDays(7)));
+
         Map<String, Object> stats = new HashMap<>();
         stats.put("totalCourses", courseCount);
         stats.put("activeStudents", studentCount);
+        stats.put("weekStudy", weekStudy);
         stats.put("totalNodes", nodeCount);
         stats.put("totalQuestions", questionCount);
 
