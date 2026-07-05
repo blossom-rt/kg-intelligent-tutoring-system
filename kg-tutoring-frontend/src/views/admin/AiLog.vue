@@ -46,6 +46,7 @@
 </template>
 
 <script setup>
+import StudentHeader from '../../components/StudentHeader.vue'
 import { ref, reactive, onMounted, computed } from 'vue'
 import { getAiLogs } from '../../api/admin'
 

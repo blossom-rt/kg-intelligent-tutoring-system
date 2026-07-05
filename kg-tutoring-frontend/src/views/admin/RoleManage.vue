@@ -47,6 +47,7 @@
 </template>
 
 <script setup>
+import StudentHeader from '../../components/StudentHeader.vue'
 import { ref, reactive, onMounted, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { getRoleList, createRole, updateRole, deleteRole } from '../../api/admin'
