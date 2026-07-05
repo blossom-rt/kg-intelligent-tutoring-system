@@ -2,18 +2,28 @@
   <div class="wrong-book-page">
     <StudentHeader title="我的错题本" subtitle="温故知新，每次回顾都是进步" />
 
-    <el-table
+    <!-- 选项卡 -->
+    <div class="tab-bar">
+      <button
+        v-for="t in tabs" :key="t.key"
+        class="tab-btn" :class="{ on: activeTab === t.key }"
+        @click="activeTab = t.key"
+      >
+        {{ t.label }}
+        <span class="tab-count">{{ t.key === 'active' ? activeList.length : reviewedList.length }}</span>
+      </button>
+    </div>
+
+    <!-- 当前错题 -->
+    <el-table v-if="activeTab === 'active'"
       v-loading="loading"
-      :data="wrongList"
-      style="width: 100%"
-      stripe
-      empty-text="暂无错题记录"
+      :data="activeList"
+      style="width: 100%" stripe
+      empty-text="暂无错题，继续保持！"
     >
       <el-table-column label="题目内容" min-width="220">
         <template #default="{ row }">
-          <span class="question-snippet">
-            {{ truncate(row.content || row.question || row.title || '', 50) }}
-          </span>
+          <span class="question-snippet">{{ truncate(row.content || row.question || row.title || '', 50) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="所属知识点" width="160">
@@ -31,28 +41,50 @@
           {{ formatTime(row.lastWrongTime || row.updateTime || row.createTime) }}
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="260" fixed="right">
+      <el-table-column label="操作" width="180" fixed="right">
         <template #default="{ row }">
-          <el-button type="primary" link size="small" @click="goRedo(row)">
-            重做
-          </el-button>
-          <el-button type="warning" link size="small" @click="handleAiExplain(row)" :loading="row._aiLoading">
-            AI讲解
-          </el-button>
-          <el-button type="danger" link size="small" @click="handleRemove(row)">
-            移除
-          </el-button>
+          <el-button type="primary" link size="small" @click="goRedo(row)">重做</el-button>
+          <el-button type="warning" link size="small" @click="handleAiExplain(row)" :loading="row._aiLoading">AI讲解</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <!-- 曾经错题 -->
+    <el-table v-else
+      :data="reviewedList"
+      style="width: 100%" stripe
+      empty-text="还没有复习过的错题"
+    >
+      <el-table-column label="题目内容" min-width="220">
+        <template #default="{ row }">
+          <span class="question-snippet reviewed">{{ truncate(row.content || row.question || row.title || '', 50) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="所属知识点" width="160">
+        <template #default="{ row }">
+          <el-tag size="small" type="info">{{ row.nodeName || row.knowledgeName || '-' }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="曾错次数" width="100" align="center">
+        <template #default="{ row }">
+          <span class="reviewed-count">{{ row.wrongCount || row.count || 1 }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="复习时间" width="180">
+        <template #default="{ row }">
+          {{ formatTime(row._reviewedAt) }}
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" width="160" fixed="right">
+        <template #default="{ row }">
+          <el-button type="primary" link size="small" @click="goRedo(row)">重做</el-button>
+          <el-button type="warning" link size="small" @click="handleAiExplain(row)" :loading="row._aiLoading">AI讲解</el-button>
         </template>
       </el-table-column>
     </el-table>
 
     <!-- AI 讲解弹窗 -->
-    <el-dialog
-      v-model="aiDialogVisible"
-      title="AI 错题讲解"
-      width="600px"
-      destroy-on-close
-    >
+    <el-dialog v-model="aiDialogVisible" title="AI 错题讲解" width="600px" destroy-on-close>
       <div v-loading="aiLoading">
         <div v-if="aiContent" class="ai-content markdown-body" v-html="formattedAiContent"></div>
         <el-empty v-if="!aiLoading && !aiContent" description="暂无讲解内容" :image-size="60" />
@@ -67,22 +99,45 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import StudentHeader from '../../components/StudentHeader.vue'
-import { getWrongQuestions, deleteWrongQuestion, aiWrongExplain } from '../../api/student'
+import { getWrongQuestions, aiWrongExplain } from '../../api/student'
 import { renderMarkdown } from '../../utils/markdown'
 
 const router = useRouter()
 const loading = ref(false)
 const wrongList = ref([])
+const activeTab = ref('active')
+
+const tabs = [
+  { key: 'active', label: '当前错题' },
+  { key: 'reviewed', label: '曾经错题' },
+]
 
 const aiDialogVisible = ref(false)
 const aiLoading = ref(false)
 const aiContent = ref('')
 
-const formattedAiContent = computed(() => {
-  return renderMarkdown(aiContent.value)
+// localStorage 记录已复习的错题: { questionId: timestamp }
+const getReviewed = () => {
+  try { return JSON.parse(localStorage.getItem('reviewedWrongQuestions') || '{}') } catch { return {} }
+}
+const saveReviewed = (map) => {
+  localStorage.setItem('reviewedWrongQuestions', JSON.stringify(map))
+}
+
+const reviewedMap = ref(getReviewed())
+
+const activeList = computed(() => {
+  return wrongList.value.filter(r => !reviewedMap.value[r.questionId])
 })
+const reviewedList = computed(() => {
+  return wrongList.value
+    .filter(r => reviewedMap.value[r.questionId])
+    .map(r => ({ ...r, _reviewedAt: reviewedMap.value[r.questionId] }))
+})
+
+const formattedAiContent = computed(() => renderMarkdown(aiContent.value))
 
 const truncate = (str, max) => {
   if (!str) return ''
@@ -97,7 +152,7 @@ const formatTime = (time) => {
 }
 
 const goRedo = (row) => {
-  router.push('/student/practice?questionId=' + (row.questionId || row.id))
+  router.push('/student/practice?questionId=' + (row.questionId || row.id) + '&fromWrong=true')
 }
 
 const handleAiExplain = async (row) => {
@@ -105,7 +160,6 @@ const handleAiExplain = async (row) => {
   aiDialogVisible.value = true
   aiLoading.value = true
   aiContent.value = ''
-
   try {
     const res = await aiWrongExplain({ questionId: row.questionId || row.id })
     aiContent.value = res?.aiExplain || res?.explanation || res || '暂无讲解'
@@ -114,21 +168,6 @@ const handleAiExplain = async (row) => {
   } finally {
     aiLoading.value = false
     row._aiLoading = false
-  }
-}
-
-const handleRemove = async (row) => {
-  try {
-    await ElMessageBox.confirm('确定要移除该错题吗？', '确认移除', {
-      confirmButtonText: '移除',
-      cancelButtonText: '取消',
-      type: 'warning'
-    })
-    await deleteWrongQuestion(row.id)
-    ElMessage.success('已移除')
-    fetchWrongList()
-  } catch {
-    // 取消移除
   }
 }
 
@@ -153,26 +192,41 @@ onMounted(fetchWrongList)
   background: #faf7f2;
 }
 
-.question-snippet {
-  font-size: 14px;
-  color: #6b655e;
+/* 选项卡 */
+.tab-bar {
+  display: flex; gap: 0;
+  padding: 16px 32px 0;
+  border-bottom: 1px solid #e8e3db;
+  background: #faf7f2;
 }
+.tab-btn {
+  padding: 10px 20px;
+  font-size: 14px; font-weight: 500;
+  border: none; background: none;
+  color: #6b655e; cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+  display: flex; align-items: center; gap: 6px;
+}
+.tab-btn:hover { color: #2d2a26; }
+.tab-btn.on {
+  color: #ff7b3d;
+  border-bottom-color: #ff7b3d;
+}
+.tab-count {
+  font-size: 12px; background: #f3efe8; color: #6b655e;
+  padding: 1px 8px; border-radius: 10px; min-width: 20px; text-align: center;
+}
+.tab-btn.on .tab-count { background: #fff3e8; color: #ff7b3d; }
 
-.wrong-count {
-  font-weight: 700;
-  color: #f56c6c;
-}
+/* 表格 */
+.question-snippet { font-size: 14px; color: #6b655e; }
+.question-snippet.reviewed { color: #a09a92; }
+.wrong-count { font-weight: 700; color: #f56c6c; }
+.reviewed-count { font-weight: 600; color: #5eaf83; }
 
 .ai-content {
-  font-size: 15px;
-  color: #2d2a26;
-  line-height: 1.9;
-  min-height: 120px;
+  font-size: 15px; color: #2d2a26; line-height: 1.9; min-height: 120px;
 }
-
-.ai-content :deep(br) {
-  display: block;
-  content: '';
-  margin-bottom: 6px;
-}
+.ai-content :deep(br) { display: block; content: ''; margin-bottom: 6px; }
 </style>
