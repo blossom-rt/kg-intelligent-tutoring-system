@@ -14,7 +14,6 @@
           <p>{{ motivationTip }}</p>
         </div>
       </div>
-      <el-button class="logout-btn" @click="logout">退出登录</el-button>
     </header>
 
     <div class="dashboard">
@@ -246,7 +245,7 @@ onMounted(async () => {
 
 const showNotice = (n) => { currentNotice.value = n; noticeDialog.value = true }
 
-const logout = () => { localStorage.clear(); router.push('/login') }
+
 </script>
 
 <style scoped>
@@ -262,8 +261,6 @@ const logout = () => { localStorage.clear(); router.push('/login') }
 .user-info { display: flex; align-items: center; gap: 16px; }
 .user-info h2 { margin: 0; font-size: 20px; font-weight: 600; }
 .user-info p { margin: 2px 0 0; font-size: 13px; color: #8a847e; }
-.logout-btn { background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.12); color: #6b655e; border-radius: 8px; }
-.logout-btn:hover { background: rgba(0,0,0,0.08); }
 
 /* ── 时间问候小组件 ── */
 .greeting-widget {

@@ -10,7 +10,6 @@
           <p>{{ subtitle }}</p>
         </div>
       </div>
-      <el-button class="logout-btn" @click="logout">退出登录</el-button>
     </header>
 
     <div class="content">
@@ -173,7 +172,7 @@ onMounted(async () => {
 
 const showNotice = (n) => { currentNotice.value = n; noticeDialog.value = true }
 
-const logout = () => {localStorage.clear(); router.push('/login') }
+
 </script>
 
 <style scoped>
@@ -190,11 +189,6 @@ const logout = () => {localStorage.clear(); router.push('/login') }
 }
 .user-info h2 { margin: 0; font-size: 20px; }
 .user-info p { margin: 2px 0 0; font-size: 13px; opacity: 0.8; }
-.logout-btn {
-  background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
-  color: #fff; border-radius: 8px;
-}
-.logout-btn:hover { background: rgba(255,255,255,0.25); }
 
 .content { padding: 24px 36px; }
 
