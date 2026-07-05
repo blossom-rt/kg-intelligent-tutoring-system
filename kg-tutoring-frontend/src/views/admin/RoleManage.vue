@@ -150,8 +150,8 @@ function handleDelete(row) {
 </script>
 
 <style scoped>
-.role-manage { padding: 20px; background: #f5f7fa; min-height: 100vh; }
-.page-header h2 { margin: 0 0 16px; font-size: 20px; color: #2d2a26; }
+.role-manage { padding: 24px 36px; background: var(--bg-root); min-height: 100vh; }
+.page-header h2 { margin: 0 0 16px; font-size: 20px; color: var(--text-primary); }
 .table-card { margin-bottom: 16px; }
 .table-toolbar { margin-bottom: 16px; }
 </style>

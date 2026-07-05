@@ -176,7 +176,7 @@ const showNotice = (n) => { currentNotice.value = n; noticeDialog.value = true }
 </script>
 
 <style scoped>
-.teacher-home { min-height: 100vh; background: #faf7f2; }
+.teacher-home { min-height: 100vh; background: var(--bg-root); }
 .top-bar {
   display: flex; justify-content: space-between; align-items: center;
   padding: 20px 36px;
@@ -195,7 +195,7 @@ const showNotice = (n) => { currentNotice.value = n; noticeDialog.value = true }
 /* 统计卡片 */
 .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 24px; }
 .stat-card {
-  background: #fffdf9; border-radius: 16px; padding: 24px;
+  background: var(--bg-surface); border-radius: 16px; padding: 24px;
   display: flex; align-items: center; gap: 16px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.04);
 }
@@ -204,20 +204,20 @@ const showNotice = (n) => { currentNotice.value = n; noticeDialog.value = true }
   display: flex; align-items: center; justify-content: center; color: #fff;
   flex-shrink: 0;
 }
-.stat-num { font-size: 26px; font-weight: 700; color: #2d2a26; margin: 0; line-height: 1.1; }
-.stat-card span { font-size: 13px; color: #a09a92; }
+.stat-num { font-size: 26px; font-weight: 700; color: var(--text-primary); margin: 0; line-height: 1.1; }
+.stat-card span { font-size: 13px; color: var(--text-muted); }
 
 /* 管理入口 */
 .section-card { margin-bottom: 24px; }
 .card {
-  background: #fffdf9; border-radius: 16px; padding: 24px;
+  background: var(--bg-surface); border-radius: 16px; padding: 24px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.04);
 }
 .card-header {
-  font-size: 16px; font-weight: 600; color: #2d2a26; margin-bottom: 20px;
+  font-size: 16px; font-weight: 600; color: var(--text-primary); margin-bottom: 20px;
   display: flex; align-items: center; gap: 8px;
 }
-.card-head-icon { color: #ff7b3d; }
+.card-head-icon { color: var(--accent); }
 .entry-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -226,21 +226,21 @@ const showNotice = (n) => { currentNotice.value = n; noticeDialog.value = true }
 .entry-item {
   display: flex; flex-direction: column; align-items: center; gap: 6px;
   padding: 20px 12px 16px; border-radius: 14px;
-  background: #f8f5f0; cursor: pointer;
+  background: var(--bg-input); cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease;
 }
-.entry-item:hover { background: #f3efe8; transform: translateY(-3px); }
+.entry-item:hover { background: var(--bg-hover); transform: translateY(-3px); }
 .entry-icon {
   width: 44px; height: 44px; border-radius: 12px;
   display: flex; align-items: center; justify-content: center;
   margin-bottom: 2px;
 }
-.entry-label { font-size: 14px; font-weight: 600; color: #2d2a26; }
-.entry-desc { font-size: 11px; color: #a09a92; }
+.entry-label { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+.entry-desc { font-size: 11px; color: var(--text-muted); }
 
 /* 底部双栏 */
 .bottom-row { display: flex; gap: 20px; }
-.empty-hint { color: #a09a92; font-size: 14px; text-align: center; padding: 28px 0; }
+.empty-hint { color: var(--text-muted); font-size: 14px; text-align: center; padding: 28px 0; }
 
 @media (max-width: 1024px) {
   .entry-grid { grid-template-columns: repeat(3, 1fr); }

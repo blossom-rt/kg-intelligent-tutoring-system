@@ -58,7 +58,7 @@
                   <el-icon :size="18" class="status-icon" :class="'icon-' + node.displayStatus">
                     <CircleCheck v-if="node.displayStatus === 'completed'" style="color:#67c23a" />
                     <Loading v-else-if="node.displayStatus === 'learning'" style="color:#ff7b3d" />
-                    <Lock v-else style="color:#c0c4cc" />
+                    <Lock v-else style="color:var(--text-muted)" />
                   </el-icon>
                   <span class="node-title" :class="{ 'text-locked': node.displayStatus === 'locked', 'text-completed': node.displayStatus === 'completed' }">{{ node.nodeName || node.name || '未命名节点' }}</span>
                   <el-tag :type="difficultyTagType(node.difficulty)" size="small">
@@ -135,8 +135,8 @@ const statusLabel = (displayStatus) => {
 }
 
 const timelineColor = (displayStatus) => {
-  const map = { completed: '#67c23a', learning: '#ff7b3d', locked: '#c0c4cc' }
-  return map[displayStatus] || '#c0c4cc'
+  const map = { completed: '#67c23a', learning: '#ff7b3d', locked: 'var(--text-muted)' }
+  return map[displayStatus] || 'var(--text-muted)'
 }
 
 const truncate = (str, max) => {
@@ -179,7 +179,7 @@ onMounted(fetchDetail)
 <style scoped>
 .path-detail-page {
   min-height: 100vh;
-  background: #faf7f2;
+  background: var(--bg-root);
   padding: 24px 32px;
 }
 
@@ -197,7 +197,7 @@ onMounted(fetchDetail)
   margin: 0;
   font-size: 22px;
   font-weight: 700;
-  color: #2d2a26;
+  color: var(--text-primary);
 }
 
 .info-card {
@@ -213,13 +213,13 @@ onMounted(fetchDetail)
 
 .info-label {
   font-size: 14px;
-  color: #a09a92;
+  color: var(--text-muted);
   min-width: 90px;
 }
 
 .info-value {
   font-size: 15px;
-  color: #2d2a26;
+  color: var(--text-primary);
   font-weight: 500;
 }
 
@@ -231,7 +231,7 @@ onMounted(fetchDetail)
 
 .progress-text {
   font-size: 14px;
-  color: #ff7b3d;
+  color: var(--accent);
   font-weight: 600;
   min-width: 40px;
 }
@@ -242,19 +242,19 @@ onMounted(fetchDetail)
 
 .card-title {
   font-weight: 600;
-  color: #2d2a26;
+  color: var(--text-primary);
 }
 
 .timeline-node {
   padding: 10px 14px;
   border-radius: 10px;
-  background: #f8f5f0;
+  background: var(--bg-input);
   transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .timeline-node.clickable {
   cursor: pointer;
-  background: #f3efe8;
+  background: var(--bg-hover);
   border: 1px solid rgba(255,123,61,0.08);
 }
 
@@ -270,24 +270,24 @@ onMounted(fetchDetail)
 }
 
 .node-title.text-locked {
-  color: #bbb6ad;
+  color: var(--text-muted);
 }
 
 .node-title.text-completed {
-  color: #67c23a;
+  color: var(--success);
 }
 
 .node-status-text.status-completed {
-  color: #67c23a;
+  color: var(--success);
   font-weight: 500;
 }
 
 .node-status-text.status-locked {
-  color: #c0c4cc;
+  color: var(--text-muted);
 }
 
 .node-status-text.status-learning {
-  color: #ff7b3d;
+  color: var(--accent);
   font-weight: 500;
 }
 
@@ -305,18 +305,18 @@ onMounted(fetchDetail)
 .node-title {
   font-size: 15px;
   font-weight: 600;
-  color: #2d2a26;
+  color: var(--text-primary);
   flex: 1;
 }
 
 .node-desc {
   font-size: 13px;
-  color: #a09a92;
+  color: var(--text-muted);
   margin: 0 0 6px;
 }
 
 .node-status-text {
   font-size: 12px;
-  color: #bbb6ad;
+  color: var(--text-muted);
 }
 </style>

@@ -55,7 +55,7 @@
           <span class="weak-rank" :class="'rank-' + Math.min(idx + 1, 5)" style="width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:12px;">{{ idx + 1 }}</span>
           <span class="weak-name" style="flex:1;font-size:13px;">{{ item.nodeName }}</span>
           <el-progress :percentage="item.correctRate || 0" :stroke-width="6" style="flex:2" :color="weakColor(item.correctRate || 0)" />
-          <span style="width:40px;text-align:right;font-size:12px;color:#909399;">{{ item.studentCount }}人</span>
+          <span style="width:40px;text-align:right;font-size:12px;color:var(--text-muted);">{{ item.studentCount }}人</span>
         </div>
       </div>
     </el-card>
@@ -71,7 +71,7 @@
           <el-table-column label="正确率" width="100" align="center">
             <template #default="{ row }">
               <el-progress :percentage="row.correctRate || 0" :stroke-width="8" :show-text="false" />
-              <span style="font-size: 12px; color: #666">{{ row.correctRate || 0 }}%</span>
+              <span style="font-size: 12px; color: var(--text-secondary)">{{ row.correctRate || 0 }}%</span>
             </template>
           </el-table-column>
           <el-table-column prop="studyMinutes" label="学习时长(分)" width="120" align="center" />
@@ -117,6 +117,10 @@ import { ElMessage } from 'element-plus'
 import * as echarts from 'echarts'
 import { getClassAnalysis, getStudentTrend } from '../../api/teacher'
 import { getCourseList } from '../../api/knowledge'
+import { useTheme } from '../../composables/useTheme'
+
+const { resolved: theme } = useTheme()
+const readVar = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim()
 
 const loading = ref(false)
 const tableData = ref([])
@@ -158,9 +162,9 @@ let pieChartInstance = null
 let barChartInstance = null
 
 const weakColor = (rate) => {
-  if (rate < 30) return '#f56c6c'
-  if (rate < 60) return '#e6a23c'
-  return '#67c23a'
+  if (rate < 30) return readVar('--danger')
+  if (rate < 60) return readVar('--warning')
+  return readVar('--success')
 }
 
 const loadCourses = async () => {
@@ -178,21 +182,21 @@ const renderPieChart = (distribution) => {
   if (!pieChartInstance) {
     pieChartInstance = echarts.init(pieChartRef.value)
   }
-  const colors = ['#f56c6c', '#e6a23c', '#409eff', '#67c23a']
+  const colors = [readVar('--danger'), readVar('--warning'), readVar('--accent'), readVar('--success')]
   pieChartInstance.setOption({
     tooltip: { trigger: 'item', formatter: '{b}: {c}人 ({d}%)' },
     legend: {
       orient: 'vertical',
       right: '5%',
       top: 'center',
-      textStyle: { fontSize: 12, color: '#606266' }
+      textStyle: { fontSize: 12, color: readVar('--text-secondary') }
     },
     series: [{
       type: 'pie',
       radius: ['35%', '60%'],
       center: ['35%', '50%'],
       avoidLabelOverlap: true,
-      itemStyle: { borderRadius: 6, borderColor: '#fff', borderWidth: 2 },
+      itemStyle: { borderRadius: 6, borderColor: readVar('--bg-surface'), borderWidth: 2 },
       label: { show: false },
       emphasis: {
         label: { show: true, fontSize: 14, fontWeight: 'bold' },
@@ -222,16 +226,16 @@ const renderBarChart = (rates) => {
     xAxis: {
       type: 'category',
       data: names,
-      axisLabel: { rotate: 35, fontSize: 10, interval: 0, color: '#606266' },
-      axisLine: { lineStyle: { color: '#dcdfe6' } }
+      axisLabel: { rotate: 35, fontSize: 10, interval: 0, color: readVar('--text-secondary') },
+      axisLine: { lineStyle: { color: readVar('--border-subtle') } }
     },
     yAxis: {
       type: 'value',
       name: '正确率(%)',
       min: 0,
       max: 100,
-      axisLabel: { formatter: '{value}%', color: '#909399' },
-      splitLine: { lineStyle: { color: '#f0f0f0', type: 'dashed' } }
+      axisLabel: { formatter: '{value}%', color: readVar('--text-muted') },
+      splitLine: { lineStyle: { color: readVar('--border-subtle'), type: 'dashed' } }
     },
     series: [{
       type: 'bar',
@@ -239,7 +243,7 @@ const renderBarChart = (rates) => {
       data: values.map(v => ({
         value: v,
         itemStyle: {
-          color: v >= 80 ? '#67c23a' : v >= 60 ? '#409eff' : v >= 40 ? '#e6a23c' : '#f56c6c',
+          color: v >= 80 ? readVar('--success') : v >= 60 ? readVar('--accent') : v >= 40 ? readVar('--warning') : readVar('--danger'),
           borderRadius: [4, 4, 0, 0]
         }
       })),
@@ -248,7 +252,7 @@ const renderBarChart = (rates) => {
         position: 'top',
         formatter: '{c}%',
         fontSize: 10,
-        color: '#606266'
+        color: readVar('--text-secondary')
       }
     }]
   })
@@ -358,6 +362,12 @@ onMounted(() => {
   window.addEventListener('resize', handleResize)
 })
 
+// 主题切换时重绘（颜色跟随）
+watch(theme, () => {
+  if (pieChartInstance && masteryDistribution.value.length) renderPieChart(masteryDistribution.value)
+  if (barChartInstance && nodeCorrectRates.value.length) renderBarChart(nodeCorrectRates.value)
+})
+
 // 组件卸载前清理
 import { onBeforeUnmount } from 'vue'
 onBeforeUnmount(() => {
@@ -367,17 +377,17 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-.page-container { padding: 20px 24px; background: #f5f7fa; min-height: 100vh; }
+.page-container { padding: 20px 24px; background: var(--bg-root); min-height: 100vh; }
 
 /* 统计卡片 */
 .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 16px; }
 .stat-card { border-radius: 12px; text-align: center; padding: 8px 0; }
 .stat-value { font-size: 28px; font-weight: 700; }
-.stat-value.blue { color: #409eff; }
-.stat-value.green { color: #67c23a; }
-.stat-value.orange { color: #e6a23c; }
-.stat-value.purple { color: #7b1fa2; }
-.stat-label { font-size: 13px; color: #909399; margin-top: 4px; }
+.stat-value.blue { color: var(--accent); }
+.stat-value.green { color: var(--success); }
+.stat-value.orange { color: var(--warning); }
+.stat-value.purple { color: var(--accent-gold); }
+.stat-label { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
 
 /* 图表区域 */
 .charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
@@ -388,7 +398,7 @@ onBeforeUnmount(() => {
 .data-panels { display: flex; gap: 16px; }
 .panel-main { flex: 1; border-radius: 12px; }
 .panel-side { width: 320px; flex-shrink: 0; border-radius: 12px; }
-.panel-title { font-weight: 600; color: #303133; }
+.panel-title { font-weight: 600; color: var(--text-primary); }
 .weak-list { display: flex; flex-direction: column; gap: 12px; }
 .weak-item { display: flex; align-items: center; gap: 10px; }
 .weak-rank {
@@ -396,12 +406,12 @@ onBeforeUnmount(() => {
   display: flex; align-items: center; justify-content: center;
   color: #fff; font-size: 12px; font-weight: 600; flex-shrink: 0;
 }
-.rank-1 { background: #f56c6c; }
-.rank-2 { background: #e6943b; }
-.rank-3 { background: #e6a23c; }
-.rank-4, .rank-5 { background: #909399; }
+.rank-1 { background: var(--danger); }
+.rank-2 { background: var(--warning); }
+.rank-3 { background: var(--warning); }
+.rank-4, .rank-5 { background: var(--text-secondary); }
 .weak-info { flex: 1; min-width: 0; }
-.weak-name { font-size: 13px; color: #6b655e; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.weak-name { font-size: 13px; color: var(--text-secondary); margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* 筛选卡片 */
 .filter-card { margin-bottom: 16px; border-radius: 12px; }

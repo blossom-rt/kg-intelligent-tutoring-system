@@ -311,7 +311,7 @@ onMounted(fetchQuestions)
 <style scoped>
 .practice-page {
   min-height: 100vh;
-  background: #faf7f2;
+  background: var(--bg-root);
   padding: 24px 32px;
 }
 
@@ -323,7 +323,7 @@ onMounted(fetchQuestions)
   margin: 0;
   font-size: 22px;
   font-weight: 700;
-  color: #2d2a26;
+  color: var(--text-primary);
 }
 
 .loading-area {
@@ -360,18 +360,18 @@ onMounted(fetchQuestions)
 .score-text {
   font-size: 20px;
   font-weight: 700;
-  color: #2d2a26;
+  color: var(--text-primary);
 }
 
 .result-title {
   margin: 0 0 8px;
   font-size: 22px;
-  color: #2d2a26;
+  color: var(--text-primary);
 }
 
 .result-summary {
   font-size: 15px;
-  color: #6b655e;
+  color: var(--text-secondary);
   margin: 0 0 24px;
 }
 
@@ -396,7 +396,7 @@ onMounted(fetchQuestions)
 
 .progress-label {
   font-size: 14px;
-  color: #6b655e;
+  color: var(--text-secondary);
   white-space: nowrap;
 }
 
@@ -413,7 +413,7 @@ onMounted(fetchQuestions)
 .question-no {
   font-weight: 600;
   font-size: 15px;
-  color: #2d2a26;
+  color: var(--text-primary);
 }
 
 .question-body {
@@ -422,7 +422,7 @@ onMounted(fetchQuestions)
 
 .question-text {
   font-size: 16px;
-  color: #2d2a26;
+  color: var(--text-primary);
   line-height: 1.8;
   margin: 0 0 24px;
 }
@@ -435,13 +435,13 @@ onMounted(fetchQuestions)
 
 .option-item {
   padding: 12px 16px;
-  border: 1px solid #e8e3db;
+  border: 1px solid var(--border-subtle);
   border-radius: 10px;
   transition: border-color 0.2s ease, background 0.2s ease;
 }
 
 .option-item:hover:not(.option-correct):not(.option-wrong) {
-  border-color: #bbb6ad;
+  border-color: var(--text-muted);
 }
 
 .option-item :deep(.el-radio) {
@@ -449,13 +449,13 @@ onMounted(fetchQuestions)
 }
 
 .option-correct {
-  border-color: #67c23a;
+  border-color: var(--success);
   background: #edf2ec;
 }
 
 .option-wrong {
-  border-color: #f56c6c;
-  background: #fef0f0;
+  border-color: var(--danger);
+  background: var(--danger-soft);
 }
 
 .option-text {
@@ -469,7 +469,7 @@ onMounted(fetchQuestions)
 .explanation {
   margin: 8px 0 0;
   font-size: 14px;
-  color: #6b655e;
+  color: var(--text-secondary);
   line-height: 1.6;
 }
 

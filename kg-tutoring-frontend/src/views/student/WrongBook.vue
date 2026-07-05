@@ -207,44 +207,44 @@ onMounted(fetchWrongList)
 <style scoped>
 .wrong-book-page {
   min-height: 100vh;
-  background: #faf7f2;
+  background: var(--bg-root);
 }
 
 /* 选项卡 */
 .tab-bar {
   display: flex; gap: 0;
   padding: 16px 32px 0;
-  border-bottom: 1px solid #e8e3db;
-  background: #faf7f2;
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-root);
 }
 .tab-btn {
   padding: 10px 20px;
   font-size: 14px; font-weight: 500;
   border: none; background: none;
-  color: #6b655e; cursor: pointer;
+  color: var(--text-secondary); cursor: pointer;
   border-bottom: 2px solid transparent;
   transition: all 0.2s ease;
   display: flex; align-items: center; gap: 6px;
 }
-.tab-btn:hover { color: #2d2a26; }
+.tab-btn:hover { color: var(--text-primary); }
 .tab-btn.on {
-  color: #ff7b3d;
-  border-bottom-color: #ff7b3d;
+  color: var(--accent);
+  border-bottom-color: var(--accent);
 }
 .tab-count {
-  font-size: 12px; background: #f3efe8; color: #6b655e;
+  font-size: 12px; background: var(--bg-hover); color: var(--text-secondary);
   padding: 1px 8px; border-radius: 10px; min-width: 20px; text-align: center;
 }
-.tab-btn.on .tab-count { background: #fff3e8; color: #ff7b3d; }
+.tab-btn.on .tab-count { background: var(--accent-soft); color: var(--accent); }
 
 /* 表格 */
-.question-snippet { font-size: 14px; color: #6b655e; }
-.question-snippet.reviewed { color: #a09a92; }
-.wrong-count { font-weight: 700; color: #f56c6c; }
-.reviewed-count { font-weight: 600; color: #5eaf83; }
+.question-snippet { font-size: 14px; color: var(--text-secondary); }
+.question-snippet.reviewed { color: var(--text-muted); }
+.wrong-count { font-weight: 700; color: var(--danger); }
+.reviewed-count { font-weight: 600; color: var(--accent-green); }
 
 .ai-content {
-  font-size: 15px; color: #2d2a26; line-height: 1.9; min-height: 120px;
+  font-size: 15px; color: var(--text-primary); line-height: 1.9; min-height: 120px;
 }
 .ai-content :deep(br) { display: block; content: ''; margin-bottom: 6px; }
 </style>

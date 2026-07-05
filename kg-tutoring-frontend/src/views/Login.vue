@@ -1,5 +1,6 @@
 <template>
   <div class="login-root" :class="themeClass">
+    <ThemeToggle class="corner-toggle" />
     <!-- 左侧：品牌 + 插画 -->
     <section class="brand-side">
       <div class="brand-inner">
@@ -87,6 +88,7 @@ import { useRouter } from 'vue-router'
 import { User, Lock, View, Hide } from '@element-plus/icons-vue'
 import { login } from '../api/user'
 import AnimatedCharacters from '../components/AnimatedCharacters.vue'
+import ThemeToggle from '../components/ThemeToggle.vue'
 
 const router = useRouter()
 const formRef = ref(null)
@@ -163,9 +165,15 @@ if (remembered) { form.username = remembered; rememberAccount.value = true }
 .login-root {
   display: flex;
   min-height: 100vh;
-  background: #faf7f2;
+  background: var(--bg-root);
   position: relative;
   overflow: hidden;
+}
+.corner-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
 }
 
 /* ============================================
@@ -179,12 +187,7 @@ if (remembered) { form.username = remembered; rememberAccount.value = true }
   padding: 48px;
   position: relative;
   z-index: 1;
-  background: linear-gradient(
-    155deg,
-    #f5f1ea 0%,
-    #f8f4ed 40%,
-    #f0ece4 100%
-  );
+  background: var(--bg-grad);
 }
 
 .brand-inner {
@@ -197,7 +200,7 @@ if (remembered) { form.username = remembered; rememberAccount.value = true }
   font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
-  color: #ff7b3d;
+  color: var(--accent);
   margin: 0 0 16px;
 }
 
@@ -206,14 +209,14 @@ if (remembered) { form.username = remembered; rememberAccount.value = true }
   font-weight: 800;
   letter-spacing: 2px;
   line-height: 1.15;
-  color: #2d2a26;
+  color: var(--text-primary);
   margin: 0 0 16px;
 }
 
 .brand-desc {
   font-size: 15px;
   line-height: 1.7;
-  color: #6b655e;
+  color: var(--text-secondary);
   margin: 0 0 40px;
 }
 
@@ -234,15 +237,15 @@ if (remembered) { form.username = remembered; rememberAccount.value = true }
   width: 100%;
   max-width: 380px;
   padding: 40px 36px;
-  background: #fffdf9;
-  border: 1px solid #e8e3db;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
   border-radius: 12px;
 }
 
 .form-heading {
   font-size: 22px;
   font-weight: 700;
-  color: #2d2a26;
+  color: var(--text-primary);
   margin: 0 0 24px;
 }
 
@@ -251,7 +254,7 @@ if (remembered) { form.username = remembered; rememberAccount.value = true }
   display: flex;
   gap: 0;
   margin-bottom: 24px;
-  background: #f8f5f0;
+  background: var(--bg-input);
   border-radius: 8px;
   padding: 3px;
 }
@@ -264,49 +267,49 @@ if (remembered) { form.username = remembered; rememberAccount.value = true }
   border-radius: 6px;
   cursor: pointer;
   background: transparent;
-  color: #a09a92;
+  color: var(--text-muted);
   transition: background 0.25s ease, color 0.25s ease;
 }
 .role-tab.on {
-  background: #ff7b3d;
+  background: var(--accent);
   color: #fff;
 }
 
 /* ── 表单输入 ── */
 .form-card :deep(.el-input__wrapper) {
-  background: #f8f5f0;
-  border: 1px solid #e8e3db;
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
   border-radius: 8px;
   box-shadow: none;
   transition: border-color 0.25s ease;
 }
 .form-card :deep(.el-input__wrapper:focus-within),
 .form-card :deep(.el-input__wrapper:hover) {
-  border-color: #ff7b3d;
+  border-color: var(--accent);
   box-shadow: none;
 }
 .form-card :deep(.el-input__inner) {
-  color: #2d2a26;
+  color: var(--text-primary);
 }
 .form-card :deep(.el-input__inner::placeholder) {
-  color: #bbb6ad;
+  color: var(--text-muted);
 }
 .form-card :deep(.el-form-item) {
   margin-bottom: 16px;
 }
 .form-card :deep(.el-input__prefix) {
-  color: #a09a92;
+  color: var(--text-muted);
 }
 
 /* 密码眼睛 */
 .pwd-eye {
   cursor: pointer;
-  color: #a09a92;
+  color: var(--text-muted);
   transition: color 0.2s ease;
   display: flex;
   align-items: center;
 }
-.pwd-eye:hover { color: #ff7b3d; }
+.pwd-eye:hover { color: var(--accent); }
 
 /* ── 记住 & 忘记 ── */
 .form-row {
@@ -316,17 +319,17 @@ if (remembered) { form.username = remembered; rememberAccount.value = true }
   margin-bottom: 20px;
 }
 .remember {
-  --el-checkbox-checked-bg-color: #ff7b3d;
-  --el-checkbox-checked-border-color: #ff7b3d;
+  --el-checkbox-checked-bg-color: var(--accent);
+  --el-checkbox-checked-border-color: var(--accent);
 }
-.remember :deep(.el-checkbox__label) { color: #6b655e; font-size: 13px; }
+.remember :deep(.el-checkbox__label) { color: var(--text-secondary); font-size: 13px; }
 .forgot {
   font-size: 13px;
-  color: #a09a92;
+  color: var(--text-muted);
   cursor: pointer;
   transition: color 0.2s ease;
 }
-.forgot:hover { color: #ff7b3d; }
+.forgot:hover { color: var(--accent); }
 
 /* ── 提交按钮 ── */
 .submit-btn {
@@ -339,11 +342,11 @@ if (remembered) { form.username = remembered; rememberAccount.value = true }
   border-radius: 8px;
   cursor: pointer;
   color: #fff;
-  background: #ff7b3d;
+  background: var(--accent);
   transition: background 0.2s ease, transform 0.15s ease;
 }
 .submit-btn:hover:not(:disabled) {
-  background: #ff9060;
+  background: var(--accent-hover);
 }
 .submit-btn:active:not(:disabled) {
   transform: scale(0.97);
@@ -367,36 +370,41 @@ if (remembered) { form.username = remembered; rememberAccount.value = true }
   text-align: center;
   margin-top: 20px;
   font-size: 13px;
-  color: #a09a92;
+  color: var(--text-muted);
 }
 .form-footer a {
-  color: #ff7b3d;
+  color: var(--accent);
   cursor: pointer;
   font-weight: 600;
   transition: color 0.2s ease;
 }
-.form-footer a:hover { color: #ff9060; }
-.form-footer .muted { color: #c5bfb5; }
+.form-footer a:hover { color: var(--accent-hover); }
+.form-footer .muted { color: var(--text-muted); }
 
 .test-hint {
   text-align: center;
   margin: 10px 0 0;
   font-size: 12px;
-  color: #c5bfb5;
+  color: var(--text-muted);
 }
 
 /* ============================================
    角色主题微调 — 只用暖调变化
    ============================================ */
-.role-teacher .brand-eyebrow { color: #5eaf83; }
-.role-teacher .role-tab.on { background: #5eaf83; }
-.role-teacher .submit-btn { background: #5eaf83; }
+.role-teacher .brand-eyebrow { color: var(--accent-green); }
+.role-teacher .role-tab.on { background: var(--accent-green); }
+.role-teacher .submit-btn { background: var(--accent-green); }
 .role-teacher .submit-btn:hover:not(:disabled) { background: #73c496; }
-.role-teacher .form-footer a { color: #5eaf83; }
-.role-teacher .pwd-eye:hover { color: #5eaf83; }
-.role-teacher :deep(.el-input__wrapper:focus-within) { border-color: #5eaf83; }
-.role-teacher :deep(.el-input__wrapper:hover) { border-color: #5eaf83; }
-.role-teacher .forgot:hover { color: #5eaf83; }
+.role-teacher .form-footer a { color: var(--accent-green); }
+.role-teacher .pwd-eye:hover { color: var(--accent-green); }
+.role-teacher :deep(.el-input__wrapper:focus-within) { border-color: var(--accent-green); }
+.role-teacher :deep(.el-input__wrapper:hover) { border-color: var(--accent-green); }
+.role-teacher .forgot:hover { color: var(--accent-green); }
+.role-teacher .remember {
+  --el-checkbox-checked-bg-color: var(--accent-green);
+  --el-checkbox-checked-border-color: var(--accent-green);
+  --el-checkbox-checked-text-color: #fff;
+}
 
 .role-admin .brand-eyebrow { color: #d4a853; }
 .role-admin .role-tab.on { background: #d4a853; }
@@ -407,6 +415,11 @@ if (remembered) { form.username = remembered; rememberAccount.value = true }
 .role-admin :deep(.el-input__wrapper:focus-within) { border-color: #d4a853; }
 .role-admin :deep(.el-input__wrapper:hover) { border-color: #d4a853; }
 .role-admin .forgot:hover { color: #d4a853; }
+.role-admin .remember {
+  --el-checkbox-checked-bg-color: #d4a853;
+  --el-checkbox-checked-border-color: #d4a853;
+  --el-checkbox-checked-text-color: #fff;
+}
 
 /* ============================================
    响应式

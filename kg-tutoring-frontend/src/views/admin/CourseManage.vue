@@ -184,8 +184,8 @@ function handleDelete(row) {
 </script>
 
 <style scoped>
-.course-manage { padding: 20px; background: #f5f7fa; min-height: 100vh; }
-.page-header h2 { margin: 0 0 16px; font-size: 20px; color: #2d2a26; }
+.course-manage { padding: 24px 36px; background: var(--bg-root); min-height: 100vh; }
+.page-header h2 { margin: 0 0 16px; font-size: 20px; color: var(--text-primary); }
 .table-card { margin-bottom: 16px; }
 .table-toolbar { margin-bottom: 16px; }
 .pagination { margin-top: 16px; display: flex; justify-content: flex-end; }

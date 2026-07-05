@@ -1,5 +1,6 @@
 <template>
   <div class="register-root">
+    <ThemeToggle class="corner-toggle" />
     <section class="brand-side">
       <div class="brand-inner">
         <p class="brand-eyebrow">CUPK · 计算机系</p>
@@ -70,6 +71,7 @@ import { useRouter } from 'vue-router'
 import { User, Lock, UserFilled, Message, Key } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { register, sendEmailCode } from '../api/user'
+import ThemeToggle from '../components/ThemeToggle.vue'
 
 const router = useRouter()
 const formRef = ref(null)
@@ -137,7 +139,14 @@ const submit = async () => {
 .register-root {
   display: flex;
   min-height: 100vh;
-  background: #faf7f2;
+  background: var(--bg-root);
+  position: relative;
+}
+.corner-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
 }
 
 .brand-side {
@@ -146,7 +155,7 @@ const submit = async () => {
   align-items: center;
   justify-content: flex-end;
   padding: 48px 64px 48px 48px;
-  background: linear-gradient(155deg, #f5f1ea 0%, #f8f4ed 40%, #f0ece4 100%);
+  background: var(--bg-grad);
 }
 .brand-inner {
   max-width: 400px;
@@ -154,14 +163,14 @@ const submit = async () => {
 }
 .brand-eyebrow {
   font-size: 12px; font-weight: 600; letter-spacing: 3px;
-  text-transform: uppercase; color: #ff7b3d; margin: 0 0 16px;
+  text-transform: uppercase; color: var(--accent); margin: 0 0 16px;
 }
 .brand-title {
   font-size: 48px; font-weight: 800; letter-spacing: 2px;
-  line-height: 1.15; color: #2d2a26; margin: 0 0 16px;
+  line-height: 1.15; color: var(--text-primary); margin: 0 0 16px;
 }
 .brand-desc {
-  font-size: 15px; line-height: 1.7; color: #6b655e; margin: 0;
+  font-size: 15px; line-height: 1.7; color: var(--text-secondary); margin: 0;
 }
 
 .form-side {
@@ -174,25 +183,25 @@ const submit = async () => {
   width: 100%;
   max-width: 420px;
   padding: 40px 36px;
-  background: #fffdf9;
-  border: 1px solid #e8e3db;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
   border-radius: 12px;
 }
 .form-heading {
-  font-size: 22px; font-weight: 700; color: #2d2a26; margin: 0 0 24px;
+  font-size: 22px; font-weight: 700; color: var(--text-primary); margin: 0 0 24px;
 }
 
 .form-card :deep(.el-input__wrapper) {
-  background: #f8f5f0; border: 1px solid #e8e3db; border-radius: 8px; box-shadow: none;
+  background: var(--bg-input); border: 1px solid var(--border-subtle); border-radius: 8px; box-shadow: none;
 }
 .form-card :deep(.el-input__wrapper:focus-within),
 .form-card :deep(.el-input__wrapper:hover) {
-  border-color: #ff7b3d; box-shadow: none;
+  border-color: var(--accent); box-shadow: none;
 }
-.form-card :deep(.el-input__inner) { color: #2d2a26; }
-.form-card :deep(.el-input__inner::placeholder) { color: #bbb6ad; }
+.form-card :deep(.el-input__inner) { color: var(--text-primary); }
+.form-card :deep(.el-input__inner::placeholder) { color: var(--text-muted); }
 .form-card :deep(.el-form-item) { margin-bottom: 16px; }
-.form-card :deep(.el-input__prefix) { color: #a09a92; }
+.form-card :deep(.el-input__prefix) { color: var(--text-muted); }
 
 .code-row { display: flex; gap: 10px; }
 .code-row :deep(.el-input) { flex: 1; }
@@ -200,21 +209,21 @@ const submit = async () => {
 .code-btn {
   flex-shrink: 0; min-width: 110px;
   padding: 0 12px; font-size: 13px; font-weight: 600;
-  border: 1px solid #ff7b3d; border-radius: 8px;
-  background: transparent; color: #ff7b3d; cursor: pointer;
+  border: 1px solid var(--accent); border-radius: 8px;
+  background: transparent; color: var(--accent); cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease;
 }
 .code-btn:hover:not(:disabled) { background: rgba(255,123,61,0.1); }
-.code-btn:disabled { border-color: #d5cfc5; color: #bbb6ad; cursor: not-allowed; }
+.code-btn:disabled { border-color: var(--border-subtle); color: var(--text-muted); cursor: not-allowed; }
 
 .submit-btn {
   width: 100%; padding: 12px 0; font-size: 15px; font-weight: 700;
   letter-spacing: 1px; border: none; border-radius: 8px; cursor: pointer;
-  color: #fff; background: #ff7b3d;
+  color: #fff; background: var(--accent);
   transition: background 0.2s ease, transform 0.15s ease;
   margin-top: 6px;
 }
-.submit-btn:hover:not(:disabled) { background: #ff9060; }
+.submit-btn:hover:not(:disabled) { background: var(--accent-hover); }
 .submit-btn:active:not(:disabled) { transform: scale(0.97); }
 .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
@@ -226,8 +235,8 @@ const submit = async () => {
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .form-footer {
-  text-align: center; margin-top: 20px; font-size: 13px; color: #a09a92;
+  text-align: center; margin-top: 20px; font-size: 13px; color: var(--text-muted);
 }
-.form-footer a { color: #ff7b3d; cursor: pointer; font-weight: 600; }
-.form-footer a:hover { color: #ff9060; }
+.form-footer a { color: var(--accent); cursor: pointer; font-weight: 600; }
+.form-footer a:hover { color: var(--accent-hover); }
 </style>

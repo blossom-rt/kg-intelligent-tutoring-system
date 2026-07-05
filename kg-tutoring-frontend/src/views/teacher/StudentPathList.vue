@@ -254,17 +254,17 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.page-container { padding: 20px 24px; background: #f5f7fa; min-height: 100vh; }
+.page-container { padding: 20px 24px; background: var(--bg-root); min-height: 100vh; }
 .filter-card { margin-bottom: 16px; border-radius: 12px; }
 .summary-card { margin-bottom: 16px; border-radius: 12px; }
 .summary-row { display: flex; gap: 24px; }
 .summary-item { flex: 1; text-align: center; padding: 8px 0; }
-.summary-label { display: block; font-size: 13px; color: #909399; margin-bottom: 4px; }
-.summary-value { display: block; font-size: 20px; font-weight: 700; color: #303133; }
-.summary-value.highlight { color: #409eff; font-size: 24px; }
-.summary-value.highlight.green { color: #67c23a; }
-.summary-value.highlight.orange { color: #e6a23c; }
+.summary-label { display: block; font-size: 13px; color: var(--text-secondary); margin-bottom: 4px; }
+.summary-value { display: block; font-size: 20px; font-weight: 700; color: var(--text-primary); }
+.summary-value.highlight { color: var(--accent); font-size: 24px; }
+.summary-value.highlight.green { color: var(--success); }
+.summary-value.highlight.orange { color: var(--warning); }
 .table-card { border-radius: 12px; }
-.panel-title { font-weight: 600; color: #303133; }
-.path-name { font-weight: 500; color: #303133; }
+.panel-title { font-weight: 600; color: var(--text-primary); }
+.path-name { font-weight: 500; color: var(--text-primary); }
 </style>
