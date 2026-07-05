@@ -17,16 +17,10 @@
     <!-- 当前错题 -->
     <el-table v-if="activeTab === 'active'"
       v-loading="loading"
-
-      :data="activeList"
-      style="width: 100%" stripe
-      empty-text="暂无错题，继续保持！"
-
       :data="paginatedWrongList"
       style="width: 100%"
       stripe
-      empty-text="暂无错题记录"
-
+      empty-text="暂无错题，继续保持！"
     >
       <el-table-column label="题目内容" min-width="220">
         <template #default="{ row }">

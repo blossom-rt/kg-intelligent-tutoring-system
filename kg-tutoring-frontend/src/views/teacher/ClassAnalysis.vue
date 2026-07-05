@@ -47,6 +47,19 @@
       </el-card>
     </div>
 
+    <!-- 薄弱知识点排行 -->
+    <el-card v-if="weakRank.length" class="section-card">
+      <template #header><span class="panel-title">薄弱知识点排行 TOP10</span></template>
+      <div class="weak-list">
+        <div v-for="(item, idx) in weakRank" :key="idx" class="weak-item">
+          <span class="weak-rank" :class="'rank-' + Math.min(idx + 1, 5)" style="width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:12px;">{{ idx + 1 }}</span>
+          <span class="weak-name" style="flex:1;font-size:13px;">{{ item.nodeName }}</span>
+          <el-progress :percentage="item.correctRate || 0" :stroke-width="6" style="flex:2" :color="weakColor(item.correctRate || 0)" />
+          <span style="width:40px;text-align:right;font-size:12px;color:#909399;">{{ item.studentCount }}人</span>
+        </div>
+      </div>
+    </el-card>
+
     <div class="data-panels">
       <!-- 学生列表 -->
       <el-card class="panel-main">
@@ -113,6 +126,8 @@ const courseList = ref([])
 const weakNodes = ref([])
 const masteryDistribution = ref([])
 const nodeCorrectRates = ref([])
+const studyTrend = ref([])
+const weakRank = ref([])
 
 const filterForm = reactive({
   courseId: null
@@ -278,6 +293,8 @@ const loadData = async () => {
       // 图表数据
       masteryDistribution.value = res.masteryDistribution || []
       nodeCorrectRates.value = res.nodeCorrectRates || []
+      studyTrend.value = res.studyTrend || []
+      weakRank.value = res.weakRank || []
 
       // 渲染图表
       await nextTick()

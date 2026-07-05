@@ -141,6 +141,41 @@ public class AnalysisServiceImpl implements AnalysisService {
         nodeCorrectRates.sort((a, b) -> Integer.compare((int) b.get("correctRate"), (int) a.get("correctRate")));
         result.put("nodeCorrectRates", nodeCorrectRates);
 
+        // ===== 学习趋势（最近7天每日学习人数） =====
+        List<Map<String, Object>> studyTrend = new ArrayList<>();
+        for (int i = 6; i >= 0; i--) {
+            java.time.LocalDate day = java.time.LocalDate.now().minusDays(i);
+            java.time.LocalDateTime dayStart = day.atStartOfDay();
+            java.time.LocalDateTime dayEnd = day.atTime(23, 59, 59);
+            long count = allRecords.stream()
+                    .filter(r -> r.getUpdateTime() != null
+                            && !r.getUpdateTime().isBefore(dayStart)
+                            && !r.getUpdateTime().isAfter(dayEnd))
+                    .count();
+            Map<String, Object> d = new LinkedHashMap<>();
+            d.put("date", day.toString());
+            d.put("studyCount", count);
+            studyTrend.add(d);
+        }
+        result.put("studyTrend", studyTrend);
+
+        // ===== 薄弱知识点排行（按正确率升序） =====
+        List<Map<String, Object>> weakRank = new ArrayList<>();
+        for (KnowledgeNode node : nodes) {
+            double nodeAvg = allRecords.stream()
+                    .filter(r -> r.getNodeId().equals(node.getId()) && r.getCorrectRate() != null)
+                    .mapToDouble(r -> r.getCorrectRate().doubleValue())
+                    .average()
+                    .orElse(100);
+            Map<String, Object> wr = new LinkedHashMap<>();
+            wr.put("nodeName", node.getName());
+            wr.put("correctRate", (int) Math.round(nodeAvg));
+            wr.put("studentCount", allRecords.stream().filter(r -> r.getNodeId().equals(node.getId())).count());
+            weakRank.add(wr);
+        }
+        weakRank.sort((a, b) -> Integer.compare((int) a.get("correctRate"), (int) b.get("correctRate")));
+        result.put("weakRank", weakRank.size() > 10 ? weakRank.subList(0, 10) : weakRank);
+
         return result;
     }
 

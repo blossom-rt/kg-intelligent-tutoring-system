@@ -18,7 +18,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="userId" label="用户ID" min-width="120" />
+        <el-table-column prop="userName" label="调用用户" min-width="100" /><el-table-column prop="userId" label="ID" min-width="60" />
         <el-table-column prop="scene" label="场景" min-width="140">
           <template #default="{ row }">
             <el-tag type="info" size="small">{{ sceneLabel(row.scene) }}</el-tag>

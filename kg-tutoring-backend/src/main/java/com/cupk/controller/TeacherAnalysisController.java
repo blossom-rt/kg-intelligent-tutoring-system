@@ -42,9 +42,7 @@ public class TeacherAnalysisController {
      * 班级整体学情分析
      *
      * @param courseId 课程 ID
-     * @return 包含班级整体掌握情况、各知识点平均掌握度、成绩分布等数据
-     *
-     * TODO: 后续可加入更多分析维度，如学习趋势、薄弱知识点排行等
+     * @return 包含班级整体掌握情况、各知识点平均掌握度、成绩分布、学习趋势、薄弱排行等数据
      */
     @GetMapping("/class")
     public Result<?> classAnalysis(@RequestParam Integer courseId) {
