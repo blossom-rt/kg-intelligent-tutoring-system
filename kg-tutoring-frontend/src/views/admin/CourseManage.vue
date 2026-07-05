@@ -68,6 +68,7 @@
 import { ref, reactive, onMounted, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { getCourseList, createCourse, updateCourse, deleteCourse } from '../../api/admin'
+import StudentHeader from '../../components/StudentHeader.vue'
 
 const loading = ref(false)
 const submitLoading = ref(false)
