@@ -205,6 +205,14 @@ const submitAnswer = () => {
   if (isCorrect.value) {
     correctCount.value++
     pet.celebrate()
+    // 从错题本来的，答对自动标记为已掌握
+    if (route.query.fromWrong === 'true') {
+      try {
+        const reviewed = JSON.parse(localStorage.getItem('reviewedWrongQuestions') || '{}')
+        reviewed[currentQuestion.value.id] = new Date().toISOString()
+        localStorage.setItem('reviewedWrongQuestions', JSON.stringify(reviewed))
+      } catch {}
+    }
     // 连击检测
     if (correctCount.value % 5 === 0) pet.fireUp()
   } else {
