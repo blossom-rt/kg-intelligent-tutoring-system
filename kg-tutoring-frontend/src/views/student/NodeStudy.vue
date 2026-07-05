@@ -251,7 +251,7 @@ onMounted(fetchNode)
 <style scoped>
 .node-study-page {
   min-height: 100vh;
-  background: #faf7f2;
+  background: var(--bg-root);
   
 }
 
@@ -272,12 +272,12 @@ onMounted(fetchNode)
 
 .meta-label {
   font-size: 14px;
-  color: #a09a92;
+  color: var(--text-muted);
 }
 
 .meta-value {
   font-size: 14px;
-  color: #2d2a26;
+  color: var(--text-primary);
   font-weight: 500;
 }
 
@@ -287,7 +287,7 @@ onMounted(fetchNode)
 
 .study-tabs :deep(.el-tabs__header) {
   margin-bottom: 0;
-  background: #fffdf9;
+  background: var(--bg-surface);
   border-radius: 12px 12px 0 0;
   padding: 0 20px;
 }
@@ -301,12 +301,12 @@ onMounted(fetchNode)
 .content-body h3 {
   margin: 0 0 16px;
   font-size: 20px;
-  color: #2d2a26;
+  color: var(--text-primary);
 }
 
 .desc-section {
   font-size: 15px;
-  color: #6b655e;
+  color: var(--text-secondary);
   line-height: 1.9;
 }
 
@@ -327,14 +327,14 @@ onMounted(fetchNode)
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
-  background: #faf7f2;
+  background: var(--bg-root);
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.2s ease;
 }
 
 .exercise-item:hover {
-  background: #f3efe8;
+  background: var(--bg-hover);
 }
 
 /* ── 内容头部（标题 + AI 按钮） ── */
@@ -347,7 +347,7 @@ onMounted(fetchNode)
 .content-header-row h3 {
   margin: 0;
   font-size: 20px;
-  color: #2d2a26;
+  color: var(--text-primary);
 }
 .content-header-row .el-button {
   flex-shrink: 0;
@@ -357,7 +357,7 @@ onMounted(fetchNode)
 .ai-summary-body {
   font-size: 15px;
   line-height: 1.9;
-  color: #6b655e;
+  color: var(--text-secondary);
   white-space: pre-wrap;
 }
 .ai-summary-body :deep(br) {
@@ -405,39 +405,39 @@ onMounted(fetchNode)
   flex-shrink: 0;
 }
 .qa-user .qa-avatar {
-  background: #ff7b3d;
+  background: var(--accent);
   color: #fff;
 }
 .qa-assistant .qa-avatar {
-  background: #e8e3db;
-  color: #6b655e;
+  background: var(--border-subtle);
+  color: var(--text-secondary);
 }
 .qa-bubble {
   padding: 10px 14px;
   border-radius: 12px;
   font-size: 14px;
   line-height: 1.7;
-  color: #2d2a26;
+  color: var(--text-primary);
 }
 .qa-user .qa-bubble {
-  background: #ff7b3d;
+  background: var(--accent);
   color: #fff;
   border-bottom-right-radius: 4px;
 }
 .qa-assistant .qa-bubble {
-  background: #f3efe8;
+  background: var(--bg-hover);
   border-bottom-left-radius: 4px;
 }
 .qa-thinking {
-  color: #a09a92;
+  color: var(--text-muted);
   font-style: italic;
 }
 .qa-input-row {
   margin-top: 12px;
 }
 .qa-input-row :deep(.el-input-group__append) {
-  background-color: #ff7b3d;
-  border-color: #ff7b3d;
+  background-color: var(--accent);
+  border-color: var(--accent);
 }
 .qa-input-row :deep(.el-input-group__append .el-button) {
   color: #fff;

@@ -234,8 +234,8 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.page-container { padding: 20px 24px; background: #f5f7fa; min-height: 100vh; }
+.page-container { padding: 20px 24px; background: var(--bg-root); min-height: 100vh; }
 .node-chip:hover { background: #dce4f0; }
-.node-chip.node-selected { background: rgba(255,123,61,0.1); box-shadow: 0 0 0 2px #ff7b3d inset; }
-.node-name { font-size: 13px; color: #6b655e; }
+.node-chip.node-selected { background: rgba(255,123,61,0.1); box-shadow: 0 0 0 2px var(--accent) inset; }
+.node-name { font-size: 13px; color: var(--text-secondary); }
 </style>

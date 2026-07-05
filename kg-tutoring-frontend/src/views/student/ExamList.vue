@@ -115,13 +115,13 @@ onMounted(fetchExams)
 <style scoped>
 .exam-list-page {
   min-height: 100vh;
-  background: #faf7f2;
+  background: var(--bg-root);
   
 }
 
 .exam-name {
   font-weight: 500;
-  color: #2d2a26;
+  color: var(--text-primary);
 }
 
 .score-value {
@@ -130,10 +130,10 @@ onMounted(fetchExams)
 }
 
 .score-pass {
-  color: #67c23a;
+  color: var(--success);
 }
 
 .score-fail {
-  color: #f56c6c;
+  color: var(--danger);
 }
 </style>

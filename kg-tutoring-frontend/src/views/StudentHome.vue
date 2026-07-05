@@ -249,14 +249,14 @@ const showNotice = (n) => { currentNotice.value = n; noticeDialog.value = true }
 </script>
 
 <style scoped>
-.student-home { min-height: 100vh; background: #faf7f2; }
+.student-home { min-height: 100vh; background: var(--bg-root); }
 
 /* ── 顶栏 ── */
 .top-bar {
   display: flex; justify-content: space-between; align-items: center;
   padding: 20px 36px;
-  background: linear-gradient(135deg, #f5f1ea, #f0ece4);
-  color: #2d2a26;
+  background: var(--bg-grad);
+  color: var(--text-primary);
 }
 .user-info { display: flex; align-items: center; gap: 16px; }
 .user-info h2 { margin: 0; font-size: 20px; font-weight: 600; }
@@ -300,26 +300,26 @@ const showNotice = (n) => { currentNotice.value = n; noticeDialog.value = true }
 .side-col { flex: 1; display: flex; flex-direction: column; gap: 20px; }
 
 .card {
-  background: #fffdf9; border-radius: 16px; padding: 24px;
+  background: var(--bg-surface); border-radius: 16px; padding: 24px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.04);
   transition: box-shadow 0.2s ease;
 }
 .card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
 .card-header {
-  font-size: 16px; font-weight: 600; color: #2d2a26;
+  font-size: 16px; font-weight: 600; color: var(--text-primary);
   margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
 }
-.card-icon { color: #ff7b3d; font-size: 16px; flex-shrink: 0; }
-.empty-hint { color: #a09a92; font-size: 14px; text-align: center; padding: 20px 0; }
+.card-icon { color: var(--accent); font-size: 16px; flex-shrink: 0; }
+.empty-hint { color: var(--text-muted); font-size: 14px; text-align: center; padding: 20px 0; }
 
 /* ── 路径列表 ── */
 .path-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; }
-.path-item:not(:last-child) { border-bottom: 1px solid #e8e3db; }
+.path-item:not(:last-child) { border-bottom: 1px solid var(--border-subtle); }
 .path-info { flex: 1; }
-.path-title { font-size: 14px; color: #2d2a26; margin-bottom: 6px; font-weight: 500; display: block; }
+.path-title { font-size: 14px; color: var(--text-primary); margin-bottom: 6px; font-weight: 500; display: block; }
 
 /* ── 待办 ── */
-.todo-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; font-size: 14px; color: #6b655e; }
+.todo-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; font-size: 14px; color: var(--text-secondary); }
 
 /* ── 学情统计 ── */
 .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
@@ -329,44 +329,44 @@ const showNotice = (n) => { currentNotice.value = n; noticeDialog.value = true }
   display: flex; align-items: center; justify-content: center;
   font-size: 20px; font-weight: 700; color: #fff;
 }
-.stat-circle.blue { background: linear-gradient(135deg, #ff7b3d, #e06830); }
-.stat-circle.green { background: linear-gradient(135deg, #5eaf83, #3d8a5e); }
+.stat-circle.blue { background: linear-gradient(135deg, var(--accent), #e06830); }
+.stat-circle.green { background: linear-gradient(135deg, var(--accent-green), var(--accent-green)); }
 .stat-circle.purple { background: linear-gradient(135deg, #d4a853, #b89030); }
 .stat-circle.orange { background: linear-gradient(135deg, #f5a623, #d4881a); }
-.stat-item span { font-size: 12px; color: #a09a92; }
+.stat-item span { font-size: 12px; color: var(--text-muted); }
 
 /* ── 快捷入口 ── */
 .quick-links { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .weak-list { display: flex; flex-direction: column; gap: 10px; }
 .weak-item { display: flex; align-items: center; gap: 8px; }
-.weak-rank { width: 20px; height: 20px; border-radius: 50%; background: #f56c6c; color: #fff; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.weak-name { flex: 1; font-size: 13px; color: #2d2a26; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.weak-rank { width: 20px; height: 20px; border-radius: 50%; background: var(--danger); color: #fff; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.weak-name { flex: 1; font-size: 13px; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .quick-item {
   display: flex; flex-direction: column; align-items: center; gap: 10px;
   padding: 18px 8px; border-radius: 14px;
-  background: #f8f5f0; cursor: pointer;
+  background: var(--bg-input); cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease;
 }
-.quick-item:hover { background: #f3efe8; transform: translateY(-3px); }
+.quick-item:hover { background: var(--bg-hover); transform: translateY(-3px); }
 .quick-icon {
   width: 40px; height: 40px; border-radius: 12px;
-  background: #fff; display: flex; align-items: center; justify-content: center;
-  color: #ff7b3d; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  background: var(--bg-surface); display: flex; align-items: center; justify-content: center;
+  color: var(--accent); box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
-.quick-label { font-size: 13px; font-weight: 500; color: #6b655e; }
+.quick-label { font-size: 13px; font-weight: 500; color: var(--text-secondary); }
 
 /* ── 新手引导 ── */
 .guide-body { display: flex; flex-direction: column; gap: 20px; padding: 8px 0; }
 .guide-item { display: flex; align-items: flex-start; gap: 14px; }
 .guide-icon {
   width: 32px; height: 32px; border-radius: 50%;
-  background: linear-gradient(135deg, #ff7b3d, #ff9060);
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
   color: #fff; font-size: 16px; font-weight: 700;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0; margin-top: 2px;
 }
 .guide-text { font-size: 14px; line-height: 1.7; color: #555; }
-.guide-text strong { color: #2d2a26; }
+.guide-text strong { color: var(--text-primary); }
 
 /* ── 响应式 ── */
 @media (max-width: 900px) {

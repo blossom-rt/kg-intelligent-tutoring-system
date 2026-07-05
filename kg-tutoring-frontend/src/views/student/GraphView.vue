@@ -46,8 +46,11 @@ import { ElMessage } from 'element-plus'
 import StudentHeader from '../../components/StudentHeader.vue'
 import { getStudentGraph, generatePath } from '../../api/student'
 import { getCourseList } from '../../api/knowledge'
+import { useTheme } from '../../composables/useTheme'
 
 const router = useRouter()
+const { resolved: theme } = useTheme()
+const readVar = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim()
 const loading = ref(false)
 const nodes = ref([])
 const edges = ref([])
@@ -77,7 +80,7 @@ function buildChartData() {
     value: n.name,
     symbolSize: n.difficulty === 3 ? 60 : n.difficulty === 2 ? 50 : 40,
     itemStyle: {
-      color: n.difficulty === 3 ? '#e74c3c' : n.difficulty === 2 ? '#f39c12' : '#ff7b3d'
+      color: n.difficulty === 3 ? readVar('--danger') : n.difficulty === 2 ? readVar('--warning') : readVar('--accent')
     },
     category: n.courseId,
     raw: n
@@ -86,7 +89,7 @@ function buildChartData() {
   const chartEdges = edgeList.map(e => ({
     source: String(e.fromNodeId),
     target: String(e.toNodeId),
-    lineStyle: { color: '#ccc', width: 2, curveness: 0.2, type: 'solid' }
+    lineStyle: { color: readVar('--border-subtle'), width: 2, curveness: 0.2, type: 'solid' }
   }))
 
   return { chartNodes, chartEdges }
@@ -118,14 +121,14 @@ function renderChart() {
         show: true,
         position: 'bottom',
         fontSize: 12,
-        color: '#2d2a26',
+        color: readVar('--text-primary'),
         formatter: (p) => p.name.length > 6 ? p.name.slice(0, 6) + '..' : p.name
       },
       edgeLabel: { show: false },
-      lineStyle: { color: '#bbb', width: 2, curveness: 0.2 },
+      lineStyle: { color: readVar('--border-subtle'), width: 2, curveness: 0.2 },
       emphasis: {
         focus: 'adjacency',
-        lineStyle: { width: 3, color: '#ff7b3d' }
+        lineStyle: { width: 3, color: readVar('--accent') }
       }
     }]
   })
@@ -192,15 +195,18 @@ onBeforeUnmount(() => {
   chart.value = null
 })
 
+// 主题切换时重绘（颜色跟随）
+watch(theme, () => { if (chart.value) renderChart() })
+
 // 窗口改变时自适应
 watch(() => [dialogVisible.value], () => setTimeout(() => chart.value?.resize(), 300))
 </script>
 
 <style scoped>
-.graph-view { min-height: 100vh; background: #faf7f2; }
+.graph-view { min-height: 100vh; background: var(--bg-root); }
 .graph-card { border-radius: 12px; min-height: 500px; position: relative; margin: 0 32px 24px; }
 .chart-container { width: 100%; height: 600px; }
 .detail-desc { margin-top: 20px; }
-.detail-desc h4 { margin: 0 0 8px; font-size: 15px; color: #2d2a26; }
-.detail-desc p { font-size: 14px; color: #6b655e; line-height: 1.8; white-space: pre-wrap; }
+.detail-desc h4 { margin: 0 0 8px; font-size: 15px; color: var(--text-primary); }
+.detail-desc p { font-size: 14px; color: var(--text-secondary); line-height: 1.8; white-space: pre-wrap; }
 </style>

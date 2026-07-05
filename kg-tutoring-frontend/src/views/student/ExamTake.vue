@@ -106,7 +106,7 @@ onMounted(loadPaper)
 <style scoped>
 .exam-take-page {
   min-height: 100vh;
-  background: #faf7f2;
+  background: var(--bg-root);
   padding: 24px 32px;
 }
 
@@ -127,12 +127,12 @@ onMounted(loadPaper)
   margin: 0;
   font-size: 22px;
   font-weight: 700;
-  color: #2d2a26;
+  color: var(--text-primary);
 }
 
 .page-meta {
   margin: 4px 0 0;
-  color: #6b655e;
+  color: var(--text-secondary);
   font-size: 13px;
 }
 
@@ -149,7 +149,7 @@ onMounted(loadPaper)
   display: flex;
   gap: 10px;
   align-items: flex-start;
-  color: #2d2a26;
+  color: var(--text-primary);
   font-weight: 600;
   line-height: 1.7;
 }
@@ -161,7 +161,7 @@ onMounted(loadPaper)
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: #ff7b3d;
+  background: var(--accent);
   color: #fff;
   font-size: 13px;
   flex: 0 0 auto;

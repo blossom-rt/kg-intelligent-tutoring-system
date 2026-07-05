@@ -159,7 +159,7 @@ onMounted(fetchTheme)
 <style scoped>
 .theme-detail-page {
   min-height: 100vh;
-  background: #faf7f2;
+  background: var(--bg-root);
   padding: 24px 32px;
 }
 
@@ -180,7 +180,7 @@ onMounted(fetchTheme)
   margin: 0;
   font-size: 22px;
   font-weight: 700;
-  color: #2d2a26;
+  color: var(--text-primary);
 }
 
 .info-card {
@@ -195,13 +195,13 @@ onMounted(fetchTheme)
 .desc-section h4 {
   margin: 0 0 8px;
   font-size: 15px;
-  color: #2d2a26;
+  color: var(--text-primary);
 }
 
 .desc-section p {
   margin: 0;
   font-size: 14px;
-  color: #6b655e;
+  color: var(--text-secondary);
   line-height: 1.8;
 }
 
@@ -211,7 +211,7 @@ onMounted(fetchTheme)
 
 .card-title {
   font-weight: 600;
-  color: #2d2a26;
+  color: var(--text-primary);
 }
 
 .node-list {
@@ -225,14 +225,14 @@ onMounted(fetchTheme)
   justify-content: space-between;
   align-items: center;
   padding: 14px 18px;
-  background: #f8f5f0;
+  background: var(--bg-input);
   border-radius: 10px;
   cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .node-item:hover {
-  background: #f3efe8;
+  background: var(--bg-hover);
   transform: translateX(4px);
 }
 
@@ -245,12 +245,12 @@ onMounted(fetchTheme)
 .node-name {
   font-size: 15px;
   font-weight: 600;
-  color: #2d2a26;
+  color: var(--text-primary);
 }
 
 .node-course {
   font-size: 12px;
-  color: #bbb6ad;
+  color: var(--text-muted);
 }
 
 .node-actions {

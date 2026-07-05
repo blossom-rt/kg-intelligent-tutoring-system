@@ -269,12 +269,12 @@ onMounted(() => {
 <style scoped>
 .path-list-page {
   min-height: 100vh;
-  background: #faf7f2;
+  background: var(--bg-root);
   
 }
 
 .path-name-cell {
   font-weight: 500;
-  color: #2d2a26;
+  color: var(--text-primary);
 }
 </style>

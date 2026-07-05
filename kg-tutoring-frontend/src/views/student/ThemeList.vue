@@ -90,7 +90,7 @@ onMounted(fetchThemes)
 <style scoped>
 .theme-list-page {
   min-height: 100vh;
-  background: #faf7f2;
+  background: var(--bg-root);
   
 }
 
@@ -123,12 +123,12 @@ onMounted(fetchThemes)
   margin: 0;
   font-size: 17px;
   font-weight: 600;
-  color: #2d2a26;
+  color: var(--text-primary);
 }
 
 .theme-desc {
   font-size: 14px;
-  color: #a09a92;
+  color: var(--text-muted);
   line-height: 1.7;
   margin: 0 0 16px;
 }
@@ -151,7 +151,7 @@ onMounted(fetchThemes)
 
 .theme-time {
   font-size: 13px;
-  color: #bbb6ad;
+  color: var(--text-muted);
   display: flex;
   align-items: center;
   gap: 4px;

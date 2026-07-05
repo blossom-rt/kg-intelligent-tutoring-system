@@ -54,6 +54,74 @@
   --el-table-header-bg-color: #fffdf9;
   --el-table-row-hover-bg-color: #faf7f2;
   --el-table-border-color: #e8e3db;
+
+  /* 语义色 & 阴影 & 噪点 */
+  --success: #67c23a;
+  --danger: #e74c3c;
+  --warning: #e6a23c;
+  --accent-soft: rgba(255, 123, 61, 0.08);
+  --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.06);
+  --grain-opacity: 0.025;
+  --bg-grad: linear-gradient(135deg, #f5f1ea, #f0ece4);
+  --danger-soft: rgba(239, 95, 95, 0.1);
+}
+
+/* ============================================
+   暗色模式 — 深暖底（暗而不冷）
+   ============================================ */
+[data-theme="dark"] {
+  --bg-root: #1f1b16;
+  --bg-surface: #2a2520;
+  --bg-input: #2f2a24;
+  --bg-hover: #352f28;
+
+  --text-primary: #ece4d8;
+  --text-secondary: #b3a99c;
+  --text-muted: #8a8074;
+
+  --border-subtle: #3d362e;
+
+  --accent: #ff8a52;
+  --accent-hover: #ffa066;
+  --accent-green: #4ba872;
+  --accent-gold: #d4a853;
+
+  --success: #5cb85c;
+  --danger: #ef5f5f;
+  --warning: #e6a23c;
+  --accent-soft: rgba(255, 138, 82, 0.14);
+  --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.4);
+  --grain-opacity: 0.04;
+  --bg-grad: linear-gradient(135deg, #2a2520, #1f1b16);
+  --danger-soft: rgba(239, 95, 95, 0.15);
+
+  /* Element Plus 暗色覆盖 */
+  --el-bg-color: #2a2520;
+  --el-bg-color-overlay: #2a2520;
+  --el-bg-color-page: #1f1b16;
+  --el-border-color: #3d362e;
+  --el-border-color-light: #3d362e;
+  --el-border-color-lighter: #352f28;
+  --el-text-color-primary: #ece4d8;
+  --el-text-color-regular: #b3a99c;
+  --el-text-color-secondary: #8a8074;
+  --el-text-color-placeholder: #6a6258;
+  --el-fill-color: #2f2a24;
+  --el-fill-color-blank: #2f2a24;
+  --el-fill-color-light: #352f28;
+  --el-color-primary: #ff8a52;
+  --el-color-primary-light-3: #ffa066;
+  --el-color-primary-light-5: #ffb58a;
+  --el-color-primary-dark-2: #e06830;
+  --el-input-bg-color: #2f2a24;
+  --el-input-border-color: #3d362e;
+  --el-input-hover-border-color: #ff8a52;
+  --el-input-focus-border-color: #ff8a52;
+  --el-table-header-bg-color: #2a2520;
+  --el-table-row-hover-bg-color: #352f28;
+  --el-table-border-color: #3d362e;
 }
 
 html, body {
@@ -148,6 +216,29 @@ html, body {
 .el-tag--primary { background: rgba(255, 123, 61, 0.1); border-color: rgba(255, 123, 61, 0.25); color: var(--accent); }
 .el-tag--success { background: rgba(61, 138, 94, 0.1); border-color: rgba(61, 138, 94, 0.25); color: var(--accent-green); }
 .el-tag--warning { background: rgba(184, 144, 48, 0.1); border-color: rgba(184, 144, 48, 0.25); color: var(--accent-gold); }
+
+/* ── 表单控件：默认跟随暖橙主题色 ── */
+:root {
+  --el-checkbox-checked-bg-color: var(--accent);
+  --el-checkbox-checked-border-color: var(--accent);
+  --el-checkbox-checked-text-color: #fff;
+  --el-checkbox-input-border-color-hover: var(--accent);
+  --el-switch-on-color: var(--accent);
+  --el-radio-checked-bg-color: var(--accent);
+  --el-radio-checked-border-color: var(--accent);
+  --el-radio-checked-text-color: var(--accent);
+  --el-radio-input-border-color-hover: var(--accent);
+  --el-datepicker-active-color: var(--accent);
+  --el-datepicker-hover-color: rgba(255, 123, 61, 0.12);
+}
+.el-checkbox__label,
+.el-radio__label { color: var(--text-secondary); }
+.el-select-dropdown__item.is-hovering { background: rgba(255, 123, 61, 0.08); }
+.el-select-dropdown__item.is-selected {
+  background: rgba(255, 123, 61, 0.08);
+  color: var(--accent);
+  font-weight: 600;
+}
 
 .el-form-item__label { color: var(--text-secondary) !important; }
 .el-empty__description p { color: var(--text-muted) !important; }

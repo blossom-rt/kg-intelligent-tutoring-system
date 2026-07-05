@@ -1,5 +1,5 @@
 <template>
-  <aside class="sidebar" :class="{ collapsed: isCollapsed }">
+  <aside class="sidebar" :class="[{ collapsed: isCollapsed }, 'theme-' + role]">
     <!-- 用户信息 + 折叠 -->
     <div class="user-area" @click="toggle" :title="isCollapsed ? '展开菜单' : '收起菜单'">
       <div class="user-avatar">{{ roleLabel.charAt(0) }}</div>
@@ -22,8 +22,12 @@
       </router-link>
     </nav>
 
-    <!-- 底部退出 -->
+    <!-- 底部：主题切换 + 退出 -->
     <div class="sidebar-footer">
+      <button class="nav-item" @click="toggleTheme" :title="isCollapsed ? (resolved === 'dark' ? '浅色模式' : '暗色模式') : ''">
+        <el-icon :size="20"><component :is="resolved === 'dark' ? Sunny : Moon" /></el-icon>
+        <span v-if="!isCollapsed" class="nav-label">{{ resolved === 'dark' ? '浅色模式' : '暗色模式' }}</span>
+      </button>
       <button class="nav-item logout" @click="logout" :title="isCollapsed ? '退出登录' : ''">
         <el-icon :size="20"><SwitchButton /></el-icon>
         <span v-if="!isCollapsed" class="nav-label">退出登录</span>
@@ -36,15 +40,18 @@
 import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useSidebar } from '../composables/useSidebar'
+import { useTheme } from '../composables/useTheme'
 import {
   Fold, SwitchButton,
   HomeFilled, Grid, Connection, MapLocation, EditPen, Tickets,
-  Notebook, DataAnalysis, School, Share, User, Lock, Bell, Files, Monitor
+  Notebook, DataAnalysis, School, Share, User, Lock, Bell, Files, Monitor,
+  Sunny, Moon
 } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const route = useRoute()
 const { isCollapsed, toggle } = useSidebar()
+const { resolved, toggle: toggleTheme } = useTheme()
 
 const role = computed(() => localStorage.getItem('role') || 'student')
 const roleLabel = computed(() => ({ student: '学生端', teacher: '教师端', admin: '管理端' }[role.value] || ''))
@@ -99,8 +106,8 @@ const logout = () => {
 .sidebar {
   position: fixed; left: 0; top: 0; bottom: 0;
   width: 200px;
-  background: #fffdf9;
-  border-right: 1px solid #e8e3db;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-subtle);
   display: flex; flex-direction: column;
   z-index: 100;
   transition: width 0.25s ease;
@@ -108,26 +115,31 @@ const logout = () => {
 }
 .sidebar.collapsed { width: 60px; }
 
+/* 角色主题色变量 — 学生橙 / 教师绿 / 管理员金 */
+.sidebar.theme-student { --sb-accent:var(--accent); --sb-accent-soft:rgba(255,123,61,.08); --sb-grad:linear-gradient(135deg,var(--accent),#e06830); }
+.sidebar.theme-teacher { --sb-accent:var(--accent-green); --sb-accent-soft:rgba(61,138,94,.08); --sb-grad:linear-gradient(135deg,#43b878,#2d8a4e); }
+.sidebar.theme-admin { --sb-accent:#b89030; --sb-accent-soft:rgba(184,144,48,.08); --sb-grad:linear-gradient(135deg,#d4a853,#b89030); }
+
 /* 用户区 — 点击折叠 */
 .user-area {
   padding: 20px 16px;
   display: flex; align-items: center; gap: 12px;
-  border-bottom: 1px solid #e8e3db;
+  border-bottom: 1px solid var(--border-subtle);
   cursor: pointer; user-select: none;
   transition: padding 0.25s ease;
 }
 .collapsed .user-area { padding: 20px 0; justify-content: center; }
 .user-avatar {
   width: 36px; height: 36px; border-radius: 10px;
-  background: linear-gradient(135deg, #ff7b3d, #e06830);
+  background: var(--sb-grad);
   color: #fff; display: flex; align-items: center; justify-content: center;
   font-weight: 700; font-size: 15px; flex-shrink: 0;
   transition: width 0.25s ease, height 0.25s ease;
 }
 .collapsed .user-avatar { width: 32px; height: 32px; font-size: 13px; }
-.user-role { font-size: 14px; font-weight: 600; color: #2d2a26; flex: 1; }
-.toggle-icon { color: #a09a92; flex-shrink: 0; transition: transform 0.25s ease; }
-.user-area:hover .toggle-icon { color: #ff7b3d; }
+.user-role { font-size: 14px; font-weight: 600; color: var(--text-primary); flex: 1; }
+.toggle-icon { color: var(--text-muted); flex-shrink: 0; transition: transform 0.25s ease; }
+.user-area:hover .toggle-icon { color: var(--sb-accent); }
 
 /* 菜单 */
 .nav-list {
@@ -138,23 +150,23 @@ const logout = () => {
 .nav-item {
   display: flex; align-items: center; gap: 12px;
   padding: 10px 12px; border-radius: 10px;
-  color: #6b655e; text-decoration: none;
+  color: var(--text-secondary); text-decoration: none;
   font-size: 14px; font-weight: 500;
   transition: all 0.2s ease;
   white-space: nowrap;
 }
-.nav-item:hover { background: #f3efe8; color: #2d2a26; }
-.nav-item.active { background: #fff3e8; color: #ff7b3d; }
+.nav-item:hover { background: var(--bg-hover); color: var(--text-primary); }
+.nav-item.active { background: var(--sb-accent-soft); color: var(--sb-accent); }
 .collapsed .nav-item { justify-content: center; padding: 10px 0; }
 .nav-label { flex: 1; }
 
 /* 底部 */
 .sidebar-footer {
-  padding: 8px; border-top: 1px solid #e8e3db;
+  padding: 8px; border-top: 1px solid var(--border-subtle);
 }
 .nav-item.logout {
   width: 100%; border: none; background: none; cursor: pointer;
-  color: #a09a92; font-size: 13px;
+  color: var(--text-muted); font-size: 13px;
 }
-.nav-item.logout:hover { color: #e74c3c; background: #fef0f0; }
+.nav-item.logout:hover { color: var(--danger); background: var(--danger-soft); }
 </style>
