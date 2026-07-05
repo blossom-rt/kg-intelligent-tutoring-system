@@ -1,5 +1,6 @@
 package com.cupk.controller;
 
+import com.cupk.aspect.OperLog;
 import com.cupk.common.BusinessException;
 import com.cupk.common.Result;
 import com.cupk.common.UserContext;
@@ -40,6 +41,7 @@ public class NoticeController {
     /**
      * 新增通知公告（仅管理员）
      */
+    @OperLog(module = "公告管理", operation = "新增公告")
     @PostMapping
     public Result<?> create(@RequestBody SysNotice notice) {
         checkAdmin();
@@ -52,6 +54,7 @@ public class NoticeController {
     /**
      * 修改通知公告（仅管理员）
      */
+    @OperLog(module = "公告管理", operation = "修改公告")
     @PutMapping("/{id}")
     public Result<?> update(@PathVariable Integer id, @RequestBody SysNotice notice) {
         checkAdmin();
@@ -63,6 +66,7 @@ public class NoticeController {
     /**
      * 删除通知公告（仅管理员）
      */
+    @OperLog(module = "公告管理", operation = "删除公告")
     @DeleteMapping("/{id}")
     public Result<?> delete(@PathVariable Integer id) {
         checkAdmin();

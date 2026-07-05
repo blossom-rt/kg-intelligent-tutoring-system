@@ -160,8 +160,12 @@ public class AdminController {
      */
     @GetMapping("/oper-logs")
     public Result<?> listOperLogs(
-            @RequestParam(required = false) String module) {
+            @RequestParam(required = false) String module,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate) {
         checkAdmin();
-        return Result.success(logService.listOperLog(module));
+        java.time.LocalDateTime start = startDate != null ? java.time.LocalDateTime.parse(startDate + "T00:00:00") : null;
+        java.time.LocalDateTime end = endDate != null ? java.time.LocalDateTime.parse(endDate + "T23:59:59") : null;
+        return Result.success(logService.listOperLog(module, start, end));
     }
 }

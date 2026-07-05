@@ -96,7 +96,7 @@ const sendCode = async () => {
   if (!form.email) { ElMessage.warning('请先填写邮箱'); return }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) { ElMessage.warning('邮箱格式不正确'); return }
   try {
-    await sendEmailCode(form.email, 'reset')
+    await sendEmailCode({ email: form.email, type: 'reset' })
     ElMessage.success('验证码已发送')
     codeCountdown.value = 60
     countdownTimer = setInterval(() => { if (--codeCountdown.value <= 0) clearInterval(countdownTimer) }, 1000)

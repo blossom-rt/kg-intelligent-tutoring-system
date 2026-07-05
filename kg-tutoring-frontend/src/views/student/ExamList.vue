@@ -4,7 +4,7 @@
 
     <el-table
       v-loading="loading"
-      :data="examList"
+      :data="paginatedExamList"
       style="width: 100%"
       stripe
       highlight-current-row
@@ -26,7 +26,7 @@
       </el-table-column>
       <el-table-column label="满分" width="100" align="center">
         <template #default="{ row }">
-          {{ row.totalScore || row.maxScore || 100 }}
+          {{ row.totalScore || 100 }}
         </template>
       </el-table-column>
       <el-table-column label="状态" width="100" align="center">
@@ -38,7 +38,7 @@
       </el-table-column>
       <el-table-column label="测评日期" width="180">
         <template #default="{ row }">
-          {{ formatTime(row.finishTime || row.createTime || row.createdAt) }}
+          {{ formatTime(row.finishTime || row.createTime) }}
         </template>
       </el-table-column>
       <el-table-column label="操作" width="140" align="center" fixed="right">
@@ -48,11 +48,19 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      v-model:current-page="pagination.page"
+      v-model:page-size="pagination.size"
+      :total="pagination.total"
+      layout="total, prev, pager, next, sizes"
+      :page-sizes="[5, 10, 20, 50]"
+      style="margin-top: 16px; justify-content: flex-end"
+    />
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import StudentHeader from '../../components/StudentHeader.vue'
@@ -61,6 +69,12 @@ import { getStudentExams } from '../../api/student'
 const router = useRouter()
 const loading = ref(false)
 const examList = ref([])
+
+const pagination = reactive({ page: 1, size: 10, total: 0 })
+const paginatedExamList = computed(() => {
+  const start = (pagination.page - 1) * pagination.size
+  return examList.value.slice(start, start + pagination.size)
+})
 
 const scoreClass = (score) => {
   if (score == null) return ''
@@ -87,6 +101,7 @@ const fetchExams = async () => {
   try {
     const res = await getStudentExams()
     examList.value = Array.isArray(res) ? res : (res.records || res.list || [])
+    pagination.total = examList.value.length
   } catch {
     ElMessage.error('加载测评列表失败')
   } finally {

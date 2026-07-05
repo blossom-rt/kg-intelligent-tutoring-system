@@ -1,5 +1,6 @@
 package com.cupk.controller;
 
+import com.cupk.aspect.OperLog;
 import com.cupk.common.BusinessException;
 import com.cupk.common.Result;
 import com.cupk.common.UserContext;
@@ -48,6 +49,7 @@ public class CourseController {
     /**
      * 新增课程（仅管理员）
      */
+    @OperLog(module = "课程管理", operation = "新增课程")
     @PostMapping
     public Result<?> create(@RequestBody Course course) {
         checkAdmin();
@@ -58,6 +60,7 @@ public class CourseController {
     /**
      * 修改课程（仅管理员）
      */
+    @OperLog(module = "课程管理", operation = "修改课程")
     @PutMapping("/{id}")
     public Result<?> update(@PathVariable Integer id, @RequestBody Course course) {
         checkAdmin();
@@ -69,6 +72,7 @@ public class CourseController {
     /**
      * 删除课程（仅管理员）
      */
+    @OperLog(module = "课程管理", operation = "删除课程")
     @DeleteMapping("/{id}")
     public Result<?> delete(@PathVariable Integer id) {
         checkAdmin();

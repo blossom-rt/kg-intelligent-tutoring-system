@@ -1,5 +1,6 @@
 package com.cupk.controller;
 
+import com.cupk.aspect.OperLog;
 import com.cupk.common.Result;
 import com.cupk.dto.*;
 import com.cupk.service.SysUserService;
@@ -17,6 +18,7 @@ public class AuthController {
     private final SysUserService sysUserService;
 
     /** 账号密码登录 */
+    @OperLog(module = "认证管理", operation = "用户登录")
     @PostMapping("/login")
     public Result<LoginVO> login(@RequestBody LoginDTO dto) {
         LoginVO vo = sysUserService.login(dto);

@@ -8,7 +8,7 @@
 
     <el-table
       v-loading="loading"
-      :data="pathList"
+      :data="paginatedPathList"
       style="width: 100%"
       stripe
     >
@@ -17,7 +17,7 @@
       </template>
       <el-table-column prop="pathName" label="路径名称" min-width="160">
         <template #default="{ row }">
-          <span class="path-name-cell">{{ row.pathName || row.name || '未命名路径' }}</span>
+          <span class="path-name-cell">{{ row.pathName || '未命名路径' }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="targetNodeId" label="目标知识点ID" min-width="140">
@@ -43,7 +43,7 @@
       </el-table-column>
       <el-table-column label="创建时间" width="170">
         <template #default="{ row }">
-          {{ formatTime(row.createTime || row.createdAt) }}
+          {{ formatTime(row.createTime) }}
         </template>
       </el-table-column>
       <el-table-column label="操作" width="180" fixed="right">
@@ -57,6 +57,15 @@
         </template>
       </el-table-column>
     </el-table>
+
+    <el-pagination
+      v-model:current-page="pagination.page"
+      v-model:page-size="pagination.size"
+      :total="pagination.total"
+      layout="total, prev, pager, next, sizes"
+      :page-sizes="[5, 10, 20, 50]"
+      style="margin-top: 16px; justify-content: flex-end"
+    />
 
     <!-- 生成新路径对话框 -->
     <el-dialog
@@ -111,7 +120,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import StudentHeader from '../../components/StudentHeader.vue'
@@ -121,6 +130,13 @@ import { getCourseList, getNodeList } from '../../api/knowledge'
 const router = useRouter()
 const loading = ref(false)
 const pathList = ref([])
+
+const pagination = reactive({ page: 1, size: 10, total: 0 })
+const paginatedPathList = computed(() => {
+  const start = (pagination.page - 1) * pagination.size
+  return pathList.value.slice(start, start + pagination.size)
+})
+
 const courses = ref([])
 const courseNodes = ref([])
 
@@ -227,6 +243,7 @@ const fetchPaths = async () => {
   try {
     const res = await getPathList()
     pathList.value = Array.isArray(res) ? res : (res.records || [])
+    pagination.total = pathList.value.length
   } catch {
     ElMessage.error('加载学习路径失败')
   } finally {

@@ -17,9 +17,16 @@
     <!-- 当前错题 -->
     <el-table v-if="activeTab === 'active'"
       v-loading="loading"
+
       :data="activeList"
       style="width: 100%" stripe
       empty-text="暂无错题，继续保持！"
+
+      :data="paginatedWrongList"
+      style="width: 100%"
+      stripe
+      empty-text="暂无错题记录"
+
     >
       <el-table-column label="题目内容" min-width="220">
         <template #default="{ row }">
@@ -83,6 +90,15 @@
       </el-table-column>
     </el-table>
 
+    <el-pagination
+      v-model:current-page="pagination.page"
+      v-model:page-size="pagination.size"
+      :total="pagination.total"
+      layout="total, prev, pager, next, sizes"
+      :page-sizes="[5, 10, 20, 50]"
+      style="margin-top: 16px; justify-content: flex-end"
+    />
+
     <!-- AI 讲解弹窗 -->
     <el-dialog v-model="aiDialogVisible" title="AI 错题讲解" width="600px" destroy-on-close>
       <div v-loading="aiLoading">
@@ -97,7 +113,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import StudentHeader from '../../components/StudentHeader.vue'
@@ -113,6 +129,13 @@ const tabs = [
   { key: 'active', label: '当前错题' },
   { key: 'reviewed', label: '曾经错题' },
 ]
+
+const pagination = reactive({ page: 1, size: 10, total: 0 })
+const paginatedWrongList = computed(() => {
+  const start = (pagination.page - 1) * pagination.size
+  const list = activeTab.value === 'active' ? activeList.value : reviewedList.value
+  return list.slice(start, start + pagination.size)
+})
 
 const aiDialogVisible = ref(false)
 const aiLoading = ref(false)
@@ -176,6 +199,7 @@ const fetchWrongList = async () => {
   try {
     const res = await getWrongQuestions()
     wrongList.value = Array.isArray(res) ? res : (res.records || res.list || [])
+    pagination.total = wrongList.value.length
   } catch {
     ElMessage.error('加载错题本失败')
   } finally {

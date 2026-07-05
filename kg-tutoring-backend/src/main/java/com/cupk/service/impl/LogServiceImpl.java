@@ -9,6 +9,7 @@ import com.cupk.service.LogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -22,10 +23,16 @@ public class LogServiceImpl implements LogService {
     private final AiCallLogMapper aiCallLogMapper;
 
     @Override
-    public List<SysOperLog> listOperLog(String module) {
+    public List<SysOperLog> listOperLog(String module, LocalDateTime startDate, LocalDateTime endDate) {
         LambdaQueryWrapper<SysOperLog> wrapper = new LambdaQueryWrapper<>();
         if (module != null && !module.isEmpty()) {
             wrapper.eq(SysOperLog::getModule, module);
+        }
+        if (startDate != null) {
+            wrapper.ge(SysOperLog::getCreateTime, startDate);
+        }
+        if (endDate != null) {
+            wrapper.le(SysOperLog::getCreateTime, endDate);
         }
         wrapper.orderByDesc(SysOperLog::getCreateTime);
         return sysOperLogMapper.selectList(wrapper);

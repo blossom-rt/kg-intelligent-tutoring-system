@@ -6,7 +6,7 @@
       <div class="table-toolbar">
         <el-button type="primary" @click="openAddDialog">新增课程</el-button>
       </div>
-      <el-table :data="courseList" v-loading="loading" border stripe>
+      <el-table :data="paginatedCourseList" v-loading="loading" border stripe>
         <el-table-column prop="courseName" label="课程名称" min-width="180" />
         <el-table-column prop="subject" label="所属学科" min-width="140" />
         <el-table-column prop="teacherId" label="教师ID" min-width="120" />
@@ -30,8 +30,6 @@
         v-model:page-size="pagination.pageSize"
         :total="pagination.total"
         layout="total, prev, pager, next"
-        @current-change="fetchList"
-        @size-change="fetchList"
         class="pagination"
       />
     </el-card>
@@ -78,6 +76,10 @@ const isEdit = ref(false)
 const editingId = ref(null)
 const formRef = ref(null)
 const courseList = ref([])
+const paginatedCourseList = computed(() => {
+  const start = (pagination.page - 1) * pagination.pageSize
+  return courseList.value.slice(start, start + pagination.pageSize)
+})
 
 const dialogTitle = computed(() => isEdit.value ? '编辑课程' : '新增课程')
 

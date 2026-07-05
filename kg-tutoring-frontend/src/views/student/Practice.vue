@@ -64,7 +64,7 @@
         </template>
 
         <div class="question-body">
-          <p class="question-text">{{ currentQuestion.content || currentQuestion.question || currentQuestion.title }}</p>
+          <p class="question-text">{{ currentQuestion.content }}</p>
 
           <el-radio-group
             v-model="selectedAnswer"
@@ -92,7 +92,7 @@
               show-icon
             >
               <template v-if="!isCorrect">
-                <p class="correct-answer">正确答案：{{ currentQuestion.answer || currentQuestion.correctAnswer }}</p>
+                <p class="correct-answer">正确答案：{{ currentQuestion.answer }}</p>
                 <p v-if="explainText" class="explanation">{{ explainText }}</p>
               </template>
             </el-alert>
@@ -137,7 +137,7 @@ const currentQuestion = computed(() => {
   return questions.value[currentIndex.value] || {}
 })
 const explainText = computed(() => {
-  return currentQuestion.value.explanation || currentQuestion.value.analysis || ''
+  return currentQuestion.value.analysis || ''
 })
 
 const parsedOptions = computed(() => {
@@ -191,7 +191,7 @@ const normalizeAnswer = (ans) => {
 const optionClass = (oi) => {
   if (!answered.value) return {}
   const key = parsedOptions.value[oi]?.key
-  const correctKey = normalizeAnswer(currentQuestion.value.answer || currentQuestion.value.correctAnswer)
+  const correctKey = normalizeAnswer(currentQuestion.value.answer)
   return {
     'option-correct': String(key) === correctKey,
     'option-wrong': !isCorrect.value && key === selectedAnswer.value
@@ -201,7 +201,7 @@ const optionClass = (oi) => {
 const submitAnswer = () => {
   if (!selectedAnswer.value) return
   answered.value = true
-  isCorrect.value = String(selectedAnswer.value) === String(currentQuestion.value.answer || currentQuestion.value.correctAnswer || '')
+  isCorrect.value = String(selectedAnswer.value) === String(currentQuestion.value.answer || '')
   if (isCorrect.value) {
     correctCount.value++
     pet.celebrate()

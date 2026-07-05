@@ -1,5 +1,6 @@
 package com.cupk.controller;
 
+import com.cupk.aspect.OperLog;
 import com.cupk.common.BusinessException;
 import com.cupk.common.Result;
 import com.cupk.common.UserContext;
@@ -45,6 +46,7 @@ public class QuestionController {
     /**
      * 新增题目（仅教师）
      */
+    @OperLog(module = "题库管理", operation = "新增题目")
     @PostMapping
     public Result<?> create(@RequestBody Question question) {
         checkTeacher();
@@ -55,6 +57,7 @@ public class QuestionController {
     /**
      * 修改题目（仅教师）
      */
+    @OperLog(module = "题库管理", operation = "修改题目")
     @PutMapping("/{id}")
     public Result<?> update(@PathVariable Integer id, @RequestBody Question question) {
         checkTeacher();
@@ -66,6 +69,7 @@ public class QuestionController {
     /**
      * 删除题目（仅教师）
      */
+    @OperLog(module = "题库管理", operation = "删除题目")
     @DeleteMapping("/{id}")
     public Result<?> delete(@PathVariable Integer id) {
         checkTeacher();

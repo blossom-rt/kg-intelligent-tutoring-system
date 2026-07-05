@@ -3,7 +3,7 @@
     <StudentHeader title="AI 调用日志" />
 
     <el-card class="table-card">
-      <el-table :data="logList" v-loading="loading" border stripe>
+      <el-table :data="paginatedLogList" v-loading="loading" border stripe>
         <el-table-column type="expand">
           <template #default="{ row }">
             <div class="expand-content">
@@ -39,8 +39,6 @@
         v-model:page-size="pagination.pageSize"
         :total="pagination.total"
         layout="total, prev, pager, next"
-        @current-change="fetchList"
-        @size-change="fetchList"
         class="pagination"
       />
     </el-card>
@@ -48,11 +46,15 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 import { getAiLogs } from '../../api/admin'
 
 const loading = ref(false)
 const logList = ref([])
+const paginatedLogList = computed(() => {
+  const start = (pagination.page - 1) * pagination.pageSize
+  return logList.value.slice(start, start + pagination.pageSize)
+})
 
 const pagination = reactive({
   page: 1,

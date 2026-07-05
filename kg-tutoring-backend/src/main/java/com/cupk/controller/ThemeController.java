@@ -1,5 +1,6 @@
 package com.cupk.controller;
 
+import com.cupk.aspect.OperLog;
 import com.cupk.common.BusinessException;
 import com.cupk.common.Result;
 import com.cupk.common.UserContext;
@@ -50,6 +51,7 @@ public class ThemeController {
     /**
      * 新增主题（仅教师）
      */
+    @OperLog(module = "主题管理", operation = "新增主题")
     @PostMapping
     public Result<?> create(@RequestBody CrossSubjectTheme theme) {
         checkTeacher();
@@ -60,6 +62,7 @@ public class ThemeController {
     /**
      * 修改主题（仅教师）
      */
+    @OperLog(module = "主题管理", operation = "修改主题")
     @PutMapping("/{id}")
     public Result<?> update(@PathVariable Integer id, @RequestBody CrossSubjectTheme theme) {
         checkTeacher();
@@ -71,6 +74,7 @@ public class ThemeController {
     /**
      * 删除主题（仅教师）
      */
+    @OperLog(module = "主题管理", operation = "删除主题")
     @DeleteMapping("/{id}")
     public Result<?> delete(@PathVariable Integer id) {
         checkTeacher();
@@ -81,6 +85,7 @@ public class ThemeController {
     /**
      * 切换主题的发布/取消发布状态（仅教师）
      */
+    @OperLog(module = "主题管理", operation = "发布/下架主题")
     @PutMapping("/{id}/status")
     public Result<?> toggleStatus(@PathVariable Integer id) {
         checkTeacher();
