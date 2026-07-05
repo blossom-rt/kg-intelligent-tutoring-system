@@ -3,7 +3,7 @@ import { ElMessage } from 'element-plus'
 
 const service = axios.create({
   baseURL: '/api/kg',
-  timeout: 10000
+  timeout: 60000
 })
 
 // 请求拦截器，自动带上 token

@@ -245,7 +245,7 @@ const nextQuestion = async () => {
 
     // 正确率 >= 60% 时自动跳转，不展示结果页
     const correctRate = submitRes?.correctRate ?? scorePercent.value
-    if (correctRate >= 60) {
+    if (correctRate >= 80) {
       ElMessage.success(submitRes?.message || '练习完成，继续加油！')
       goBack()
       return

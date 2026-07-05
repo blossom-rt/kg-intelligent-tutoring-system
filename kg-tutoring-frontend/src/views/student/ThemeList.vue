@@ -75,7 +75,7 @@ const goDetail = (theme) => {
 const fetchThemes = async () => {
   loading.value = true
   try {
-    const res = await request.get('/themes')
+    const res = await request.get('/themes', { params: { status: 1 } })
     themes.value = Array.isArray(res) ? res : (res.records || res.list || [])
   } catch {
     ElMessage.error('加载跨学科主题失败')

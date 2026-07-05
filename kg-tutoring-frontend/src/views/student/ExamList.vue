@@ -12,9 +12,9 @@
       <template #empty>
         <el-empty description="暂无测评记录" :image-size="60" />
       </template>
-      <el-table-column prop="courseId" label="测评" min-width="180">
+      <el-table-column prop="examName" label="测评名称" min-width="180">
         <template #default="{ row }">
-          <span class="exam-name">课程{{ row.courseId || '-' }}测评</span>
+          <span class="exam-name">{{ row.examName || '课程' + (row.courseId || '-') + '测评' }}</span>
         </template>
       </el-table-column>
       <el-table-column label="成绩" width="120" align="center">

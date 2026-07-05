@@ -72,6 +72,7 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
+import StudentHeader from '../../components/StudentHeader.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { getCourseList, createCourse, updateCourse, deleteCourse } from '../../api/knowledge'
 

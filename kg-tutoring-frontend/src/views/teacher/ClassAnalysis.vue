@@ -101,6 +101,7 @@
 
 <script setup>
 import { ref, reactive, onMounted, nextTick, watch } from 'vue'
+import StudentHeader from '../../components/StudentHeader.vue'
 import { ElMessage } from 'element-plus'
 import * as echarts from 'echarts'
 import { getClassAnalysis } from '../../api/teacher'
@@ -264,8 +265,10 @@ const loadData = async () => {
       stats.avgMastery = res.avgMastery || 0
       stats.avgCorrectRate = res.avgCorrectRate || 0
       stats.activeStudents = res.activeStudents || 0
-      tableData.value = Array.isArray(res) ? res : (res.studentList || res.records || res.data || [])
-      pagination.total = res.studentTotal || res.total || 0
+      const allStudents = Array.isArray(res) ? res : (res.studentList || res.records || res.data || [])
+      pagination.total = allStudents.length
+      const start = (pagination.page - 1) * pagination.size
+      tableData.value = allStudents.slice(start, start + pagination.size)
       weakNodes.value = (res.weakNodes || []).slice(0, 5)
 
       // 图表数据

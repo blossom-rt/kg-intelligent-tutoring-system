@@ -156,8 +156,8 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { DataAnalysis } from '@element-plus/icons-vue'
 import StudentHeader from '../../components/StudentHeader.vue'
+import request from '../../utils/request'
 import { getStudentPaths } from '../../api/teacher'
-import { getUserList } from '../../api/admin'
 
 const loading = ref(false)
 const detailLoading = ref(false)
@@ -192,12 +192,12 @@ const formatTime = (time) => {
 const loadStudents = async () => {
   try {
     // 获取所有学生列表（教师端可以看到学生）
-    const res = await getUserList({ roleId: 1 }) // roleId=1 为学生角色
+    const res = await request.get('/teacher/analysis/students')
     studentList.value = Array.isArray(res) ? res : (res.records || res.data || [])
   } catch {
     // 如果带 roleId 过滤不支持，尝试获取全部用户再过滤
     try {
-      const res = await getUserList()
+      const res = await request.get('/teacher/analysis/students')
       const all = Array.isArray(res) ? res : (res.records || res.data || [])
       studentList.value = all.filter(u => u.roleId === 1 || u.role?.id === 1)
     } catch {
@@ -217,11 +217,12 @@ const loadStudentPaths = async () => {
   try {
     const res = await getStudentPaths(selectedStudentId.value)
     if (res) {
+      const data = res.data || res
       studentInfo.value = {
-        studentId: res.studentId,
-        studentName: res.studentName
+        studentId: data.studentId || res.studentId,
+        studentName: data.studentName || res.studentName
       }
-      pathList.value = Array.isArray(res.paths) ? res.paths : []
+      pathList.value = Array.isArray(data.paths || res.paths) ? (data.paths || res.paths) : []
     }
   } catch {
     ElMessage.error('查询学生学习路径失败')

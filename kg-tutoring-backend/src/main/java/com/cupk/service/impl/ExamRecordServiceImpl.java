@@ -40,6 +40,7 @@ public class ExamRecordServiceImpl implements ExamRecordService {
         // 计算得分
         int totalScore = 0;
         int userScore = 0;
+        StringBuilder wrongDetails = new StringBuilder();
 
         for (ExamSubmitDTO.AnswerItem item : answers) {
             Question question = questionMapper.selectById(item.getQuestionId());
@@ -48,6 +49,13 @@ public class ExamRecordServiceImpl implements ExamRecordService {
                 if (question.getAnswer() != null && question.getAnswer().equals(item.getUserAnswer())) {
                     userScore++;
                 } else {
+                    // 记录错题详情供 AI 分析
+                    wrongDetails.append("- 题目：").append(question.getContent()).append("\n")
+                            .append("  正确答案：").append(question.getAnswer()).append("\n")
+                            .append("  你的答案：").append(item.getUserAnswer()).append("\n");
+                    if (question.getAnalysis() != null) {
+                        wrongDetails.append("  解析：").append(question.getAnalysis()).append("\n");
+                    }
                     // 保存错题
                     WrongQuestion existing = wrongQuestionMapper.selectOne(
                             new LambdaQueryWrapper<WrongQuestion>()
@@ -85,9 +93,14 @@ public class ExamRecordServiceImpl implements ExamRecordService {
                 : BigDecimal.ZERO;
         record.setUserScore(score);
         try {
+            String wrongDetail = wrongDetails.length() > 0
+                    ? "\n\n【错题详情】\n" + wrongDetails.toString().substring(0, Math.min(wrongDetails.length(), 2000))
+                    : "\n\n本次答题全部正确，无错题。";
             String prompt = "请为以下测评成绩生成一份诊断报告，包含成绩分析、薄弱环节诊断和后续学习建议。\n\n"
                     + "得分：" + userScore + " / " + totalScore
-                    + "（" + (totalScore > 0 ? String.format("%.1f", userScore * 100.0 / totalScore) : "0") + "%）";
+                    + "（" + (totalScore > 0 ? String.format("%.1f", userScore * 100.0 / totalScore) : "0") + "%）"
+                    + "\n共 " + totalScore + " 题，答对 " + userScore + " 题，答错 " + (totalScore - userScore) + " 题。"
+                    + wrongDetail;
             String aiReport = deepSeekService.generate(
                     "你是一个经验丰富的学业诊断分析师，善于根据测评成绩为学生提供个性化的学习建议。",
                     prompt);
