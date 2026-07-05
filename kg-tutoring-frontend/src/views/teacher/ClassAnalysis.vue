@@ -42,14 +42,14 @@
         <div ref="pieChartRef" class="chart-container"></div>
       </el-card>
       <el-card class="chart-card">
-        <template #header><span class="panel-title">知识点平均正确率 TOP15</span></template>
+        <template #header><span class="panel-title">知识点平均正确率 TOP8</span></template>
         <div ref="barChartRef" class="chart-container"></div>
       </el-card>
     </div>
 
     <!-- 薄弱知识点排行 -->
     <el-card v-if="weakRank.length" class="section-card">
-      <template #header><span class="panel-title">薄弱知识点排行 TOP10</span></template>
+      <template #header><span class="panel-title">薄弱知识点排行 TOP8</span></template>
       <div class="weak-list">
         <div v-for="(item, idx) in weakRank" :key="idx" class="weak-item">
           <span class="weak-rank" :class="'rank-' + Math.min(idx + 1, 5)" style="width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:12px;">{{ idx + 1 }}</span>
@@ -65,7 +65,8 @@
       <el-card class="panel-main">
         <template #header><span class="panel-title">学生学情明细</span></template>
         <el-table :data="paginatedTableData" v-loading="loading" stripe border>
-          <el-table-column prop="userId" label="学生ID" min-width="120" />
+          <el-table-column prop="userId" label="学生ID" min-width="80" />
+          <el-table-column prop="studentName" label="学生姓名" min-width="100" />
           <el-table-column prop="masteryLevel" label="掌握度" width="130" align="center" />
           <el-table-column label="正确率" width="100" align="center">
             <template #default="{ row }">
@@ -89,25 +90,23 @@
         />
       </el-card>
 
-      <!-- 薄弱知识点 -->
-      <el-card class="panel-side">
-        <template #header><span class="panel-title">薄弱知识点 TOP5</span></template>
-        <div v-if="weakNodes.length" class="weak-list">
-          <div v-for="(item, idx) in weakNodes" :key="idx" class="weak-item">
-            <div class="weak-rank" :class="'rank-' + (idx + 1)">{{ idx + 1 }}</div>
-            <div class="weak-info">
-              <div class="weak-name">{{ item.nodeName }}</div>
-              <el-progress
-                :percentage="item.masteryRate || 0"
-                :stroke-width="6"
-                :color="weakColor(item.masteryRate || 0)"
-              />
-            </div>
-          </div>
-        </div>
-        <el-empty v-else description="暂无数据" :image-size="60" />
-      </el-card>
     </div>
+
+    <el-dialog v-model="detailDialog" :title="'学生详情 - ' + (studentDetail?.studentName || '')" width="600px">
+      <template v-if="studentDetail">
+        <el-descriptions :column="2" border size="small">
+          <el-descriptions-item label="学生ID">{{ studentDetail.userId }}</el-descriptions-item>
+          <el-descriptions-item label="姓名">{{ studentDetail.studentName }}</el-descriptions-item>
+          <el-descriptions-item label="掌握度">{{ studentDetail.masteryLevel || 0 }}</el-descriptions-item>
+          <el-descriptions-item label="正确率">{{ studentDetail.correctRate || 0 }}%</el-descriptions-item>
+          <el-descriptions-item label="学习时长">{{ studentDetail.studyMinutes || 0 }} 分钟</el-descriptions-item>
+          <el-descriptions-item label="趋势">
+            <el-button type="primary" size="small" :loading="trendLoading" @click="loadTrend(studentDetail.userId)">加载趋势图</el-button>
+          </el-descriptions-item>
+        </el-descriptions>
+        <div v-if="trendVisible" ref="trendChartRef" style="width:100%;height:250px;margin-top:16px;"></div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -116,7 +115,7 @@ import { ref, reactive, onMounted, nextTick, watch, computed } from 'vue'
 import StudentHeader from '../../components/StudentHeader.vue'
 import { ElMessage } from 'element-plus'
 import * as echarts from 'echarts'
-import { getClassAnalysis } from '../../api/teacher'
+import { getClassAnalysis, getStudentTrend } from '../../api/teacher'
 import { getCourseList } from '../../api/knowledge'
 
 const loading = ref(false)
@@ -213,7 +212,7 @@ const renderBarChart = (rates) => {
   if (!barChartInstance) {
     barChartInstance = echarts.init(barChartRef.value)
   }
-  const list = (rates || []).slice(0, 15)
+  const list = (rates || []).slice(0, 8)
   const names = list.map(r => r.nodeName || '未知')
   const values = list.map(r => r.correctRate || 0)
 
@@ -313,8 +312,39 @@ const loadData = async () => {
   }
 }
 
+const studentDetail = ref(null)
+const detailDialog = ref(false)
+const trendLoading = ref(false)
+const trendVisible = ref(false)
+const trendChartRef = ref(null)
+
+const loadTrend = async (userId) => {
+  trendLoading.value = true
+  trendVisible.value = true
+  try {
+    const res = await getStudentTrend(userId)
+    await nextTick()
+    if (!trendChartRef.value) return
+    const chart = echarts.init(trendChartRef.value)
+    chart.setOption({
+      tooltip: { trigger: 'axis' },
+      grid: { left: '5%', right: '5%', bottom: '15%', top: '10%', containLabel: true },
+      xAxis: { type: 'category', data: (res || []).map(d => d.date.slice(5)), axisLabel: { fontSize: 11 } },
+      yAxis: { type: 'value', minInterval: 1, name: '学习记录数' },
+      series: [{
+        type: 'line', smooth: true, data: (res || []).map(d => d.studyCount || 0),
+        areaStyle: { color: 'rgba(64,158,255,0.15)' },
+        lineStyle: { color: '#409eff', width: 2 },
+        itemStyle: { color: '#409eff' }
+      }]
+    })
+  } catch { /* ignore */ }
+  finally { trendLoading.value = false }
+}
+
 const viewDetail = (row) => {
-  ElMessage.info(`查看学生「${row.studentName}」的详细分析（功能待扩展）`)
+  studentDetail.value = row
+  detailDialog.value = true
 }
 
 // 窗口大小变化时自适应

@@ -5,9 +5,11 @@ import com.cupk.common.BusinessException;
 import com.cupk.common.Result;
 import com.cupk.common.UserContext;
 import com.cupk.mapper.PathDetailMapper;
+import com.cupk.mapper.StudyRecordMapper;
 import com.cupk.mapper.SysUserMapper;
 import com.cupk.pojo.PathDetail;
 import com.cupk.pojo.StudyPath;
+import com.cupk.pojo.StudyRecord;
 import com.cupk.pojo.SysUser;
 import com.cupk.service.AnalysisService;
 import com.cupk.service.StudyPathService;
@@ -27,6 +29,7 @@ public class TeacherAnalysisController {
     private final AnalysisService analysisService;
     private final StudyPathService studyPathService;
     private final PathDetailMapper pathDetailMapper;
+    private final StudyRecordMapper studyRecordMapper;
     private final SysUserMapper sysUserMapper;
 
     /**
@@ -120,5 +123,32 @@ public class TeacherAnalysisController {
         response.put("paths", result);
 
         return Result.success(response);
+    }
+
+    /**
+     * 获取指定学生的个人学习趋势（近7天每日学习记录数）
+     */
+    @GetMapping("/student-trend/{userId}")
+    public Result<List<Map<String, Object>>> studentTrend(@PathVariable Integer userId) {
+        checkTeacher();
+        List<StudyRecord> records = studyRecordMapper.selectList(
+                new LambdaQueryWrapper<StudyRecord>()
+                        .eq(StudyRecord::getUserId, userId));
+        List<Map<String, Object>> trends = new ArrayList<>();
+        for (int i = 6; i >= 0; i--) {
+            java.time.LocalDate day = java.time.LocalDate.now().minusDays(i);
+            java.time.LocalDateTime dayStart = day.atStartOfDay();
+            java.time.LocalDateTime dayEnd = day.atTime(23, 59, 59);
+            long count = records.stream()
+                    .filter(r -> r.getUpdateTime() != null
+                            && !r.getUpdateTime().isBefore(dayStart)
+                            && !r.getUpdateTime().isAfter(dayEnd))
+                    .count();
+            Map<String, Object> d = new LinkedHashMap<>();
+            d.put("date", day.toString());
+            d.put("studyCount", count);
+            trends.add(d);
+        }
+        return Result.success(trends);
     }
 }
