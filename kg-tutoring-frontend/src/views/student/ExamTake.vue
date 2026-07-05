@@ -86,6 +86,7 @@ const handleSubmit = async () => {
     await submitExam({
       examId: paper.value.id,
       courseId: paper.value.courseId,
+      issuedAt: paper.value.issuedAt,
       answers: questions.value.map(q => ({
         questionId: q.id,
         answer: answers[q.id]

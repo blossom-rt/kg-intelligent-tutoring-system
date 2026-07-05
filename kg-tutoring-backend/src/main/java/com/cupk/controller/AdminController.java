@@ -4,6 +4,8 @@ import com.cupk.aspect.OperLog;
 import com.cupk.common.BusinessException;
 import com.cupk.common.Result;
 import com.cupk.common.UserContext;
+import com.cupk.mapper.SysUserMapper;
+import com.cupk.pojo.SysOperLog;
 import com.cupk.pojo.SysRole;
 import com.cupk.pojo.SysUser;
 import com.cupk.service.LogService;
@@ -12,8 +14,7 @@ import com.cupk.service.SysUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 管理员控制器 —— 角色管理、用户管理、日志查询（管理员操作）
@@ -26,6 +27,7 @@ public class AdminController {
     private final SysRoleService sysRoleService;
     private final SysUserService sysUserService;
     private final LogService logService;
+    private final SysUserMapper sysUserMapper;
 
     /**
      * 检查当前用户是否为管理员，否则抛出无权限异常
@@ -150,7 +152,27 @@ public class AdminController {
     @GetMapping("/ai-logs")
     public Result<?> listAiLogs() {
         checkAdmin();
-        return Result.success(logService.listAiLog(null));
+        List<com.cupk.pojo.AiCallLog> logs = logService.listAiLog(null);
+        List<Map<String, Object>> enriched = new ArrayList<>();
+        for (com.cupk.pojo.AiCallLog log : logs) {
+            Map<String, Object> item = new LinkedHashMap<>();
+            item.put("id", log.getId());
+            item.put("userId", log.getUserId());
+            if (log.getUserId() != null) {
+                SysUser u = sysUserMapper.selectById(log.getUserId());
+                item.put("userName", u != null ? u.getRealName() : ("用户" + log.getUserId()));
+            } else {
+                item.put("userName", "-");
+            }
+            item.put("scene", log.getScene());
+            item.put("prompt", log.getPrompt());
+            item.put("result", log.getResult());
+            item.put("callDuration", log.getCallDuration());
+            item.put("status", log.getStatus());
+            item.put("createTime", log.getCreateTime());
+            enriched.add(item);
+        }
+        return Result.success(enriched);
     }
 
     /**
@@ -166,6 +188,25 @@ public class AdminController {
         checkAdmin();
         java.time.LocalDateTime start = startDate != null ? java.time.LocalDateTime.parse(startDate + "T00:00:00") : null;
         java.time.LocalDateTime end = endDate != null ? java.time.LocalDateTime.parse(endDate + "T23:59:59") : null;
-        return Result.success(logService.listOperLog(module, start, end));
+        List<SysOperLog> logs = logService.listOperLog(module, start, end);
+        // 补充操作人姓名
+        List<Map<String, Object>> enriched = new ArrayList<>();
+        for (SysOperLog log : logs) {
+            Map<String, Object> item = new LinkedHashMap<>();
+            item.put("id", log.getId());
+            item.put("userId", log.getUserId());
+            if (log.getUserId() != null) {
+                SysUser u = sysUserMapper.selectById(log.getUserId());
+                item.put("userName", u != null ? u.getRealName() : ("用户" + log.getUserId()));
+            } else {
+                item.put("userName", "-");
+            }
+            item.put("module", log.getModule());
+            item.put("operation", log.getOperation());
+            item.put("ip", log.getIp());
+            item.put("createTime", log.getCreateTime());
+            enriched.add(item);
+        }
+        return Result.success(enriched);
     }
 }

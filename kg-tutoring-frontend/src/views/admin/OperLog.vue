@@ -38,7 +38,7 @@
     <!-- 表格 -->
     <el-card class="table-card">
       <el-table :data="paginatedLogList" v-loading="loading" border stripe>
-        <el-table-column prop="userId" label="操作人ID" min-width="120" />
+        <el-table-column prop="userName" label="操作人" min-width="100" /><el-table-column prop="userId" label="ID" min-width="60" />
         <el-table-column prop="module" label="模块" min-width="120" />
         <el-table-column prop="operation" label="操作内容" min-width="280" show-overflow-tooltip />
         <el-table-column prop="ip" label="IP" min-width="140" />
