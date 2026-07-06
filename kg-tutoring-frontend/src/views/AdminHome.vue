@@ -12,7 +12,6 @@
       </div>
       <div class="top-actions">
         <ThemeToggle />
-        <el-button class="logout-btn" @click="logout">退出登录</el-button>
       </div>
     </header>
 
@@ -108,11 +107,6 @@ const showNotice = (n) => {
   noticeDialog.value = true
 }
 
-const logout = () => {
-  localStorage.clear()
-  router.push('/login')
-}
-
 /**
  * 从 API 响应中安全提取数组
  */
@@ -184,12 +178,6 @@ onMounted(async () => {
 .user-info p { margin: 2px 0 0; font-size: 13px; color: var(--text-secondary); }
 
 .top-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-.logout-btn {
-  flex-shrink: 0; font-weight: 600; letter-spacing: 1px;
-  color: var(--accent-gold) !important;
-  border-color: var(--accent-gold) !important;
-  background: transparent !important;
-}
 .logout-btn:hover {
   background: var(--accent-gold) !important;
   color: #fff !important;

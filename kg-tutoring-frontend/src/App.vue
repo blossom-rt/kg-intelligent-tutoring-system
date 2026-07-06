@@ -23,7 +23,7 @@ const { isCollapsed } = useSidebar()
 const petRef = ref(null)
 
 const showSidebar = computed(() => {
-  return route.path.startsWith('/student') || route.path.startsWith('/teacher')
+  return route.path.startsWith('/student') || route.path.startsWith('/teacher') || route.path.startsWith('/admin')
 })
 const showPet = computed(() => route.path.startsWith('/student'))
 const contentMargin = computed(() => showSidebar.value ? (isCollapsed.value ? '60px' : '200px') : '0')
