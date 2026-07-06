@@ -31,6 +31,14 @@ public class KnowledgeEdgeServiceImpl implements KnowledgeEdgeService {
     }
 
     @Override
+    public boolean existsByFromNodeAndToNode(Integer fromNodeId, Integer toNodeId) {
+        return knowledgeEdgeMapper.selectCount(
+                new LambdaQueryWrapper<KnowledgeEdge>()
+                        .eq(KnowledgeEdge::getFromNodeId, fromNodeId)
+                        .eq(KnowledgeEdge::getToNodeId, toNodeId)) > 0;
+    }
+
+    @Override
     public void save(KnowledgeEdge edge) {
         knowledgeEdgeMapper.insert(edge);
     }

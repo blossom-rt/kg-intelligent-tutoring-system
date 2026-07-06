@@ -40,7 +40,7 @@ public class StudentController {
         if (userId == null) return ResponseEntity.status(401).body(Map.of("error", "未登录"));
 
         List<StudyPath> paths = pathMapper.selectList(
-                new LambdaQueryWrapper<StudyPath>().eq(StudyPath::getUserId, userId).eq(StudyPath::getStatus, 0));
+                new LambdaQueryWrapper<StudyPath>().eq(StudyPath::getUserId, userId));
         List<StudyRecord> records = recordMapper.selectList(
                 new LambdaQueryWrapper<StudyRecord>().eq(StudyRecord::getUserId, userId));
         long mastered = records.stream().filter(r -> r.getMasteryLevel() != null && r.getMasteryLevel() == 2).count();
@@ -52,19 +52,22 @@ public class StudentController {
         int displayCorrectRate = (int) Math.round(Math.max(0, Math.min(100, avgRate)));
 
         Map<String, Object> result = new HashMap<>();
-        result.put("activePaths", paths.stream().map(p -> {
-            Map<String, Object> m = new HashMap<>();
-            m.put("id", p.getId());
-            m.put("pathName", p.getPathName());
-            // 从 path_detail 计算实际进度（与学习路径模块一致）
-            List<PathDetail> details = detailMapper.selectList(
-                new LambdaQueryWrapper<PathDetail>().eq(PathDetail::getPathId, p.getId()));
-            int total = details.size();
-            long finished = details.stream().filter(d -> d.getIsFinished() != null && d.getIsFinished() == 1).count();
-            int progress = total > 0 ? (int) Math.round((double) finished / total * 100) : 0;
-            m.put("progress", progress);
-            return m;
-        }).toList());
+        result.put("activePaths", paths.stream()
+            .map(p -> {
+                Map<String, Object> m = new HashMap<>();
+                m.put("id", p.getId());
+                m.put("pathName", p.getPathName());
+                // 从 path_detail 计算实际进度（与学习路径模块一致）
+                List<PathDetail> details = detailMapper.selectList(
+                    new LambdaQueryWrapper<PathDetail>().eq(PathDetail::getPathId, p.getId()));
+                int total = details.size();
+                long finished = details.stream().filter(d -> d.getIsFinished() != null && d.getIsFinished() == 1).count();
+                int progress = total > 0 ? (int) Math.round((double) finished / total * 100) : 0;
+                m.put("progress", progress);
+                return m;
+            })
+            .filter(m -> (int) m.get("progress") < 100)
+            .toList());
         result.put("todos", List.of());
         result.put("stats", Map.of(
                 "studyDays", records.isEmpty() ? 0 : 1,

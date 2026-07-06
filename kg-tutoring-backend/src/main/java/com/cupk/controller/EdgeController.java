@@ -6,6 +6,8 @@ import com.cupk.common.Result;
 import com.cupk.common.UserContext;
 import com.cupk.pojo.KnowledgeEdge;
 import com.cupk.service.KnowledgeEdgeService;
+
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,12 +46,31 @@ public class EdgeController {
     }
 
     /**
-     * 新增边关系（仅教师）
+     * 新增边关系（仅教师），自动查重
      */
     @OperLog(module = "知识图谱", operation = "新增依赖边")
     @PostMapping
-    public Result<?> create(@RequestBody KnowledgeEdge edge) {
+    public Result<?> create(@RequestBody Map<String, Object> body) {
         checkTeacher();
+        Integer fromNodeId = body.get("fromNodeId") != null
+                ? Integer.valueOf(body.get("fromNodeId").toString())
+                : (body.get("sourceId") != null ? Integer.valueOf(body.get("sourceId").toString()) : null);
+        Integer toNodeId = body.get("toNodeId") != null
+                ? Integer.valueOf(body.get("toNodeId").toString())
+                : (body.get("targetId") != null ? Integer.valueOf(body.get("targetId").toString()) : null);
+        if (fromNodeId == null || toNodeId == null) {
+            return Result.error("缺少前置或后置节点ID");
+        }
+        if (fromNodeId.equals(toNodeId)) {
+            return Result.error("前置和后置节点不能相同");
+        }
+        // 查重：防止重复插入
+        if (knowledgeEdgeService.existsByFromNodeAndToNode(fromNodeId, toNodeId)) {
+            return Result.error("该依赖关系已存在");
+        }
+        KnowledgeEdge edge = new KnowledgeEdge();
+        edge.setFromNodeId(fromNodeId);
+        edge.setToNodeId(toNodeId);
         knowledgeEdgeService.save(edge);
         return Result.success("新增边关系成功");
     }

@@ -117,7 +117,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { usePet } from '../../composables/usePet'
-import { getPracticeQuestions, submitPractice } from '../../api/student'
+import { getPracticeQuestions, submitPractice, updatePathDetail } from '../../api/student'
 
 const router = useRouter()
 const route = useRoute()
@@ -254,6 +254,11 @@ const nextQuestion = async () => {
     // 正确率 >= 60% 时自动跳转，不展示结果页
     const correctRate = submitRes?.correctRate ?? scorePercent.value
     if (correctRate >= 80) {
+      // 标记路径节点完成（如果是从路径进入的练习）
+      const detailId = route.query.detailId
+      if (detailId) {
+        try { await updatePathDetail(detailId) } catch { /* 非路径上下文或已完成 */ }
+      }
       ElMessage.success(submitRes?.message || '练习完成，继续加油！')
       // 直接回退到上一页（知识点学习），不产生新历史记录
       router.go(-1)
@@ -275,7 +280,14 @@ const restart = () => {
   userAnswers.value = []
 }
 
-const goBack = () => {
+const goBack = async () => {
+  // 已完成所有练习（结果页），标记路径节点完成
+  if (finished.value) {
+    const detailId = route.query.detailId
+    if (detailId) {
+      try { await updatePathDetail(detailId) } catch { /* 非路径上下文 */ }
+    }
+  }
   const nodeId = route.query.nodeId
   if (nodeId) {
     router.push('/student/study/' + nodeId)

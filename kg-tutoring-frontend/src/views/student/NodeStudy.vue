@@ -117,12 +117,12 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter, useRoute, onBeforeRouteLeave } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { Promotion } from '@element-plus/icons-vue'
 import StudentHeader from '../../components/StudentHeader.vue'
 import { getNodeById } from '../../api/knowledge'
-import { updateStudyRecord, getStudyRecords, aiNodeSummary, aiChat } from '../../api/student'
+import { updateStudyRecord, getStudyRecords, aiNodeSummary, aiChat, updatePathDetail } from '../../api/student'
 
 const router = useRouter()
 const route = useRoute()
@@ -220,8 +220,18 @@ const goPractice = (questionId) => {
   if (questionId) {
     query += `&questionId=${questionId}`
   }
+  const detailId = route.query.detailId
+  if (detailId) query += `&detailId=${detailId}`
   router.push('/student/practice' + query)
 }
+
+// 离开知识点页面时，标记路径节点完成（如果有 detailId）
+onBeforeRouteLeave(() => {
+  const detailId = route.query.detailId
+  if (detailId) {
+    updatePathDetail(detailId).catch(() => {})
+  }
+})
 
 
 const fetchNode = async () => {

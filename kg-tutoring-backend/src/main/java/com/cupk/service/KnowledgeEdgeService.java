@@ -18,6 +18,9 @@ public interface KnowledgeEdgeService {
     /** 新增边 */
     void save(KnowledgeEdge edge);
 
+    /** 检查边是否已存在（fromNodeId → toNodeId） */
+    boolean existsByFromNodeAndToNode(Integer fromNodeId, Integer toNodeId);
+
     /** 删除边 */
     void delete(Integer id);
 }

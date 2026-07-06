@@ -169,6 +169,9 @@ html, body {
   color: var(--text-secondary);
   border-bottom: 1px solid var(--border-subtle) !important;
 }
+[data-theme="dark"] .el-table th.el-table__cell {
+  background: var(--bg-surface) !important;
+}
 .el-table td.el-table__cell {
   background: var(--bg-surface);
   border-bottom: 1px solid var(--border-subtle) !important;
@@ -182,6 +185,9 @@ html, body {
 }
 .el-table .el-table__cell.is-hidden > * {
   visibility: hidden;
+}
+[data-theme="dark"] .el-table--striped .el-table__body tr.el-table__row--striped td.el-table__cell {
+  background: #2f2a24;
 }
 
 .el-button--primary {
