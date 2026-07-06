@@ -11,6 +11,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -72,7 +73,11 @@ public class EdgeController {
         edge.setFromNodeId(fromNodeId);
         edge.setToNodeId(toNodeId);
         knowledgeEdgeService.save(edge);
-        return Result.success("新增边关系成功");
+        Map<String, Object> result = new HashMap<>();
+        result.put("id", edge.getId());
+        result.put("fromNodeId", fromNodeId);
+        result.put("toNodeId", toNodeId);
+        return Result.success(result);
     }
 
     /**
