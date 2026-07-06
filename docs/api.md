@@ -1,6 +1,6 @@
 # 前后端接口文档
 
-记录日期：2026-07-03
+最后更新：2026-07-06（同步 7/4、7/6 新增/修复的接口）
 
 本文档根据当前前端 `src/api` 调用和后端 `controller` 代码整理，用于组员联调、答辩说明和后续维护。
 
@@ -494,6 +494,22 @@ nodeId 可选
 
 前端文件：`kg-tutoring-frontend/src/api/student.js`
 
+### 7.0 学生通用接口（StudentController）
+
+后端控制器：`StudentController`（`/api/student`）
+
+| 功能 | 方法 | 路径 | 前端函数 | 状态 |
+|---|---|---|---|---|
+| 学习看板 | GET | `/api/student/dashboard` | `getStudentDashboard()` | 已实现 |
+| 课程列表 | GET | `/api/student/courses` | `getStudentCourses()` | 已实现 |
+| 知识点列表 | GET | `/api/student/knowledge-nodes` | `getStudentNodes()` | 已实现 |
+| 学习路径列表 | GET | `/api/student/study-paths` | `getStudentPaths()` | 已实现 |
+| 学习记录列表 | GET | `/api/student/study-records` | `getStudentRecords()` | 已实现 |
+| 测评记录列表 | GET | `/api/student/exam-records` | `getStudentExamRecords()` | 已实现 |
+| 跨学科主题列表 | GET | `/api/student/cross-subjects` | `getStudentThemes()` | 已实现 |
+
+这些是"我的学习总览"系列接口，返回当前登录学生的学习聚合数据。
+
 ### 7.1 知识图谱
 
 后端控制器：`StudentGraphController`
@@ -588,7 +604,7 @@ updateStudyRecord(data)
 | 功能 | 方法 | 路径 | 前端函数 | 状态 |
 |---|---|---|---|---|
 | 获取练习题 | GET | `/api/student/practice/questions` | `getPracticeQuestions(params)` | 已实现 |
-| 提交练习 | POST | `/api/student/practice/submit` | `submitPractice(data)` | 已实现，错题记录未接入 |
+| 提交练习 | POST | `/api/student/practice/submit` | `submitPractice(data)` | 已实现（答错自动写入错题本） |
 
 获取练习题查询参数：
 
@@ -629,7 +645,8 @@ nodeId 必填
 | 功能 | 方法 | 路径 | 前端函数 | 状态 |
 |---|---|---|---|---|
 | 我的测评列表 | GET | `/api/student/exams` | `getStudentExams()` | 已实现 |
-| 测评详情 | GET | `/api/student/exam/{id}` | `getExamResult(id)` | 已实现 |
+| 测评卷预览 | GET | `/api/student/exam-paper/{id}` | `getExamPaper(id)` | 已实现 |
+| 测评结果详情 | GET | `/api/student/exam/{id}` | `getExamResult(id)` | 已实现 |
 | 提交测评 | POST | `/api/student/exam/submit` | `submitExam(data)` | 已实现 |
 
 提交测评请求体：
@@ -688,7 +705,7 @@ nodeId 必填
 }
 ```
 
-### 7.8 学生端扩展能力占位接口
+### 7.8 AI 能力接口（StudentAiController）
 
 后端控制器：`StudentAiController`
 
@@ -697,6 +714,7 @@ nodeId 必填
 | 知识点总结 | POST | `/api/student/ai/node-summary` | `aiNodeSummary(data)` | 占位 |
 | 错题解析 | POST | `/api/student/ai/wrong-explain` | `aiWrongExplain(data)` | 占位 |
 | 测评报告 | POST | `/api/student/ai/exam-report` | `aiExamReport(data)` | 占位 |
+| AI 自由问答 | POST | `/api/student/ai/chat` | `aiChat(data)` | 已实现（接入本地模型/开发中 stub） |
 
 请求体示例：
 
@@ -706,15 +724,22 @@ nodeId 必填
 }
 ```
 
-当前返回：
-
-```json
-"AI 功能开发中"
-```
+`node-summary / wrong-explain / exam-report` 当前返回占位文本 `"AI 功能开发中"`。
+`ai/chat` 已实现基本对话能力，前端在知识图谱/学习路径页面通过右下角学习宠物触发。
 
 ## 8. 教师端接口
 
 前端文件：`kg-tutoring-frontend/src/api/teacher.js`
+
+### 8.0 教师看板（TeacherHomeController）
+
+后端控制器：`TeacherHomeController`（`/api/teacher`）
+
+| 功能 | 方法 | 路径 | 前端函数 | 状态 |
+|---|---|---|---|---|
+| 教师看板数据 | GET | `/api/teacher/dashboard` | `getTeacherDashboard()` | 已实现 |
+
+返回教师所负责课程的学生人数、平均掌握度、近期测评统计等聚合数据。
 
 ### 8.1 教师测评管理
 
@@ -744,7 +769,7 @@ courseId 可选
 }
 ```
 
-说明：当前后端尚未真正实现教师创建考试。
+注意：删除仅在测评尚无学生提交的 `exam_record` 时可成功，否则返回 500。
 
 ### 8.2 班级学情分析
 
@@ -834,57 +859,26 @@ courseId 必填
 
 ## 11. 旧接口说明
 
-项目中还存在两个早期 Controller：
+> ⚠️ 本节已过时。所有 `/student/**` 和 `/teacher/**` 路径的 `StudentController`、`TeacherHomeController` 已在 7/3 之后加上 `/api` 前缀（即 `/api/student/**`、`/api/teacher/**`），详见 §7.0 与 §8.0。前端已主要迁移到 `/api/**` 路径，保留本节仅供未完成迁移的调用方参考。
 
-```text
-/student/**
-/teacher/**
-```
-
-这些接口直接返回 `ResponseEntity`，不完全遵循统一 `Result` 格式。当前前端主要使用 `/api/**` 接口，后续建议统一迁移到 `/api/**`，避免维护两套路径。
-
-旧学生接口包括：
-
-```text
-GET /student/dashboard
-GET /student/courses
-GET /student/knowledge-nodes
-GET /student/study-paths
-GET /student/study-records
-GET /student/wrong-questions
-GET /student/exam-records
-GET /student/cross-subjects
-```
-
-旧教师接口包括：
-
-```text
-GET /teacher/dashboard
-GET /teacher/courses
-POST /teacher/courses
-PUT /teacher/courses/{id}
-DELETE /teacher/courses/{id}
-GET /teacher/knowledge-nodes
-POST /teacher/knowledge-nodes
-PUT /teacher/knowledge-nodes/{id}
-DELETE /teacher/knowledge-nodes/{id}
-GET /teacher/questions
-```
+历史上 `/student/**` 和 `/teacher/**` 路径直接返回 `ResponseEntity`，不完全遵循统一 `Result` 格式。当前统一为 `/api/student/**` 和 `/api/teacher/**`。
 
 ## 12. 当前接口完成度总结
 
-| 模块 | 完成度 |
-|---|---|
-| 登录注册 | 基本完成 |
-| 用户资料 | 基本完成，资料返回字段可再完善 |
-| 管理员角色/用户/公告/日志 | 基本完成 |
-| 课程/知识点/知识边 | 基本完成 |
-| 题库管理 | 基本完成 |
-| 学生知识图谱 | 基本完成 |
-| 学习路径 | 基本完成，但详情接口只返回主表 |
-| 练习 | 可用，练习和测评提交都会写入错题本 |
-| 测评 | 教师发布测评、学生参加测评、成绩记录已形成基础闭环 |
-| 错题本 | 基本完成 |
-| 学情分析 | 有基础数据，班级分析较简化 |
-| 跨学科主题 | 基本完成 |
-| 扩展能力占位接口 | 仅占位 |
+| 模块 | 完成度 | 备注 |
+|---|---|---|
+| 登录注册（auth） | 基本完成 | 含邮箱验证码发送 |
+| 用户资料（user） | 基本完成 | 修改密码/资料，profile 返回可再完善 |
+| 管理员接口（admin） | 基本完成 | 角色、用户、公告、操作/AI 日志 CRUD |
+| 课程/知识点/知识边 | 基本完成 | |
+| 题库管理 | 基本完成 | |
+| 学生通用接口（7.0） | 已实现 | dashboard、courses、paths、records 等聚合接口 |
+| 知识图谱 | 已实现 | |
+| 学习路径 | 已实现 | 主表+详情+完成状态更新 |
+| 练习 | 已实现 | 提交后自动写入错题本 |
+| 测评 | 已实现 | 教师发布/学生参加/成绩记录/错题归档 闭环 |
+| 错题本 | 基本完成 | |
+| 学情分析 | 基础可用 | 个人分析完整，班级分析仍有简化 |
+| 跨学科主题 | 基本完成 | 含架上状态过滤 |
+| AI 能力 | 部分实现 | 自由问答已实现，summary/explain/report 仍占位 |
+| 教师看板（8.0） | 已实现 | dashboard 聚合数据 |
