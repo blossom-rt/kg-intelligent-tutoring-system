@@ -76,8 +76,8 @@ public class StudentPathController {
                     : 0;
             item.put("progress", progress);
 
-            // 状态转换：0=学习中, 1=已完成
-            String status = p.getStatus() != null && p.getStatus() == 1 ? "completed" : "active";
+            // 状态根据进度推导（进度100% = 已完成）
+            String status = progress >= 100 ? "completed" : "active";
             item.put("status", status);
 
             result.add(item);

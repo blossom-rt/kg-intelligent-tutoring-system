@@ -3,9 +3,11 @@ package com.cupk.controller;
 import com.cupk.common.Result;
 import com.cupk.common.UserContext;
 import com.cupk.mapper.PathDetailMapper;
+import com.cupk.mapper.StudyPathMapper;
 import com.cupk.mapper.WrongQuestionMapper;
 import com.cupk.pojo.PathDetail;
 import com.cupk.pojo.Question;
+import com.cupk.pojo.StudyPath;
 import com.cupk.pojo.WrongQuestion;
 import com.cupk.service.QuestionService;
 import com.cupk.service.StudyRecordService;
@@ -30,6 +32,7 @@ public class StudentPracticeController {
     private final StudyRecordService studyRecordService;
     private final WrongQuestionMapper wrongQuestionMapper;
     private final PathDetailMapper pathDetailMapper;
+    private final StudyPathMapper studyPathMapper;
 
     /** 获取练习题目 */
     @GetMapping("/questions")
@@ -108,6 +111,26 @@ public class StudentPracticeController {
                             new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<PathDetail>()
                                     .eq(PathDetail::getNodeId, nodeId)
                                     .eq(PathDetail::getIsFinished, 0));
+
+                    // 检查该节点所属的所有路径是否已全部完成，是则更新路径状态
+                    var pathsWithNode = pathDetailMapper.selectList(
+                            new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<PathDetail>()
+                                    .eq(PathDetail::getNodeId, nodeId));
+                    var pathIds = pathsWithNode.stream()
+                            .map(PathDetail::getPathId).distinct().toList();
+                    for (Integer pid : pathIds) {
+                        Long unfinished = pathDetailMapper.selectCount(
+                                new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<PathDetail>()
+                                        .eq(PathDetail::getPathId, pid)
+                                        .eq(PathDetail::getIsFinished, 0));
+                        if (unfinished == 0) {
+                            StudyPath sp = studyPathMapper.selectById(pid);
+                            if (sp != null && sp.getStatus() != 1) {
+                                sp.setStatus(1);
+                                studyPathMapper.updateById(sp);
+                            }
+                        }
+                    }
                 } catch (Exception e) {
                     log.error("更新路径节点状态失败", e);
                 }

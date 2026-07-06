@@ -153,7 +153,9 @@ const formatTime = (time) => {
 
 const goStudy = (node) => {
   if (node.displayStatus === 'learning') {
-    router.push('/student/study/' + (node.nodeId || node.id))
+    let url = '/student/study/' + (node.nodeId || node.id)
+    if (node.detailId) url += '?detailId=' + node.detailId
+    router.push(url)
   }
 }
 

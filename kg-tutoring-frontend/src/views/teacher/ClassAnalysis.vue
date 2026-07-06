@@ -182,7 +182,7 @@ const renderPieChart = (distribution) => {
   if (!pieChartInstance) {
     pieChartInstance = echarts.init(pieChartRef.value)
   }
-  const colors = [readVar('--danger'), readVar('--warning'), readVar('--accent'), readVar('--success')]
+  const colors = ['#e74c3c', '#f39c12', '#409eff', '#67c23a', '#9b59b6']
   pieChartInstance.setOption({
     tooltip: { trigger: 'item', formatter: '{b}: {c}人 ({d}%)' },
     legend: {
