@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 课程服务实现
@@ -34,6 +35,16 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    public List<Map<String, Object>> recommendRelatedCourses(Integer courseId, Integer limit) {
+        return courseMapper.selectRelatedCourses(courseId, normalizeLimit(limit));
+    }
+
+    @Override
+    public List<Map<String, Object>> recommendAlsoLearnedCourses(Integer courseId, Integer limit) {
+        return courseMapper.selectAlsoLearnedCourses(courseId, normalizeLimit(limit));
+    }
+
+    @Override
     public void save(Course course) {
         courseMapper.insert(course);
     }
@@ -46,5 +57,12 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public void delete(Integer id) {
         courseMapper.deleteById(id);
+    }
+
+    private Integer normalizeLimit(Integer limit) {
+        if (limit == null || limit <= 0) {
+            return 6;
+        }
+        return Math.min(limit, 20);
     }
 }

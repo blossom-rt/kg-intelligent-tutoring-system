@@ -3,6 +3,8 @@ import request from '../utils/request'
 // ===== 课程管理 =====
 export function getCourseList(params) { return request.get('/courses', { params }) }
 export function getCourseById(id) { return request.get(`/courses/${id}`) }
+export function getRelatedCourseRecommendations(id, params) { return request.get(`/courses/${id}/recommendations/related`, { params }) }
+export function getAlsoLearnedCourseRecommendations(id, params) { return request.get(`/courses/${id}/recommendations/also-learned`, { params }) }
 export function createCourse(data) { return request.post('/courses', data) }
 export function updateCourse(id, data) { return request.put(`/courses/${id}`, data) }
 export function deleteCourse(id) { return request.delete(`/courses/${id}`) }

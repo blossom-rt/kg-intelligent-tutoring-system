@@ -40,7 +40,7 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount, nextTick, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import * as d3 from 'd3'
 import { ElMessage } from 'element-plus'
 import StudentHeader from '../../components/StudentHeader.vue'
@@ -48,6 +48,7 @@ import { getStudentGraph, generatePath } from '../../api/student'
 import { getCourseList } from '../../api/knowledge'
 
 const router = useRouter()
+const route = useRoute()
 const loading = ref(false)
 const nodes = ref([])
 const edges = ref([])
@@ -260,7 +261,15 @@ const fetchCourses = async () => {
 onMounted(async () => {
   await fetchGraph()
   await fetchCourses()
+  if (route.query.courseId) {
+    selectedCourseId.value = Number(route.query.courseId)
+  }
   await nextTick()
+  renderChart()
+})
+
+watch(() => route.query.courseId, (courseId) => {
+  selectedCourseId.value = courseId ? Number(courseId) : ''
   renderChart()
 })
 
