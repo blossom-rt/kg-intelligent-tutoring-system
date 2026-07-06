@@ -1,11 +1,11 @@
 <template>
   <div class="graph-view">
-    <StudentHeader title="知识图谱" subtitle="点击节点查看详情，拖拽可自由探索">
+    <StudentHeader title="知识图谱" subtitle="拖拽旋转视角，滚轮缩放，点击节点查看详情">
       <template #actions>
         <el-select v-model="selectedCourseId" placeholder="选择课程" clearable size="default" style="width:200px" @change="onCourseChange">
           <el-option v-for="c in courses" :key="c.id" :label="c.courseName" :value="c.id" />
         </el-select>
-        <el-button @click="resetZoom" round>重置视图</el-button>
+        <el-button @click="resetView" round>重置视角</el-button>
       </template>
     </StudentHeader>
 
@@ -18,15 +18,25 @@
       <template v-if="currentNode">
         <el-descriptions :column="1" border>
           <el-descriptions-item label="知识点名称">{{ currentNode.name }}</el-descriptions-item>
+          <el-descriptions-item label="节点类型">{{ nodeTypeLabel(currentNode.nodeType) }}</el-descriptions-item>
           <el-descriptions-item label="难度等级">
             <el-tag :type="diffTag(currentNode.difficulty)" size="small">{{ diffLabel(currentNode.difficulty) }}</el-tag>
           </el-descriptions-item>
           <el-descriptions-item label="所属章节">{{ currentNode.chapter || '无' }}</el-descriptions-item>
           <el-descriptions-item label="预计时长">{{ currentNode.expectedMinutes || '-' }} 分钟</el-descriptions-item>
+          <el-descriptions-item v-if="currentNode.keywords" label="关键词">{{ currentNode.keywords }}</el-descriptions-item>
         </el-descriptions>
+        <div v-if="currentNode.learningGoal" class="detail-desc">
+          <h4>学习目标</h4>
+          <p>{{ currentNode.learningGoal }}</p>
+        </div>
         <div class="detail-desc">
           <h4>详细描述</h4>
           <p>{{ currentNode.description || '暂无详细描述' }}</p>
+        </div>
+        <div v-if="currentNode.exampleHint" class="detail-desc">
+          <h4>例题提示</h4>
+          <p>{{ currentNode.exampleHint }}</p>
         </div>
       </template>
       <template #footer>
@@ -41,185 +51,431 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount, nextTick, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import * as d3 from 'd3'
+import * as THREE from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { ElMessage } from 'element-plus'
 import StudentHeader from '../../components/StudentHeader.vue'
+import { usePet } from '../../composables/usePet'
 import { getStudentGraph, generatePath } from '../../api/student'
 import { getCourseList } from '../../api/knowledge'
 
 const router = useRouter()
 const route = useRoute()
+const pet = usePet()
 const loading = ref(false)
 const nodes = ref([])
 const edges = ref([])
+const learnedNodeIds = ref(new Set())
+const pathNodeIds = ref(new Set())
 const courses = ref([])
 const selectedCourseId = ref('')
 const dialogVisible = ref(false)
 const currentNode = ref(null)
 const genLoading = ref(false)
 const chartRef = ref(null)
+const lastSpokenCourseId = ref(null)
 
-let svg = null
-let zoomG = null
-let zoom = null
+let scene = null
+let camera = null
+let renderer = null
+let controls = null
+let raycaster = null
+let resizeObserver = null
+let animationId = null
+let hoveredNodeId = null
+let nodeObjects = []
+let lineObjects = []
+let labelObjects = []
 
 const diffLabel = (v) => ({ 1: '入门', 2: '基础', 3: '进阶', 4: '困难', 5: '挑战' }[v] || '未知')
 const diffTag = (v) => ({ 1: 'success', 2: 'info', 3: 'warning', 4: 'danger', 5: 'danger' }[v] || 'info')
+const nodeTypeLabel = (v) => ({ concept: '概念理解', skill: '方法技能', application: '应用实践' }[v] || '概念理解')
 
-// 边线端点计算（从节点边缘到边缘）
-const edgeX1 = (e, m) => { const s = m[e.fromNodeId], t = m[e.toNodeId]; if (!s||!t) return 0; const r=radiusByDifficulty(s), dx=t.x-s.x, dy=t.y-s.y, d=Math.sqrt(dx*dx+dy*dy)||1; return s.x+dx/d*r }
-const edgeY1 = (e, m) => { const s = m[e.fromNodeId], t = m[e.toNodeId]; if (!s||!t) return 0; const r=radiusByDifficulty(s), dx=t.x-s.x, dy=t.y-s.y, d=Math.sqrt(dx*dx+dy*dy)||1; return s.y+dy/d*r }
-const edgeX2 = (e, m) => { const s = m[e.fromNodeId], t = m[e.toNodeId]; if (!s||!t) return 0; const r=radiusByDifficulty(t), dx=s.x-t.x, dy=s.y-t.y, d=Math.sqrt(dx*dx+dy*dy)||1; return t.x+dx/d*r }
-const edgeY2 = (e, m) => { const s = m[e.fromNodeId], t = m[e.toNodeId]; if (!s||!t) return 0; const r=radiusByDifficulty(t), dx=s.x-t.x, dy=s.y-t.y, d=Math.sqrt(dx*dx+dy*dy)||1; return t.y+dy/d*r }
-
-const colorByDifficulty = (d) => {
-  if (d.difficulty === 3) return '#e74c3c'
-  if (d.difficulty === 2) return '#f39c12'
-  return '#409eff'
+const getCssVar = (name, fallback) => {
+  const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim()
+  return value || fallback
 }
 
-const radiusByDifficulty = (d) => {
-  if (d.difficulty === 3) return 22
-  if (d.difficulty === 2) return 18
-  return 14
+const colorByDifficulty = (node) => {
+  if (node.difficulty === 3) return 0xe74c3c
+  if (node.difficulty === 2) return 0xf5a623
+  return 0x4aa3ff
 }
 
-function getFilteredData() {
+const radiusByDifficulty = (node) => {
+  if (node.difficulty === 3) return 2.9
+  if (node.difficulty === 2) return 2.4
+  return 2
+}
+
+const getNodeState = (node) => {
+  const nodeId = Number(node.id)
+  if (learnedNodeIds.value.has(nodeId)) return 'learned'
+  if (pathNodeIds.value.has(nodeId)) return 'path'
+  return 'unseen'
+}
+
+const nodeOpacity = (node) => {
+  const state = getNodeState(node)
+  if (state === 'learned') return 1
+  if (state === 'path') return 0.78
+  return 0.22
+}
+
+const getFilteredData = () => {
   let list = nodes.value
   if (selectedCourseId.value) {
-    list = nodes.value.filter(n => n.courseId === selectedCourseId.value)
+    list = nodes.value.filter(n => Number(n.courseId) === Number(selectedCourseId.value))
   }
-  const nodeIds = new Set(list.map(n => n.id))
-  const edgeList = edges.value.filter(e => nodeIds.has(e.fromNodeId) && nodeIds.has(e.toNodeId))
+  const nodeIds = new Set(list.map(n => Number(n.id)))
+  const edgeList = edges.value.filter(e => nodeIds.has(Number(e.fromNodeId)) && nodeIds.has(Number(e.toNodeId)))
   return { nodeList: list, edgeList }
 }
 
-function renderChart() {
-  if (!chartRef.value) return
-
-  // 清理旧画布
-  d3.select(chartRef.value).selectAll('svg').remove()
-
+const getRelatedChainNodeIds = (nodeId) => {
   const { nodeList, edgeList } = getFilteredData()
-  const W = 1200, H = 800
+  const visibleNodeIds = new Set(nodeList.map(node => Number(node.id)))
+  const startId = Number(nodeId)
+  if (!visibleNodeIds.has(startId)) return new Set()
 
-  chartRef.value.style.position = 'relative'
-  chartRef.value.style.width = '100%'
-  chartRef.value.style.height = H + 'px'
-
-  svg = d3.select(chartRef.value)
-    .append('svg')
-    .attr('viewBox', `0 0 ${W} ${H}`)
-    .attr('preserveAspectRatio', 'xMidYMid meet')
-    .style('width', '100%')
-    .style('height', '100%')
-    .style('background', '#fafafa')
-    .style('border-radius', '8px')
-    .style('display', 'block')
-
-  zoom = d3.zoom().scaleExtent([0.2, 5]).on('zoom', (event) => {
-    zoomG.attr('transform', event.transform)
+  const forward = new Map()
+  const backward = new Map()
+  edgeList.forEach(edge => {
+    const from = Number(edge.fromNodeId)
+    const to = Number(edge.toNodeId)
+    if (!forward.has(from)) forward.set(from, [])
+    if (!backward.has(to)) backward.set(to, [])
+    forward.get(from).push(to)
+    backward.get(to).push(from)
   })
 
-  svg.call(zoom)
-  zoomG = svg.append('g')
-
-  // 箭头定义
-  svg.append('defs').selectAll('marker')
-    .data(['arrow'])
-    .join('marker')
-    .attr('id', 'arrow')
-    .attr('viewBox', '0 -5 10 10')
-    .attr('refX', 10)
-    .attr('refY', 0)
-    .attr('markerWidth', 8)
-    .attr('markerHeight', 8)
-    .attr('orient', 'auto')
-    .append('path')
-    .attr('d', 'M0,-5L10,0L0,5')
-    .attr('fill', '#bbb')
-
-  if (!nodeList.length) return
-
-  // 松散布局（自适应间距 + 随机偏移）
-  const cols = Math.ceil(Math.sqrt(nodeList.length))
-  const rows = Math.ceil(nodeList.length / cols)
-  const cw = Math.min((W - 100) / cols, 220)
-  const rh = Math.min((H - 80) / rows, 160)
-  const ox = (W - cols * cw) / 2
-  const oy = (H - rows * rh) / 2
-  nodeList.forEach((d, i) => {
-    d.x = ox + (i % cols) * cw + (Math.random() - 0.5) * 30
-    d.y = oy + Math.floor(i / cols) * rh + (Math.random() - 0.5) * 25
-  })
-
-  // 连线坐标映射
-  const nodeMap = {}
-  nodeList.forEach(d => { nodeMap[d.id] = d })
-
-  // 不再画课程背景色块
-
-  // 边（从节点边缘到边缘，避免箭头被挡住）
-  const link = zoomG.append('g').selectAll('line').data(edgeList).join('line')
-    .attr('stroke', '#999').attr('stroke-width', 1.5)
-    .attr('stroke-opacity', 0.5).attr('marker-end', 'url(#arrow)')
-    .attr('x1', d => edgeX1(d, nodeMap))
-    .attr('y1', d => edgeY1(d, nodeMap))
-    .attr('x2', d => edgeX2(d, nodeMap))
-    .attr('y2', d => edgeY2(d, nodeMap))
-
-  // 节点组（可拖拽）
-  const nodeGroup = zoomG.append('g').selectAll('g').data(nodeList).join('g')
-    .attr('transform', d => `translate(${d.x},${d.y})`)
-    .style('cursor', 'grab')
-    .call(d3.drag()
-      .on('start', function(event) { event.sourceEvent.stopPropagation(); d3.select(this).style('cursor', 'grabbing') })
-      .on('drag', function(event, d) {
-        d.x += event.dx; d.y += event.dy
-        d3.select(this).attr('transform', `translate(${d.x},${d.y})`)
-        link.attr('x1', d2 => edgeX1(d2, nodeMap)).attr('y1', d2 => edgeY1(d2, nodeMap))
-            .attr('x2', d2 => edgeX2(d2, nodeMap)).attr('y2', d2 => edgeY2(d2, nodeMap))
+  const relatedIds = new Set([startId])
+  const walk = (graph) => {
+    const queue = [startId]
+    const visited = new Set([startId])
+    while (queue.length) {
+      const current = queue.shift()
+      ;(graph.get(current) || []).forEach(next => {
+        if (visited.has(next)) return
+        visited.add(next)
+        relatedIds.add(next)
+        queue.push(next)
       })
-      .on('end', function(event, d) {
-        d3.select(this).style('cursor', 'grab')
-      })
-    )
+    }
+  }
 
-  // 圆形节点
-  nodeGroup.append('circle')
-    .attr('r', d => radiusByDifficulty(d))
-    .attr('fill', d => colorByDifficulty(d))
-    .attr('stroke', '#fff').attr('stroke-width', 2.5)
-    .style('filter', 'drop-shadow(0 2px 3px rgba(0,0,0,0.15))')
-
-  // 标签
-  nodeGroup.append('text')
-    .text(d => d.name.length > 8 ? d.name.slice(0, 8) + '..' : d.name)
-    .attr('text-anchor', 'middle')
-    .attr('dy', d => radiusByDifficulty(d) + 14)
-    .attr('font-size', 11).attr('fill', '#444').attr('font-weight', '500')
-
-  // 悬停高亮（无关连线隐藏）
-  nodeGroup.on('mouseenter', function(ev, d) {
-    const ids = new Set(edgeList.flatMap(e => e.fromNodeId === d.id || e.toNodeId === d.id ? [e.fromNodeId, e.toNodeId] : []))
-    nodeGroup.style('opacity', n => ids.has(n.id) ? 1 : 0.2)
-    link.style('opacity', e => e.fromNodeId === d.id || e.toNodeId === d.id ? 1 : 0)
-  })
-  nodeGroup.on('mouseleave', () => { nodeGroup.style('opacity', 1); link.style('opacity', 1) })
-
-  // 点击
-  nodeGroup.on('click', (ev, d) => { currentNode.value = d; dialogVisible.value = true })
-
-  // 不再使用呼吸抖动，避免拖拽时箭头跳动
+  walk(forward)
+  walk(backward)
+  return relatedIds
 }
 
-function resetZoom() {
-  if (svg && zoom) {
-    svg.transition().duration(500).call(zoom.transform, d3.zoomIdentity)
+const placeNodes = (nodeList) => {
+  const count = Math.max(nodeList.length, 1)
+  const radius = Math.max(22, Math.min(58, count * 1.8))
+  const goldenAngle = Math.PI * (3 - Math.sqrt(5))
+  return nodeList.map((node, index) => {
+    const y = 1 - (index / Math.max(count - 1, 1)) * 2
+    const r = Math.sqrt(1 - y * y)
+    const theta = index * goldenAngle
+    const stable = ((Number(node.id) * 17) % 11 - 5) * 0.28
+    return {
+      ...node,
+      x: Math.cos(theta) * r * radius + stable,
+      y: y * radius * 0.62,
+      z: Math.sin(theta) * r * radius - stable
+    }
+  })
+}
+
+const createTextSprite = (text, opacity) => {
+  const canvas = document.createElement('canvas')
+  const ctx = canvas.getContext('2d')
+  const ratio = window.devicePixelRatio || 1
+  const label = text.length > 8 ? text.slice(0, 8) + '..' : text
+  canvas.width = 220 * ratio
+  canvas.height = 64 * ratio
+  ctx.scale(ratio, ratio)
+  ctx.font = '600 24px "PingFang SC", system-ui, sans-serif'
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
+  ctx.fillStyle = getCssVar('--text-primary', '#2d2a26')
+  ctx.fillText(label, 110, 32)
+  const texture = new THREE.CanvasTexture(canvas)
+  texture.colorSpace = THREE.SRGBColorSpace
+  const material = new THREE.SpriteMaterial({ map: texture, transparent: true, opacity, depthWrite: false })
+  const sprite = new THREE.Sprite(material)
+  sprite.scale.set(10.5, 3.1, 1)
+  return sprite
+}
+
+const clearScene = () => {
+  nodeObjects.forEach(item => {
+    item.mesh.geometry.dispose()
+    item.mesh.material.dispose()
+  })
+  lineObjects.forEach(item => {
+    item.line.geometry.dispose()
+    item.line.material.dispose()
+  })
+  labelObjects.forEach(item => {
+    item.sprite.material.map?.dispose()
+    item.sprite.material.dispose()
+  })
+  nodeObjects = []
+  lineObjects = []
+  labelObjects = []
+  if (scene) {
+    while (scene.children.length) {
+      scene.remove(scene.children[0])
+    }
   }
 }
 
-const onCourseChange = () => { renderChart() }
+const applyDefaultStyles = () => {
+  nodeObjects.forEach(item => {
+    const state = getNodeState(item.node)
+    item.mesh.material.opacity = nodeOpacity(item.node)
+    item.mesh.scale.setScalar(state === 'learned' ? 1.18 : 1)
+    item.mesh.material.emissiveIntensity = state === 'learned' ? 0.35 : (state === 'path' ? 0.16 : 0.04)
+  })
+  labelObjects.forEach(item => {
+    item.sprite.material.opacity = Math.max(nodeOpacity(item.node), 0.42)
+  })
+  lineObjects.forEach(item => {
+    const from = item.fromNode
+    const to = item.toNode
+    item.line.material.opacity = Math.max(0.06, Math.min(nodeOpacity(from), nodeOpacity(to)) * 0.4)
+    item.line.material.linewidth = 1
+  })
+}
+
+const applyHoverStyles = (nodeId) => {
+  const highlighted = getRelatedChainNodeIds(nodeId)
+  nodeObjects.forEach(item => {
+    const isActive = highlighted.has(Number(item.node.id))
+    item.mesh.material.opacity = isActive ? Math.max(nodeOpacity(item.node), 0.96) : Math.min(nodeOpacity(item.node), 0.14)
+    item.mesh.scale.setScalar(isActive ? 1.32 : 0.92)
+    item.mesh.material.emissiveIntensity = isActive ? 0.58 : 0.04
+  })
+  labelObjects.forEach(item => {
+    item.sprite.material.opacity = highlighted.has(Number(item.node.id)) ? 1 : 0.25
+  })
+  lineObjects.forEach(item => {
+    const active = highlighted.has(Number(item.edge.fromNodeId)) && highlighted.has(Number(item.edge.toNodeId))
+    item.line.material.opacity = active ? 0.86 : 0.06
+  })
+}
+
+const renderChart = () => {
+  if (!chartRef.value) return
+  clearScene()
+
+  const { nodeList, edgeList } = getFilteredData()
+  if (!nodeList.length) return
+
+  const placedNodes = placeNodes(nodeList)
+  const nodeMap = {}
+  placedNodes.forEach(node => { nodeMap[Number(node.id)] = node })
+
+  const bgColor = new THREE.Color(getCssVar('--bg-input', '#f8f5f0'))
+  scene.background = bgColor
+  scene.add(new THREE.AmbientLight(0xffffff, 1.9))
+  const keyLight = new THREE.DirectionalLight(0xffffff, 2.2)
+  keyLight.position.set(30, 40, 55)
+  scene.add(keyLight)
+  const fillLight = new THREE.PointLight(0xffb277, 1.6, 160)
+  fillLight.position.set(-35, -20, 35)
+  scene.add(fillLight)
+
+  edgeList.forEach(edge => {
+    const from = nodeMap[Number(edge.fromNodeId)]
+    const to = nodeMap[Number(edge.toNodeId)]
+    if (!from || !to) return
+    const points = [
+      new THREE.Vector3(from.x, from.y, from.z),
+      new THREE.Vector3(to.x, to.y, to.z)
+    ]
+    const geometry = new THREE.BufferGeometry().setFromPoints(points)
+    const material = new THREE.LineBasicMaterial({
+      color: getCssVar('--text-muted', '#a09a92'),
+      transparent: true,
+      opacity: Math.max(0.06, Math.min(nodeOpacity(from), nodeOpacity(to)) * 0.4)
+    })
+    const line = new THREE.Line(geometry, material)
+    scene.add(line)
+    lineObjects.push({ line, edge, fromNode: from, toNode: to })
+  })
+
+  placedNodes.forEach(node => {
+    const state = getNodeState(node)
+    const material = new THREE.MeshStandardMaterial({
+      color: colorByDifficulty(node),
+      roughness: 0.38,
+      metalness: 0.1,
+      transparent: true,
+      opacity: nodeOpacity(node),
+      emissive: colorByDifficulty(node),
+      emissiveIntensity: state === 'learned' ? 0.35 : (state === 'path' ? 0.16 : 0.04)
+    })
+    const mesh = new THREE.Mesh(new THREE.SphereGeometry(radiusByDifficulty(node), 32, 24), material)
+    mesh.position.set(node.x, node.y, node.z)
+    mesh.scale.setScalar(state === 'learned' ? 1.18 : 1)
+    mesh.userData.node = node
+    scene.add(mesh)
+    nodeObjects.push({ mesh, node })
+
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(radiusByDifficulty(node) * 1.2, 0.14, 10, 48),
+      new THREE.MeshBasicMaterial({
+        color: state === 'learned' ? getCssVar('--accent', '#ff7b3d') : getCssVar('--accent-gold', '#b89030'),
+        transparent: true,
+        opacity: state === 'unseen' ? 0.12 : 0.55
+      })
+    )
+    ring.position.copy(mesh.position)
+    ring.rotation.x = Math.PI / 2
+    scene.add(ring)
+    nodeObjects.push({ mesh: ring, node })
+
+    const label = createTextSprite(node.name || '未命名', Math.max(nodeOpacity(node), 0.42))
+    label.position.set(node.x, node.y - radiusByDifficulty(node) - 3.2, node.z)
+    scene.add(label)
+    labelObjects.push({ sprite: label, node })
+  })
+}
+
+const initScene = () => {
+  if (!chartRef.value || renderer) return
+  scene = new THREE.Scene()
+  camera = new THREE.PerspectiveCamera(50, 1, 0.1, 1000)
+  camera.position.set(0, 16, 118)
+
+  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false })
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2))
+  renderer.outputColorSpace = THREE.SRGBColorSpace
+  chartRef.value.appendChild(renderer.domElement)
+
+  controls = new OrbitControls(camera, renderer.domElement)
+  controls.enableDamping = true
+  controls.dampingFactor = 0.08
+  controls.minDistance = 38
+  controls.maxDistance = 210
+  controls.autoRotate = true
+  controls.autoRotateSpeed = 0.22
+
+  raycaster = new THREE.Raycaster()
+  renderer.domElement.addEventListener('pointermove', handlePointerMove)
+  renderer.domElement.addEventListener('pointerleave', handlePointerLeave)
+  renderer.domElement.addEventListener('click', handleCanvasClick)
+
+  resizeObserver = new ResizeObserver(resizeScene)
+  resizeObserver.observe(chartRef.value)
+  resizeScene()
+  animate()
+}
+
+const resizeScene = () => {
+  if (!chartRef.value || !renderer || !camera) return
+  const width = chartRef.value.clientWidth || 800
+  const height = chartRef.value.clientHeight || 620
+  camera.aspect = width / height
+  camera.updateProjectionMatrix()
+  renderer.setSize(width, height, false)
+}
+
+const getIntersectedNode = (event) => {
+  if (!renderer || !camera) return null
+  const rect = renderer.domElement.getBoundingClientRect()
+  const pointer = new THREE.Vector2(
+    ((event.clientX - rect.left) / rect.width) * 2 - 1,
+    -((event.clientY - rect.top) / rect.height) * 2 + 1
+  )
+  raycaster.setFromCamera(pointer, camera)
+  const meshes = nodeObjects.map(item => item.mesh).filter(mesh => mesh.userData.node)
+  const hit = raycaster.intersectObjects(meshes, false)[0]
+  return hit?.object?.userData?.node || null
+}
+
+const handlePointerMove = (event) => {
+  const node = getIntersectedNode(event)
+  const nextId = node ? Number(node.id) : null
+  renderer.domElement.style.cursor = node ? 'pointer' : 'grab'
+  if (hoveredNodeId === nextId) return
+  hoveredNodeId = nextId
+  if (nextId) {
+    controls.autoRotate = false
+    applyHoverStyles(nextId)
+  } else {
+    applyDefaultStyles()
+  }
+}
+
+const handlePointerLeave = () => {
+  hoveredNodeId = null
+  renderer.domElement.style.cursor = 'grab'
+  applyDefaultStyles()
+}
+
+const handleCanvasClick = (event) => {
+  const node = getIntersectedNode(event)
+  if (!node) return
+  currentNode.value = node
+  dialogVisible.value = true
+  speakForNode(node)
+}
+
+const animate = () => {
+  animationId = requestAnimationFrame(animate)
+  controls?.update()
+  renderer?.render(scene, camera)
+}
+
+const resetView = () => {
+  if (!camera || !controls) return
+  camera.position.set(0, 16, 118)
+  controls.target.set(0, 0, 0)
+  controls.autoRotate = true
+  controls.update()
+}
+
+const onCourseChange = () => {
+  hoveredNodeId = null
+  renderChart()
+  resetView()
+  speakForCourse(selectedCourseId.value)
+}
+
+const getCourseMessage = (course) => {
+  const name = course.courseName || '这门课'
+  const subject = course.subject || ''
+  if (subject.includes('数学')) return `打开《${name}》啦，先抓住核心概念，再一步步推理。`
+  if (subject.includes('物理')) return `《${name}》很适合联系生活现象，一边观察一边理解规律。`
+  if (subject.includes('信息') || subject.includes('计算机') || name.toLowerCase().includes('python')) return `学《${name}》可以多动手试试，小程序会帮你把思路跑通。`
+  if (subject.includes('跨学科')) return `《${name}》要把不同学科串起来，先找一个真实问题切入。`
+  return `开始看《${name}》吧，先扫一遍知识点，再挑重点突破。`
+}
+
+const speakForCourse = (courseId) => {
+  if (!courseId || lastSpokenCourseId.value === courseId) return
+  const course = courses.value.find(c => Number(c.id) === Number(courseId))
+  if (!course) return
+  lastSpokenCourseId.value = courseId
+  pet.say(getCourseMessage(course))
+}
+
+const speakForNode = (node) => {
+  if (!node) return
+  const name = node.name || '这个知识点'
+  if (node.difficulty >= 3) {
+    pet.say(`《${name}》有点挑战，先拆成概念、例题、练习三步来。`)
+    return
+  }
+  if (node.difficulty === 2) {
+    pet.say(`点到《${name}》啦，先看懂例子，再做两道题巩固。`)
+    return
+  }
+  pet.say(`《${name}》是打基础的好节点，稳稳拿下它。`)
+}
 
 const handleGeneratePath = async (node) => {
   if (!node) return
@@ -242,13 +498,19 @@ const fetchGraph = async () => {
   loading.value = true
   try {
     const res = await getStudentGraph()
-    if (res && res.nodes) { nodes.value = res.nodes; edges.value = res.edges || [] }
+    if (res && res.nodes) {
+      nodes.value = res.nodes
+      edges.value = res.edges || []
+      learnedNodeIds.value = new Set((res.learnedNodeIds || []).map(id => Number(id)))
+      pathNodeIds.value = new Set((res.pathNodeIds || []).map(id => Number(id)))
+    }
   } catch {
     ElMessage.error('知识图谱加载失败')
     nodes.value = []
     edges.value = []
+  } finally {
+    loading.value = false
   }
-  finally { loading.value = false }
 }
 
 const fetchCourses = async () => {
@@ -258,32 +520,55 @@ const fetchCourses = async () => {
   } catch { /* ignore */ }
 }
 
+const destroyScene = () => {
+  if (animationId) cancelAnimationFrame(animationId)
+  renderer?.domElement?.removeEventListener('pointermove', handlePointerMove)
+  renderer?.domElement?.removeEventListener('pointerleave', handlePointerLeave)
+  renderer?.domElement?.removeEventListener('click', handleCanvasClick)
+  resizeObserver?.disconnect()
+  clearScene()
+  controls?.dispose()
+  renderer?.dispose()
+  if (renderer?.domElement?.parentNode) renderer.domElement.parentNode.removeChild(renderer.domElement)
+  scene = null
+  camera = null
+  renderer = null
+  controls = null
+  raycaster = null
+}
+
 onMounted(async () => {
   await fetchGraph()
   await fetchCourses()
-  if (route.query.courseId) {
-    selectedCourseId.value = Number(route.query.courseId)
-  }
+  if (route.query.courseId) selectedCourseId.value = Number(route.query.courseId)
   await nextTick()
+  initScene()
   renderChart()
+  resetView()
+  speakForCourse(selectedCourseId.value)
 })
 
 watch(() => route.query.courseId, (courseId) => {
   selectedCourseId.value = courseId ? Number(courseId) : ''
   renderChart()
+  resetView()
+  speakForCourse(selectedCourseId.value)
 })
 
-onBeforeUnmount(() => {
-  svg = null; zoom = null; zoomG = null
-})
+onBeforeUnmount(destroyScene)
 </script>
 
 <style scoped>
 .graph-view { min-height: 100vh; background: var(--bg-root); }
-.graph-card { border-radius: 12px; min-height: 500px; position: relative; margin: 0 32px 24px; }
-.chart-container { width: 100%; min-height: 600px; overflow: hidden; }
-.chart-container :deep(svg) { display: block; }
+.graph-card { border-radius: 12px; min-height: 620px; position: relative; margin: 0 32px 24px; overflow: hidden; }
+.chart-container { width: 100%; height: min(72vh, 780px); min-height: 560px; overflow: hidden; border-radius: 8px; background: var(--bg-input); }
+.chart-container :deep(canvas) { display: block; width: 100%; height: 100%; cursor: grab; }
 .detail-desc { margin-top: 20px; }
 .detail-desc h4 { margin: 0 0 8px; font-size: 15px; color: var(--text-primary); }
 .detail-desc p { font-size: 14px; color: var(--text-secondary); line-height: 1.8; white-space: pre-wrap; }
+
+@media (max-width: 700px) {
+  .graph-card { margin: 0 12px 16px; min-height: 520px; }
+  .chart-container { height: 66vh; min-height: 480px; }
+}
 </style>

@@ -22,12 +22,12 @@
           <div class="progress-section">
             <span class="info-label">整体进度：</span>
             <el-progress
-              :percentage="detail.progress || progressPercent"
+              :percentage="displayProgress"
               :stroke-width="14"
-              :status="(detail.progress || progressPercent) === 100 ? 'success' : undefined"
+              :status="displayProgress === 100 ? 'success' : undefined"
               style="flex: 1"
             />
-            <span class="progress-text">{{ detail.progress || progressPercent }}%</span>
+            <span class="progress-text">{{ displayProgress }}%</span>
           </div>
         </el-card>
 
@@ -116,8 +116,17 @@ const computedNodes = computed(() => {
 const progressPercent = computed(() => {
   if (!nodes.value.length) return 0
   const done = nodes.value.filter((n) => n.status === 'completed').length
-  return Math.round((done / nodes.value.length) * 100)
+  return formatProgress((done / nodes.value.length) * 100)
 })
+
+const displayProgress = computed(() => {
+  return formatProgress(detail.value?.progress ?? progressPercent.value)
+})
+
+const formatProgress = (progress) => {
+  const value = Number(progress || 0)
+  return Math.max(0, Math.min(100, Math.round(value)))
+}
 
 const difficultyLabel = (level) => {
   const map = { 1: '入门', 2: '基础', 3: '进阶', 4: '困难', 5: '挑战' }

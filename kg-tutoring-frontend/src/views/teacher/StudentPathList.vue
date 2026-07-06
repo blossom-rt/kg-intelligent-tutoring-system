@@ -76,9 +76,9 @@
         <el-table-column label="进度" width="200">
           <template #default="{ row }">
             <el-progress
-              :percentage="row.progress || 0"
+              :percentage="formatProgress(row.progress)"
               :stroke-width="10"
-              :status="row.progress === 100 ? 'success' : undefined"
+              :status="formatProgress(row.progress) === 100 ? 'success' : undefined"
             />
           </template>
         </el-table-column>
@@ -187,6 +187,11 @@ const formatTime = (time) => {
   const d = new Date(time)
   const pad = (n) => String(n).padStart(2, '0')
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`
+}
+
+const formatProgress = (progress) => {
+  const value = Number(progress || 0)
+  return Math.max(0, Math.min(100, Math.round(value)))
 }
 
 const loadStudents = async () => {
