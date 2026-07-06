@@ -418,7 +418,10 @@ function handleGraphNodeClick(d) {
 
     // 异步调用后端
     createEdge({ fromNodeId: sourceNode.value.id, toNodeId: targetNode.value.id })
-      .then(() => {
+      .then((res) => {
+        // 用后端返回的真实 ID 更新本地数据，确保删除时能找到
+        const createdId = res?.data?.id
+        if (createdId) newEdge.id = createdId
         ElMessage.success('依赖边创建成功')
       })
       .catch((err) => {
