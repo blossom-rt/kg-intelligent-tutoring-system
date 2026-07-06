@@ -26,6 +26,18 @@ public class KnowledgeNode {
     /** 知识点讲解内容 */
     private String description;
 
+    /** 节点类型：concept概念 skill技能 application应用 */
+    private String nodeType;
+
+    /** 学习目标 */
+    private String learningGoal;
+
+    /** 关键词，逗号分隔 */
+    private String keywords;
+
+    /** 例题或学习提示 */
+    private String exampleHint;
+
     /** 难度：1基础 2进阶 3困难 */
     private Integer difficulty;
 

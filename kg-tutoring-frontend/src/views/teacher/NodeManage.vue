@@ -32,6 +32,11 @@
             <el-tag :type="diffTag(row.difficulty)" size="small">{{ diffLabel(row.difficulty) }}</el-tag>
           </template>
         </el-table-column>
+        <el-table-column prop="nodeType" label="类型" width="100" align="center">
+          <template #default="{ row }">
+            <el-tag size="small" effect="plain">{{ nodeTypeLabel(row.nodeType) }}</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column prop="chapter" label="章节" width="140" />
         <el-table-column prop="expectedMinutes" label="预计时长(分)" width="120" align="center" />
         <el-table-column label="操作" width="160" fixed="right">
@@ -54,7 +59,7 @@
     <el-dialog
       v-model="dialogVisible"
       :title="isEdit ? '编辑知识点' : '新增知识点'"
-      width="520px"
+      width="620px"
       :close-on-click-modal="false"
     >
       <el-form ref="formRef" :model="form" :rules="rules" label-width="100px">
@@ -68,6 +73,22 @@
         </el-form-item>
         <el-form-item label="描述" prop="description">
           <el-input v-model="form.description" type="textarea" :rows="3" placeholder="请输入知识点描述" />
+        </el-form-item>
+        <el-form-item label="节点类型" prop="nodeType">
+          <el-select v-model="form.nodeType" placeholder="请选择节点类型" style="width: 100%">
+            <el-option label="概念理解" value="concept" />
+            <el-option label="方法技能" value="skill" />
+            <el-option label="应用实践" value="application" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="学习目标" prop="learningGoal">
+          <el-input v-model="form.learningGoal" maxlength="200" show-word-limit placeholder="学生学完后应能做到什么" />
+        </el-form-item>
+        <el-form-item label="关键词" prop="keywords">
+          <el-input v-model="form.keywords" maxlength="200" placeholder="例如：数轴、绝对值、有理数运算" />
+        </el-form-item>
+        <el-form-item label="例题提示" prop="exampleHint">
+          <el-input v-model="form.exampleHint" type="textarea" :rows="2" maxlength="300" show-word-limit placeholder="可填写一个典型题型或学习提醒" />
         </el-form-item>
         <el-form-item label="难度" prop="difficulty">
           <el-select v-model="form.difficulty" placeholder="请选择难度" style="width: 100%">
@@ -126,6 +147,10 @@ const form = reactive({
   courseId: null,
   name: '',
   description: '',
+  nodeType: 'concept',
+  learningGoal: '',
+  keywords: '',
+  exampleHint: '',
   difficulty: 1,
   chapter: '',
   expectedMinutes: 30
@@ -149,6 +174,11 @@ const diffTag = (val) => {
   if (val === 2) return 'warning'
   if (val === 3) return 'danger'
   return 'info'
+}
+
+const nodeTypeLabel = (val) => {
+  const map = { concept: '概念', skill: '技能', application: '应用' }
+  return map[val] || '概念'
 }
 
 const loadCourses = async () => {
@@ -192,7 +222,19 @@ const resetFilter = () => {
 
 const openAdd = () => {
   isEdit.value = false
-  Object.assign(form, { id: null, courseId: null, name: '', description: '', difficulty: 1, chapter: '', expectedMinutes: 30 })
+  Object.assign(form, {
+    id: null,
+    courseId: null,
+    name: '',
+    description: '',
+    nodeType: 'concept',
+    learningGoal: '',
+    keywords: '',
+    exampleHint: '',
+    difficulty: 1,
+    chapter: '',
+    expectedMinutes: 30
+  })
   dialogVisible.value = true
 }
 
@@ -203,6 +245,10 @@ const openEdit = (row) => {
     courseId: row.courseId || null,
     name: row.name || '',
     description: row.description || '',
+    nodeType: row.nodeType || 'concept',
+    learningGoal: row.learningGoal || '',
+    keywords: row.keywords || '',
+    exampleHint: row.exampleHint || '',
     difficulty: row.difficulty || 1,
     chapter: row.chapter || '',
     expectedMinutes: row.expectedMinutes || 30
@@ -219,6 +265,10 @@ const handleSubmit = async () => {
       courseId: form.courseId,
       name: form.name,
       description: form.description,
+      nodeType: form.nodeType,
+      learningGoal: form.learningGoal,
+      keywords: form.keywords,
+      exampleHint: form.exampleHint,
       difficulty: form.difficulty,
       chapter: form.chapter,
       expectedMinutes: form.expectedMinutes

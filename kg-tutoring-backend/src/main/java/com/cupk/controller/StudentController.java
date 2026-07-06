@@ -63,6 +63,7 @@ public class StudentController {
                 int total = details.size();
                 long finished = details.stream().filter(d -> d.getIsFinished() != null && d.getIsFinished() == 1).count();
                 int progress = total > 0 ? (int) Math.round((double) finished / total * 100) : 0;
+                progress = Math.max(0, Math.min(100, progress));
                 m.put("progress", progress);
                 return m;
             })

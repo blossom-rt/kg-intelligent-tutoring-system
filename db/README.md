@@ -81,7 +81,7 @@ mysql -u root -p < db/init/enrich_learning_materials.sql
 
 ## 导入后主要数据量
 
-执行 `init_full.sql`（或分步执行三个脚本）后，数据库共有 **21 张表**，主要数据量约：
+执行 `init_full.sql`（或分步执行三个脚本）后，数据库共有 **19 张表**，主要数据量约：
 
 | 表 | 数量 | 说明 |
 |---|---:|---|
