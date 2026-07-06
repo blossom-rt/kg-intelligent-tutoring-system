@@ -20,36 +20,44 @@ db/                     ← 数据库初始化脚本（按顺序执行）
 |------|---------|
 | 后端框架 | Spring Boot 3.5 + MyBatis Plus 3.5 |
 | 数据库 | MySQL 8.0 + HikariCP 连接池 |
-| 认证 | JWT (jjwt 0.11.5) + MD5 密码加密 |
-| 前端框架 | Vue 3.5 + Vite + Element Plus |
+| 认证 | JWT + MD5 密码加密 |
+| 前端框架 | Vue 3.5 + Vite + Element Plus 2.x |
 | 状态管理 | Pinia |
 | 路由 | Vue Router 5 |
+| 可视化 | ECharts 6.x |
 
 ---
 
-## 数据库（19 张表）
+## 数据库（21 张表）
 
 ```
+-- 用户与角色
 sys_role              ← 角色（admin / teacher / student）
 sys_user              ← 用户（关联角色）
+sys_email_code        ← 邮箱验证码（注册/找回密码）
 
+-- 知识图谱
 course                ← 课程（关联教师）
 knowledge_node        ← 知识点节点（图谱顶点）
 knowledge_edge        ← 前置依赖边（图谱有向边）
 
+-- 学习与练习
 question              ← 习题（关联知识点）
 study_record          ← 学习记录（学生→知识点，掌握度）
 study_path            ← 学习路径
 path_detail           ← 路径详情（排序后的知识点序列）
 
+-- 测评
 exam                  ← 测评定义
 exam_question         ← 测评-题目关联
 exam_record           ← 测评记录
 wrong_question        ← 错题本
+
+-- 跨学科主题
 cross_subject_theme   ← 跨学科主题
 cross_theme_node      ← 主题-知识点关联
 
-sys_email_code        ← 邮箱验证码
+-- 系统运维
 sys_notice            ← 系统公告
 sys_oper_log          ← 操作日志
 ai_call_log           ← AI 调用日志
@@ -72,18 +80,35 @@ ai_call_log           ← AI 调用日志
 
 ### 1. 数据库
 
-按顺序执行初始化脚本：
+全新环境，一条命令搞定：
 
 ```bash
-mysql -u root -p < db/init_all.sql
-mysql -u root -p < db/seed_all.sql
+mysql -u root -p < db/init_full.sql
 ```
 
-如果是已经初始化过的旧库，只需要补测评定义表，可执行：
+也可以分步执行（效果完全相同）：
 
 ```bash
-mysql -u root -p < db/migrate_exam.sql
+mysql -u root -p < db/init/init_all.sql                    # 建库建表
+mysql -u root -p < db/init/seed_all.sql                     # 导入演示数据
+mysql -u root -p < db/init/enrich_learning_materials.sql    # 补充学习资料
 ```
+
+如果只有旧库缺少 `exam`、`exam_question` 表（7 月 2 日前建的库）：
+
+```bash
+mysql -u root -p < db/migrate/migrate_exam.sql
+```
+
+如果测试过程中数据乱了，想重置：
+
+```bash
+mysql -u root -p < db/migrate/cleanup.sql      # 清空业务数据（保留 admin/teacher/student）
+mysql -u root -p < db/init/seed_all.sql
+mysql -u root -p < db/init/enrich_learning_materials.sql
+```
+
+详细脚本说明见 [`db/README.md`](db/README.md)。
 
 ### 2. 后端
 

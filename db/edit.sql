@@ -1,2 +1,0 @@
-USE kg_tutoring_db;
-INSERT INTO sys_oper_log (user_id, module, operation, ip, create_time) VALUES (5, '用户管理', '登录系统', '127.0.0.1', NOW()), (1, '刷题', '完成练习', '127.0.0.1', NOW()), (5, '用户管理', '新增用户', '127.0.0.1', NOW());

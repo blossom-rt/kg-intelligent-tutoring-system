@@ -2,54 +2,69 @@
 
 本目录用于初始化 `kg_tutoring_db` 数据库，并导入项目演示数据。
 
-## 推荐使用的两个脚本
+## 目录结构
 
-组员一般只需要使用这两个脚本：
-
-| 脚本 | 作用 |
-|---|---|
-| `init_all.sql` | 创建数据库、创建所有表、初始化基础角色和管理员账号 |
-| `seed_all.sql` | 导入课程、知识点、题库、学生、教师、学习记录、测评记录、错题和主题等演示数据 |
-| `enrich_learning_materials.sql` | 为每个知识点补充结构化学习资料，可重复执行 |
-| `migrate_exam.sql` | 旧库补测评定义表和演示测评数据，已全新初始化时不需要执行 |
-
-## 全新数据库使用方式
-
-如果本地还没有初始化过数据库，执行：
-
-```bash
-cd kg-intelligent-tutoring-system/db
-
-mysql -u root -p < init_all.sql
-mysql -u root -p < seed_all.sql
-mysql -u root -p < enrich_learning_materials.sql
+```
+db/
+├── init_full.sql             ← 一键初始化（全新环境就用它）
+├── docker-init.sql           ← Docker 容器启动入口
+├── data_sources.md           ← 演示数据来源说明
+├── README.md                 ← 本文件
+├── init/                     ← 分步初始化脚本
+│   ├── init_all.sql              ← 第 1 步：建库建表 + 角色 + admin
+│   ├── seed_all.sql              ← 第 2 步：导入全部演示数据
+│   └── enrich_learning_materials.sql ← 第 3 步：补充知识点学习资料
+└── migrate/                  ← 维护/迁移脚本
+    ├── cleanup.sql               ← 清空业务数据（保留主账号）
+    └── migrate_exam.sql          ← 旧库升级：补 exam 表 + 演示测评
 ```
 
-执行完成后会生成数据库：
+## 快速开始
 
-```text
-kg_tutoring_db
-```
-
-## 已经建过表的情况
-
-如果数据库和表已经存在，只想补充或刷新演示数据，执行：
+### 方式 A：一键初始化（推荐）
 
 ```bash
-cd kg-intelligent-tutoring-system/db
-
-mysql -u root -p < seed_all.sql
-mysql -u root -p < enrich_learning_materials.sql
+mysql -u root -p < db/init_full.sql
 ```
 
-`seed_all.sql` 会导入完整演示数据，并完成必要的数据清理。`enrich_learning_materials.sql` 会把知识点的一句话简介扩展为“学习目标、核心概念、学习步骤、例题导学、常见误区、练习建议、自测清单”等结构化学习资料。
+一条命令完成：建库 → 建表 → 导入全部演示数据 → 补充学习资料。
 
-如果旧库还没有教师发布测评功能所需的 `exam`、`exam_question` 表，先执行：
+### 方式 B：分步执行
 
 ```bash
-cd kg-intelligent-tutoring-system/db
+mysql -u root -p < db/init/init_all.sql
+mysql -u root -p < db/init/seed_all.sql
+mysql -u root -p < db/init/enrich_learning_materials.sql
+```
 
-mysql -u root -p < migrate_exam.sql
+效果与 `init_full.sql` 完全相同。
+
+### 方式 C：Docker
+
+使用项目根目录的 `docker-compose.yml`，它会自动挂载 `init/` 下的三个脚本，启动 MySQL 时执行 `docker-init.sql`。
+
+## 数据重置
+
+如果数据库和表已经存在，只想清空业务数据并重新导入：
+
+```bash
+mysql -u root -p < db/migrate/cleanup.sql     # 清空业务表（保留 admin/teacher/student）
+mysql -u root -p < db/init/seed_all.sql
+mysql -u root -p < db/init/enrich_learning_materials.sql
+```
+
+## 旧库升级
+
+如果旧库还没有 exam、exam_question 表（7 月 2 日前建的库）：
+
+```bash
+mysql -u root -p < db/migrate/migrate_exam.sql
+```
+
+然后补学习资料：
+
+```bash
+mysql -u root -p < db/init/enrich_learning_materials.sql
 ```
 
 ## 测试账号
@@ -66,25 +81,31 @@ mysql -u root -p < migrate_exam.sql
 
 ## 导入后主要数据量
 
-正常导入后大致会有：
+执行 `init_full.sql`（或分步执行三个脚本）后，数据库共有 **21 张表**，主要数据量约：
 
-| 表 | 数量 |
-|---|---:|
-| `sys_role` | 3 |
-| `sys_user` | 18 |
-| `course` | 9 |
-| `knowledge_node` | 56 |
-| `knowledge_edge` | 55 |
-| `question` | 56 |
-| `study_record` | 370 |
-| `exam` | 3 |
-| `exam_question` | 13 |
-| `exam_record` | 40 |
-| `wrong_question` | 66 |
-| `cross_subject_theme` | 3 |
-| `cross_theme_node` | 12 |
+| 表 | 数量 | 说明 |
+|---|---:|---|
+| `sys_role` | 3 | admin / teacher / student |
+| `sys_user` | 18 | 3 主账号 + 3 教师 + 12 学生 |
+| `sys_email_code` | 0 | 邮箱验证码（运行时产生） |
+| `course` | 9 | 含 1 门跨学科课程 |
+| `knowledge_node` | 56 | |
+| `knowledge_edge` | 55 | 含跨学科 support 边 |
+| `question` | 56 | |
+| `study_record` | 370 | |
+| `study_path` | — | |
+| `path_detail` | — | |
+| `exam` | 3 | |
+| `exam_question` | 13 | |
+| `exam_record` | 40 | |
+| `wrong_question` | 66 | |
+| `cross_subject_theme` | 3 | |
+| `cross_theme_node` | 12 | |
+| `sys_notice` | 2 | |
+| `sys_oper_log` | 2 | |
+| `ai_call_log` | 0 | AI 调用时产生 |
 
-可以用下面命令检查：
+验证命令：
 
 ```bash
 mysql -u root -p kg_tutoring_db -e "
@@ -102,32 +123,15 @@ UNION ALL SELECT 'wrong_question', COUNT(*) FROM wrong_question;
 
 ## 数据来源说明
 
-详细来源见：
-
-```text
-data_sources.md
-```
-
-简要说明：
+详细来源见 [`data_sources.md`](data_sources.md)。
 
 - 课程和知识点参考公开课程标准主题整理。
 - 题目是围绕知识点自编的演示题。
 - 学生、教师、学习记录、测评记录、错题均为虚构测试数据。
-- 不直接复制网上题库原题。
 
 ## 注意事项
 
-- 如果 MySQL 用户不是 `root`，把命令里的 `root` 换成自己的用户名。
-- 如果后端连接失败，检查 `kg-tutoring-backend/src/main/resources/application.properties` 里的数据库账号密码。
-- `seed_all.sql` 可以重复执行，核心演示数据不会无限重复。
-- 如果想完全重置数据库，可以先删除库再重新执行 `init_all.sql` 和 `seed_all.sql`。
-
-重置命令示例：
-
-```bash
-mysql -u root -p -e "DROP DATABASE IF EXISTS kg_tutoring_db;"
-
-cd kg-intelligent-tutoring-system/db
-mysql -u root -p < init_all.sql
-mysql -u root -p < seed_all.sql
-```
+- MySQL 用户名若不是 `root`，请替换命令中的 `root`。
+- 后端连接配置在 `kg-tutoring-backend/src/main/resources/application.properties`。
+- `seed_all.sql` 可重复执行（核心数据不会无限叠加）。
+- 完全重置：先 `DROP DATABASE kg_tutoring_db`，再重跑 `init_full.sql`。
