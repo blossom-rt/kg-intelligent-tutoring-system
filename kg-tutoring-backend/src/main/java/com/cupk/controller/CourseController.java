@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 课程控制器 —— 课程的增删改查（管理员操作）
@@ -44,6 +45,28 @@ public class CourseController {
     @GetMapping("/{id}")
     public Result<Course> getOne(@PathVariable Integer id) {
         return Result.success(courseService.getById(id));
+    }
+
+    /**
+     * 推荐与所选课程相关度高的其他课程
+     */
+    @GetMapping("/{id}/recommendations/related")
+    public Result<List<Map<String, Object>>> relatedRecommendations(
+            @PathVariable Integer id,
+            @RequestParam(required = false) Integer limit
+    ) {
+        return Result.success(courseService.recommendRelatedCourses(id, limit));
+    }
+
+    /**
+     * 学习这门课程的同学还学习了哪些课程
+     */
+    @GetMapping("/{id}/recommendations/also-learned")
+    public Result<List<Map<String, Object>>> alsoLearnedRecommendations(
+            @PathVariable Integer id,
+            @RequestParam(required = false) Integer limit
+    ) {
+        return Result.success(courseService.recommendAlsoLearnedCourses(id, limit));
     }
 
     /**

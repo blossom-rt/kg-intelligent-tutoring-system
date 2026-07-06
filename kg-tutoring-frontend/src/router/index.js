@@ -23,6 +23,7 @@ const routes = [
   { path: '/student/wrong', component: () => import('../views/student/WrongBook.vue'), meta: { roles: ['student'] } },
   { path: '/student/themes', component: () => import('../views/student/ThemeList.vue'), meta: { roles: ['student'] } },
   { path: '/student/theme/:id', component: () => import('../views/student/ThemeDetail.vue'), meta: { roles: ['student'] } },
+  { path: '/student/recommendations', component: () => import('../views/student/Personalization.vue'), meta: { roles: ['student'] } },
   { path: '/student/profile', component: () => import('../views/Profile.vue'), meta: { roles: ['student'] } },
 
   // 教师端

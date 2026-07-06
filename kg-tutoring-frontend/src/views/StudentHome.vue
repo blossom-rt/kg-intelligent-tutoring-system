@@ -46,7 +46,13 @@
 
         <div class="card">
           <div class="card-header"><el-icon class="card-icon"><Present /></el-icon>个性化推荐</div>
-          <div class="empty-hint">完成更多学习后，系统将为你精准推荐</div>
+          <div class="recommend-entry" @click="$router.push('/student/recommendations')">
+            <div>
+              <strong>按课程发现下一步</strong>
+              <span>相关课程与同伴共学课程推荐</span>
+            </div>
+            <el-button type="primary" size="small" round>查看</el-button>
+          </div>
         </div>
 
         <div class="card">
@@ -311,6 +317,14 @@ const showNotice = (n) => { currentNotice.value = n; noticeDialog.value = true }
 }
 .card-icon { color: var(--accent); font-size: 16px; flex-shrink: 0; }
 .empty-hint { color: var(--text-muted); font-size: 14px; text-align: center; padding: 20px 0; }
+.recommend-entry {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 16px; border-radius: 12px; background: var(--bg-input);
+  cursor: pointer; transition: background 0.2s ease, transform 0.2s ease;
+}
+.recommend-entry:hover { background: var(--bg-hover); transform: translateY(-2px); }
+.recommend-entry strong { display: block; margin-bottom: 6px; color: var(--text-primary); font-size: 15px; }
+.recommend-entry span { color: var(--text-muted); font-size: 13px; }
 
 /* ── 路径列表 ── */
 .path-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; }

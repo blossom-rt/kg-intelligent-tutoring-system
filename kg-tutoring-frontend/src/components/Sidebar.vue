@@ -63,6 +63,7 @@ const menuItems = computed(() => {
       { path: '/student/knowledge', label: '知识图谱', icon: Grid },
       { path: '/student/themes', label: '跨学科主题', icon: Connection },
       { path: '/student/path', label: '学习路径', icon: MapLocation },
+      { path: '/student/recommendations', label: '个性推荐', icon: DataAnalysis },
       { path: '/student/exams', label: '测评中心', icon: Tickets },
       { path: '/student/wrong', label: '错题本', icon: Notebook },
     ],
