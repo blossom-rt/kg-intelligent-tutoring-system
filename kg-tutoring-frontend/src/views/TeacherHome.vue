@@ -58,9 +58,17 @@
         <div class="card" style="flex:1">
           <div class="card-header">
             <el-icon class="card-head-icon"><Warning /></el-icon>
-<div v-if="weakNodes.length" class="weak-list"><div v-for="(item, idx) in weakNodes" :key="idx" class="weak-item"><span class="weak-rank" :style="{ background: idx < 2 ? '#f56c6c' : idx < 4 ? '#e6a23c' : '#909399' }">{{ idx + 1 }}</span><span class="weak-name">{{ item.nodeName }}</span><span class="weak-rate">{{ item.masteryRate || 0 }}%</span></div></div><div v-else class="empty-hint">暂无数据</div>
+            学生薄弱知识点 TOP5
           </div>
-        </div>
+          <div v-if="weakNodes.length" class="weak-list">
+            <div v-for="(item, idx) in weakNodes" :key="idx" class="weak-item">
+              <span class="weak-rank" :style="{ background: idx < 2 ? '#f56c6c' : idx < 4 ? '#e6a23c' : '#a09a92' }">{{ idx + 1 }}</span>
+              <span class="weak-name">{{ item.nodeName }}</span>
+              <span class="weak-rate">{{ item.masteryRate || 0 }}%</span>
+            </div>
+          </div>
+          <div v-else class="empty-hint">暂无数据</div>
+          </div>
       </div>
 
       <el-card class="section-card">
@@ -241,6 +249,16 @@ const showNotice = (n) => { currentNotice.value = n; noticeDialog.value = true }
 /* 底部双栏 */
 .bottom-row { display: flex; gap: 20px; }
 .empty-hint { color: var(--text-muted); font-size: 14px; text-align: center; padding: 28px 0; }
+
+.weak-list { display: flex; flex-direction: column; gap: 10px; }
+.weak-item { display: flex; align-items: center; gap: 12px; padding: 8px 0; }
+.weak-rank {
+  width: 24px; height: 24px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 12px; font-weight: 700; flex-shrink: 0;
+}
+.weak-name { flex: 1; font-size: 14px; color: #2d2a26; }
+.weak-rate { font-size: 14px; font-weight: 600; color: #ff7b3d; }
 
 @media (max-width: 1024px) {
   .entry-grid { grid-template-columns: repeat(3, 1fr); }
