@@ -44,7 +44,7 @@
         <el-table :data="paginatedEdgeList" v-loading="loading" size="small" max-height="500" stripe border>
           <el-table-column label="前置节点" min-width="140">
             <template #default="{ row }">
-              <span>{{ row.sourceName || '节点-' + row.sourceId }}</span>
+              <span>{{ nodeName(row.fromNodeId) }}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="60" align="center">
@@ -54,7 +54,7 @@
           </el-table-column>
           <el-table-column label="后继节点" min-width="140">
             <template #default="{ row }">
-              <span>{{ row.targetName || '节点-' + row.targetId }}</span>
+              <span>{{ nodeName(row.toNodeId) }}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="80" fixed="right" align="center">
@@ -82,16 +82,16 @@
       :close-on-click-modal="false"
     >
       <el-form ref="formRef" :model="form" :rules="edgeRules" label-width="100px">
-        <el-form-item label="前置节点" prop="sourceId">
-          <el-select v-model="form.sourceId" placeholder="请选择前置节点" style="width: 100%" filterable>
+        <el-form-item label="前置节点" prop="fromNodeId">
+          <el-select v-model="form.fromNodeId" placeholder="请选择前置节点" style="width: 100%" filterable>
             <el-option v-for="n in nodeList" :key="n.id" :label="n.name" :value="n.id"
-              :disabled="n.id === form.targetId" />
+              :disabled="n.id === form.toNodeId" />
           </el-select>
         </el-form-item>
-        <el-form-item label="后继节点" prop="targetId">
-          <el-select v-model="form.targetId" placeholder="请选择后继节点" style="width: 100%" filterable>
+        <el-form-item label="后继节点" prop="toNodeId">
+          <el-select v-model="form.toNodeId" placeholder="请选择后继节点" style="width: 100%" filterable>
             <el-option v-for="n in nodeList" :key="n.id" :label="n.name" :value="n.id"
-              :disabled="n.id === form.sourceId" />
+              :disabled="n.id === form.fromNodeId" />
           </el-select>
         </el-form-item>
       </el-form>
@@ -130,13 +130,13 @@ const filterForm = reactive({
 })
 
 const form = reactive({
-  sourceId: null,
-  targetId: null
+  fromNodeId: null,
+  toNodeId: null
 })
 
 const edgeRules = {
-  sourceId: [{ required: true, message: '请选择前置节点', trigger: 'change' }],
-  targetId: [{ required: true, message: '请选择后继节点', trigger: 'change' }]
+  fromNodeId: [{ required: true, message: '请选择前置节点', trigger: 'change' }],
+  toNodeId: [{ required: true, message: '请选择后继节点', trigger: 'change' }]
 }
 
 const diffLabel = (val) => {
@@ -161,18 +161,24 @@ const loadCourses = async () => {
   }
 }
 
+const nodeName = (id) => {
+  const n = nodeList.value.find(n => n.id === id)
+  return n ? n.name : ('节点-' + id)
+}
+
 const loadData = async () => {
   loading.value = true
   try {
-    const params = {}
-    if (filterForm.courseId) params.courseId = filterForm.courseId
     const [edgeRes, nodeRes] = await Promise.all([
-      getEdgeList(params),
+      getEdgeList(),
       getNodeList({ page: 1, size: 999, ...(filterForm.courseId ? { courseId: filterForm.courseId } : {}) })
     ])
-    edgeList.value = Array.isArray(edgeRes) ? edgeRes : (edgeRes.records || edgeRes.data || [])
-    pagination.total = edgeList.value.length
     nodeList.value = Array.isArray(nodeRes) ? nodeRes : (nodeRes.records || nodeRes.data || [])
+    // 过滤只保留当前课程节点间的边
+    const allEdges = Array.isArray(edgeRes) ? edgeRes : (edgeRes.records || edgeRes.data || [])
+    const nodeIds = new Set(nodeList.value.map(n => n.id))
+    edgeList.value = allEdges.filter(e => nodeIds.has(e.fromNodeId) && nodeIds.has(e.toNodeId))
+    pagination.total = edgeList.value.length
   } catch {
     edgeList.value = []
     nodeList.value = []
@@ -191,7 +197,7 @@ const openAddEdge = () => {
     ElMessage.warning('当前课程下知识点不足，请至少拥有2个知识点')
     return
   }
-  Object.assign(form, { sourceId: null, targetId: null })
+  Object.assign(form, { fromNodeId: null, toNodeId: null })
   dialogVisible.value = true
 }
 
@@ -201,9 +207,8 @@ const handleSubmit = async () => {
   submitLoading.value = true
   try {
     await createEdge({
-      sourceId: form.sourceId,
-      targetId: form.targetId,
-      courseId: filterForm.courseId
+      fromNodeId: form.fromNodeId,
+      toNodeId: form.toNodeId
     })
     ElMessage.success('依赖边创建成功')
     dialogVisible.value = false
