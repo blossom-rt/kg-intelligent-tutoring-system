@@ -24,7 +24,7 @@
             <div v-for="p in activePaths" :key="p.id" class="path-item">
               <div class="path-info">
                 <span class="path-title">{{ p.pathName }}</span>
-                <el-progress :percentage="p.progress" :stroke-width="6" :show-text="false" />
+                <el-progress :percentage="formatProgress(p.progress)" :stroke-width="6" :show-text="false" />
               </div>
               <el-tag size="small" round>进行中</el-tag>
               <el-button type="primary" size="small" round @click="$router.push('/student/path/' + p.id)">继续</el-button>
@@ -219,6 +219,11 @@ const timePeriod = computed(() => {
   return 'night'
 })
 const motivationTip = ref(tips[Math.floor(Math.random() * tips.length)])
+
+const formatProgress = (progress) => {
+  const value = Number(progress || 0)
+  return Math.max(0, Math.min(100, Math.round(value)))
+}
 
 onMounted(async () => {
   motivationTip.value = tips[Math.floor(Math.random() * tips.length)]

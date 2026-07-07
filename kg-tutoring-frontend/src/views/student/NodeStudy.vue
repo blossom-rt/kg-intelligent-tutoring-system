@@ -13,6 +13,9 @@
           <div class="meta-row">
             <span class="meta-label">所属课程：</span>
             <span class="meta-value">{{ node.courseName || '未分类' }}</span>
+            <el-tag size="small" effect="plain" style="margin-left: 12px">
+              {{ nodeTypeLabel(node.nodeType) }}
+            </el-tag>
             <el-tag :type="difficultyTagType(node.difficulty)" size="small" style="margin-left: 12px">
               {{ difficultyLabel(node.difficulty) }}
             </el-tag>
@@ -28,6 +31,20 @@
                   <el-button type="warning" plain size="small" :loading="aiSummaryLoading" @click="showAiSummary">
                     <el-icon style="margin-right:4px"><Promotion /></el-icon>AI 划重点
                   </el-button>
+                </div>
+                <div v-if="node.learningGoal || node.keywords || node.exampleHint" class="guide-block">
+                  <div v-if="node.learningGoal" class="guide-row">
+                    <span>学习目标</span>
+                    <p>{{ node.learningGoal }}</p>
+                  </div>
+                  <div v-if="node.keywords" class="guide-row">
+                    <span>关键词</span>
+                    <p>{{ node.keywords }}</p>
+                  </div>
+                  <div v-if="node.exampleHint" class="guide-row">
+                    <span>例题提示</span>
+                    <p>{{ node.exampleHint }}</p>
+                  </div>
                 </div>
                 <div class="desc-section" v-html="formattedContent"></div>
               </div>
@@ -206,6 +223,11 @@ const difficultyTagType = (level) => {
   return map[level] || 'info'
 }
 
+const nodeTypeLabel = (type) => {
+  const map = { concept: '概念理解', skill: '方法技能', application: '应用实践' }
+  return map[type] || '概念理解'
+}
+
 const goBack = () => {
   if (window.history.length > 1) {
     router.back()
@@ -324,6 +346,34 @@ onMounted(fetchNode)
   display: block;
   content: '';
   margin-bottom: 8px;
+}
+
+.guide-block {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 18px;
+  padding: 14px 16px;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  background: var(--bg-root);
+}
+
+.guide-row {
+  display: grid;
+  grid-template-columns: 76px 1fr;
+  gap: 12px;
+  align-items: start;
+}
+
+.guide-row span {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.guide-row p {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.7;
 }
 
 .exercise-list {
