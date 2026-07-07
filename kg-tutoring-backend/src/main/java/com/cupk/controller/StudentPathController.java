@@ -62,18 +62,23 @@ public class StudentPathController {
             item.put("id", p.getId());
             item.put("pathName", p.getPathName());
             item.put("targetNodeId", p.getTargetNodeId());
-            item.put("totalNodes", p.getTotalNodes());
             item.put("createTime", p.getCreateTime());
             item.put("aiSummary", p.getAiSummary());
 
             // 计算进度：已完成节点数 / 总节点数
+            long totalDetailNodes = pathDetailMapper.selectCount(
+                    new LambdaQueryWrapper<PathDetail>()
+                            .eq(PathDetail::getPathId, p.getId()));
             long finishedNodes = pathDetailMapper.selectCount(
                     new LambdaQueryWrapper<PathDetail>()
                             .eq(PathDetail::getPathId, p.getId())
                             .eq(PathDetail::getIsFinished, 1));
-            int progress = p.getTotalNodes() != null && p.getTotalNodes() > 0
-                    ? (int) Math.round(finishedNodes * 100.0 / p.getTotalNodes())
+            long totalNodes = totalDetailNodes > 0 ? totalDetailNodes : (p.getTotalNodes() != null ? p.getTotalNodes() : 0);
+            item.put("totalNodes", totalNodes);
+            int progress = totalNodes > 0
+                    ? (int) Math.round(finishedNodes * 100.0 / totalNodes)
                     : 0;
+            progress = Math.max(0, Math.min(100, progress));
             item.put("progress", progress);
 
             // 状态根据进度推导（进度100% = 已完成）

@@ -28,9 +28,9 @@
       <el-table-column label="进度" width="180">
         <template #default="{ row }">
           <el-progress
-            :percentage="row.progress || 0"
+            :percentage="formatProgress(row.progress)"
             :stroke-width="8"
-            :status="row.progress === 100 ? 'success' : undefined"
+            :status="formatProgress(row.progress) === 100 ? 'success' : undefined"
           />
         </template>
       </el-table-column>
@@ -164,6 +164,11 @@ const statusTagType = (status) => {
 const statusLabel = (status) => {
   const map = { active: '学习中', completed: '已完成', paused: '已暂停', abandoned: '已放弃' }
   return map[status] || '未知'
+}
+
+const formatProgress = (progress) => {
+  const value = Number(progress || 0)
+  return Math.max(0, Math.min(100, Math.round(value)))
 }
 
 const formatTime = (time) => {

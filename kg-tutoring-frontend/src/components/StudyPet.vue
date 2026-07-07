@@ -232,9 +232,11 @@ defineExpose({ celebrate, comfort, say, fireUp, poke })
   padding: 8px 14px;
   border-radius: 14px 14px 4px 14px;
   font-size: 13px; font-weight: 500;
-  white-space: nowrap;
+  white-space: normal;
+  line-height: 1.6;
   box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-  max-width: 200px;
+  width: max-content;
+  max-width: 240px;
 }
 .bubble-enter-active { animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
 .bubble-leave-active { animation: popIn 0.2s ease reverse; }
