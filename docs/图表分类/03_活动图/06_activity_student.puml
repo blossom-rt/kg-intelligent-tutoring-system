@@ -1,0 +1,89 @@
+@startuml kg_activity_student
+' ============================================================
+' 活动图 — 学生完整学习流程
+' 标准 UML：起始/终止节点、活动(圆角矩形)、菱形判断、循环
+' ============================================================
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontSize 11
+skinparam activity {
+    BackgroundColor #E3F2FD
+    BorderColor #1565C0
+    FontSize 11
+}
+skinparam diamondBackgroundColor #FFF9C4
+skinparam diamondBorderColor #F57F17
+skinparam startColor #4CAF50
+skinparam endColor #F44336
+
+title 学生完整学习流程 — 活动图
+
+start
+
+:访问系统;
+
+if (已注册?) then (否)
+    :填写注册信息;
+    :获取邮箱验证码;
+    :提交注册;
+    :注册成功;
+endif
+
+:登录系统;
+
+if (首次登录?) then (是)
+    :进入新手引导;
+else (否)
+    :进入学情看板;
+    if (有进行中的路径?) then (是)
+        :快捷续学;
+    endif
+endif
+
+:浏览知识图谱;
+:选择目标知识点;
+
+:生成学习路径;
+note right
+    系统通过拓扑排序
+    计算前置依赖链
+end note
+
+while (还有未完成节点?) is (是)
+    :学习知识点内容;
+
+    :完成配套练习;
+
+    :提交答案;
+
+    if (正确率 ≥ 80%?) then (是)
+        :标记节点已掌握\n(mastery_level = 2);
+        :解锁下一节点;
+    else (否)
+        :标记学习中\n(mastery_level = 1);
+        :继续刷题;
+    endif
+endwhile (否)
+
+:参加章节测评;
+
+if (测评通过?) then (是)
+    :生成 AI 诊断报告;
+    :查看报告;
+    stop
+else (否)
+    :错题自动收录;
+
+    :进入错题本;
+    :查看错题讲解;
+
+    :复习错题;
+    note right
+        可以按知识点
+        或按时间筛选
+    end note
+
+    :再次测评;
+    detach
+endif
+
+@enduml

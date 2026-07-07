@@ -1,44 +1,63 @@
-# kg-tutoring-frontend
+# 知识图谱智能导学系统前端
 
-This template should help get you started developing with Vue 3 in Vite.
+本目录是项目的 Vue 3 + Vite 前端工程。
 
-## Recommended IDE Setup
+## Docker 启动方式
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+如果使用项目根目录的 Docker Compose 一键启动：
 
-## Recommended Browser Setup
+```sh
+cd ..
+docker compose up -d --build
+```
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+前端访问地址：
 
-## Customize configuration
+```text
+http://localhost
+```
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+Docker 方式下，前端会先执行 `npm run build`，再由 Nginx 容器托管打包后的静态文件。Nginx 使用默认 `80` 端口，所以访问地址是 `http://localhost`，不是 `http://localhost:5173`。
 
-## Project Setup
+前端容器中已经配置接口代理：
+
+```text
+/api/kg/* -> backend:8080/api/*
+```
+
+## 本地开发方式
+
+如果需要前端热更新开发，可以单独启动 Vite 开发服务器：
 
 ```sh
 npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
 npm run dev
 ```
 
-### Compile and Minify for Production
+本地开发访问地址：
+
+```text
+http://localhost:5173
+```
+
+`localhost:5173` 只对应本地 Vite 开发服务器；Docker 启动时不使用这个端口。
+
+## 构建
 
 ```sh
 npm run build
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+## 代码检查
 
 ```sh
 npm run lint
 ```
+
+## 常用测试账号
+
+| 角色 | 账号 | 密码 |
+|---|---|---|
+| 学生 | `student` | `123456` |
+| 教师 | `teacher` | `123456` |
+| 管理员 | `admin` | `admin123` |

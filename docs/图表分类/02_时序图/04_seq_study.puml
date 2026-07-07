@@ -1,0 +1,106 @@
+@startuml kg_seq_study
+' ============================================================
+' 顺序图 — 学习流程
+' 标准 UML：分段、alt/else、循环、自调用
+' ============================================================
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontSize 11
+skinparam sequenceMessageAlign center
+
+title 学生学习流程 — 顺序图
+
+actor "学生" as S
+participant "Vue 前端" as F
+participant "SpringBoot\n后端" as B
+database "MySQL" as D
+
+== 进入知识图谱 ==
+
+S -> F : 进入知识图谱页面
+activate F
+
+F -> B : GET /student/knowledge-nodes
+activate B
+
+B -> D : SELECT * FROM knowledge_node
+activate D
+D --> B : 知识点列表
+deactivate D
+
+B --> F : 知识点列表 JSON
+deactivate B
+
+F -> F : 渲染知识点卡片
+F --> S : 展示知识点图谱
+
+|||
+
+== 生成学习路径 ==
+
+S -> F : 选择目标知识点\n点击"生成学习路径"
+F -> B : POST /student/study-path/generate\n{targetNodeId}
+activate B
+
+B -> B : 拓扑排序算法\n(+) 计算前置依赖链
+note right of B
+    从目标节点反向 BFS
+    收集所有前置依赖节点
+    按拓扑序排列
+end note
+
+B -> D : INSERT INTO study_path\n(user_id, target_node_id, path_name, ...)
+activate D
+D --> B : path_id
+deactivate D
+
+loop 每个路径节点
+    B -> D : INSERT INTO path_detail\n(path_id, node_id, sort_order)
+    activate D
+    D --> B : OK
+    deactivate D
+end
+
+B --> F : {pathId, nodes: [...], totalMinutes}
+deactivate B
+
+F --> S : 展示学习路径节点列表
+
+|||
+
+== 按序学习 + 练习 ==
+
+loop 逐个节点学习
+    S -> F : 学习知识点内容
+    F -> F : 展示知识点讲解
+    S -> F : 完成配套练习
+    F -> B : POST /student/submit-answer\n{questionId, userAnswer}
+    activate B
+
+    B -> D : INSERT INTO study_record\n(user_id, node_id, ...)
+    activate D
+    D --> B : OK
+    deactivate D
+
+    B -> B : 计算正确率
+
+    alt 正确率 ≥ 阈值 (80%)
+        B -> D : UPDATE study_record\nSET mastery_level = 2
+        activate D
+        D --> B : OK
+        deactivate D
+        B --> F : {correctRate, masteryLevel: 2}\n达标 ✓ 解锁下一节点
+    else 正确率 < 阈值
+        B -> D : UPDATE study_record\nSET mastery_level = 1
+        activate D
+        D --> B : OK
+        deactivate D
+        B --> F : {correctRate, masteryLevel: 1}\n未达标，建议继续刷题
+    end
+    deactivate B
+
+    F --> S : 显示判分结果与掌握度
+end
+
+deactivate F
+
+@enduml

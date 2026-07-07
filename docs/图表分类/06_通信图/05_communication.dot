@@ -1,0 +1,156 @@
+/*
+ * ============================================================
+ * 通信图 (Communication Diagram) — KG 智能导学系统
+ * 标准 UML：对象节点 + 链路(link) + 编号消息序列
+ * 用 Graphviz DOT 渲染：dot -Tpng 05_communication.dot -o 05_communication.png
+ * ============================================================
+ */
+
+digraph KG_Communication {
+    rankdir=LR;
+    splines=polyline;
+    fontname="Helvetica";
+    fontsize=14;
+    label="通信图 — KG 智能导学系统架构交互";
+
+    /* 全局样式 */
+    node [fontname="Helvetica", fontsize=10];
+    edge [fontname="Helvetica", fontsize=9];
+
+    /* ====== 子图：Vue 前端 ====== */
+    subgraph cluster_frontend {
+        label="<<component>>\nVue 前端";
+        style=filled;
+        fillcolor="#E3F2FD";
+        color="#1565C0";
+        fontsize=12;
+        penwidth=2;
+
+        login [label="登录页\n:LoginView", shape=rect, style="rounded,filled", fillcolor="#BBDEFB"];
+        register [label="注册页\n:RegisterView", shape=rect, style="rounded,filled", fillcolor="#BBDEFB"];
+        stuhome [label="学生首页\n:StudentHome", shape=rect, style="rounded,filled", fillcolor="#BBDEFB"];
+        kggraph [label="知识图谱\n:KGGraph", shape=rect, style="rounded,filled", fillcolor="#BBDEFB"];
+        wrongbook [label="错题本\n:WrongBook", shape=rect, style="rounded,filled", fillcolor="#BBDEFB"];
+        teachwp [label="教师工作台\n:TeachWorkplace", shape=rect, style="rounded,filled", fillcolor="#BBDEFB"];
+        adminp [label="管理后台\n:AdminPanel", shape=rect, style="rounded,filled", fillcolor="#BBDEFB"];
+    }
+
+    /* ====== 子图：SpringBoot 后端 ====== */
+    subgraph cluster_backend {
+        label="<<component>>\nSpringBoot 后端";
+        style=filled;
+        fillcolor="#FFF3E0";
+        color="#E65100";
+        fontsize=12;
+        penwidth=2;
+
+        auth [label="认证接口\n:AuthController", shape=rect, style="rounded,filled", fillcolor="#FFE0B2"];
+        stu [label="学生接口\n:StudentController", shape=rect, style="rounded,filled", fillcolor="#FFE0B2"];
+        teach [label="教师接口\n:TeacherController", shape=rect, style="rounded,filled", fillcolor="#FFE0B2"];
+    }
+
+    /* ====== 子图：MySQL 数据库 ====== */
+    subgraph cluster_database {
+        label="<<component>>\nMySQL 数据库";
+        style=filled;
+        fillcolor="#E8F5E9";
+        color="#2E7D32";
+        fontsize=12;
+        penwidth=2;
+
+        user [label="sys_user\n用户表", shape=cylinder, style=filled, fillcolor="#C8E6C9"];
+        role [label="sys_role\n角色表", shape=cylinder, style=filled, fillcolor="#C8E6C9"];
+        knode [label="knowledge_node\n知识点表", shape=cylinder, style=filled, fillcolor="#C8E6C9"];
+        path [label="study_path\n学习路径表", shape=cylinder, style=filled, fillcolor="#C8E6C9"];
+        wrong [label="wrong_question\n错题本表", shape=cylinder, style=filled, fillcolor="#C8E6C9"];
+    }
+
+    /* ====== 链路 & 编号消息 ====== */
+
+    /* ── 登录 ── */
+    login -> auth [
+        label="1: POST /user/login",
+        fontcolor="#1565C0",
+        color="#1565C0"
+    ];
+    auth -> user [
+        label="1.1: SELECT",
+        fontcolor="#1565C0",
+        color="#1565C0"
+    ];
+    auth -> role [
+        label="1.2: 校验 role_id",
+        fontcolor="#1565C0",
+        color="#1565C0"
+    ];
+
+    /* ── 注册 ── */
+    register -> auth [
+        label="2: GET /user/send-code\n3: POST /user/register",
+        fontcolor="#6A1B9A",
+        color="#6A1B9A"
+    ];
+    auth -> user [
+        label="2.1: INSERT",
+        fontcolor="#6A1B9A",
+        color="#6A1B9A"
+    ];
+
+    /* ── 学生学习 ── */
+    stuhome -> stu [
+        label="4: GET /student/study-path",
+        fontcolor="#2E7D32",
+        color="#2E7D32"
+    ];
+    kggraph -> stu [
+        label="5: GET /student/knowledge-nodes",
+        fontcolor="#2E7D32",
+        color="#2E7D32"
+    ];
+    stu -> path [
+        label="4.1: INSERT/SELECT",
+        fontcolor="#2E7D32",
+        color="#2E7D32"
+    ];
+    stu -> knode [
+        label="5.1: SELECT",
+        fontcolor="#2E7D32",
+        color="#2E7D32"
+    ];
+
+    /* ── 错题本 ── */
+    wrongbook -> stu [
+        label="6: GET /student/wrong-questions",
+        fontcolor="#D84315",
+        color="#D84315"
+    ];
+    stu -> wrong [
+        label="6.1: SELECT",
+        fontcolor="#D84315",
+        color="#D84315"
+    ];
+
+    /* ── 教师 ── */
+    teachwp -> teach [
+        label="7: CRUD /teacher/*",
+        fontcolor="#E65100",
+        color="#E65100"
+    ];
+    teach -> knode [
+        label="7.1: INSERT/UPDATE",
+        fontcolor="#E65100",
+        color="#E65100"
+    ];
+    teach -> user [
+        label="7.2: SELECT\n(学情查看)",
+        fontcolor="#E65100",
+        color="#E65100"
+    ];
+
+    /* ── 管理员 ── */
+    adminp -> user [
+        label="8: 用户管理 CRUD",
+        fontcolor="#37474F",
+        color="#37474F"
+    ];
+}
