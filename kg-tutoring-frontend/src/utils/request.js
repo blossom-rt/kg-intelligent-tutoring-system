@@ -41,7 +41,7 @@ service.interceptors.response.use(
       ElMessage.error('账号或密码错误')
     } else if (status === 403) {
       ElMessage.error('无权限')
-    } else {
+    } else if (status !== 404) {
       ElMessage.error('请求异常')
     }
     return Promise.reject(err)

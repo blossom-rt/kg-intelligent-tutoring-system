@@ -90,6 +90,7 @@ import { ElMessage } from 'element-plus'
 import { ArrowLeft, CircleCheck, Download, Loading, Lock } from '@element-plus/icons-vue'
 import * as echarts from 'echarts'
 import confetti from 'canvas-confetti'
+import { usePet } from '../../composables/usePet'
 import { getPathDetail } from '../../api/student'
 
 const router = useRouter()
@@ -97,6 +98,7 @@ const route = useRoute()
 const loading = ref(false)
 const detail = ref(null)
 const nodes = ref([])
+const pet = usePet()
 
 // 根据 sortOrder 和完成状态推导每个节点的实际状态
 const computedNodes = computed(() => {
@@ -192,19 +194,26 @@ const bigCelebrate = () => {
   setTimeout(() => confetti({ particleCount: 150, spread: 120, origin: { x: 0.5, y: 0.5 }, colors, disableForReducedMotion: true }), 500)
 }
 
-// 进度变化时触发庆祝
-const lastSeenKey = computed(() => `path_progress_${route.params.id}`)
-watch(displayProgress, (newVal, oldVal) => {
-  if (newVal === oldVal || newVal === 0) return
-  const key = lastSeenKey.value
-  const prev = Number(localStorage.getItem(key) || 0)
-  if (newVal > prev && newVal < 100) {
+// 进度变化时触发庆祝（跨页面导航保持状态）
+const progressKey = computed(() => `path_p_${route.params.id}`)
+const lastSaved = computed(() => Number(localStorage.getItem(progressKey.value) || 0))
+
+const hasFiredBig = ref(false)
+
+watch(displayProgress, (newVal) => {
+  if (!newVal || newVal <= lastSaved.value) return
+  if (newVal < 100 && newVal > 0) {
     setTimeout(() => smallCelebrate(), 300)
+    pet.celebrate()
+    pet.say('又完成了一个节点！')
   }
-  if (newVal >= 100 && prev < 100) {
+  if (newVal >= 100 && !hasFiredBig.value) {
+    hasFiredBig.value = true
     setTimeout(() => bigCelebrate(), 500)
+    pet.fireUp()
+    pet.say('太厉害了！全部完成了！')
   }
-  localStorage.setItem(key, String(newVal))
+  localStorage.setItem(progressKey.value, String(newVal))
 })
 
 const fetchDetail = async () => {

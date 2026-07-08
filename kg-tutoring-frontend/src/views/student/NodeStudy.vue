@@ -52,39 +52,6 @@
             </el-card>
           </el-tab-pane>
 
-          <el-tab-pane label="视频资源" name="resources">
-            <el-card shadow="never" class="resource-card">
-              <el-empty v-if="!resources.length" description="暂无视频资源" :image-size="80">
-                <template #default>
-                  <p style="color: #a09a92; font-size: 14px">老师还没有为该知识点配置配套视频</p>
-                </template>
-              </el-empty>
-              <div v-else class="resource-list">
-                <div v-for="resource in resources" :key="resource.id" class="resource-item">
-                  <div v-if="isDirectVideo(resource.url)" class="video-frame">
-                    <video :src="resource.url" controls preload="metadata"></video>
-                  </div>
-                  <div v-else class="video-cover" :style="coverStyle(resource)">
-                    <span>{{ resource.source || 'video' }}</span>
-                  </div>
-                  <div class="resource-info">
-                    <div class="resource-title-row">
-                      <h4>{{ resource.title }}</h4>
-                      <el-tag size="small" effect="plain">{{ resourceLabel(resource.resourceType) }}</el-tag>
-                    </div>
-                    <p v-if="resource.durationSeconds" class="resource-meta">
-                      时长：{{ formatDuration(resource.durationSeconds) }}
-                    </p>
-                    <p class="resource-url">{{ resource.url }}</p>
-                    <el-button type="primary" plain size="small" @click="openResource(resource.url)">
-                      打开资源
-                    </el-button>
-                  </div>
-                </div>
-              </div>
-            </el-card>
-          </el-tab-pane>
-
           <el-tab-pane label="配套练习" name="practice">
             <el-card shadow="never" class="practice-card">
               <el-empty v-if="!hasExercises" description="暂无配套练习" :image-size="80">
@@ -126,12 +93,7 @@
                   :class="msg.role === 'user' ? 'qa-user' : 'qa-assistant'"
                 >
                   <div class="qa-avatar">{{ msg.role === 'user' ? '我' : 'AI' }}</div>
-                  <div
-                    v-if="msg.role === 'assistant'"
-                    class="qa-bubble markdown-body"
-                    v-html="renderAiMarkdown(msg.content)"
-                  ></div>
-                  <div v-else class="qa-bubble">{{ msg.content }}</div>
+                  <div class="qa-bubble">{{ msg.content }}</div>
                 </div>
                 <div v-if="qaLoading" class="qa-message qa-assistant">
                   <div class="qa-avatar">AI</div>
@@ -174,7 +136,7 @@
     <!-- AI 划重点弹窗 -->
     <el-dialog v-model="aiSummaryVisible" :title="aiSummaryTitle" width="680px">
       <div v-loading="aiSummaryLoading" style="min-height:100px;">
-        <div v-if="aiSummaryContent" class="ai-summary-body markdown-body" v-html="formattedAiSummary"></div>
+        <div v-if="aiSummaryContent" class="ai-summary-body" v-html="aiSummaryContent"></div>
       </div>
       <template #footer>
         <el-button @click="aiSummaryVisible = false">关闭</el-button>
@@ -189,15 +151,13 @@ import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { Promotion, ArrowRight, Star, StarFilled } from '@element-plus/icons-vue'
 import StudentHeader from '../../components/StudentHeader.vue'
-import { getNodeById, getNodeResources } from '../../api/knowledge'
+import { getNodeById } from '../../api/knowledge'
 import { updateStudyRecord, getStudyRecords, aiNodeSummary, aiChat, addFavorite, deleteFavorite, getFavoriteList, getPrerequisiteNodes } from '../../api/student'
-import { renderMarkdown } from '../../utils/markdown'
 
 const router = useRouter()
 const route = useRoute()
 const loading = ref(false)
 const node = ref(null)
-const resources = ref([])
 const nodeStatus = ref('')
 const activeTab = ref('content')
 
@@ -234,7 +194,7 @@ const fetchFavStatus = async () => {
   const nodeId = node.value?.nodeId || node.value?.id
   if (!nodeId) return
   try {
-    const res = await getFavoriteList({ silent: true })
+    const res = await getFavoriteList()
     const all = Array.isArray(res) ? res : []
     const found = all.find(f => f.nodeId === Number(nodeId))
     isFav.value = !!found
@@ -249,7 +209,7 @@ const fetchPrerequisites = async () => {
   const nodeId = node.value?.nodeId || node.value?.id
   if (!nodeId) return
   try {
-    const res = await getPrerequisiteNodes(nodeId, { silent: true })
+    const res = await getPrerequisiteNodes(nodeId)
     prerequisiteNodes.value = Array.isArray(res) ? res : []
   } catch { prerequisiteNodes.value = [] }
 }
@@ -263,8 +223,6 @@ const aiSummaryVisible = ref(false)
 const aiSummaryLoading = ref(false)
 const aiSummaryTitle = ref('')
 const aiSummaryContent = ref('')
-const formattedAiSummary = computed(() => renderMarkdown(aiSummaryContent.value))
-const renderAiMarkdown = (content) => renderMarkdown(content)
 
 const showAiSummary = async () => {
   const nodeId = node.value?.nodeId || node.value?.id
@@ -280,7 +238,7 @@ const showAiSummary = async () => {
     const res = await aiNodeSummary({ nodeId })
     if (res) {
       aiSummaryTitle.value = res.title || 'AI 学习总结'
-      aiSummaryContent.value = res.summary || ''
+      aiSummaryContent.value = (res.summary || '').replace(/\n/g, '<br>')
     }
   } catch {
     aiSummaryContent.value = 'AI 总结生成失败，请稍后重试'
@@ -336,33 +294,6 @@ const nodeTypeLabel = (type) => {
   return map[type] || '概念理解'
 }
 
-const resourceLabel = (type) => {
-  const map = { video: '视频', article: '文章', pdf: '文档', link: '链接' }
-  return map[type] || '资源'
-}
-
-const isDirectVideo = (url = '') => {
-  return /\.(mp4|webm|ogg)(\?.*)?$/i.test(url)
-}
-
-const formatDuration = (seconds) => {
-  const total = Number(seconds)
-  if (!Number.isFinite(total) || total <= 0) return '-'
-  const minutes = Math.floor(total / 60)
-  const rest = total % 60
-  return `${minutes}:${String(rest).padStart(2, '0')}`
-}
-
-const coverStyle = (resource) => {
-  if (!resource.coverUrl) return {}
-  return { backgroundImage: `url(${resource.coverUrl})` }
-}
-
-const openResource = (url) => {
-  if (!url) return
-  window.open(url, '_blank', 'noopener,noreferrer')
-}
-
 const goBack = () => {
   if (window.history.length > 1) {
     router.back()
@@ -391,19 +322,12 @@ const fetchNode = async () => {
   try {
     const res = await getNodeById(nodeId)
     node.value = res
-    try {
-      const resourceRes = await getNodeResources(nodeId, undefined, { silent: true })
-      resources.value = Array.isArray(resourceRes) ? resourceRes : []
-    } catch {
-      resources.value = []
-    }
     // 从学习记录中获取当前掌握状态
     try {
       const records = await getStudyRecords()
       const record = Array.isArray(records) ? records.find(r => r.nodeId === Number(nodeId)) : null
       if (record && record.masteryLevel === 2) nodeStatus.value = 'completed'
     } catch {}
-    fetchFavStatus()
     fetchPrerequisites()
   } catch {
     ElMessage.error('加载知识点失败')
@@ -417,6 +341,7 @@ onMounted(fetchNode)
 // 路由参数变化时重新加载（前置知识跳转等）
 watch(() => route.params.nodeId, () => {
   fetchNode()
+  fetchPrerequisites()
 })
 </script>
 
@@ -465,8 +390,7 @@ watch(() => route.params.nodeId, () => {
 }
 
 .content-card,
-.practice-card,
-.resource-card {
+.practice-card {
   border-radius: 0 0 12px 12px;
   min-height: 300px;
 }
@@ -538,92 +462,6 @@ watch(() => route.params.nodeId, () => {
   background: var(--bg-hover);
 }
 
-.resource-list {
-  display: grid;
-  gap: 16px;
-}
-
-.resource-item {
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 18px;
-  padding: 16px;
-  border: 1px solid var(--border-light);
-  border-radius: 10px;
-  background: var(--bg-root);
-}
-
-.video-frame,
-.video-cover {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-  border-radius: 8px;
-  background: #171717;
-}
-
-.video-frame video {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-.video-cover {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-size: 13px;
-  font-weight: 700;
-  text-transform: uppercase;
-  background-size: cover;
-  background-position: center;
-}
-
-.video-cover span {
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.48);
-}
-
-.resource-info {
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
-}
-
-.resource-title-row {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.resource-title-row h4 {
-  margin: 0;
-  color: var(--text-primary);
-  font-size: 16px;
-}
-
-.resource-meta {
-  margin: 0;
-  color: var(--text-muted);
-  font-size: 13px;
-}
-
-.resource-url {
-  width: 100%;
-  margin: 0 0 4px;
-  color: var(--text-muted);
-  font-size: 13px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 /* ── 内容头部（标题 + AI 按钮） ── */
 .content-header-row {
   display: flex;
@@ -645,6 +483,12 @@ watch(() => route.params.nodeId, () => {
   font-size: 15px;
   line-height: 1.9;
   color: var(--text-secondary);
+  white-space: pre-wrap;
+}
+.ai-summary-body :deep(br) {
+  display: block;
+  content: '';
+  margin-bottom: 8px;
 }
 
 /* ── AI 答疑 ── */
@@ -709,64 +553,6 @@ watch(() => route.params.nodeId, () => {
   background: var(--bg-hover);
   border-bottom-left-radius: 4px;
 }
-.markdown-body :deep(p) {
-  margin: 0 0 8px;
-}
-.markdown-body :deep(p:last-child) {
-  margin-bottom: 0;
-}
-.markdown-body :deep(h1),
-.markdown-body :deep(h2),
-.markdown-body :deep(h3),
-.markdown-body :deep(h4) {
-  margin: 12px 0 8px;
-  color: var(--text-primary);
-  line-height: 1.35;
-}
-.markdown-body :deep(h1) { font-size: 20px; }
-.markdown-body :deep(h2) { font-size: 18px; }
-.markdown-body :deep(h3) { font-size: 16px; }
-.markdown-body :deep(h4) { font-size: 15px; }
-.markdown-body :deep(ul),
-.markdown-body :deep(ol) {
-  margin: 6px 0 10px;
-  padding-left: 20px;
-}
-.markdown-body :deep(li) {
-  margin: 4px 0;
-}
-.markdown-body :deep(code) {
-  padding: 2px 5px;
-  border-radius: 4px;
-  background: rgba(0, 0, 0, 0.08);
-  color: var(--text-primary);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 0.92em;
-}
-.markdown-body :deep(pre) {
-  margin: 8px 0 10px;
-  padding: 10px 12px;
-  border-radius: 8px;
-  overflow-x: auto;
-  background: #1f2328;
-}
-.markdown-body :deep(pre code) {
-  padding: 0;
-  background: transparent;
-  color: #f6f8fa;
-}
-.markdown-body :deep(blockquote) {
-  margin: 8px 0;
-  padding: 6px 10px;
-  border-left: 3px solid var(--accent);
-  color: var(--text-secondary);
-  background: var(--bg-root);
-}
-.qa-user .markdown-body :deep(code),
-.qa-user .markdown-body :deep(pre) {
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
-}
 .qa-thinking {
   color: var(--text-muted);
   font-style: italic;
@@ -793,10 +579,4 @@ watch(() => route.params.nodeId, () => {
 .prereq-item:hover { background: var(--bg-hover); }
 .prereq-name { flex: 1; font-size: 14px; color: var(--text-primary); }
 .card-title { font-weight: 600; color: var(--text-primary); }
-
-@media (max-width: 720px) {
-  .resource-item {
-    grid-template-columns: 1fr;
-  }
-}
 </style>
