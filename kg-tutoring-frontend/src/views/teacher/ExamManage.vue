@@ -219,11 +219,50 @@ const autoPickQuestions = async () => {
     return
   }
   const count = Math.min(autoQuestionCount.value, bank.length)
-  // 随机打乱后取前 count 个
-  const shuffled = [...bank].sort(() => Math.random() - 0.5)
-  const picked = shuffled.slice(0, count)
+
+  // 按知识点分组，保证覆盖度
+  const groups = {}
+  bank.forEach(q => {
+    const key = q.nodeId || 'unknown'
+    if (!groups[key]) groups[key] = []
+    groups[key].push(q)
+  })
+
+  // 每个知识点内按难度排序（穿插简单/中等/困难）
+  Object.values(groups).forEach(arr => {
+    arr.sort((a, b) => (a.difficulty || 1) - (b.difficulty || 1))
+    const easy = arr.filter(q => (q.difficulty || 1) <= 1)
+    const medium = arr.filter(q => q.difficulty === 2)
+    const hard = arr.filter(q => (q.difficulty || 3) >= 3)
+    const interleaved = []
+    const maxLen = Math.max(easy.length, medium.length, hard.length)
+    for (let i = 0; i < maxLen; i++) {
+      if (i < easy.length) interleaved.push(easy[i])
+      if (i < medium.length) interleaved.push(medium[i])
+      if (i < hard.length) interleaved.push(hard[i])
+    }
+    arr.length = 0
+    arr.push(...interleaved)
+  })
+
+  const keys = Object.keys(groups)
+  // 轮询每个知识点取题，直到取够 count 个
+  const picked = []
+  let idx = 0
+  while (picked.length < count) {
+    const key = keys[idx % keys.length]
+    if (groups[key].length > 0) {
+      picked.push(groups[key].shift())
+    }
+    idx++
+    // 安全终止：所有知识点都取完了
+    if (idx > keys.length * 50) break
+  }
+
   form.questionIds = picked.map(q => q.id)
-  ElMessage.success(`已随机抽取 ${count} 道题目`)
+  ElMessage.success(
+    `智能选题完成：${count} 道题，覆盖 ${keys.length} 个知识点`
+  )
 }
 
 const openCreate = () => {

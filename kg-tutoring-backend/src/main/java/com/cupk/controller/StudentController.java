@@ -52,6 +52,7 @@ public class StudentController {
         int displayCorrectRate = (int) Math.round(Math.max(0, Math.min(100, avgRate)));
 
         Map<String, Object> result = new HashMap<>();
+        result.put("isNewUser", records.isEmpty());
         result.put("activePaths", paths.stream()
             .map(p -> {
                 Map<String, Object> m = new HashMap<>();

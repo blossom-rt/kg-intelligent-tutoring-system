@@ -244,8 +244,15 @@ const applyDefaultStyles = () => {
   lineObjects.forEach(item => {
     const from = item.fromNode
     const to = item.toNode
-    item.line.material.opacity = Math.max(0.06, Math.min(nodeOpacity(from), nodeOpacity(to)) * 0.4)
-    item.line.material.linewidth = 1
+    if (item.isCone) {
+      item.line.material.opacity = Math.max(0.06, Math.min(nodeOpacity(from), nodeOpacity(to)) * 0.4)
+      const state = getNodeState(to)
+      const s = state === 'learned' ? 1.18 : 1
+      item.line.scale.setScalar(s)
+    } else {
+      item.line.material.opacity = Math.max(0.06, Math.min(nodeOpacity(from), nodeOpacity(to)) * 0.4)
+      item.line.material.linewidth = 1
+    }
   })
 }
 
@@ -262,7 +269,12 @@ const applyHoverStyles = (nodeId) => {
   })
   lineObjects.forEach(item => {
     const active = highlighted.has(Number(item.edge.fromNodeId)) && highlighted.has(Number(item.edge.toNodeId))
-    item.line.material.opacity = active ? 0.86 : 0.06
+    if (item.isCone) {
+      item.line.material.opacity = active ? 0.86 : 0.06
+      item.line.scale.setScalar(active ? 1.32 : 0.92)
+    } else {
+      item.line.material.opacity = active ? 0.86 : 0.06
+    }
   })
 }
 
@@ -304,6 +316,22 @@ const renderChart = () => {
     const line = new THREE.Line(geometry, material)
     scene.add(line)
     lineObjects.push({ line, edge, fromNode: from, toNode: to })
+
+    // 箭头锥体
+    const dir = new THREE.Vector3(to.x - from.x, to.y - from.y, to.z - from.z)
+    const len = dir.length()
+    if (len < 0.01) return
+    dir.normalize()
+    const r = radiusByDifficulty(to)
+    const arrowPos = new THREE.Vector3(to.x - dir.x * (r + 0.9), to.y - dir.y * (r + 0.9), to.z - dir.z * (r + 0.9))
+    const cone = new THREE.Mesh(
+      new THREE.ConeGeometry(0.6, 1.2, 8),
+      new THREE.MeshBasicMaterial({ color: getCssVar('--text-muted', '#a09a92'), transparent: true, opacity: 0.5 })
+    )
+    cone.position.copy(arrowPos)
+    cone.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir)
+    scene.add(cone)
+    lineObjects.push({ line: cone, isCone: true, edge, fromNode: from, toNode: to })
   })
 
   placedNodes.forEach(node => {
@@ -324,18 +352,6 @@ const renderChart = () => {
     scene.add(mesh)
     nodeObjects.push({ mesh, node })
 
-    const ring = new THREE.Mesh(
-      new THREE.TorusGeometry(radiusByDifficulty(node) * 1.2, 0.14, 10, 48),
-      new THREE.MeshBasicMaterial({
-        color: state === 'learned' ? getCssVar('--accent', '#ff7b3d') : getCssVar('--accent-gold', '#b89030'),
-        transparent: true,
-        opacity: state === 'unseen' ? 0.12 : 0.55
-      })
-    )
-    ring.position.copy(mesh.position)
-    ring.rotation.x = Math.PI / 2
-    scene.add(ring)
-    nodeObjects.push({ mesh: ring, node })
 
     const label = createTextSprite(node.name || '未命名', Math.max(nodeOpacity(node), 0.42))
     label.position.set(node.x, node.y - radiusByDifficulty(node) - 3.2, node.z)
