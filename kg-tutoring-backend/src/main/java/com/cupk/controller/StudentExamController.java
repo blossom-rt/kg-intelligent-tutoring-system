@@ -3,9 +3,12 @@ package com.cupk.controller;
 import com.cupk.common.Result;
 import com.cupk.common.UserContext;
 import com.cupk.dto.ExamSubmitDTO;
+import com.cupk.mapper.SysUserMapper;
+import com.cupk.pojo.SysUser;
 import com.cupk.service.ExamService;
 import com.cupk.service.ExamRecordService;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -20,6 +23,7 @@ public class StudentExamController {
 
     private final ExamRecordService examRecordService;
     private final ExamService examService;
+    private final SysUserMapper sysUserMapper;
 
     /**
      * 获取当前学生的考试列表及成绩
@@ -60,7 +64,19 @@ public class StudentExamController {
      */
     @GetMapping("/exam/{id}")
     public Result<?> examDetail(@PathVariable Integer id) {
-        return Result.success(examRecordService.getById(id));
+        Map<String, Object> result = examRecordService.getById(id);
+        if (result == null) return Result.error("测评记录不存在");
+        // 补充学生姓名
+        Integer userId = (Integer) result.get("userId");
+        if (userId != null) {
+            SysUser user = sysUserMapper.selectById(userId);
+            result.put("studentName", user != null ? user.getRealName() : "同学");
+        } else {
+            result.put("studentName", "同学");
+        }
+        // 考试日期
+        result.put("examDate", result.get("createTime"));
+        return Result.success(result);
     }
 
     /**
@@ -107,6 +123,7 @@ public class StudentExamController {
         ExamSubmitDTO dto = new ExamSubmitDTO();
         dto.setExamId(examId);
         dto.setCourseId(courseId);
+        dto.setIssuedAt(issuedAt);
         List<ExamSubmitDTO.AnswerItem> answerItems = new ArrayList<>();
         if (answers != null) {
             for (Map<String, Object> ans : answers) {

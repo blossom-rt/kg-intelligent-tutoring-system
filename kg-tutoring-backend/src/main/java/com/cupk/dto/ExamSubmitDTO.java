@@ -19,6 +19,9 @@ public class ExamSubmitDTO {
     /** 作答列表 */
     private List<AnswerItem> answers;
 
+    /** 发卷时间戳（毫秒） */
+    private Long issuedAt;
+
     /**
      * 单题作答项
      */

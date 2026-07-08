@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.cupk.dto.ExamSubmitDTO;
 import com.cupk.ai.DeepSeekService;
 import com.cupk.mapper.ExamMapper;
+import com.cupk.mapper.ExamQuestionMapper;
 import com.cupk.mapper.ExamRecordMapper;
 import com.cupk.mapper.QuestionMapper;
 import com.cupk.mapper.WrongQuestionMapper;
 import com.cupk.pojo.Exam;
+import com.cupk.pojo.ExamQuestion;
 import com.cupk.pojo.ExamRecord;
 import com.cupk.pojo.Question;
 import com.cupk.pojo.WrongQuestion;
@@ -31,6 +33,7 @@ public class ExamRecordServiceImpl implements ExamRecordService {
     private final WrongQuestionMapper wrongQuestionMapper;
     private final QuestionMapper questionMapper;
     private final ExamMapper examMapper;
+    private final ExamQuestionMapper examQuestionMapper;
     private final DeepSeekService deepSeekService;
 
     @Override
@@ -108,6 +111,11 @@ public class ExamRecordServiceImpl implements ExamRecordService {
         } catch (Exception e) {
             record.setAiReport("测评完成，共 " + totalScore + " 题，答对 " + userScore + " 题，得分 " + score + " 分。");
         }
+        // 保存开始时间（从发卷时间戳转换）
+        if (dto.getIssuedAt() != null) {
+            record.setStartTime(new java.util.Date(dto.getIssuedAt()).toInstant()
+                    .atZone(java.time.ZoneId.systemDefault()).toLocalDateTime());
+        }
         record.setCreateTime(LocalDateTime.now());
         examRecordMapper.insert(record);
     }
@@ -127,17 +135,47 @@ public class ExamRecordServiceImpl implements ExamRecordService {
             return null;
         }
         Exam exam = record.getExamId() != null ? examMapper.selectById(record.getExamId()) : null;
+        // 统计题目总数和正确题数
+        int totalQuestions = 0;
+        int correctCount = 0;
+        if (record.getExamId() != null) {
+            List<ExamQuestion> eqList = examQuestionMapper.selectList(
+                    new LambdaQueryWrapper<ExamQuestion>()
+                            .eq(ExamQuestion::getExamId, record.getExamId()));
+            totalQuestions = eqList.size();
+            if (totalQuestions > 0 && record.getTotalScore() != null && record.getUserScore() != null) {
+                double perQuestion = record.getTotalScore().doubleValue() / totalQuestions;
+                if (perQuestion > 0) {
+                    correctCount = (int) Math.round(record.getUserScore().doubleValue() / perQuestion);
+                }
+            }
+        }
+        int wrongCount = totalQuestions - correctCount;
+
         Map<String, Object> result = new java.util.LinkedHashMap<>();
         result.put("id", record.getId());
+        result.put("userId", record.getUserId());
         result.put("examId", record.getExamId());
         result.put("examName", exam != null ? exam.getExamName() : "阶段测评");
         result.put("courseId", record.getCourseId());
         result.put("totalScore", record.getTotalScore());
         result.put("score", record.getUserScore());
         result.put("userScore", record.getUserScore());
+        result.put("correctCount", correctCount);
+        result.put("wrongCount", wrongCount);
         result.put("passed", record.getUserScore() != null
                 && record.getTotalScore() != null
                 && record.getUserScore().doubleValue() >= record.getTotalScore() * 0.6);
+        // 计算用时（分+秒）
+        String duration = "-";
+        if (record.getStartTime() != null && record.getCreateTime() != null) {
+            java.time.Duration d = java.time.Duration.between(record.getStartTime(), record.getCreateTime());
+            long mins = d.toMinutesPart();
+            long secs = d.toSecondsPart();
+            duration = mins + " 分 " + secs + " 秒";
+        }
+        result.put("duration", duration);
+
         result.put("aiReport", record.getAiReport());
         result.put("createTime", record.getCreateTime());
         return result;

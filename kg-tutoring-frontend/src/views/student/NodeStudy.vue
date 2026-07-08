@@ -4,7 +4,7 @@
       <template #actions>
         <el-button v-if="node" :type="isFav ? 'warning' : 'default'" :icon="favIcon" circle size="small" @click="toggleFavorite" />
         <el-tag v-if="nodeStatus === 'completed'" type="success" size="large" effect="dark" round>已掌握 ✓</el-tag>
-        <el-tag v-else type="info" size="large" effect="plain" round>完成练习后自动标记</el-tag>
+        <el-tag v-else type="info" size="large" effect="plain" round>待练习</el-tag>
       </template>
     </StudentHeader>
 
@@ -401,7 +401,7 @@ const fetchNode = async () => {
     try {
       const records = await getStudyRecords()
       const record = Array.isArray(records) ? records.find(r => r.nodeId === Number(nodeId)) : null
-      if (record && record.masteryLevel === 2) nodeStatus.value = 'completed'
+      if (record && record.masteryLevel >= 3) nodeStatus.value = 'completed'
     } catch {}
     fetchFavStatus()
     fetchPrerequisites()

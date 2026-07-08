@@ -11,10 +11,8 @@
         <el-table-column prop="subject" label="所属学科" min-width="140" />
         <el-table-column prop="teacherId" label="教师ID" min-width="120" />
         <el-table-column label="状态" min-width="80">
-          <template #default="{ row }">
-            <el-tag :type="row.status === 1 ? 'success' : 'info'" size="small">
-              {{ row.status === 1 ? '启用' : '禁用' }}
-            </el-tag>
+          <template #default>
+            <el-tag type="success" size="small">启用</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间" min-width="160" />
@@ -46,10 +44,10 @@
         <el-form-item label="课程名称" prop="courseName">
           <el-input v-model="form.courseName" placeholder="请输入课程名称" />
         </el-form-item>
-        <el-form-item label="课程编码" prop="courseCode">
-          <el-input v-model="form.courseCode" placeholder="请输入课程编码" />
+        <el-form-item label="所属学科" prop="subject">
+          <el-input v-model="form.subject" placeholder="如：数学、物理、信息技术" />
         </el-form-item>
-        <el-form-item label="授课教师" prop="teacherId">
+<el-form-item label="授课教师" prop="teacherId">
           <el-input v-model="form.teacherId" placeholder="请输入教师ID" />
         </el-form-item>
         <el-form-item label="课程描述" prop="description">
@@ -86,7 +84,7 @@ const dialogTitle = computed(() => isEdit.value ? '编辑课程' : '新增课程
 
 const form = reactive({
   courseName: '',
-  courseCode: '',
+  subject: '',
   teacherId: '',
   description: ''
 })
@@ -128,6 +126,7 @@ function openEditDialog(row) {
   isEdit.value = true
   editingId.value = row.id
   form.courseName = row.courseName
+  form.subject = row.subject || ''
   form.courseCode = row.courseCode
   form.teacherId = row.teacherId || ''
   form.description = row.description || ''
@@ -136,7 +135,7 @@ function openEditDialog(row) {
 
 function resetForm() {
   form.courseName = ''
-  form.courseCode = ''
+  form.subject = ''
   form.teacherId = ''
   form.description = ''
   formRef.value?.resetFields()
@@ -150,7 +149,7 @@ async function handleSubmit() {
   try {
     const data = {
       courseName: form.courseName,
-      courseCode: form.courseCode,
+      subject: form.subject,
       teacherId: form.teacherId,
       description: form.description
     }

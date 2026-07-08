@@ -58,6 +58,10 @@
           <template #header>
             <span class="card-title">AI 学情报告</span>
           </template>
+          <div class="report-meta" v-if="result.studentName || result.examDate">
+            <span v-if="result.studentName">学生：{{ result.studentName }}</span>
+            <span v-if="result.examDate">日期：{{ formatTime(result.examDate) }}</span>
+          </div>
           <div class="report-content markdown-body" v-html="formattedReport"></div>
         </el-card>
 
@@ -236,6 +240,11 @@ onMounted(fetchResult)
   color: var(--text-primary);
 }
 
+.report-meta {
+  display: flex; gap: 20px; padding: 0 0 12px;
+  font-size: 13px; color: var(--text-muted); border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 16px;
+}
 .report-content {
   font-size: 15px;
   color: var(--text-secondary);
