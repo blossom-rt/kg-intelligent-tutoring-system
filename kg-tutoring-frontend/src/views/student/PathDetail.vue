@@ -79,7 +79,7 @@
     </div>
 
     <!-- 隐藏的思维导图容器 -->
-    <div ref="mindMapRef" class="mindmap-container" style="position:fixed;left:-9999px;top:0;width:1200px;height:800px;"></div>
+    <div ref="mindMapRef" class="mindmap-container" style="position:fixed;left:-9999px;top:0;width:1800px;height:900px;"></div>
   </div>
 </template>
 
@@ -252,10 +252,10 @@ const exportMindMap = async () => {
     series: [{
       type: 'tree',
       data: [treeData],
-      top: '5%',
-      left: '8%',
-      bottom: '5%',
-      right: '18%',
+      top: '3%',
+      left: '18%',
+      bottom: '3%',
+      right: '22%',
       symbolSize: 10,
       label: {
         position: 'left',
