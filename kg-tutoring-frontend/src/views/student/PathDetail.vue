@@ -4,6 +4,9 @@
       <div class="header-left">
         <el-button @click="router.push('/student/path')" :icon="ArrowLeft" circle size="small" />
         <h2 class="page-title">学习路径详情</h2>
+        <el-button type="primary" size="small" @click="exportMindMap" :loading="exportLoading">
+          <el-icon style="margin-right:4px"><Download /></el-icon>导出思维导图
+        </el-button>
       </div>
     </div>
 
@@ -74,14 +77,18 @@
       </template>
       <el-empty v-else description="路径不存在或已删除" :image-size="80" />
     </div>
+
+    <!-- 隐藏的思维导图容器 -->
+    <div ref="mindMapRef" class="mindmap-container" style="position:fixed;left:-9999px;top:0;width:1200px;height:800px;"></div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { ArrowLeft, CircleCheck, Loading, Lock } from '@element-plus/icons-vue'
+import { ArrowLeft, CircleCheck, Download, Loading, Lock } from '@element-plus/icons-vue'
+import * as echarts from 'echarts'
 import { getPathDetail } from '../../api/student'
 
 const router = useRouter()
@@ -182,6 +189,74 @@ const fetchDetail = async () => {
   } finally {
     loading.value = false
   }
+}
+
+// ---- 思维导图导出 ----
+const mindMapRef = ref(null)
+const exportLoading = ref(false)
+
+const exportMindMap = async () => {
+  if (exportLoading.value || !nodes.value.length) return
+  exportLoading.value = true
+  await nextTick()
+
+  // 构建树形数据（按排序顺序作为层级）
+  const nodeList = computedNodes.value
+  const treeData = {
+    name: detail.value?.pathName || '学习路径',
+    children: nodeList.map((n, i) => ({
+      name: n.nodeName || n.name || `节点${i + 1}`,
+      itemStyle: {
+        color: n.displayStatus === 'completed' ? '#67c23a'
+             : n.displayStatus === 'learning' ? '#ff7b3d'
+             : '#bbb'
+      }
+    }))
+  }
+
+  const chart = echarts.init(mindMapRef.value)
+  chart.setOption({
+    tooltip: { trigger: 'item', formatter: '{b}' },
+    series: [{
+      type: 'tree',
+      data: [treeData],
+      top: '5%',
+      left: '8%',
+      bottom: '5%',
+      right: '18%',
+      symbolSize: 10,
+      label: {
+        position: 'left',
+        verticalAlign: 'middle',
+        align: 'right',
+        fontSize: 14,
+        color: '#333'
+      },
+      leaves: {
+        label: { position: 'right', verticalAlign: 'middle', align: 'left' }
+      },
+      expandAndCollapse: false,
+      animationDuration: 300,
+      lineStyle: { color: '#ccc', width: 1.5 }
+    }]
+  })
+
+  // 导出为图片下载
+  setTimeout(() => {
+    try {
+      const url = chart.getDataURL({ type: 'png', pixelRatio: 2, backgroundColor: '#fff' })
+      const a = document.createElement('a')
+      a.href = url
+      a.download = (detail.value?.pathName || '学习路径') + '_思维导图.png'
+      a.click()
+      ElMessage.success('思维导图已导出')
+    } catch {
+      ElMessage.error('导出失败')
+    } finally {
+      chart.dispose()
+      exportLoading.value = false
+    }
+  }, 500)
 }
 
 onMounted(fetchDetail)

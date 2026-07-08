@@ -59,4 +59,11 @@ public class KnowledgeNodeServiceImpl implements KnowledgeNodeService {
         }
         return knowledgeNodeMapper.selectList(wrapper.orderByAsc(KnowledgeNode::getChapter));
     }
+
+    @Override
+    public List<KnowledgeNode> listByIds(List<Integer> ids) {
+        return knowledgeNodeMapper.selectList(
+                new LambdaQueryWrapper<KnowledgeNode>()
+                        .in(KnowledgeNode::getId, ids));
+    }
 }

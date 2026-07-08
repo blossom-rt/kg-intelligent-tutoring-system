@@ -26,6 +26,13 @@ public class KnowledgeEdgeServiceImpl implements KnowledgeEdgeService {
     }
 
     @Override
+    public List<KnowledgeEdge> listByToNode(Integer toNodeId) {
+        return knowledgeEdgeMapper.selectList(
+                new LambdaQueryWrapper<KnowledgeEdge>()
+                        .eq(KnowledgeEdge::getToNodeId, toNodeId));
+    }
+
+    @Override
     public List<KnowledgeEdge> listAll() {
         return knowledgeEdgeMapper.selectList(null);
     }

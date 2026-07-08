@@ -2,6 +2,7 @@
   <div class="node-study-page">
     <StudentHeader :title="'知识点学习 - ' + (node?.nodeName || node?.name || '加载中...')" subtitle="仔细阅读内容，认真完成练习">
       <template #actions>
+        <el-button v-if="node" :type="isFav ? 'warning' : 'default'" :icon="favIcon" circle size="small" @click="toggleFavorite" />
         <el-tag v-if="nodeStatus === 'completed'" type="success" size="large" effect="dark" round>已掌握 ✓</el-tag>
         <el-tag v-else type="info" size="large" effect="plain" round>完成练习后自动标记</el-tag>
       </template>
@@ -116,6 +117,18 @@
             </el-card>
           </el-tab-pane>
         </el-tabs>
+
+        <!-- 前置知识快速回顾 -->
+        <el-card v-if="prerequisiteNodes.length" class="prereq-card" shadow="never">
+          <template #header><span class="card-title">前置知识</span></template>
+          <div class="prereq-list">
+            <div v-for="p in prerequisiteNodes" :key="p.id" class="prereq-item" @click="goStudyNode(p)">
+              <el-tag :type="difficultyTagType(p.difficulty)" size="small" effect="dark">{{ difficultyLabel(p.difficulty) }}</el-tag>
+              <span class="prereq-name">{{ p.name }}</span>
+              <el-icon color="var(--text-muted)"><ArrowRight /></el-icon>
+            </div>
+          </div>
+        </el-card>
       </template>
       <el-empty v-else description="知识点不存在" :image-size="80" />
     </div>
@@ -133,13 +146,13 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { useRouter, useRoute, onBeforeRouteLeave } from 'vue-router'
+import { ref, computed, onMounted, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { Promotion } from '@element-plus/icons-vue'
+import { Promotion, ArrowRight, Star, StarFilled } from '@element-plus/icons-vue'
 import StudentHeader from '../../components/StudentHeader.vue'
 import { getNodeById } from '../../api/knowledge'
-import { updateStudyRecord, getStudyRecords, aiNodeSummary, aiChat, updatePathDetail } from '../../api/student'
+import { updateStudyRecord, getStudyRecords, aiNodeSummary, aiChat, addFavorite, deleteFavorite, getFavoriteList, getPrerequisiteNodes } from '../../api/student'
 
 const router = useRouter()
 const route = useRoute()
@@ -151,6 +164,59 @@ const activeTab = ref('content')
 const hasExercises = computed(() => {
   return node.value?.exercises && node.value.exercises.length > 0
 })
+
+// ---- 收藏夹 ----
+const isFav = ref(false)
+const favId = ref(null)
+const favIcon = computed(() => isFav.value ? StarFilled : Star)
+
+const toggleFavorite = async () => {
+  const nodeId = node.value?.nodeId || node.value?.id
+  if (!nodeId) return
+  try {
+    if (isFav.value) {
+      await deleteFavorite(favId.value)
+      isFav.value = false
+      favId.value = null
+      ElMessage.success('已取消收藏')
+    } else {
+      const res = await addFavorite({ nodeId })
+      isFav.value = true
+      favId.value = res?.id
+      ElMessage.success('已收藏')
+    }
+  } catch (e) {
+    ElMessage.warning(e?.response?.data?.message || '操作失败')
+  }
+}
+
+const fetchFavStatus = async () => {
+  const nodeId = node.value?.nodeId || node.value?.id
+  if (!nodeId) return
+  try {
+    const res = await getFavoriteList()
+    const all = Array.isArray(res) ? res : []
+    const found = all.find(f => f.nodeId === Number(nodeId))
+    isFav.value = !!found
+    if (found) favId.value = found.id
+  } catch { }
+}
+
+// ---- 前置知识 ----
+const prerequisiteNodes = ref([])
+
+const fetchPrerequisites = async () => {
+  const nodeId = node.value?.nodeId || node.value?.id
+  if (!nodeId) return
+  try {
+    const res = await getPrerequisiteNodes(nodeId)
+    prerequisiteNodes.value = Array.isArray(res) ? res : []
+  } catch { prerequisiteNodes.value = [] }
+}
+
+const goStudyNode = (p) => {
+  router.push('/student/study/' + p.id)
+}
 
 // ---- AI 划重点 ----
 const aiSummaryVisible = ref(false)
@@ -247,14 +313,6 @@ const goPractice = (questionId) => {
   router.push('/student/practice' + query)
 }
 
-// 离开知识点页面时，标记路径节点完成（如果有 detailId）
-onBeforeRouteLeave(() => {
-  const detailId = route.query.detailId
-  if (detailId) {
-    updatePathDetail(detailId).catch(() => {})
-  }
-})
-
 
 const fetchNode = async () => {
   const nodeId = route.params.nodeId
@@ -270,6 +328,8 @@ const fetchNode = async () => {
       const record = Array.isArray(records) ? records.find(r => r.nodeId === Number(nodeId)) : null
       if (record && record.masteryLevel === 2) nodeStatus.value = 'completed'
     } catch {}
+    fetchFavStatus()
+    fetchPrerequisites()
   } catch {
     ElMessage.error('加载知识点失败')
   } finally {
@@ -278,6 +338,13 @@ const fetchNode = async () => {
 }
 
 onMounted(fetchNode)
+
+// 路由参数变化时重新加载（前置知识跳转等）
+watch(() => route.params.nodeId, () => {
+  fetchNode()
+  fetchFavStatus()
+  fetchPrerequisites()
+})
 </script>
 
 <style scoped>
@@ -502,4 +569,16 @@ onMounted(fetchNode)
 .qa-input-row :deep(.el-input-group__append .el-button) {
   color: #fff;
 }
+
+/* 前置知识卡片 */
+.prereq-card { margin-top: 20px; border-radius: 12px; }
+.prereq-list { display: flex; flex-direction: column; gap: 8px; }
+.prereq-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 12px; border-radius: 8px;
+  cursor: pointer; transition: background 0.2s;
+}
+.prereq-item:hover { background: var(--bg-hover); }
+.prereq-name { flex: 1; font-size: 14px; color: var(--text-primary); }
+.card-title { font-weight: 600; color: var(--text-primary); }
 </style>
