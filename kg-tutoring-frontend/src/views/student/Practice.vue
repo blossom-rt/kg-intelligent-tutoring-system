@@ -117,7 +117,8 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { usePet } from '../../composables/usePet'
-import { getPracticeQuestions, submitPractice, updatePathDetail } from '../../api/student'
+import confetti from 'canvas-confetti'
+import { getPracticeQuestions, submitPractice, updatePathDetail, addWrongQuestion } from '../../api/student'
 
 const router = useRouter()
 const route = useRoute()
@@ -207,6 +208,8 @@ const submitAnswer = () => {
     pet.celebrate()
     // 从错题本来的，答对自动标记为已掌握
     if (route.query.fromWrong === 'true') {
+      // 错题做对：撒花 + 标记已掌握
+      setTimeout(() => confetti({ particleCount: 80, spread: 70, origin: { x: 0.5, y: 0.6 }, colors: ['#ff7b3d','#f5a623','#5eaf83','#d4a853'], disableForReducedMotion: true }), 100)
       try {
         const reviewed = JSON.parse(localStorage.getItem('reviewedWrongQuestions') || '{}')
         reviewed[currentQuestion.value.id] = new Date().toISOString()
