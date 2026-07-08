@@ -16,6 +16,14 @@ export function createNode(data) { return request.post('/nodes', data) }
 export function updateNode(id, data) { return request.put(`/nodes/${id}`, data) }
 export function deleteNode(id) { return request.delete(`/nodes/${id}`) }
 
+// ===== 知识点学习资源 =====
+export function getNodeResources(nodeId, params, config = {}) {
+  return request.get(`/nodes/${nodeId}/resources`, { params, ...config })
+}
+export function createNodeResource(nodeId, data) { return request.post(`/nodes/${nodeId}/resources`, data) }
+export function updateNodeResource(id, data) { return request.put(`/resources/${id}`, data) }
+export function deleteNodeResource(id) { return request.delete(`/resources/${id}`) }
+
 // ===== 依赖边 =====
 export function getEdgeList(params) { return request.get('/edges', { params }) }
 export function createEdge(data) { return request.post('/edges', data) }

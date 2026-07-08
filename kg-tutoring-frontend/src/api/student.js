@@ -46,3 +46,11 @@ export function addWrongQuestion(data) { return request.post('/student/wrong-que
 
 // 获取学习记录
 export function getStudyRecords(params) { return request.get('/student/study-records', { params }) }
+
+// 收藏夹
+export function getFavoriteList(config = {}) { return request.get('/student/favorites', config) }
+export function addFavorite(data) { return request.post('/student/favorites', data) }
+export function deleteFavorite(id) { return request.delete(`/student/favorites/${id}`) }
+
+// 前置知识点
+export function getPrerequisiteNodes(nodeId, config = {}) { return request.get(`/student/prerequisite-nodes/${nodeId}`, config) }

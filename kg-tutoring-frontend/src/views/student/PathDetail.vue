@@ -4,6 +4,9 @@
       <div class="header-left">
         <el-button @click="router.push('/student/path')" :icon="ArrowLeft" circle size="small" />
         <h2 class="page-title">学习路径详情</h2>
+        <el-button type="primary" size="small" @click="exportMindMap" :loading="exportLoading">
+          <el-icon style="margin-right:4px"><Download /></el-icon>导出思维导图
+        </el-button>
       </div>
     </div>
 
@@ -74,14 +77,20 @@
       </template>
       <el-empty v-else description="路径不存在或已删除" :image-size="80" />
     </div>
+
+    <!-- 隐藏的思维导图容器 -->
+    <div ref="mindMapRef" class="mindmap-container" style="position:fixed;left:-9999px;top:0;width:1800px;height:900px;"></div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { ArrowLeft, CircleCheck, Loading, Lock } from '@element-plus/icons-vue'
+import { ArrowLeft, CircleCheck, Download, Loading, Lock } from '@element-plus/icons-vue'
+import * as echarts from 'echarts'
+import confetti from 'canvas-confetti'
+import { usePet } from '../../composables/usePet'
 import { getPathDetail } from '../../api/student'
 
 const router = useRouter()
@@ -89,6 +98,7 @@ const route = useRoute()
 const loading = ref(false)
 const detail = ref(null)
 const nodes = ref([])
+const pet = usePet()
 
 // 根据 sortOrder 和完成状态推导每个节点的实际状态
 const computedNodes = computed(() => {
@@ -168,6 +178,44 @@ const goStudy = (node) => {
   }
 }
 
+// ── 撒花动画 ──
+const smallCelebrate = () => {
+  confetti({ particleCount: 50, spread: 50, origin: { x: 0.5, y: 0.6 }, colors: ['#ff7b3d','#f5a623','#5eaf83','#d4a853'], disableForReducedMotion: true })
+}
+const bigCelebrate = () => {
+  const duration = 2500
+  const end = Date.now() + duration
+  const colors = ['#ff7b3d','#f5a623','#5eaf83','#d4a853','#ff6b6b','#64b5f6']
+  ;(function frame() {
+    confetti({ particleCount: 4, angle: 60, spread: 70, origin: { x: 0, y: 0.6 }, colors, disableForReducedMotion: true })
+    confetti({ particleCount: 4, angle: 120, spread: 70, origin: { x: 1, y: 0.6 }, colors, disableForReducedMotion: true })
+    if (Date.now() < end) requestAnimationFrame(frame)
+  })()
+  setTimeout(() => confetti({ particleCount: 150, spread: 120, origin: { x: 0.5, y: 0.5 }, colors, disableForReducedMotion: true }), 500)
+}
+
+// 进度变化时触发庆祝（跨页面导航保持状态）
+const progressKey = computed(() => `path_p_${route.params.id}`)
+const lastSaved = computed(() => Number(localStorage.getItem(progressKey.value) || 0))
+
+const hasFiredBig = ref(false)
+
+watch(displayProgress, (newVal) => {
+  if (!newVal || newVal <= lastSaved.value) return
+  if (newVal < 100 && newVal > 0) {
+    setTimeout(() => smallCelebrate(), 300)
+    pet.celebrate()
+    pet.say('又完成了一个节点！')
+  }
+  if (newVal >= 100 && !hasFiredBig.value) {
+    hasFiredBig.value = true
+    setTimeout(() => bigCelebrate(), 500)
+    pet.fireUp()
+    pet.say('太厉害了！全部完成了！')
+  }
+  localStorage.setItem(progressKey.value, String(newVal))
+})
+
 const fetchDetail = async () => {
   const id = route.params.id
   if (!id) return
@@ -182,6 +230,75 @@ const fetchDetail = async () => {
   } finally {
     loading.value = false
   }
+}
+
+// ---- 思维导图导出 ----
+const mindMapRef = ref(null)
+const exportLoading = ref(false)
+
+const exportMindMap = async () => {
+  if (exportLoading.value || !nodes.value.length) return
+  exportLoading.value = true
+  await nextTick()
+
+  // 构建树形数据（按排序顺序作为层级）
+  const nodeList = computedNodes.value
+  const treeData = {
+    name: detail.value?.pathName || '学习路径',
+    children: nodeList.map((n, i) => ({
+      name: n.nodeName || n.name || `节点${i + 1}`,
+      itemStyle: {
+        color: n.displayStatus === 'completed' ? '#67c23a'
+             : n.displayStatus === 'learning' ? '#ff7b3d'
+             : '#bbb'
+      }
+    }))
+  }
+
+  const chart = echarts.init(mindMapRef.value)
+  chart.setOption({
+    tooltip: { trigger: 'item', formatter: '{b}' },
+    series: [{
+      type: 'tree',
+      data: [treeData],
+      top: '3%',
+      left: '18%',
+      bottom: '3%',
+      right: '22%',
+      symbolSize: 10,
+      label: {
+        position: 'left',
+        verticalAlign: 'middle',
+        align: 'right',
+        fontSize: 14,
+        color: '#333'
+      },
+      leaves: {
+        label: { position: 'right', verticalAlign: 'middle', align: 'left' }
+      },
+      edgeShape: 'polyline',
+      expandAndCollapse: false,
+      animationDuration: 300,
+      lineStyle: { color: '#ccc', width: 1.5, curveness: 0 }
+    }]
+  })
+
+  // 导出为图片下载
+  setTimeout(() => {
+    try {
+      const url = chart.getDataURL({ type: 'png', pixelRatio: 2, backgroundColor: '#fff' })
+      const a = document.createElement('a')
+      a.href = url
+      a.download = (detail.value?.pathName || '学习路径') + '_思维导图.png'
+      a.click()
+      ElMessage.success('思维导图已导出')
+    } catch {
+      ElMessage.error('导出失败')
+    } finally {
+      chart.dispose()
+      exportLoading.value = false
+    }
+  }, 500)
 }
 
 onMounted(fetchDetail)
