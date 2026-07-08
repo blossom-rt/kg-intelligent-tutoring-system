@@ -12,6 +12,9 @@ public interface KnowledgeEdgeService {
     /** 查询某节点的所有出边 */
     List<KnowledgeEdge> listByFromNode(Integer nodeId);
 
+    /** 查询某节点的所有入边（指向该节点的边） */
+    List<KnowledgeEdge> listByToNode(Integer toNodeId);
+
     /** 查询所有边 */
     List<KnowledgeEdge> listAll();
 

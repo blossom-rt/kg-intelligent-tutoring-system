@@ -45,7 +45,7 @@ import {
   Fold, SwitchButton,
   HomeFilled, Grid, Connection, MapLocation, EditPen, Tickets,
   Notebook, DataAnalysis, School, Share, User, Lock, Bell, Files, Monitor,
-  Sunny, Moon
+  Sunny, Moon, Star
 } from '@element-plus/icons-vue'
 
 const router = useRouter()
@@ -66,6 +66,7 @@ const menuItems = computed(() => {
       { path: '/student/recommendations', label: '个性推荐', icon: DataAnalysis },
       { path: '/student/exams', label: '测评中心', icon: Tickets },
       { path: '/student/wrong', label: '错题本', icon: Notebook },
+      { path: '/student/favorites', label: '收藏夹', icon: Star },
     ],
     teacher: [
       { path: '/teacher', label: '工作台', icon: HomeFilled },

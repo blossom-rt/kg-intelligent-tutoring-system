@@ -6,6 +6,8 @@ import com.cupk.common.UserContext;
 import com.cupk.mapper.PathDetailMapper;
 import com.cupk.mapper.StudyPathMapper;
 import com.cupk.mapper.StudyRecordMapper;
+import com.cupk.pojo.KnowledgeEdge;
+import com.cupk.pojo.KnowledgeNode;
 import com.cupk.pojo.PathDetail;
 import com.cupk.pojo.StudyPath;
 import com.cupk.pojo.StudyRecord;
@@ -115,5 +117,21 @@ public class StudentGraphController {
                     return item;
                 })
                 .toList();
+    }
+
+    /**
+     * 获取某个知识点的所有前置知识点（入边节点）
+     */
+    @GetMapping("/prerequisite-nodes/{nodeId}")
+    public Result<List<KnowledgeNode>> prerequisiteNodes(@PathVariable Integer nodeId) {
+        List<KnowledgeEdge> incomingEdges = knowledgeEdgeService.listByToNode(nodeId);
+        if (incomingEdges.isEmpty()) {
+            return Result.success(Collections.emptyList());
+        }
+        List<Integer> fromNodeIds = incomingEdges.stream()
+                .map(KnowledgeEdge::getFromNodeId)
+                .toList();
+        List<KnowledgeNode> nodes = knowledgeNodeService.listByIds(fromNodeIds);
+        return Result.success(nodes);
     }
 }

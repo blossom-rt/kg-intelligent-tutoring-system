@@ -26,4 +26,7 @@ public interface KnowledgeNodeService {
 
     /** 查询某课程下的所有知识点 */
     List<KnowledgeNode> listByCourse(Integer courseId);
+
+    /** 根据ID列表批量查询 */
+    List<KnowledgeNode> listByIds(List<Integer> ids);
 }
