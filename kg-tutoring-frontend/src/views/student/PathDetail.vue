@@ -84,11 +84,12 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, nextTick } from 'vue'
+import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { ArrowLeft, CircleCheck, Download, Loading, Lock } from '@element-plus/icons-vue'
 import * as echarts from 'echarts'
+import confetti from 'canvas-confetti'
 import { getPathDetail } from '../../api/student'
 
 const router = useRouter()
@@ -174,6 +175,37 @@ const goStudy = (node) => {
     router.push(url)
   }
 }
+
+// ── 撒花动画 ──
+const smallCelebrate = () => {
+  confetti({ particleCount: 50, spread: 50, origin: { x: 0.5, y: 0.6 }, colors: ['#ff7b3d','#f5a623','#5eaf83','#d4a853'], disableForReducedMotion: true })
+}
+const bigCelebrate = () => {
+  const duration = 2500
+  const end = Date.now() + duration
+  const colors = ['#ff7b3d','#f5a623','#5eaf83','#d4a853','#ff6b6b','#64b5f6']
+  ;(function frame() {
+    confetti({ particleCount: 4, angle: 60, spread: 70, origin: { x: 0, y: 0.6 }, colors, disableForReducedMotion: true })
+    confetti({ particleCount: 4, angle: 120, spread: 70, origin: { x: 1, y: 0.6 }, colors, disableForReducedMotion: true })
+    if (Date.now() < end) requestAnimationFrame(frame)
+  })()
+  setTimeout(() => confetti({ particleCount: 150, spread: 120, origin: { x: 0.5, y: 0.5 }, colors, disableForReducedMotion: true }), 500)
+}
+
+// 进度变化时触发庆祝
+const lastSeenKey = computed(() => `path_progress_${route.params.id}`)
+watch(displayProgress, (newVal, oldVal) => {
+  if (newVal === oldVal || newVal === 0) return
+  const key = lastSeenKey.value
+  const prev = Number(localStorage.getItem(key) || 0)
+  if (newVal > prev && newVal < 100) {
+    setTimeout(() => smallCelebrate(), 300)
+  }
+  if (newVal >= 100 && prev < 100) {
+    setTimeout(() => bigCelebrate(), 500)
+  }
+  localStorage.setItem(key, String(newVal))
+})
 
 const fetchDetail = async () => {
   const id = route.params.id
