@@ -16,6 +16,8 @@ db/
 │   └── enrich_learning_materials.sql ← 第 3 步：补充知识点学习资料
 └── migrate/                  ← 维护/迁移脚本
     ├── cleanup.sql               ← 清空业务数据（保留主账号）
+    ├── add_learning_resource.sql ← 旧库升级：补 learning_resource 表
+    ├── seed_learning_resource_demo.sql ← 为知识点生成演示视频资源
     └── migrate_exam.sql          ← 旧库升级：补 exam 表 + 演示测评
 ```
 
@@ -61,6 +63,18 @@ mysql -u root -p < db/init/enrich_learning_materials.sql
 mysql -u root -p < db/migrate/migrate_exam.sql
 ```
 
+如果旧库还没有 learning_resource 表：
+
+```bash
+mysql -u root -p < db/migrate/add_learning_resource.sql
+```
+
+如果需要为已有知识点快速生成演示视频资源：
+
+```bash
+mysql -u root -p < db/migrate/seed_learning_resource_demo.sql
+```
+
 然后补学习资料：
 
 ```bash
@@ -81,7 +95,7 @@ mysql -u root -p < db/init/enrich_learning_materials.sql
 
 ## 导入后主要数据量
 
-执行 `init_full.sql`（或分步执行三个脚本）后，数据库共有 **19 张表**，主要数据量约：
+执行 `init_full.sql`（或分步执行三个脚本）后，数据库共有 **20 张表**，主要数据量约：
 
 | 表 | 数量 | 说明 |
 |---|---:|---|
@@ -90,6 +104,7 @@ mysql -u root -p < db/init/enrich_learning_materials.sql
 | `sys_email_code` | 0 | 邮箱验证码（运行时产生） |
 | `course` | 9 | 含 1 门跨学科课程 |
 | `knowledge_node` | 56 | |
+| `learning_resource` | 0 | 教师配置知识点视频/资料后产生 |
 | `knowledge_edge` | 55 | 含跨学科 support 边 |
 | `question` | 56 | |
 | `study_record` | 370 | |
@@ -112,6 +127,7 @@ mysql -u root -p kg_tutoring_db -e "
 SELECT 'sys_user' 表名, COUNT(*) 数量 FROM sys_user
 UNION ALL SELECT 'course', COUNT(*) FROM course
 UNION ALL SELECT 'knowledge_node', COUNT(*) FROM knowledge_node
+UNION ALL SELECT 'learning_resource', COUNT(*) FROM learning_resource
 UNION ALL SELECT 'question', COUNT(*) FROM question
 UNION ALL SELECT 'study_record', COUNT(*) FROM study_record
 UNION ALL SELECT 'exam', COUNT(*) FROM exam
