@@ -4,8 +4,13 @@ import com.cupk.aspect.OperLog;
 import com.cupk.common.BusinessException;
 import com.cupk.common.Result;
 import com.cupk.common.UserContext;
+import com.cupk.mapper.CourseMapper;
+import com.cupk.pojo.Course;
 import com.cupk.pojo.KnowledgeNode;
 import com.cupk.service.KnowledgeNodeService;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +25,7 @@ import java.util.List;
 public class NodeController {
 
     private final KnowledgeNodeService knowledgeNodeService;
+    private final CourseMapper courseMapper;
 
     /**
      * 检查当前用户是否为教师，否则抛出无权限异常
@@ -43,11 +49,33 @@ public class NodeController {
     }
 
     /**
-     * 根据 ID 获取知识点详情
+     * 根据 ID 获取知识点详情（含课程名称）
      */
     @GetMapping("/{id}")
-    public Result<KnowledgeNode> getOne(@PathVariable Integer id) {
-        return Result.success(knowledgeNodeService.getById(id));
+    public Result<?> getOne(@PathVariable Integer id) {
+        KnowledgeNode node = knowledgeNodeService.getById(id);
+        if (node == null) return Result.error("知识点不存在");
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("id", node.getId());
+        result.put("courseId", node.getCourseId());
+        if (node.getCourseId() != null) {
+            Course course = courseMapper.selectById(node.getCourseId());
+            result.put("courseName", course != null ? course.getCourseName() : null);
+        } else {
+            result.put("courseName", null);
+        }
+        result.put("name", node.getName());
+        result.put("nodeName", node.getName());
+        result.put("description", node.getDescription());
+        result.put("nodeType", node.getNodeType());
+        result.put("learningGoal", node.getLearningGoal());
+        result.put("keywords", node.getKeywords());
+        result.put("exampleHint", node.getExampleHint());
+        result.put("difficulty", node.getDifficulty());
+        result.put("chapter", node.getChapter());
+        result.put("expectedMinutes", node.getExpectedMinutes());
+        result.put("createTime", node.getCreateTime());
+        return Result.success(result);
     }
 
     /**

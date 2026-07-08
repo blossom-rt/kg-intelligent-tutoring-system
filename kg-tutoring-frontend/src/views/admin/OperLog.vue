@@ -10,6 +10,7 @@
             <el-option label="用户管理" value="用户管理" />
             <el-option label="角色管理" value="角色管理" />
             <el-option label="课程管理" value="课程管理" />
+            <el-option label="认证管理" value="认证管理" />
             <el-option label="公告管理" value="公告管理" />
             <el-option label="测评管理" value="测评管理" />
             <el-option label="题库管理" value="题库管理" />

@@ -94,11 +94,24 @@ public class StudentAiController {
         double total = record.getTotalScore() != null ? record.getTotalScore().doubleValue() : 1;
         double rate = total > 0 ? score / total * 100 : 0;
 
-        String userPrompt = "请为以下测评成绩生成一份诊断报告，包含成绩分析、薄弱环节诊断和后续学习建议。\n\n"
+        String userPrompt = "你是一名学业诊断分析师。请根据以下成绩数据直接撰写诊断报告正文，各段落之间用空行分隔。\n"
+                + "输出要求：\n"
+                + "- 第一行直接写【成绩分析】\n"
+                + "- 不要写【学生姓名】【测评日期】【测评科目】\n"
+                + "- 不要输出模板式的开头和结尾\n\n"
                 + "得分：" + score + " / " + total + "（" + String.format("%.1f", rate) + "%）\n"
                 + (rate >= 60 ? "状态：已通过" : "状态：未通过");
 
         String aiResult = deepSeekService.generate("你是一个经验丰富的学业诊断分析师，善于根据测评成绩为学生提供个性化的学习建议和改进方案。", userPrompt);
+
+        // 后处理：移除 AI 可能输出的占位行
+        aiResult = aiResult.replaceAll("(?m)^.*学生姓名[：:].*$", "")
+                .replaceAll("(?m)^.*测评时间[：:].*$", "")
+                .replaceAll("(?m)^.*测评科目[：:].*$", "")
+                .replaceAll("(?m)^.*学业诊断报告.*$", "")
+                .replaceAll("\\n{3,}", "\n\n")  // 合并多余空行
+                .trim();
+
         saveLog("exam-report", userPrompt, aiResult, start);
 
         Map<String, Object> result = new LinkedHashMap<>();

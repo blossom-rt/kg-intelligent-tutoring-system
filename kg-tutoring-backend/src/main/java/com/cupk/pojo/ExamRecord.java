@@ -36,6 +36,9 @@ public class ExamRecord {
     /** AI诊断报告 */
     private String aiReport;
 
+    /** 开始答题时间 */
+    private LocalDateTime startTime;
+
     /** 完成时间 */
     private LocalDateTime createTime;
 }

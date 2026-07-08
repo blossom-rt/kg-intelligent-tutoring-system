@@ -228,11 +228,6 @@ const formatProgress = (progress) => {
 onMounted(async () => {
   motivationTip.value = tips[Math.floor(Math.random() * tips.length)]
 
-  // 新手引导：仅首次登录时显示
-  if (!localStorage.getItem('guide_done')) {
-    guideDialogVisible.value = true
-  }
-
   try {
     const res = await getStudentDashboard()
     if (res) {
@@ -240,6 +235,10 @@ onMounted(async () => {
       activePaths.value = res.activePaths || []
       todos.value = res.todos || []
       stats.value = res.stats || stats.value
+      // 新手引导：仅后端标记为新用户且本地未关闭过
+      if (res.isNewUser && !localStorage.getItem('guide_done')) {
+        guideDialogVisible.value = true
+      }
     }
   } catch { }
 
