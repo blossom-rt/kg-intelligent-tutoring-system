@@ -267,9 +267,10 @@ const exportMindMap = async () => {
       leaves: {
         label: { position: 'right', verticalAlign: 'middle', align: 'left' }
       },
+      edgeShape: 'polyline',
       expandAndCollapse: false,
       animationDuration: 300,
-      lineStyle: { color: '#ccc', width: 1.5 }
+      lineStyle: { color: '#ccc', width: 1.5, curveness: 0 }
     }]
   })
 
