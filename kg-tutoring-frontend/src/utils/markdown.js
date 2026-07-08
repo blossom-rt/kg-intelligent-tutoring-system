@@ -18,6 +18,7 @@ export function renderMarkdown(value) {
   const html = []
   let paragraph = []
   let listType = null
+  let codeBlock = null
 
   const flushParagraph = () => {
     if (!paragraph.length) return
@@ -40,6 +41,24 @@ export function renderMarkdown(value) {
 
   for (const rawLine of lines) {
     const line = rawLine.trim()
+
+    const fence = line.match(/^```(\w+)?\s*$/)
+    if (fence) {
+      if (codeBlock) {
+        html.push(`<pre><code>${escapeHtml(codeBlock.lines.join('\n'))}</code></pre>`)
+        codeBlock = null
+      } else {
+        flushParagraph()
+        closeList()
+        codeBlock = { language: fence[1] || '', lines: [] }
+      }
+      continue
+    }
+
+    if (codeBlock) {
+      codeBlock.lines.push(rawLine)
+      continue
+    }
 
     if (!line) {
       flushParagraph()
@@ -72,9 +91,20 @@ export function renderMarkdown(value) {
       continue
     }
 
+    const quote = line.match(/^>\s+(.+)$/)
+    if (quote) {
+      flushParagraph()
+      closeList()
+      html.push(`<blockquote>${renderInline(quote[1])}</blockquote>`)
+      continue
+    }
+
     paragraph.push(line)
   }
 
+  if (codeBlock) {
+    html.push(`<pre><code>${escapeHtml(codeBlock.lines.join('\n'))}</code></pre>`)
+  }
   flushParagraph()
   closeList()
 

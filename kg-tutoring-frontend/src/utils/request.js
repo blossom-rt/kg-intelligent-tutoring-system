@@ -24,7 +24,9 @@ service.interceptors.response.use(
       if (body.code === 200) {
         return body.data
       }
-      ElMessage.error(body.message || '请求失败')
+      if (!res.config?.silent) {
+        ElMessage.error(body.message || '请求失败')
+      }
       return Promise.reject(new Error(body.message))
     }
     // 非 Result 格式直接返回
@@ -32,6 +34,9 @@ service.interceptors.response.use(
   },
   err => {
     const status = err.response?.status
+    if (err.config?.silent) {
+      return Promise.reject(err)
+    }
     if (status === 401) {
       ElMessage.error('账号或密码错误')
     } else if (status === 403) {

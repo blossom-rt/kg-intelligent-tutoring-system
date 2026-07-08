@@ -39,9 +39,10 @@
         </el-table-column>
         <el-table-column prop="chapter" label="章节" width="140" />
         <el-table-column prop="expectedMinutes" label="预计时长(分)" width="120" align="center" />
-        <el-table-column label="操作" width="160" fixed="right">
+        <el-table-column label="操作" width="220" fixed="right">
           <template #default="{ row }">
             <el-button type="primary" size="small" link @click="openEdit(row)">编辑</el-button>
+            <el-button type="success" size="small" link @click="openResourceDialog(row)">资源</el-button>
             <el-button type="danger" size="small" link @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
@@ -109,6 +110,97 @@
         <el-button type="primary" :loading="submitLoading" @click="handleSubmit">确定</el-button>
       </template>
     </el-dialog>
+
+    <!-- 学习资源维护弹窗 -->
+    <el-dialog
+      v-model="resourceDialogVisible"
+      :title="`学习资源 - ${currentNode?.name || ''}`"
+      width="760px"
+      :close-on-click-modal="false"
+    >
+      <el-form ref="resourceFormRef" :model="resourceForm" :rules="resourceRules" label-width="92px" class="resource-form">
+        <el-form-item label="资源标题" prop="title">
+          <el-input v-model="resourceForm.title" placeholder="例如：有理数运算微课" />
+        </el-form-item>
+        <el-form-item label="资源链接" prop="url">
+          <el-input v-model="resourceForm.url" placeholder="可填写 mp4 直链、B站/慕课/学校资源站链接" />
+        </el-form-item>
+        <el-row :gutter="12">
+          <el-col :span="8">
+            <el-form-item label="类型" prop="resourceType">
+              <el-select v-model="resourceForm.resourceType" style="width: 100%">
+                <el-option label="视频" value="video" />
+                <el-option label="文章" value="article" />
+                <el-option label="文档" value="pdf" />
+                <el-option label="链接" value="link" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="来源">
+              <el-select v-model="resourceForm.source" style="width: 100%">
+                <el-option label="自定义" value="custom" />
+                <el-option label="Bilibili" value="bilibili" />
+                <el-option label="慕课" value="mooc" />
+                <el-option label="本地/校内" value="local" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="状态">
+              <el-switch v-model="resourceForm.enabled" active-text="启用" inactive-text="停用" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="12">
+          <el-col :span="8">
+            <el-form-item label="排序">
+              <el-input-number v-model="resourceForm.sortOrder" :min="0" :max="999" style="width: 100%" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="时长(秒)">
+              <el-input-number v-model="resourceForm.durationSeconds" :min="0" :max="86400" style="width: 100%" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="封面">
+              <el-input v-model="resourceForm.coverUrl" placeholder="可选" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <div class="resource-actions">
+          <el-button @click="resetResourceForm">清空</el-button>
+          <el-button type="primary" :loading="resourceSubmitLoading" @click="submitResource">
+            {{ resourceForm.id ? '保存修改' : '新增资源' }}
+          </el-button>
+        </div>
+      </el-form>
+
+      <el-divider />
+
+      <el-table :data="resourceList" v-loading="resourceLoading" border stripe>
+        <el-table-column prop="title" label="标题" min-width="160" />
+        <el-table-column prop="resourceType" label="类型" width="80" align="center">
+          <template #default="{ row }">{{ resourceTypeLabel(row.resourceType) }}</template>
+        </el-table-column>
+        <el-table-column prop="source" label="来源" width="100" align="center" />
+        <el-table-column label="状态" width="80" align="center">
+          <template #default="{ row }">
+            <el-tag :type="row.status === 1 ? 'success' : 'info'" size="small">
+              {{ row.status === 1 ? '启用' : '停用' }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="url" label="链接" min-width="180" show-overflow-tooltip />
+        <el-table-column label="操作" width="130" fixed="right">
+          <template #default="{ row }">
+            <el-button type="primary" size="small" link @click="editResource(row)">编辑</el-button>
+            <el-button type="danger" size="small" link @click="deleteResource(row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
@@ -116,15 +208,31 @@
 import { ref, reactive, onMounted, computed } from 'vue'
 import StudentHeader from '../../components/StudentHeader.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { getNodeList, createNode, updateNode, deleteNode, getCourseList } from '../../api/knowledge'
+import {
+  getNodeList,
+  createNode,
+  updateNode,
+  deleteNode,
+  getCourseList,
+  getNodeResources,
+  createNodeResource,
+  updateNodeResource,
+  deleteNodeResource
+} from '../../api/knowledge'
 
 const loading = ref(false)
 const submitLoading = ref(false)
 const dialogVisible = ref(false)
 const isEdit = ref(false)
 const formRef = ref(null)
+const resourceFormRef = ref(null)
 const tableData = ref([])
 const courseList = ref([])
+const resourceList = ref([])
+const currentNode = ref(null)
+const resourceDialogVisible = ref(false)
+const resourceLoading = ref(false)
+const resourceSubmitLoading = ref(false)
 
 const filterForm = reactive({
   courseId: null,
@@ -156,11 +264,29 @@ const form = reactive({
   expectedMinutes: 30
 })
 
+const resourceForm = reactive({
+  id: null,
+  title: '',
+  resourceType: 'video',
+  url: '',
+  coverUrl: '',
+  durationSeconds: 0,
+  source: 'custom',
+  sortOrder: 0,
+  enabled: true
+})
+
 const rules = {
   courseId: [{ required: true, message: '请选择课程', trigger: 'change' }],
   name: [{ required: true, message: '请输入知识点名称', trigger: 'blur' }],
   difficulty: [{ required: true, message: '请选择难度', trigger: 'change' }],
   expectedMinutes: [{ required: true, message: '请输入预计时长', trigger: 'blur' }]
+}
+
+const resourceRules = {
+  title: [{ required: true, message: '请输入资源标题', trigger: 'blur' }],
+  url: [{ required: true, message: '请输入资源链接', trigger: 'blur' }],
+  resourceType: [{ required: true, message: '请选择资源类型', trigger: 'change' }]
 }
 
 const diffLabel = (val) => {
@@ -179,6 +305,11 @@ const diffTag = (val) => {
 const nodeTypeLabel = (val) => {
   const map = { concept: '概念', skill: '技能', application: '应用' }
   return map[val] || '概念'
+}
+
+const resourceTypeLabel = (val) => {
+  const map = { video: '视频', article: '文章', pdf: '文档', link: '链接' }
+  return map[val] || '资源'
 }
 
 const loadCourses = async () => {
@@ -301,6 +432,99 @@ const handleDelete = (row) => {
   }).catch(() => { })
 }
 
+const resetResourceForm = () => {
+  Object.assign(resourceForm, {
+    id: null,
+    title: '',
+    resourceType: 'video',
+    url: '',
+    coverUrl: '',
+    durationSeconds: 0,
+    source: 'custom',
+    sortOrder: 0,
+    enabled: true
+  })
+  resourceFormRef.value?.clearValidate()
+}
+
+const loadResources = async () => {
+  if (!currentNode.value?.id) return
+  resourceLoading.value = true
+  try {
+    const res = await getNodeResources(currentNode.value.id, { onlyEnabled: false })
+    resourceList.value = Array.isArray(res) ? res : []
+  } catch {
+    resourceList.value = []
+  } finally {
+    resourceLoading.value = false
+  }
+}
+
+const openResourceDialog = async (row) => {
+  currentNode.value = row
+  resourceDialogVisible.value = true
+  resetResourceForm()
+  await loadResources()
+}
+
+const editResource = (row) => {
+  Object.assign(resourceForm, {
+    id: row.id,
+    title: row.title || '',
+    resourceType: row.resourceType || 'video',
+    url: row.url || '',
+    coverUrl: row.coverUrl || '',
+    durationSeconds: row.durationSeconds || 0,
+    source: row.source || 'custom',
+    sortOrder: row.sortOrder || 0,
+    enabled: row.status !== 0
+  })
+}
+
+const submitResource = async () => {
+  if (!currentNode.value?.id) return
+  const valid = await resourceFormRef.value.validate().catch(() => false)
+  if (!valid) return
+  resourceSubmitLoading.value = true
+  const data = {
+    title: resourceForm.title,
+    resourceType: resourceForm.resourceType,
+    url: resourceForm.url,
+    coverUrl: resourceForm.coverUrl,
+    durationSeconds: resourceForm.durationSeconds || null,
+    source: resourceForm.source,
+    sortOrder: resourceForm.sortOrder,
+    status: resourceForm.enabled ? 1 : 0
+  }
+  try {
+    if (resourceForm.id) {
+      await updateNodeResource(resourceForm.id, data)
+      ElMessage.success('资源已更新')
+    } else {
+      await createNodeResource(currentNode.value.id, data)
+      ElMessage.success('资源已新增')
+    }
+    resetResourceForm()
+    loadResources()
+  } catch { } finally {
+    resourceSubmitLoading.value = false
+  }
+}
+
+const deleteResource = (row) => {
+  ElMessageBox.confirm(`确定要删除资源「${row.title}」吗？`, '删除确认', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(async () => {
+    try {
+      await deleteNodeResource(row.id)
+      ElMessage.success('删除成功')
+      loadResources()
+    } catch { }
+  }).catch(() => { })
+}
+
 onMounted(() => {
   loadCourses()
   loadData()
@@ -309,4 +533,12 @@ onMounted(() => {
 
 <style scoped>
 .page-container { padding: 20px 24px; background: var(--bg-root); min-height: 100vh; }
+.resource-form {
+  padding-top: 4px;
+}
+.resource-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
 </style>
