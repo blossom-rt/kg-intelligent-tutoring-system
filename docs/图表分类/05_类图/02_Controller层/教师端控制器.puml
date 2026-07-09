@@ -1,0 +1,33 @@
+@startuml 教师端控制器
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontSize 11
+skinparam class {
+    BackgroundColor #E8F5E9
+    BorderColor #2E7D32
+    FontSize 11
+}
+
+title 教师端 Controller
+
+class TeacherHomeController <<REST>> {
+    + getDashboard()
+    + getTeachingCourses()
+}
+class TeacherExamController <<REST>> {
+    + createExam()
+    + editExam()
+    + deleteExam()
+    + getExamDetail()
+    + getExamResults()
+    + getAiReports()
+}
+class TeacherAnalysisController <<REST>> {
+    + getOverallMastery()
+    + getStudentDetail()
+    + getWrongQuestionStats()
+    + exportReport()
+}
+
+note top of TeacherExamController : 测评管理(v2)
+note top of TeacherAnalysisController : 学情分析(v2)
+@enduml

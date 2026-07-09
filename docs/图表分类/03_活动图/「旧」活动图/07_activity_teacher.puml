@@ -1,0 +1,124 @@
+@startuml kg_activity_teacher
+' ============================================================
+' 活动图 — 教师工作流程（v2，含测评管理 + 学习资源管理）
+' ============================================================
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontSize 11
+skinparam activity {
+    BackgroundColor #E3F2FD
+    BorderColor #1565C0
+    FontSize 11
+}
+skinparam diamondBackgroundColor #FFF9C4
+skinparam diamondBorderColor #F57F17
+skinparam startColor #4CAF50
+skinparam endColor #F44336
+skinparam partitionBorderColor #333333
+skinparam partitionBackgroundColor #FAFAFA
+
+title 教师工作流程 — 活动图 (v2)
+
+|教师|
+start
+:登录系统;
+:进入工作台看板;
+
+|教师|
+if (操作类型?) then (课程 & 知识点)
+
+    :创建/编辑课程\n(course);
+    :管理知识点\n(knowledge_node);
+
+    :配置知识点属性;
+    note right
+        name, description
+        node_type, learning_goal
+        keywords, example_hint
+        difficulty, chapter
+        expected_minutes
+    end note
+
+    :设定前置依赖关系\n(knowledge_edge);
+    note right
+        from_node_id → to_node_id
+        relation_type
+        is_cross_subject
+    end note
+
+    :管理学习资源\n(learning_resource);
+    note right
+        上传视频、文档
+        设置封面图
+        配置资源链接(url)
+        排序(sort_order)
+    end note
+
+    :管理题库\n(question);
+    :题目关联知识点;
+    note right
+        content, options
+        answer, analysis
+        difficulty, question_type
+    end note
+
+elseif (测评管理?) then (是)
+    :创建测评\n(exam);
+    :设置试卷总分;
+
+    :从题库选题\n(exam_question);
+    :设定题目顺序\n(sort_order);
+
+    :发布测评;
+
+    :查看学生成绩;
+    note right
+        exam_record:
+        user_score, start_time
+        create_time(完成时间)
+    end note
+
+    :查看 AI 诊断报告;
+    note right
+        ai_report 字段
+        DeepSeek 自动生成
+    end note
+
+elseif (跨学科主题?) then (是)
+    :创建跨学科主题\n(cross_subject_theme);
+    note right
+        theme_name, description
+        difficulty, status
+    end note
+
+    :关联多学科知识点\n(cross_theme_node);
+    :发布到学生端;
+
+elseif (学情分析?) then (是)
+    :选择班级/课程;
+
+    :查看整体掌握度;
+    note right
+        study_record.mastery_level
+        study_record.correct_rate
+        study_record.study_minutes
+    end note
+
+    :查看学生个体详情;
+    :查看错题统计;
+    note right
+        wrong_question
+        wrong_count 频率分析
+    end note
+
+    :导出学情报表;
+
+else (公告)
+    :发布系统公告\n(sys_notice);
+    :选择推送对象\n(target_role);
+endif
+
+|教师|
+:更新教学内容;
+stop
+
+@enduml
