@@ -332,7 +332,7 @@ const loadTrend = async (userId) => {
     const chart = echarts.init(trendChartRef.value)
     chart.setOption({
       tooltip: { trigger: 'axis' },
-      grid: { left: '5%', right: '5%', bottom: '15%', top: '10%', containLabel: true },
+      grid: { left: '5%', right: '5%', bottom: '15%', top: '20%', containLabel: true },
       xAxis: { type: 'category', data: (res || []).map(d => d.date.slice(5)), axisLabel: { fontSize: 11 } },
       yAxis: { type: 'value', minInterval: 1, name: '学习记录数' },
       series: [{
