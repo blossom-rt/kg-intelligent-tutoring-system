@@ -1,80 +1,604 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="886" height="999" viewBox="0 0 886 999">
-<rect width="886" height="999" fill="#ffffff"/>
-<line x1="293.6" y1="167.6" x2="98" y2="29" stroke="#aaa" stroke-width="1"/>
-<line x1="293.6" y1="167.6" x2="197" y2="29" stroke="#aaa" stroke-width="1"/>
-<line x1="293.6" y1="167.6" x2="296" y2="29" stroke="#aaa" stroke-width="1"/>
-<line x1="293.6" y1="167.6" x2="395" y2="29" stroke="#aaa" stroke-width="1"/>
-<rect x="243.6" y="144.6" width="100" height="46" rx="3" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="293.6" y="168.6" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="17" font-family="Microsoft YaHei, PingFang SC, sans-serif" font-weight="normal">系统角色</text>
-<ellipse cx="98" cy="29" rx="39.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="98" y="30" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">角色ID</text>
-<ellipse cx="197" cy="29" rx="45.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="197" y="30" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">角色编码</text>
-<ellipse cx="296" cy="29" rx="45.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="296" y="30" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">角色名称</text>
-<ellipse cx="395" cy="29" rx="45.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="395" y="30" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">角色描述</text>
-<line x1="525.6" y1="579.3" x2="642.7" y2="565" stroke="#aaa" stroke-width="1"/>
-<line x1="525.6" y1="579.3" x2="613.2" y2="658.4" stroke="#aaa" stroke-width="1"/>
-<line x1="525.6" y1="579.3" x2="523.3" y2="697.2" stroke="#aaa" stroke-width="1"/>
-<line x1="525.6" y1="579.3" x2="435" y2="654.8" stroke="#aaa" stroke-width="1"/>
-<line x1="525.6" y1="579.3" x2="409.1" y2="560.4" stroke="#aaa" stroke-width="1"/>
-<rect x="475.6" y="556.3" width="100" height="46" rx="3" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="525.6" y="580.3" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="17" font-family="Microsoft YaHei, PingFang SC, sans-serif" font-weight="normal">系统用户</text>
-<ellipse cx="642.7" cy="565" rx="39.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="642.7" y="566" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">用户ID</text>
-<ellipse cx="613.2" cy="658.4" rx="45.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="613.2" y="659.4" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">登录账号</text>
-<ellipse cx="523.3" cy="697.2" rx="45.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="523.3" y="698.2" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">真实姓名</text>
-<ellipse cx="435" cy="654.8" rx="45.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="435" y="655.8" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">绑定邮箱</text>
-<ellipse cx="409.1" cy="560.4" rx="45.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="409.1" y="561.4" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">账号状态</text>
-<line x1="259" y1="850.7" x2="55" y2="969.7" stroke="#aaa" stroke-width="1"/>
-<line x1="259" y1="850.7" x2="157" y2="969.7" stroke="#aaa" stroke-width="1"/>
-<line x1="259" y1="850.7" x2="259" y2="969.7" stroke="#aaa" stroke-width="1"/>
-<line x1="259" y1="850.7" x2="361" y2="969.7" stroke="#aaa" stroke-width="1"/>
-<line x1="259" y1="850.7" x2="463" y2="969.7" stroke="#aaa" stroke-width="1"/>
-<rect x="209" y="827.7" width="100" height="46" rx="3" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="259" y="851.7" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="17" font-family="Microsoft YaHei, PingFang SC, sans-serif" font-weight="normal">邮箱验证码</text>
-<ellipse cx="55" cy="969.7" rx="47" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="55" y="970.7" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">验证码ID</text>
-<ellipse cx="157" cy="969.7" rx="45.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="157" y="970.7" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">目标邮箱</text>
-<ellipse cx="259" cy="969.7" rx="38" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="259" y="970.7" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">验证码</text>
-<ellipse cx="361" cy="969.7" rx="45.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="361" y="970.7" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">过期时间</text>
-<ellipse cx="463" cy="969.7" rx="45.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="463" y="970.7" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">是否使用</text>
-<line x1="634.2" y1="222.6" x2="409.1" y2="107.6" stroke="#aaa" stroke-width="1"/>
-<line x1="634.2" y1="222.6" x2="523.3" y2="107.6" stroke="#aaa" stroke-width="1"/>
-<line x1="634.2" y1="222.6" x2="634.2" y2="104.6" stroke="#aaa" stroke-width="1"/>
-<line x1="634.2" y1="222.6" x2="733.2" y2="104.6" stroke="#aaa" stroke-width="1"/>
-<line x1="634.2" y1="222.6" x2="832.2" y2="104.6" stroke="#aaa" stroke-width="1"/>
-<rect x="584.2" y="199.6" width="100" height="46" rx="3" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="634.2" y="223.6" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="17" font-family="Microsoft YaHei, PingFang SC, sans-serif" font-weight="normal">系统公告</text>
-<ellipse cx="409.1" cy="107.6" rx="39.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="409.1" y="108.6" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">公告ID</text>
-<ellipse cx="523.3" cy="107.6" rx="45.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="523.3" y="108.6" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">公告标题</text>
-<ellipse cx="634.2" cy="104.6" rx="45.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="634.2" y="105.6" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">公告正文</text>
-<ellipse cx="733.2" cy="104.6" rx="45.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="733.2" y="105.6" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">推送对象</text>
-<ellipse cx="832.2" cy="104.6" rx="45.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="832.2" y="105.6" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">发布时间</text>
-<line x1="306.5" y1="190.6" x2="400.1" y2="356.6" stroke="#333" stroke-width="1.5"/>
-<line x1="419" y1="390.2" x2="512.6" y2="556.3" stroke="#333" stroke-width="1.5"/>
-<polygon points="409.6,351.4 449.6,373.4 409.6,395.4 369.6,373.4" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="409.6" y="374.4" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="16" font-family="Microsoft YaHei, PingFang SC, sans-serif">拥有</text>
-<text x="341.7" y="268.6" text-anchor="middle" fill="#000" font-size="18" font-family="Microsoft YaHei, PingFang SC, sans-serif">1</text>
-<text x="477.4" y="462.2" text-anchor="middle" fill="#000" font-size="18" font-family="Microsoft YaHei, PingFang SC, sans-serif">n</text>
-<line x1="532.6" y1="556.3" x2="574.2" y2="419.8" stroke="#333" stroke-width="1.5"/>
-<line x1="585.6" y1="382.1" x2="627.2" y2="245.6" stroke="#333" stroke-width="1.5"/>
-<polygon points="579.9,378.9 619.9,400.9 579.9,422.9 539.9,400.9" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="579.9" y="401.9" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="16" font-family="Microsoft YaHei, PingFang SC, sans-serif">发布</text>
-<text x="564.9" y="483.5" text-anchor="middle" fill="#000" font-size="18" font-family="Microsoft YaHei, PingFang SC, sans-serif">1</text>
-<text x="594.9" y="302.4" text-anchor="middle" fill="#000" font-size="18" font-family="Microsoft YaHei, PingFang SC, sans-serif">n</text>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 15.1.0 (20260618.0150)
+ -->
+<!-- Title: 管理系统业务ER图 Pages: 1 -->
+<svg width="5819pt" height="1032pt"
+ viewBox="0.00 0.00 5819.00 1032.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(2.08333 2.08333) rotate(0) translate(4 491.24)">
+<title>管理系统业务ER图</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-491.24 2789.19,-491.24 2789.19,4 -4,4"/>
+<text xml:space="preserve" text-anchor="middle" x="1392.6" y="-468.04" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="16.00">管理系统业务 ER 图</text>
+<!-- sys_role -->
+<g id="node1" class="node">
+<title>sys_role</title>
+<polygon fill="none" stroke="black" points="551.88,-455.99 487.88,-455.99 487.88,-413.49 551.88,-413.49 551.88,-455.99"/>
+<text xml:space="preserve" text-anchor="middle" x="519.88" y="-440.59" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">系统角色</text>
+<text xml:space="preserve" text-anchor="middle" x="519.88" y="-423.34" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">sys_role</text>
+</g>
+<!-- r_id -->
+<g id="node2" class="node">
+<title>r_id</title>
+<ellipse fill="none" stroke="black" cx="308.88" cy="-352.74" rx="29.88" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="308.88" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">角色ID</text>
+<text xml:space="preserve" text-anchor="middle" x="308.88" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">id</text>
+</g>
+<!-- sys_role&#45;&gt;r_id -->
+<g id="edge1" class="edge">
+<title>sys_role&#45;&gt;r_id</title>
+<path fill="none" stroke="black" d="M487.56,-424.64C453.47,-414.63 398.47,-397.31 352.88,-377.49 346.35,-374.66 339.49,-371.2 333.18,-367.81"/>
+</g>
+<!-- r_code -->
+<g id="node3" class="node">
+<title>r_code</title>
+<ellipse fill="none" stroke="black" cx="407.88" cy="-352.74" rx="40.48" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="407.88" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">角色编码</text>
+<text xml:space="preserve" text-anchor="middle" x="407.88" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">role_code</text>
+</g>
+<!-- sys_role&#45;&gt;r_code -->
+<g id="edge2" class="edge">
+<title>sys_role&#45;&gt;r_code</title>
+<path fill="none" stroke="black" d="M491.03,-413.14C473.27,-400.46 450.71,-384.34 433.56,-372.09"/>
+</g>
+<!-- r_name -->
+<g id="node4" class="node">
+<title>r_name</title>
+<ellipse fill="none" stroke="black" cx="519.88" cy="-352.74" rx="42.07" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="519.88" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">角色名称</text>
+<text xml:space="preserve" text-anchor="middle" x="519.88" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">role_name</text>
+</g>
+<!-- sys_role&#45;&gt;r_name -->
+<g id="edge3" class="edge">
+<title>sys_role&#45;&gt;r_name</title>
+<path fill="none" stroke="black" d="M519.88,-413.14C519.88,-402.4 519.88,-389.2 519.88,-377.97"/>
+</g>
+<!-- r_desc -->
+<g id="node5" class="node">
+<title>r_desc</title>
+<ellipse fill="none" stroke="black" cx="634.88" cy="-352.74" rx="44.19" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="634.88" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">角色描述</text>
+<text xml:space="preserve" text-anchor="middle" x="634.88" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">description</text>
+</g>
+<!-- sys_role&#45;&gt;r_desc -->
+<g id="edge4" class="edge">
+<title>sys_role&#45;&gt;r_desc</title>
+<path fill="none" stroke="black" d="M549.49,-413.14C567.46,-400.64 590.22,-384.81 607.72,-372.63"/>
+</g>
+<!-- has_user -->
+<g id="node46" class="node">
+<title>has_user</title>
+<polygon fill="none" stroke="black" points="740.88,-370.74 708.25,-352.74 740.88,-334.74 773.51,-352.74 740.88,-370.74"/>
+<text xml:space="preserve" text-anchor="middle" x="740.88" y="-350.74" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10.00">拥有</text>
+</g>
+<!-- sys_role&#45;&gt;has_user -->
+<g id="edge40" class="edge">
+<title>sys_role&#45;&gt;has_user</title>
+<path fill="none" stroke="black" d="M552.16,-424.94C587.5,-414.92 645.58,-397.36 693.88,-377.49 704.53,-373.11 716.08,-367.29 725.07,-362.51"/>
+</g>
+<!-- sys_user -->
+<g id="node6" class="node">
+<title>sys_user</title>
+<polygon fill="none" stroke="black" points="772.88,-291.99 708.88,-291.99 708.88,-249.49 772.88,-249.49 772.88,-291.99"/>
+<text xml:space="preserve" text-anchor="middle" x="740.88" y="-276.59" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">系统用户</text>
+<text xml:space="preserve" text-anchor="middle" x="740.88" y="-259.34" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">sys_user</text>
+</g>
+<!-- u_id -->
+<g id="node7" class="node">
+<title>u_id</title>
+<ellipse fill="none" stroke="black" cx="169.88" cy="-188.75" rx="29.88" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="169.88" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">用户ID</text>
+<text xml:space="preserve" text-anchor="middle" x="169.88" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">id</text>
+</g>
+<!-- sys_user&#45;&gt;u_id -->
+<g id="edge5" class="edge">
+<title>sys_user&#45;&gt;u_id</title>
+<path fill="none" stroke="black" d="M708.49,-267.93C608.73,-262.09 307.25,-242.45 213.88,-213.49 206.91,-211.34 199.78,-208.04 193.34,-204.58"/>
+</g>
+<!-- u_user -->
+<g id="node8" class="node">
+<title>u_user</title>
+<ellipse fill="none" stroke="black" cx="268.88" cy="-188.75" rx="40.48" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="268.88" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">登录账号</text>
+<text xml:space="preserve" text-anchor="middle" x="268.88" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">username</text>
+</g>
+<!-- sys_user&#45;&gt;u_user -->
+<g id="edge6" class="edge">
+<title>sys_user&#45;&gt;u_user</title>
+<path fill="none" stroke="black" d="M708.63,-268.39C637.79,-264.77 463.77,-252.34 323.88,-213.49 315.96,-211.3 307.69,-208.19 300.04,-204.95"/>
+</g>
+<!-- u_real -->
+<g id="node9" class="node">
+<title>u_real</title>
+<ellipse fill="none" stroke="black" cx="380.88" cy="-188.75" rx="42.07" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="380.88" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">真实姓名</text>
+<text xml:space="preserve" text-anchor="middle" x="380.88" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">real_name</text>
+</g>
+<!-- sys_user&#45;&gt;u_real -->
+<g id="edge7" class="edge">
+<title>sys_user&#45;&gt;u_real</title>
+<path fill="none" stroke="black" d="M708.5,-266.02C652.5,-259.07 534.28,-242.18 437.88,-213.49 429.86,-211.11 421.44,-207.97 413.6,-204.77"/>
+</g>
+<!-- u_email -->
+<g id="node10" class="node">
+<title>u_email</title>
+<ellipse fill="none" stroke="black" cx="488.88" cy="-188.75" rx="36.77" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="488.88" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">绑定邮箱</text>
+<text xml:space="preserve" text-anchor="middle" x="488.88" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">email</text>
+</g>
+<!-- sys_user&#45;&gt;u_email -->
+<g id="edge8" class="edge">
+<title>sys_user&#45;&gt;u_email</title>
+<path fill="none" stroke="black" d="M708.69,-262.45C668.56,-252.97 598.16,-235.06 539.88,-213.49 532.64,-210.82 525.01,-207.53 517.92,-204.27"/>
+</g>
+<!-- u_pwd -->
+<g id="node11" class="node">
+<title>u_pwd</title>
+<ellipse fill="none" stroke="black" cx="593.88" cy="-188.75" rx="39.42" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="593.88" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">密码</text>
+<text xml:space="preserve" text-anchor="middle" x="593.88" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">password</text>
+</g>
+<!-- sys_user&#45;&gt;u_pwd -->
+<g id="edge9" class="edge">
+<title>sys_user&#45;&gt;u_pwd</title>
+<path fill="none" stroke="black" d="M708.62,-252.19C683.09,-238.3 647.76,-219.07 623.07,-205.63"/>
+</g>
+<!-- u_rid -->
+<g id="node12" class="node">
+<title>u_rid</title>
+<ellipse fill="none" stroke="black" cx="692.88" cy="-188.75" rx="30.94" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="692.88" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">角色ID</text>
+<text xml:space="preserve" text-anchor="middle" x="692.88" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">role_id</text>
+</g>
+<!-- sys_user&#45;&gt;u_rid -->
+<g id="edge10" class="edge">
+<title>sys_user&#45;&gt;u_rid</title>
+<path fill="none" stroke="black" d="M728.51,-249.14C721.57,-237.57 712.91,-223.14 705.87,-211.4"/>
+</g>
+<!-- u_status -->
+<g id="node13" class="node">
+<title>u_status</title>
+<ellipse fill="none" stroke="black" cx="789.88" cy="-188.75" rx="36.77" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="789.88" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">账号状态</text>
+<text xml:space="preserve" text-anchor="middle" x="789.88" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">status</text>
+</g>
+<!-- sys_user&#45;&gt;u_status -->
+<g id="edge11" class="edge">
+<title>sys_user&#45;&gt;u_status</title>
+<path fill="none" stroke="black" d="M753.49,-249.14C760.47,-237.75 769.14,-223.6 776.27,-211.96"/>
+</g>
+<!-- u_ctime -->
+<g id="node14" class="node">
+<title>u_ctime</title>
+<ellipse fill="none" stroke="black" cx="901.88" cy="-188.75" rx="46.32" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="901.88" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">创建时间</text>
+<text xml:space="preserve" text-anchor="middle" x="901.88" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">create_time</text>
+</g>
+<!-- sys_user&#45;&gt;u_ctime -->
+<g id="edge12" class="edge">
+<title>sys_user&#45;&gt;u_ctime</title>
+<path fill="none" stroke="black" d="M773.07,-253.75C800.78,-239.98 840.62,-220.19 868.63,-206.27"/>
+</g>
+<!-- publishes -->
+<g id="node47" class="node">
+<title>publishes</title>
+<polygon fill="none" stroke="black" points="1009.88,-206.75 977.25,-188.75 1009.88,-170.75 1042.51,-188.75 1009.88,-206.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1009.88" y="-186.75" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10.00">发布</text>
+</g>
+<!-- sys_user&#45;&gt;publishes -->
+<g id="edge42" class="edge">
+<title>sys_user&#45;&gt;publishes</title>
+<path fill="none" stroke="black" d="M773.16,-263.88C816.98,-255.41 897.34,-238.02 962.88,-213.49 973.84,-209.39 985.59,-203.46 994.6,-198.55"/>
+</g>
+<!-- generates -->
+<g id="node48" class="node">
+<title>generates</title>
+<polygon fill="none" stroke="black" points="1103.88,-206.75 1071.25,-188.75 1103.88,-170.75 1136.51,-188.75 1103.88,-206.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1103.88" y="-186.75" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10.00">产生</text>
+</g>
+<!-- sys_user&#45;&gt;generates -->
+<g id="edge44" class="edge">
+<title>sys_user&#45;&gt;generates</title>
+<path fill="none" stroke="black" d="M773.03,-267.14C831.02,-261.76 956.44,-247 1056.88,-213.49 1067.98,-209.79 1079.73,-203.85 1088.7,-198.84"/>
+</g>
+<!-- calls_ai -->
+<g id="node49" class="node">
+<title>calls_ai</title>
+<polygon fill="none" stroke="black" points="1447.88,-206.75 1415.25,-188.75 1447.88,-170.75 1480.51,-188.75 1447.88,-206.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1447.88" y="-186.75" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10.00">调用</text>
+</g>
+<!-- sys_user&#45;&gt;calls_ai -->
+<g id="edge46" class="edge">
+<title>sys_user&#45;&gt;calls_ai</title>
+<path fill="none" stroke="black" d="M773.09,-266.1C893.03,-252.53 1312.4,-205.08 1421.68,-192.71"/>
+</g>
+<!-- requests -->
+<g id="node50" class="node">
+<title>requests</title>
+<polygon fill="none" stroke="black" points="2035.88,-206.75 2003.25,-188.75 2035.88,-170.75 2068.51,-188.75 2035.88,-206.75"/>
+<text xml:space="preserve" text-anchor="middle" x="2035.88" y="-186.75" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10.00">请求</text>
+</g>
+<!-- sys_user&#45;&gt;requests -->
+<g id="edge48" class="edge">
+<title>sys_user&#45;&gt;requests</title>
+<path fill="none" stroke="black" d="M773.21,-267.75C953.9,-256.59 1836.59,-202.06 2007.27,-191.51"/>
+</g>
+<!-- sys_email_code -->
+<g id="node15" class="node">
+<title>sys_email_code</title>
+<polygon fill="none" stroke="black" points="2408.38,-128 2305.38,-128 2305.38,-85.5 2408.38,-85.5 2408.38,-128"/>
+<text xml:space="preserve" text-anchor="middle" x="2356.88" y="-112.6" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">邮箱验证码</text>
+<text xml:space="preserve" text-anchor="middle" x="2356.88" y="-95.35" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">sys_email_code</text>
+</g>
+<!-- ec_id -->
+<g id="node16" class="node">
+<title>ec_id</title>
+<ellipse fill="none" stroke="black" cx="2110.88" cy="-24.75" rx="36.24" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="2110.88" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">验证码ID</text>
+<text xml:space="preserve" text-anchor="middle" x="2110.88" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">id</text>
+</g>
+<!-- sys_email_code&#45;&gt;ec_id -->
+<g id="edge13" class="edge">
+<title>sys_email_code&#45;&gt;ec_id</title>
+<path fill="none" stroke="black" d="M2305.26,-93.19C2265.54,-82.97 2209.56,-67.35 2161.88,-49.5 2154.56,-46.76 2146.83,-43.41 2139.67,-40.1"/>
+</g>
+<!-- ec_email -->
+<g id="node17" class="node">
+<title>ec_email</title>
+<ellipse fill="none" stroke="black" cx="2212.88" cy="-24.75" rx="36.77" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="2212.88" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">目标邮箱</text>
+<text xml:space="preserve" text-anchor="middle" x="2212.88" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">email</text>
+</g>
+<!-- sys_email_code&#45;&gt;ec_email -->
+<g id="edge14" class="edge">
+<title>sys_email_code&#45;&gt;ec_email</title>
+<path fill="none" stroke="black" d="M2319.79,-85.15C2295.13,-71.44 2263.24,-53.73 2240.74,-41.23"/>
+</g>
+<!-- ec_code -->
+<g id="node18" class="node">
+<title>ec_code</title>
+<ellipse fill="none" stroke="black" cx="2308.88" cy="-24.75" rx="30.41" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="2308.88" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">验证码</text>
+<text xml:space="preserve" text-anchor="middle" x="2308.88" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">code</text>
+</g>
+<!-- sys_email_code&#45;&gt;ec_code -->
+<g id="edge15" class="edge">
+<title>sys_email_code&#45;&gt;ec_code</title>
+<path fill="none" stroke="black" d="M2344.51,-85.15C2337.57,-73.57 2328.91,-59.14 2321.87,-47.4"/>
+</g>
+<!-- ec_type -->
+<g id="node19" class="node">
+<title>ec_type</title>
+<ellipse fill="none" stroke="black" cx="2404.88" cy="-24.75" rx="36.77" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="2404.88" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">验证类型</text>
+<text xml:space="preserve" text-anchor="middle" x="2404.88" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">type</text>
+</g>
+<!-- sys_email_code&#45;&gt;ec_type -->
+<g id="edge16" class="edge">
+<title>sys_email_code&#45;&gt;ec_type</title>
+<path fill="none" stroke="black" d="M2369.24,-85.15C2376.01,-73.85 2384.43,-59.83 2391.37,-48.25"/>
+</g>
+<!-- ec_expire -->
+<g id="node20" class="node">
+<title>ec_expire</title>
+<ellipse fill="none" stroke="black" cx="2515.88" cy="-24.75" rx="45.25" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="2515.88" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">过期时间</text>
+<text xml:space="preserve" text-anchor="middle" x="2515.88" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">expire_time</text>
+</g>
+<!-- sys_email_code&#45;&gt;ec_expire -->
+<g id="edge17" class="edge">
+<title>sys_email_code&#45;&gt;ec_expire</title>
+<path fill="none" stroke="black" d="M2397.82,-85.15C2424.32,-71.81 2458.36,-54.69 2483.07,-42.25"/>
+</g>
+<!-- ec_used -->
+<g id="node21" class="node">
+<title>ec_used</title>
+<ellipse fill="none" stroke="black" cx="2626.88" cy="-24.75" rx="36.77" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="2626.88" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">是否使用</text>
+<text xml:space="preserve" text-anchor="middle" x="2626.88" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">is_used</text>
+</g>
+<!-- sys_email_code&#45;&gt;ec_used -->
+<g id="edge18" class="edge">
+<title>sys_email_code&#45;&gt;ec_used</title>
+<path fill="none" stroke="black" d="M2408.57,-95.3C2453.46,-85.55 2519.88,-69.53 2575.88,-49.5 2583.14,-46.9 2590.78,-43.64 2597.87,-40.38"/>
+</g>
+<!-- ec_ctime -->
+<g id="node22" class="node">
+<title>ec_ctime</title>
+<ellipse fill="none" stroke="black" cx="2738.88" cy="-24.75" rx="46.32" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="2738.88" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">创建时间</text>
+<text xml:space="preserve" text-anchor="middle" x="2738.88" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">create_time</text>
+</g>
+<!-- sys_email_code&#45;&gt;ec_ctime -->
+<g id="edge19" class="edge">
+<title>sys_email_code&#45;&gt;ec_ctime</title>
+<path fill="none" stroke="black" d="M2408.72,-99.87C2472.77,-91.88 2584.69,-75.52 2677.88,-49.5 2686.19,-47.17 2694.95,-44.14 2703.15,-41.01"/>
+</g>
+<!-- sys_notice -->
+<g id="node23" class="node">
+<title>sys_notice</title>
+<polygon fill="none" stroke="black" points="379.13,-128 304.63,-128 304.63,-85.5 379.13,-85.5 379.13,-128"/>
+<text xml:space="preserve" text-anchor="middle" x="341.88" y="-112.6" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">系统公告</text>
+<text xml:space="preserve" text-anchor="middle" x="341.88" y="-95.35" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">sys_notice</text>
+</g>
+<!-- n_id -->
+<g id="node24" class="node">
+<title>n_id</title>
+<ellipse fill="none" stroke="black" cx="29.88" cy="-24.75" rx="29.88" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="29.88" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">公告ID</text>
+<text xml:space="preserve" text-anchor="middle" x="29.88" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">id</text>
+</g>
+<!-- sys_notice&#45;&gt;n_id -->
+<g id="edge20" class="edge">
+<title>sys_notice&#45;&gt;n_id</title>
+<path fill="none" stroke="black" d="M304.26,-101.18C251.74,-94.06 153.96,-78.06 74.88,-49.5 67.73,-46.92 60.31,-43.39 53.6,-39.84"/>
+</g>
+<!-- n_title -->
+<g id="node25" class="node">
+<title>n_title</title>
+<ellipse fill="none" stroke="black" cx="125.88" cy="-24.75" rx="36.77" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="125.88" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">公告标题</text>
+<text xml:space="preserve" text-anchor="middle" x="125.88" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">title</text>
+</g>
+<!-- sys_notice&#45;&gt;n_title -->
+<g id="edge21" class="edge">
+<title>sys_notice&#45;&gt;n_title</title>
+<path fill="none" stroke="black" d="M304.37,-94.04C270.88,-83.32 220.65,-66.55 177.88,-49.5 170.59,-46.59 162.85,-43.22 155.63,-39.94"/>
+</g>
+<!-- n_content -->
+<g id="node26" class="node">
+<title>n_content</title>
+<ellipse fill="none" stroke="black" cx="228.88" cy="-24.75" rx="36.77" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="228.88" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">公告正文</text>
+<text xml:space="preserve" text-anchor="middle" x="228.88" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">content</text>
+</g>
+<!-- sys_notice&#45;&gt;n_content -->
+<g id="edge22" class="edge">
+<title>sys_notice&#45;&gt;n_content</title>
+<path fill="none" stroke="black" d="M312.77,-85.15C294.46,-72.18 271.09,-55.63 253.66,-43.3"/>
+</g>
+<!-- n_pub -->
+<g id="node27" class="node">
+<title>n_pub</title>
+<ellipse fill="none" stroke="black" cx="341.88" cy="-24.75" rx="46.85" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="341.88" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">发布者ID</text>
+<text xml:space="preserve" text-anchor="middle" x="341.88" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">publisher_id</text>
+</g>
+<!-- sys_notice&#45;&gt;n_pub -->
+<g id="edge23" class="edge">
+<title>sys_notice&#45;&gt;n_pub</title>
+<path fill="none" stroke="black" d="M341.88,-85.15C341.88,-74.41 341.88,-61.2 341.88,-49.97"/>
+</g>
+<!-- n_target -->
+<g id="node28" class="node">
+<title>n_target</title>
+<ellipse fill="none" stroke="black" cx="460.88" cy="-24.75" rx="43.13" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="460.88" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">推送对象</text>
+<text xml:space="preserve" text-anchor="middle" x="460.88" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">target_role</text>
+</g>
+<!-- sys_notice&#45;&gt;n_target -->
+<g id="edge24" class="edge">
+<title>sys_notice&#45;&gt;n_target</title>
+<path fill="none" stroke="black" d="M372.52,-85.15C391.39,-72.46 415.37,-56.34 433.58,-44.1"/>
+</g>
+<!-- n_ctime -->
+<g id="node29" class="node">
+<title>n_ctime</title>
+<ellipse fill="none" stroke="black" cx="578.88" cy="-24.75" rx="46.32" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="578.88" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">发布时间</text>
+<text xml:space="preserve" text-anchor="middle" x="578.88" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">create_time</text>
+</g>
+<!-- sys_notice&#45;&gt;n_ctime -->
+<g id="edge25" class="edge">
+<title>sys_notice&#45;&gt;n_ctime</title>
+<path fill="none" stroke="black" d="M379.42,-94.64C415.42,-83.8 471.19,-66.49 518.88,-49.5 526.58,-46.75 534.77,-43.64 542.54,-40.6"/>
+</g>
+<!-- sys_oper_log -->
+<g id="node30" class="node">
+<title>sys_oper_log</title>
+<polygon fill="none" stroke="black" points="1021.5,-128 934.25,-128 934.25,-85.5 1021.5,-85.5 1021.5,-128"/>
+<text xml:space="preserve" text-anchor="middle" x="977.88" y="-112.6" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">操作日志</text>
+<text xml:space="preserve" text-anchor="middle" x="977.88" y="-95.35" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">sys_oper_log</text>
+</g>
+<!-- log_id -->
+<g id="node31" class="node">
+<title>log_id</title>
+<ellipse fill="none" stroke="black" cx="683.88" cy="-24.75" rx="29.88" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="683.88" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">日志ID</text>
+<text xml:space="preserve" text-anchor="middle" x="683.88" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">id</text>
+</g>
+<!-- sys_oper_log&#45;&gt;log_id -->
+<g id="edge26" class="edge">
+<title>sys_oper_log&#45;&gt;log_id</title>
+<path fill="none" stroke="black" d="M933.92,-99.59C883.15,-91.64 797.66,-75.62 727.88,-49.5 721.05,-46.94 713.96,-43.51 707.52,-40.04"/>
+</g>
+<!-- log_uid -->
+<g id="node32" class="node">
+<title>log_uid</title>
+<ellipse fill="none" stroke="black" cx="774.88" cy="-24.75" rx="32.53" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="774.88" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">用户ID</text>
+<text xml:space="preserve" text-anchor="middle" x="774.88" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">user_id</text>
+</g>
+<!-- sys_oper_log&#45;&gt;log_uid -->
+<g id="edge27" class="edge">
+<title>sys_oper_log&#45;&gt;log_uid</title>
+<path fill="none" stroke="black" d="M933.95,-91.51C902.38,-80.89 859.02,-65.51 821.88,-49.5 814.99,-46.53 807.69,-43.03 800.96,-39.64"/>
+</g>
+<!-- log_mod -->
+<g id="node33" class="node">
+<title>log_mod</title>
+<ellipse fill="none" stroke="black" cx="872.88" cy="-24.75" rx="36.77" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="872.88" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">操作模块</text>
+<text xml:space="preserve" text-anchor="middle" x="872.88" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">module</text>
+</g>
+<!-- sys_oper_log&#45;&gt;log_mod -->
+<g id="edge28" class="edge">
+<title>sys_oper_log&#45;&gt;log_mod</title>
+<path fill="none" stroke="black" d="M950.84,-85.15C934.06,-72.37 912.72,-56.11 896.61,-43.83"/>
+</g>
+<!-- log_op -->
+<g id="node34" class="node">
+<title>log_op</title>
+<ellipse fill="none" stroke="black" cx="977.88" cy="-24.75" rx="39.42" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="977.88" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">操作内容</text>
+<text xml:space="preserve" text-anchor="middle" x="977.88" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">operation</text>
+</g>
+<!-- sys_oper_log&#45;&gt;log_op -->
+<g id="edge29" class="edge">
+<title>sys_oper_log&#45;&gt;log_op</title>
+<path fill="none" stroke="black" d="M977.88,-85.15C977.88,-74.41 977.88,-61.2 977.88,-49.97"/>
+</g>
+<!-- log_ip -->
+<g id="node35" class="node">
+<title>log_ip</title>
+<ellipse fill="none" stroke="black" cx="1075.88" cy="-24.75" rx="29.88" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1075.88" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">IP地址</text>
+<text xml:space="preserve" text-anchor="middle" x="1075.88" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">ip</text>
+</g>
+<!-- sys_oper_log&#45;&gt;log_ip -->
+<g id="edge30" class="edge">
+<title>sys_oper_log&#45;&gt;log_ip</title>
+<path fill="none" stroke="black" d="M1003.11,-85.15C1019.22,-72 1039.84,-55.16 1055.02,-42.77"/>
+</g>
+<!-- log_ctime -->
+<g id="node36" class="node">
+<title>log_ctime</title>
+<ellipse fill="none" stroke="black" cx="1180.88" cy="-24.75" rx="46.32" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1180.88" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">操作时间</text>
+<text xml:space="preserve" text-anchor="middle" x="1180.88" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">create_time</text>
+</g>
+<!-- sys_oper_log&#45;&gt;log_ctime -->
+<g id="edge31" class="edge">
+<title>sys_oper_log&#45;&gt;log_ctime</title>
+<path fill="none" stroke="black" d="M1021.92,-88.39C1058.42,-74.01 1109.7,-53.8 1144.05,-40.26"/>
+</g>
+<!-- ai_call_log -->
+<g id="node37" class="node">
+<title>ai_call_log</title>
+<polygon fill="none" stroke="black" points="1610.5,-128 1535.25,-128 1535.25,-85.5 1610.5,-85.5 1610.5,-128"/>
+<text xml:space="preserve" text-anchor="middle" x="1572.88" y="-112.6" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">AI调用日志</text>
+<text xml:space="preserve" text-anchor="middle" x="1572.88" y="-95.35" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">ai_call_log</text>
+</g>
+<!-- ai_id -->
+<g id="node38" class="node">
+<title>ai_id</title>
+<ellipse fill="none" stroke="black" cx="1285.88" cy="-24.75" rx="29.88" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1285.88" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">日志ID</text>
+<text xml:space="preserve" text-anchor="middle" x="1285.88" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">id</text>
+</g>
+<!-- ai_call_log&#45;&gt;ai_id -->
+<g id="edge32" class="edge">
+<title>ai_call_log&#45;&gt;ai_id</title>
+<path fill="none" stroke="black" d="M1534.91,-100.19C1486.29,-92.35 1399.96,-75.97 1329.88,-49.5 1323.05,-46.92 1315.97,-43.48 1309.53,-40.01"/>
+</g>
+<!-- ai_uid -->
+<g id="node39" class="node">
+<title>ai_uid</title>
+<ellipse fill="none" stroke="black" cx="1376.88" cy="-24.75" rx="32.53" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1376.88" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">用户ID</text>
+<text xml:space="preserve" text-anchor="middle" x="1376.88" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">user_id</text>
+</g>
+<!-- ai_call_log&#45;&gt;ai_uid -->
+<g id="edge33" class="edge">
+<title>ai_call_log&#45;&gt;ai_uid</title>
+<path fill="none" stroke="black" d="M1534.77,-92.63C1504.39,-81.87 1460.95,-65.81 1423.88,-49.5 1417.01,-46.48 1409.72,-42.96 1402.99,-39.56"/>
+</g>
+<!-- ai_scene -->
+<g id="node40" class="node">
+<title>ai_scene</title>
+<ellipse fill="none" stroke="black" cx="1474.88" cy="-24.75" rx="36.77" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1474.88" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">调用场景</text>
+<text xml:space="preserve" text-anchor="middle" x="1474.88" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">scene</text>
+</g>
+<!-- ai_call_log&#45;&gt;ai_scene -->
+<g id="edge34" class="edge">
+<title>ai_call_log&#45;&gt;ai_scene</title>
+<path fill="none" stroke="black" d="M1547.64,-85.15C1532.21,-72.55 1512.64,-56.58 1497.68,-44.37"/>
+</g>
+<!-- ai_prompt -->
+<g id="node41" class="node">
+<title>ai_prompt</title>
+<ellipse fill="none" stroke="black" cx="1572.88" cy="-24.75" rx="32" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1572.88" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">提示词</text>
+<text xml:space="preserve" text-anchor="middle" x="1572.88" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">prompt</text>
+</g>
+<!-- ai_call_log&#45;&gt;ai_prompt -->
+<g id="edge35" class="edge">
+<title>ai_call_log&#45;&gt;ai_prompt</title>
+<path fill="none" stroke="black" d="M1572.88,-85.15C1572.88,-74.41 1572.88,-61.2 1572.88,-49.97"/>
+</g>
+<!-- ai_result -->
+<g id="node42" class="node">
+<title>ai_result</title>
+<ellipse fill="none" stroke="black" cx="1670.88" cy="-24.75" rx="36.77" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1670.88" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">返回结果</text>
+<text xml:space="preserve" text-anchor="middle" x="1670.88" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">result</text>
+</g>
+<!-- ai_call_log&#45;&gt;ai_result -->
+<g id="edge36" class="edge">
+<title>ai_call_log&#45;&gt;ai_result</title>
+<path fill="none" stroke="black" d="M1598.11,-85.15C1613.54,-72.55 1633.11,-56.58 1648.07,-44.37"/>
+</g>
+<!-- ai_dur -->
+<g id="node43" class="node">
+<title>ai_dur</title>
+<ellipse fill="none" stroke="black" cx="1785.88" cy="-24.75" rx="49.5" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1785.88" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">耗时(秒)</text>
+<text xml:space="preserve" text-anchor="middle" x="1785.88" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">call_duration</text>
+</g>
+<!-- ai_call_log&#45;&gt;ai_dur -->
+<g id="edge37" class="edge">
+<title>ai_call_log&#45;&gt;ai_dur</title>
+<path fill="none" stroke="black" d="M1610.96,-91.45C1649.37,-77.02 1708.37,-54.86 1747.05,-40.33"/>
+</g>
+<!-- ai_status -->
+<g id="node44" class="node">
+<title>ai_status</title>
+<ellipse fill="none" stroke="black" cx="1893.88" cy="-24.75" rx="29.34" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1893.88" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">状态</text>
+<text xml:space="preserve" text-anchor="middle" x="1893.88" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">status</text>
+</g>
+<!-- ai_call_log&#45;&gt;ai_status -->
+<g id="edge38" class="edge">
+<title>ai_call_log&#45;&gt;ai_status</title>
+<path fill="none" stroke="black" d="M1610.57,-101.66C1664.77,-95 1767.29,-79.42 1849.88,-49.5 1856.73,-47.01 1863.82,-43.6 1870.26,-40.14"/>
+</g>
+<!-- ai_ctime -->
+<g id="node45" class="node">
+<title>ai_ctime</title>
+<ellipse fill="none" stroke="black" cx="1998.88" cy="-24.75" rx="46.32" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1998.88" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">调用时间</text>
+<text xml:space="preserve" text-anchor="middle" x="1998.88" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">create_time</text>
+</g>
+<!-- ai_call_log&#45;&gt;ai_ctime -->
+<g id="edge39" class="edge">
+<title>ai_call_log&#45;&gt;ai_ctime</title>
+<path fill="none" stroke="black" d="M1610.74,-102.66C1677.66,-96.59 1820.83,-80.89 1937.88,-49.5 1946.33,-47.23 1955.21,-44.18 1963.51,-41.02"/>
+</g>
+<!-- has_user&#45;&gt;sys_user -->
+<g id="edge41" class="edge">
+<title>has_user&#45;&gt;sys_user</title>
+<path fill="none" stroke="black" d="M740.88,-334.39C740.88,-322.07 740.88,-305.48 740.88,-292.47"/>
+</g>
+<!-- publishes&#45;&gt;sys_notice -->
+<g id="edge43" class="edge">
+<title>publishes&#45;&gt;sys_notice</title>
+<path fill="none" stroke="black" d="M995.23,-178.53C986.24,-173.34 974.3,-167.27 962.88,-164 852.18,-132.27 496.58,-114.43 379.58,-109.31"/>
+</g>
+<!-- generates&#45;&gt;sys_oper_log -->
+<g id="edge45" class="edge">
+<title>generates&#45;&gt;sys_oper_log</title>
+<path fill="none" stroke="black" d="M1089.42,-178.57C1070.29,-166.42 1036,-144.65 1010.47,-128.44"/>
+</g>
+<!-- calls_ai&#45;&gt;ai_call_log -->
+<g id="edge47" class="edge">
+<title>calls_ai&#45;&gt;ai_call_log</title>
+<path fill="none" stroke="black" d="M1462.21,-178.57C1481.2,-166.42 1515.22,-144.65 1540.54,-128.44"/>
+</g>
+<!-- requests&#45;&gt;sys_email_code -->
+<g id="edge49" class="edge">
+<title>requests&#45;&gt;sys_email_code</title>
+<path fill="none" stroke="black" d="M2057.69,-182.31C2108.06,-169.76 2233.65,-138.46 2305.07,-120.66"/>
+</g>
+</g>
 </svg>

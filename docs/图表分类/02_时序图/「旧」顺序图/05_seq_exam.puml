@@ -1,0 +1,120 @@
+@startuml kg_seq_exam
+' ============================================================
+' 顺序图 — 测评流程（新增）
+' ============================================================
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontSize 11
+skinparam sequenceMessageAlign center
+
+title 学生测评流程 — 顺序图
+
+actor "学生" as S
+participant "Vue 前端" as F
+participant "SpringBoot\n后端" as B
+database "MySQL" as D
+participant "DeepSeek AI" as AI
+
+== 进入测评 ==
+
+S -> F : 选择课程/测评
+activate F
+
+F -> B : GET /student/exams?courseId=x
+activate B
+B -> D : SELECT * FROM exam\nWHERE course_id = ?
+activate D
+D --> B : 测评列表
+deactivate D
+B --> F : 测评列表 JSON
+deactivate B
+
+F --> S : 展示可用测评
+
+|||
+
+== 开始答题 ==
+
+S -> F : 点击"开始测评"
+F -> B : POST /student/exam/start\n{examId}
+activate B
+
+B -> D : INSERT INTO exam_record\n(user_id, exam_id, course_id,\nstart_time = NOW())
+activate D
+D --> B : record_id
+deactivate D
+
+B -> D : SELECT eq.*, q.*\nFROM exam_question eq\nJOIN question q ON eq.question_id = q.id\nWHERE eq.exam_id = ?\nORDER BY eq.sort_order
+activate D
+D --> B : 题目列表（含选项、答案）
+deactivate D
+
+B --> F : {recordId, questions: [...]\n(答案不返回前端)}
+deactivate B
+
+F -> F : 渲染答题界面\n记录 startTime
+
+|||
+
+== 逐题作答 ==
+
+loop 每题
+    S -> F : 选择/输入答案
+    F -> F : 暂存答案
+end
+
+|||
+
+== 提交试卷 ==
+
+S -> F : 点击"交卷"
+F -> B : POST /student/exam/submit\n{recordId, answers: [...]}
+activate B
+
+B -> D : SELECT q.answer FROM question q\nJOIN exam_question eq\nWHERE eq.exam_id = ?
+activate D
+D --> B : 正确答案
+deactivate D
+
+B -> B : 逐题比对答案\n计算总分 user_score
+
+B -> D : UPDATE exam_record\nSET user_score = ?,\ncreate_time = NOW()
+activate D
+D --> B : OK
+deactivate D
+
+B --> F : {totalScore, userScore}
+deactivate B
+
+F --> S : 展示得分
+
+|||
+
+== AI 诊断 ==
+
+S -> F : 点击"查看诊断报告"
+F -> B : POST /student/exam/ai-report\n{recordId}
+activate B
+
+B -> D : SELECT * FROM exam_record\nWHERE id = ?
+activate D
+D --> B : 答题记录
+deactivate D
+
+B -> AI : 请求 AI 分析\n(错题 + 正确率)
+activate AI
+AI --> B : AI 诊断报告
+deactivate AI
+
+B -> D : UPDATE exam_record\nSET ai_report = ?
+activate D
+D --> B : OK
+deactivate D
+
+B --> F : {aiReport}
+deactivate B
+
+F --> S : 展示 AI 诊断报告
+
+deactivate F
+
+@enduml
