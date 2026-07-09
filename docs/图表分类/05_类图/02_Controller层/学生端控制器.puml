@@ -1,0 +1,68 @@
+@startuml 学生端控制器
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontSize 11
+skinparam class {
+    BackgroundColor #E3F2FD
+    BorderColor #1565C0
+    FontSize 11
+}
+skinparam package {
+    BorderColor #555
+    FontSize 12
+    FontStyle bold
+}
+
+title 学生端 Controller
+
+class StudentController <<REST>> {
+    + getStudentHome()
+    + getProfile()
+}
+class StudentPathController <<REST>> {
+    + generatePath()
+    + getStudyPathDetail()
+    + completeNode()
+    + getPathProgress()
+}
+class StudentPracticeController <<REST>> {
+    + getPracticeQuestions()
+    + submitAnswer()
+}
+class StudentRecordController <<REST>> {
+    + getStudyRecords()
+    + getMasteryOverview()
+}
+class StudentExamController <<REST>> {
+    + getExams()
+    + startExam()
+    + submitExam()
+    + getExamResult()
+    + getAiReport()
+}
+class StudentWrongController <<REST>> {
+    + getWrongQuestions()
+    + redoQuestion()
+    + removeWrong()
+}
+class StudentFavoriteController <<REST>> {
+    + getFavorites()
+    + toggleFavorite()
+}
+class StudentAiController <<REST>> {
+    + aiChat()
+    + aiHighlight()
+    + aiSummary()
+}
+class StudentGraphController <<REST>> {
+    + getKnowledgeGraph()
+    + getNodeDetail()
+}
+
+' 层次标注
+note top of StudentPathController : 学习路径管理
+note top of StudentPracticeController : 刷题练习
+note top of StudentExamController : 测评考试
+note top of StudentWrongController : 错题本
+note top of StudentFavoriteController : 收藏功能(v2)
+note top of StudentAiController : AI答疑(v2)
+@enduml

@@ -1,0 +1,123 @@
+@startuml kg_usecase
+' ============================================================
+' 用例图 — KG 智能导学系统（紧凑文档版）
+' 学生(左)、教师(上)、管理员(右) 三面围绕系统
+' ============================================================
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontSize 11
+skinparam actorStyle awesome
+skinparam usecase {
+    BackgroundColor #E3F2FD
+    BorderColor #1565C0
+    FontSize 11
+}
+skinparam rectangle {
+    BorderColor #333333
+    FontSize 13
+    FontStyle bold
+    BackgroundColor #FAFAFA
+}
+skinparam package {
+    BorderColor #888888
+    FontSize 11
+    BackgroundColor #F5F5F5
+}
+
+left to right direction
+
+' ── 参与者 ──
+actor "学生" as Student
+actor "教师" as Teacher
+actor "管理员" as Admin
+actor "邮箱服务" as Email <<外部>>
+actor "DeepSeek\nAI" as AI <<外部>>
+
+' ── 系统边界 ──
+rectangle "KG 智能导学系统" as System {
+
+    ' ===== 学习模块（左侧 — 学生） =====
+    package "学习模块" as LearnMod {
+        usecase "浏览3D知识图谱" as UC_BrowseKG
+        usecase "生成学习路径" as UC_GenPath
+        usecase "刷题练习" as UC_Practice
+        usecase "浏览学习资源" as UC_Resource
+        usecase "AI 答疑" as UC_AIQA
+        usecase "收藏知识点" as UC_Favorite
+        usecase "查看错题本" as UC_WrongBook
+    }
+
+    ' ===== 测评模块 =====
+    package "测评模块" as ExamMod {
+        usecase "参加测评" as UC_Exam
+        usecase "查看学情报告" as UC_Report
+    }
+
+    ' ===== 教学模块（右侧 — 教师） =====
+    package "教学模块" as TeachMod {
+        usecase "知识点管理" as UC_NodeMgr
+        usecase "题库管理" as UC_QuestionMgr
+        usecase "测评管理" as UC_ExamMgr
+        usecase "学习资源管理" as UC_ResourceMgr
+        usecase "跨学科主题" as UC_CrossTheme
+        usecase "学情分析" as UC_Analytics
+    }
+
+    ' ===== 管理模块（右侧 — 管理员） =====
+    package "管理模块" as AdminMod {
+        usecase "用户管理" as UC_UserMgr
+        usecase "角色管理" as UC_RoleMgr
+        usecase "课程管理" as UC_CourseMgr
+        usecase "公告管理" as UC_Notice
+        usecase "操作审计" as UC_Audit
+    }
+
+    ' ===== 公共用例 =====
+    usecase "登录" as UC_Login
+    usecase "注册" as UC_Register
+    usecase "发送验证码" as UC_SendCode
+    usecase "AI 诊断分析" as UC_AIDiag
+    usecase "拓扑排序" as UC_TopoSort
+
+    ' ── include/extend 关系 ──
+    UC_Register ..> UC_SendCode : <<extend>>
+    UC_Login ..> UC_SendCode : <<extend>>
+    UC_GenPath ..> UC_TopoSort : <<include>>
+    UC_Exam ..> UC_AIDiag : <<include>>
+    UC_AIQA ..> AI : <<use>>
+}
+
+' ── 学生(左) → 学习+测评模块 ──
+Student --> UC_Login
+Student --> UC_Register
+Student --> UC_BrowseKG
+Student --> UC_GenPath
+Student --> UC_Practice
+Student --> UC_Resource
+Student --> UC_AIQA
+Student --> UC_Favorite
+Student --> UC_Exam
+Student --> UC_WrongBook
+Student --> UC_Report
+
+' ── 教师(右) → 教学模块 ──
+Teacher --> UC_Login
+Teacher --> UC_NodeMgr
+Teacher --> UC_QuestionMgr
+Teacher --> UC_ExamMgr
+Teacher --> UC_ResourceMgr
+Teacher --> UC_CrossTheme
+Teacher --> UC_Analytics
+
+' ── 管理员(右) → 管理模块 ──
+Admin --> UC_Login
+Admin --> UC_UserMgr
+Admin --> UC_RoleMgr
+Admin --> UC_CourseMgr
+Admin --> UC_Notice
+Admin --> UC_Audit
+
+' ── 外部系统 ──
+Email --> UC_SendCode
+AI --> UC_AIDiag
+
+@enduml

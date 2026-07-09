@@ -1,0 +1,54 @@
+@startuml 管理员用例图
+' ============================================================
+' 用例图 — 管理员角色
+' ============================================================
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontSize 12
+skinparam actorStyle awesome
+skinparam usecase {
+    BackgroundColor #FFF3E0
+    BorderColor #E65100
+    FontSize 12
+}
+skinparam rectangle {
+    BorderColor #333333
+    FontSize 14
+    FontStyle bold
+    BackgroundColor #FAFAFA
+}
+
+left to right direction
+
+actor "管理员" as Admin
+
+rectangle "KG 智能导学系统 — 管理端" {
+
+    usecase "登录" as UC_Login
+
+    usecase "用户管理" as UC_UserMgr
+    usecase "角色管理" as UC_RoleMgr
+    usecase "课程管理" as UC_CourseMgr
+    usecase "公告管理" as UC_Notice
+    usecase "操作审计" as UC_Audit
+
+    usecase "创建/编辑/禁用用户" as UC_UserOps
+    usecase "配置角色权限" as UC_RolePerm
+    usecase "查看操作日志" as UC_OperLog
+    usecase "查看AI调用日志" as UC_AILog
+    usecase "全站推送公告" as UC_Broadcast
+
+    UC_UserMgr ..> UC_UserOps : <<extend>>
+    UC_RoleMgr ..> UC_RolePerm : <<extend>>
+    UC_Audit ..> UC_OperLog : <<extend>>
+    UC_Audit ..> UC_AILog : <<extend>>
+    UC_Notice ..> UC_Broadcast : <<extend>>
+}
+
+Admin --> UC_Login
+Admin --> UC_UserMgr
+Admin --> UC_RoleMgr
+Admin --> UC_CourseMgr
+Admin --> UC_Notice
+Admin --> UC_Audit
+
+@enduml

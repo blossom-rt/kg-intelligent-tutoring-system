@@ -1,0 +1,75 @@
+@startuml 管理与公共控制器
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontSize 11
+skinparam class {
+    BackgroundColor #FFF3E0
+    BorderColor #E65100
+    FontSize 11
+}
+
+title 管理端 & 公共 Controller
+
+package "管理端" {
+    class AdminController <<REST>> {
+        + getUserList()
+        + createUser()
+        + editUser()
+        + disableUser()
+        + getAILogs()
+        + getOperLogs()
+    }
+    class UserController <<REST>> {
+        + getUsers()
+        + addUser()
+        + updateUser()
+    }
+    class NoticeController <<REST>> {
+        + getNotices()
+        + publishNotice()
+        + deleteNotice()
+    }
+}
+
+package "公共" {
+    class AuthController <<REST>> {
+        + login()
+        + register()
+        + sendCode()
+        + resetPassword()
+        + updatePassword()
+    }
+    class CourseController <<REST>> {
+        + getCourses()
+        + addCourse()
+        + updateCourse()
+    }
+    class NodeController <<REST>> {
+        + getNodes()
+        + addNode()
+        + updateNode()
+        + getNodeDetail()
+    }
+    class EdgeController <<REST>> {
+        + getEdges()
+        + addEdge()
+        + deleteEdge()
+    }
+    class QuestionController <<REST>> {
+        + getQuestions()
+        + addQuestion()
+        + updateQuestion()
+    }
+    class ThemeController <<REST>> {
+        + getThemes()
+        + createTheme()
+        + linkNodeToTheme()
+    }
+    class LearningResourceController <<REST>> {
+        + getResources()
+        + addResource()
+        + updateResource()
+    }
+}
+
+note bottom of LearningResourceController : 学习资源管理(v2)
+@enduml

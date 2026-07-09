@@ -1,0 +1,74 @@
+@startuml 实体与Mapper
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontSize 10
+skinparam class {
+    BackgroundColor #EDE7F6
+    BorderColor #4527A0
+    FontSize 9
+}
+
+title POJO 实体 & Mapper
+
+package "学习业务实体" {
+    class Course
+    class KnowledgeNode
+    class KnowledgeEdge
+    class Question
+    class StudyPath
+    class PathDetail
+    class StudyRecord
+    class WrongQuestion
+    class LearningResource
+    class CrossSubjectTheme
+    class CrossThemeNode
+    class UserFavorite
+}
+
+package "测评业务实体" {
+    class Exam
+    class ExamQuestion
+    class ExamRecord
+}
+
+package "系统管理实体" {
+    class SysUser
+    class SysRole
+    class SysNotice
+    class SysOperLog
+    class SysEmailCode
+    class AiCallLog
+}
+
+package "Mapper 层" {
+    class SysUserMapper
+    class SysRoleMapper
+    class SysNoticeMapper
+    class SysOperLogMapper
+    class SysEmailCodeMapper
+    class AiCallLogMapper
+    class CourseMapper
+    class KnowledgeNodeMapper
+    class KnowledgeEdgeMapper
+    class QuestionMapper
+    class StudyPathMapper
+    class PathDetailMapper
+    class StudyRecordMapper
+    class ExamMapper
+    class ExamQuestionMapper
+    class ExamRecordMapper
+    class WrongQuestionMapper
+    class LearningResourceMapper
+    class CrossSubjectThemeMapper
+    class CrossThemeNodeMapper
+    class UserFavoriteMapper
+}
+
+SysUserMapper --> SysUser
+CourseMapper --> Course
+KnowledgeNodeMapper --> KnowledgeNode
+QuestionMapper --> Question
+ExamRecordMapper --> ExamRecord
+LearningResourceMapper --> LearningResource
+UserFavoriteMapper --> UserFavorite
+
+@enduml
