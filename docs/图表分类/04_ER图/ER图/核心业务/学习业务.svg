@@ -1,188 +1,1417 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1710" height="1512" viewBox="0 0 1710 1512">
-<rect width="1710" height="1512" fill="#ffffff"/>
-<line x1="171.5" y1="590.9" x2="53.5" y2="515.9" stroke="#aaa" stroke-width="1"/>
-<line x1="171.5" y1="590.9" x2="53.5" y2="565.9" stroke="#aaa" stroke-width="1"/>
-<line x1="171.5" y1="590.9" x2="53.5" y2="615.9" stroke="#aaa" stroke-width="1"/>
-<line x1="171.5" y1="590.9" x2="53.5" y2="665.9" stroke="#aaa" stroke-width="1"/>
-<rect x="121.5" y="567.9" width="100" height="46" rx="3" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="171.5" y="591.9" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="17" font-family="Microsoft YaHei, PingFang SC, sans-serif" font-weight="normal">课程</text>
-<ellipse cx="53.5" cy="515.9" rx="39.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="53.5" y="516.9" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">课程ID</text>
-<ellipse cx="53.5" cy="565.9" rx="45.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="53.5" y="566.9" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">课程名称</text>
-<ellipse cx="53.5" cy="615.9" rx="45.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="53.5" y="616.9" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">所属学科</text>
-<ellipse cx="53.5" cy="665.9" rx="45.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="53.5" y="666.9" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">负责教师</text>
-<line x1="626" y1="553" x2="600.1" y2="407.9" stroke="#aaa" stroke-width="1"/>
-<line x1="626" y1="553" x2="561.7" y2="661.3" stroke="#aaa" stroke-width="1"/>
-<line x1="626" y1="553" x2="709.3" y2="462.5" stroke="#aaa" stroke-width="1"/>
-<line x1="626" y1="553" x2="773.7" y2="599.8" stroke="#aaa" stroke-width="1"/>
-<rect x="576" y="530" width="100" height="46" rx="3" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="626" y="554" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="17" font-family="Microsoft YaHei, PingFang SC, sans-serif" font-weight="normal">知识点</text>
-<ellipse cx="600.1" cy="407.9" rx="47" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="600.1" y="408.9" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">知识点ID</text>
-<ellipse cx="561.7" cy="661.3" rx="53.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="561.7" y="662.3" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">知识点名称</text>
-<ellipse cx="709.3" cy="462.5" rx="38" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="709.3" y="463.5" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">难度</text>
-<ellipse cx="773.7" cy="599.8" rx="45.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="773.7" y="600.8" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">所属章节</text>
-<line x1="209.4" y1="382.9" x2="86.4" y2="307.9" stroke="#aaa" stroke-width="1"/>
-<line x1="209.4" y1="382.9" x2="86.4" y2="357.9" stroke="#aaa" stroke-width="1"/>
-<line x1="209.4" y1="382.9" x2="86.4" y2="407.9" stroke="#aaa" stroke-width="1"/>
-<line x1="209.4" y1="382.9" x2="86.4" y2="457.9" stroke="#aaa" stroke-width="1"/>
-<rect x="159.4" y="359.9" width="100" height="46" rx="3" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="209.4" y="383.9" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="17" font-family="Microsoft YaHei, PingFang SC, sans-serif" font-weight="normal">依赖边</text>
-<ellipse cx="86.4" cy="307.9" rx="38" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="86.4" y="308.9" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">边ID</text>
-<ellipse cx="86.4" cy="357.9" rx="53.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="86.4" y="358.9" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">前置知识点</text>
-<ellipse cx="86.4" cy="407.9" rx="53.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="86.4" y="408.9" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">后继知识点</text>
-<ellipse cx="86.4" cy="457.9" rx="45.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="86.4" y="458.9" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">关系类型</text>
-<line x1="1082" y1="553" x2="1193" y2="513" stroke="#aaa" stroke-width="1"/>
-<line x1="1082" y1="553" x2="1190.3" y2="599.8" stroke="#aaa" stroke-width="1"/>
-<line x1="1082" y1="553" x2="1128.8" y2="661.3" stroke="#aaa" stroke-width="1"/>
-<line x1="1082" y1="553" x2="1042" y2="664" stroke="#aaa" stroke-width="1"/>
-<rect x="1032" y="530" width="100" height="46" rx="3" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="1082" y="554" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="17" font-family="Microsoft YaHei, PingFang SC, sans-serif" font-weight="normal">习题</text>
-<ellipse cx="1193" cy="513" rx="39.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="1193" y="514" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">题目ID</text>
-<ellipse cx="1190.3" cy="599.8" rx="38" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="1190.3" y="600.8" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">题干</text>
-<ellipse cx="1128.8" cy="661.3" rx="38" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="1128.8" y="662.3" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">难度</text>
-<ellipse cx="1042" cy="664" rx="38" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="1042" y="665" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">题型</text>
-<line x1="349.3" y1="230.3" x2="231.3" y2="155.3" stroke="#aaa" stroke-width="1"/>
-<line x1="349.3" y1="230.3" x2="231.3" y2="205.3" stroke="#aaa" stroke-width="1"/>
-<line x1="349.3" y1="230.3" x2="231.3" y2="255.3" stroke="#aaa" stroke-width="1"/>
-<line x1="349.3" y1="230.3" x2="231.3" y2="305.3" stroke="#aaa" stroke-width="1"/>
-<rect x="299.3" y="207.3" width="100" height="46" rx="3" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="349.3" y="231.3" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="17" font-family="Microsoft YaHei, PingFang SC, sans-serif" font-weight="normal">学习记录</text>
-<ellipse cx="231.3" cy="155.3" rx="39.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="231.3" y="156.3" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">记录ID</text>
-<ellipse cx="231.3" cy="205.3" rx="39.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="231.3" y="206.3" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">学生ID</text>
-<ellipse cx="231.3" cy="255.3" rx="38" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="231.3" y="256.3" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">掌握度</text>
-<ellipse cx="231.3" cy="305.3" rx="38" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="231.3" y="306.3" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">正确率</text>
-<line x1="1538" y1="553" x2="1656" y2="478" stroke="#aaa" stroke-width="1"/>
-<line x1="1538" y1="553" x2="1656" y2="528" stroke="#aaa" stroke-width="1"/>
-<line x1="1538" y1="553" x2="1656" y2="578" stroke="#aaa" stroke-width="1"/>
-<line x1="1538" y1="553" x2="1656" y2="628" stroke="#aaa" stroke-width="1"/>
-<rect x="1488" y="530" width="100" height="46" rx="3" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="1538" y="554" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="17" font-family="Microsoft YaHei, PingFang SC, sans-serif" font-weight="normal">学习路径</text>
-<ellipse cx="1656" cy="478" rx="39.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="1656" y="479" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">路径ID</text>
-<ellipse cx="1656" cy="528" rx="39.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="1656" y="529" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">学生ID</text>
-<ellipse cx="1656" cy="578" rx="45.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="1656" y="579" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">路径名称</text>
-<ellipse cx="1656" cy="628" rx="38" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="1656" y="629" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">状态</text>
-<line x1="626" y1="959" x2="658.6" y2="1072.4" stroke="#aaa" stroke-width="1"/>
-<line x1="626" y1="959" x2="561.7" y2="1058" stroke="#aaa" stroke-width="1"/>
-<line x1="626" y1="959" x2="509.1" y2="975.3" stroke="#aaa" stroke-width="1"/>
-<rect x="576" y="936" width="100" height="46" rx="3" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="626" y="960" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="17" font-family="Microsoft YaHei, PingFang SC, sans-serif" font-weight="normal">路径详情</text>
-<ellipse cx="658.6" cy="1072.4" rx="39.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="658.6" y="1073.4" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">详情ID</text>
-<ellipse cx="561.7" cy="1058" rx="45.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="561.7" y="1059" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">学习顺序</text>
-<ellipse cx="509.1" cy="975.3" rx="45.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="509.1" y="976.3" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">是否完成</text>
-<line x1="1082" y1="147" x2="983" y2="29" stroke="#aaa" stroke-width="1"/>
-<line x1="1082" y1="147" x2="1082" y2="29" stroke="#aaa" stroke-width="1"/>
-<line x1="1082" y1="147" x2="1181" y2="29" stroke="#aaa" stroke-width="1"/>
-<rect x="1032" y="124" width="100" height="46" rx="3" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="1082" y="148" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="17" font-family="Microsoft YaHei, PingFang SC, sans-serif" font-weight="normal">错题</text>
-<ellipse cx="983" cy="29" rx="39.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="983" y="30" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">错题ID</text>
-<ellipse cx="1082" cy="29" rx="39.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="1082" y="30" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">学生ID</text>
-<ellipse cx="1181" cy="29" rx="45.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="1181" y="30" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">错误次数</text>
-<line x1="1082" y1="1365" x2="933.5" y2="1483" stroke="#aaa" stroke-width="1"/>
-<line x1="1082" y1="1365" x2="1032.5" y2="1483" stroke="#aaa" stroke-width="1"/>
-<line x1="1082" y1="1365" x2="1131.5" y2="1483" stroke="#aaa" stroke-width="1"/>
-<line x1="1082" y1="1365" x2="1230.5" y2="1483" stroke="#aaa" stroke-width="1"/>
-<rect x="1032" y="1342" width="100" height="46" rx="3" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="1082" y="1366" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="17" font-family="Microsoft YaHei, PingFang SC, sans-serif" font-weight="normal">跨学科主题</text>
-<ellipse cx="933.5" cy="1483" rx="39.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="933.5" y="1484" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">主题ID</text>
-<ellipse cx="1032.5" cy="1483" rx="45.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="1032.5" y="1484" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">主题名称</text>
-<ellipse cx="1131.5" cy="1483" rx="38" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="1131.5" y="1484" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">难度</text>
-<ellipse cx="1230.5" cy="1483" rx="45.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="1230.5" y="1484" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">发布教师</text>
-<line x1="1082" y1="959" x2="1189.7" y2="910.7" stroke="#aaa" stroke-width="1"/>
-<rect x="1032" y="936" width="100" height="46" rx="3" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="1082" y="960" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="17" font-family="Microsoft YaHei, PingFang SC, sans-serif" font-weight="normal">主题知识点</text>
-<ellipse cx="1189.7" cy="910.7" rx="39.5" ry="21" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="1189.7" y="911.7" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="15" font-family="Microsoft YaHei, PingFang SC, sans-serif">关联ID</text>
-<line x1="221.5" y1="586.7" x2="364" y2="574.8" stroke="#333" stroke-width="1.5"/>
-<line x1="433.5" y1="569.1" x2="576" y2="557.2" stroke="#333" stroke-width="1.5"/>
-<polygon points="398.7,549.9 438.7,571.9 398.7,593.9 358.7,571.9" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="398.7" y="572.9" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="16" font-family="Microsoft YaHei, PingFang SC, sans-serif">包含</text>
-<text x="293.8" y="584.7" text-anchor="middle" fill="#000" font-size="18" font-family="Microsoft YaHei, PingFang SC, sans-serif">1</text>
-<text x="503.7" y="543.2" text-anchor="middle" fill="#000" font-size="18" font-family="Microsoft YaHei, PingFang SC, sans-serif">n</text>
-<line x1="576" y1="532.6" x2="440.7" y2="477.3" stroke="#333" stroke-width="1.5"/>
-<line x1="394.7" y1="458.6" x2="259.4" y2="403.3" stroke="#333" stroke-width="1.5"/>
-<polygon points="417.7,445.9 457.7,467.9 417.7,489.9 377.7,467.9" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="417.7" y="468.9" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="16" font-family="Microsoft YaHei, PingFang SC, sans-serif">前置</text>
-<text x="512.9" y="485.8" text-anchor="middle" fill="#000" font-size="18" font-family="Microsoft YaHei, PingFang SC, sans-serif">1</text>
-<text x="322.5" y="434.1" text-anchor="middle" fill="#000" font-size="18" font-family="Microsoft YaHei, PingFang SC, sans-serif">n</text>
-<line x1="676" y1="553" x2="814" y2="553" stroke="#333" stroke-width="1.5"/>
-<line x1="894" y1="553" x2="1032" y2="553" stroke="#333" stroke-width="1.5"/>
-<polygon points="854,531 894,553 854,575 814,553" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="854" y="554" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="16" font-family="Microsoft YaHei, PingFang SC, sans-serif">关联</text>
-<text x="745" y="557" text-anchor="middle" fill="#000" font-size="18" font-family="Microsoft YaHei, PingFang SC, sans-serif">1</text>
-<text x="963" y="533" text-anchor="middle" fill="#000" font-size="18" font-family="Microsoft YaHei, PingFang SC, sans-serif">n</text>
-<line x1="606.3" y1="530" x2="500.5" y2="406.6" stroke="#333" stroke-width="1.5"/>
-<line x1="474.8" y1="376.7" x2="369" y2="253.3" stroke="#333" stroke-width="1.5"/>
-<polygon points="487.7,369.6 527.7,391.6 487.7,413.6 447.7,391.6" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="487.7" y="392.6" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="16" font-family="Microsoft YaHei, PingFang SC, sans-serif">学习</text>
-<text x="550.6" y="475.5" text-anchor="middle" fill="#000" font-size="18" font-family="Microsoft YaHei, PingFang SC, sans-serif">1</text>
-<text x="412.8" y="314.8" text-anchor="middle" fill="#000" font-size="18" font-family="Microsoft YaHei, PingFang SC, sans-serif">n</text>
-<line x1="676" y1="545.8" x2="1050.3" y2="491.6" stroke="#333" stroke-width="1.5"/>
-<line x1="1113.7" y1="491.6" x2="1488" y2="545.8" stroke="#333" stroke-width="1.5"/>
-<polygon points="1082,465 1122,487 1082,509 1042,487" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="1082" y="488" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="16" font-family="Microsoft YaHei, PingFang SC, sans-serif">目标</text>
-<text x="861.4" y="498.8" text-anchor="middle" fill="#000" font-size="18" font-family="Microsoft YaHei, PingFang SC, sans-serif">1</text>
-<text x="1302.6" y="498.8" text-anchor="middle" fill="#000" font-size="18" font-family="Microsoft YaHei, PingFang SC, sans-serif">n</text>
-<line x1="626" y1="576" x2="626" y2="734" stroke="#333" stroke-width="1.5"/>
-<line x1="626" y1="778" x2="626" y2="936" stroke="#333" stroke-width="1.5"/>
-<polygon points="626,734 666,756 626,778 586,756" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="626" y="757" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="16" font-family="Microsoft YaHei, PingFang SC, sans-serif">包含</text>
-<text x="614" y="647" text-anchor="middle" fill="#000" font-size="18" font-family="Microsoft YaHei, PingFang SC, sans-serif">1</text>
-<text x="638" y="849" text-anchor="middle" fill="#000" font-size="18" font-family="Microsoft YaHei, PingFang SC, sans-serif">n</text>
-<line x1="1488" y1="575.3" x2="1104.1" y2="746.2" stroke="#333" stroke-width="1.5"/>
-<line x1="1059.9" y1="765.8" x2="676" y2="936.7" stroke="#333" stroke-width="1.5"/>
-<polygon points="1082,734 1122,756 1082,778 1042,756" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="1082" y="757" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="16" font-family="Microsoft YaHei, PingFang SC, sans-serif">组成</text>
-<text x="1291.2" y="641.7" text-anchor="middle" fill="#000" font-size="18" font-family="Microsoft YaHei, PingFang SC, sans-serif">1</text>
-<text x="872.8" y="854.3" text-anchor="middle" fill="#000" font-size="18" font-family="Microsoft YaHei, PingFang SC, sans-serif">n</text>
-<line x1="1082" y1="530" x2="1082" y2="372" stroke="#333" stroke-width="1.5"/>
-<line x1="1082" y1="328" x2="1082" y2="170" stroke="#333" stroke-width="1.5"/>
-<polygon points="1082,328 1122,350 1082,372 1042,350" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="1082" y="351" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="16" font-family="Microsoft YaHei, PingFang SC, sans-serif">记录</text>
-<text x="1094" y="443" text-anchor="middle" fill="#000" font-size="18" font-family="Microsoft YaHei, PingFang SC, sans-serif">1</text>
-<text x="1070" y="241" text-anchor="middle" fill="#000" font-size="18" font-family="Microsoft YaHei, PingFang SC, sans-serif">n</text>
-<line x1="1082" y1="1342" x2="1082" y2="1184" stroke="#333" stroke-width="1.5"/>
-<line x1="1082" y1="1140" x2="1082" y2="982" stroke="#333" stroke-width="1.5"/>
-<polygon points="1082,1140 1122,1162 1082,1184 1042,1162" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="1082" y="1163" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="16" font-family="Microsoft YaHei, PingFang SC, sans-serif">关联</text>
-<text x="1094" y="1255" text-anchor="middle" fill="#000" font-size="18" font-family="Microsoft YaHei, PingFang SC, sans-serif">1</text>
-<text x="1070" y="1053" text-anchor="middle" fill="#000" font-size="18" font-family="Microsoft YaHei, PingFang SC, sans-serif">n</text>
-<line x1="651.8" y1="576" x2="838.7" y2="742.4" stroke="#333" stroke-width="1.5"/>
-<line x1="869.3" y1="769.6" x2="1056.2" y2="936" stroke="#333" stroke-width="1.5"/>
-<polygon points="854,734 894,756 854,778 814,756" fill="white" stroke="#222" stroke-width="1.5"/>
-<text x="854" y="757" text-anchor="middle" dominant-baseline="middle" fill="#111" font-size="16" font-family="Microsoft YaHei, PingFang SC, sans-serif">关联</text>
-<text x="737.3" y="660.2" text-anchor="middle" fill="#000" font-size="18" font-family="Microsoft YaHei, PingFang SC, sans-serif">1</text>
-<text x="970.7" y="835.8" text-anchor="middle" fill="#000" font-size="18" font-family="Microsoft YaHei, PingFang SC, sans-serif">n</text>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 15.1.0 (20260618.0150)
+ -->
+<!-- Title: 学习业务ER图 Pages: 1 -->
+<svg width="9798pt" height="1715pt"
+ viewBox="0.00 0.00 9798.00 1715.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(2.08333 2.08333) rotate(0) translate(4 819.24)">
+<title>学习业务ER图</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-819.24 4698.91,-819.24 4698.91,4 -4,4"/>
+<text xml:space="preserve" text-anchor="middle" x="2347.45" y="-796.04" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="16.00">学习业务 ER 图</text>
+<!-- course -->
+<g id="node1" class="node">
+<title>course</title>
+<polygon fill="none" stroke="black" points="733.91,-455.99 679.91,-455.99 679.91,-413.49 733.91,-413.49 733.91,-455.99"/>
+<text xml:space="preserve" text-anchor="middle" x="706.91" y="-440.59" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">课程</text>
+<text xml:space="preserve" text-anchor="middle" x="706.91" y="-423.34" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">course</text>
+</g>
+<!-- c_id -->
+<g id="node2" class="node">
+<title>c_id</title>
+<ellipse fill="none" stroke="black" cx="610.91" cy="-352.74" rx="29.88" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="610.91" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">课程ID</text>
+<text xml:space="preserve" text-anchor="middle" x="610.91" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">id</text>
+</g>
+<!-- course&#45;&gt;c_id -->
+<g id="edge1" class="edge">
+<title>course&#45;&gt;c_id</title>
+<path fill="none" stroke="black" d="M682.18,-413.14C666.52,-400.09 646.49,-383.39 631.65,-371.03"/>
+</g>
+<!-- c_subject -->
+<g id="node3" class="node">
+<title>c_subject</title>
+<ellipse fill="none" stroke="black" cx="706.91" cy="-352.74" rx="36.77" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="706.91" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">所属学科</text>
+<text xml:space="preserve" text-anchor="middle" x="706.91" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">subject</text>
+</g>
+<!-- course&#45;&gt;c_subject -->
+<g id="edge2" class="edge">
+<title>course&#45;&gt;c_subject</title>
+<path fill="none" stroke="black" d="M706.91,-413.14C706.91,-402.4 706.91,-389.2 706.91,-377.97"/>
+</g>
+<!-- c_name -->
+<g id="node4" class="node">
+<title>c_name</title>
+<ellipse fill="none" stroke="black" cx="823.91" cy="-352.74" rx="51.09" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="823.91" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">课程名称</text>
+<text xml:space="preserve" text-anchor="middle" x="823.91" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">course_name</text>
+</g>
+<!-- course&#45;&gt;c_name -->
+<g id="edge3" class="edge">
+<title>course&#45;&gt;c_name</title>
+<path fill="none" stroke="black" d="M734.34,-414.99C752.57,-402.52 776.49,-386.17 795.01,-373.5"/>
+</g>
+<!-- c_desc -->
+<g id="node5" class="node">
+<title>c_desc</title>
+<ellipse fill="none" stroke="black" cx="947.91" cy="-352.74" rx="44.19" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="947.91" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">课程描述</text>
+<text xml:space="preserve" text-anchor="middle" x="947.91" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">description</text>
+</g>
+<!-- course&#45;&gt;c_desc -->
+<g id="edge4" class="edge">
+<title>course&#45;&gt;c_desc</title>
+<path fill="none" stroke="black" d="M734.13,-426.21C770.11,-416.06 835.29,-397.02 889.91,-377.49 897.49,-374.78 905.53,-371.65 913.14,-368.58"/>
+</g>
+<!-- c_teacher -->
+<g id="node6" class="node">
+<title>c_teacher</title>
+<ellipse fill="none" stroke="black" cx="387.91" cy="-352.74" rx="42.6" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="387.91" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">负责教师ID</text>
+<text xml:space="preserve" text-anchor="middle" x="387.91" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">teacher_id</text>
+</g>
+<!-- course&#45;&gt;c_teacher -->
+<g id="edge5" class="edge">
+<title>course&#45;&gt;c_teacher</title>
+<path fill="none" stroke="black" d="M679.71,-429.59C631.64,-421.89 528.83,-403.74 444.91,-377.49 437.03,-375.03 428.73,-371.9 420.98,-368.73"/>
+</g>
+<!-- c_ctime -->
+<g id="node7" class="node">
+<title>c_ctime</title>
+<ellipse fill="none" stroke="black" cx="505.91" cy="-352.74" rx="46.32" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="505.91" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">创建时间</text>
+<text xml:space="preserve" text-anchor="middle" x="505.91" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">create_time</text>
+</g>
+<!-- course&#45;&gt;c_ctime -->
+<g id="edge6" class="edge">
+<title>course&#45;&gt;c_ctime</title>
+<path fill="none" stroke="black" d="M679.8,-422.95C644.33,-408.84 582.04,-384.05 542.44,-368.28"/>
+</g>
+<!-- contains_cn -->
+<g id="node102" class="node">
+<title>contains_cn</title>
+<polygon fill="none" stroke="black" points="877.91,-452.74 845.28,-434.74 877.91,-416.74 910.54,-434.74 877.91,-452.74"/>
+<text xml:space="preserve" text-anchor="middle" x="877.91" y="-432.74" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10.00">包含</text>
+</g>
+<!-- course&#45;&gt;contains_cn -->
+<g id="edge89" class="edge">
+<title>course&#45;&gt;contains_cn</title>
+<path fill="none" stroke="black" d="M734.29,-434.74C770.94,-434.74 807.6,-434.74 844.25,-434.74"/>
+</g>
+<!-- knowledge_node -->
+<g id="node8" class="node">
+<title>knowledge_node</title>
+<polygon fill="none" stroke="black" points="2173.66,-455.99 2066.16,-455.99 2066.16,-413.49 2173.66,-413.49 2173.66,-455.99"/>
+<text xml:space="preserve" text-anchor="middle" x="2119.91" y="-440.59" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">知识点</text>
+<text xml:space="preserve" text-anchor="middle" x="2119.91" y="-423.34" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">knowledge_node</text>
+</g>
+<!-- kn_id -->
+<g id="node9" class="node">
+<title>kn_id</title>
+<ellipse fill="none" stroke="black" cx="2168.91" cy="-352.74" rx="36.24" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="2168.91" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">知识点ID</text>
+<text xml:space="preserve" text-anchor="middle" x="2168.91" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">id</text>
+</g>
+<!-- knowledge_node&#45;&gt;kn_id -->
+<g id="edge7" class="edge">
+<title>knowledge_node&#45;&gt;kn_id</title>
+<path fill="none" stroke="black" d="M2132.53,-413.14C2139.5,-401.75 2148.17,-387.6 2155.3,-375.96"/>
+</g>
+<!-- kn_cid -->
+<g id="node10" class="node">
+<title>kn_cid</title>
+<ellipse fill="none" stroke="black" cx="2276.91" cy="-352.74" rx="42.6" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="2276.91" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">所属课程ID</text>
+<text xml:space="preserve" text-anchor="middle" x="2276.91" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">course_id</text>
+</g>
+<!-- knowledge_node&#45;&gt;kn_cid -->
+<g id="edge8" class="edge">
+<title>knowledge_node&#45;&gt;kn_cid</title>
+<path fill="none" stroke="black" d="M2160.34,-413.14C2186.78,-399.67 2220.82,-382.32 2245.28,-369.86"/>
+</g>
+<!-- kn_name -->
+<g id="node11" class="node">
+<title>kn_name</title>
+<ellipse fill="none" stroke="black" cx="2503.91" cy="-352.74" rx="43.13" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="2503.91" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">知识点名称</text>
+<text xml:space="preserve" text-anchor="middle" x="2503.91" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">name</text>
+</g>
+<!-- knowledge_node&#45;&gt;kn_name -->
+<g id="edge9" class="edge">
+<title>knowledge_node&#45;&gt;kn_name</title>
+<path fill="none" stroke="black" d="M2174.08,-428.06C2239.43,-420.36 2352.2,-404.41 2445.91,-377.49 2454.06,-375.15 2462.63,-372.03 2470.61,-368.82"/>
+</g>
+<!-- kn_desc -->
+<g id="node12" class="node">
+<title>kn_desc</title>
+<ellipse fill="none" stroke="black" cx="2619.91" cy="-352.74" rx="44.19" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="2619.91" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">描述</text>
+<text xml:space="preserve" text-anchor="middle" x="2619.91" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">description</text>
+</g>
+<!-- knowledge_node&#45;&gt;kn_desc -->
+<g id="edge10" class="edge">
+<title>knowledge_node&#45;&gt;kn_desc</title>
+<path fill="none" stroke="black" d="M2173.84,-431.43C2257.97,-426.8 2425.02,-413.56 2561.91,-377.49 2570.01,-375.36 2578.48,-372.36 2586.37,-369.21"/>
+</g>
+<!-- kn_type -->
+<g id="node13" class="node">
+<title>kn_type</title>
+<ellipse fill="none" stroke="black" cx="2734.91" cy="-352.74" rx="42.07" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="2734.91" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">节点类型</text>
+<text xml:space="preserve" text-anchor="middle" x="2734.91" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">node_type</text>
+</g>
+<!-- knowledge_node&#45;&gt;kn_type -->
+<g id="edge11" class="edge">
+<title>knowledge_node&#45;&gt;kn_type</title>
+<path fill="none" stroke="black" d="M2173.98,-430.38C2294.94,-422.51 2584.18,-401.75 2678.91,-377.49 2686.89,-375.45 2695.2,-372.45 2702.91,-369.26"/>
+</g>
+<!-- kn_goal -->
+<g id="node14" class="node">
+<title>kn_goal</title>
+<ellipse fill="none" stroke="black" cx="2856.91" cy="-352.74" rx="51.09" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="2856.91" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">学习目标</text>
+<text xml:space="preserve" text-anchor="middle" x="2856.91" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">learning_goal</text>
+</g>
+<!-- knowledge_node&#45;&gt;kn_goal -->
+<g id="edge12" class="edge">
+<title>knowledge_node&#45;&gt;kn_goal</title>
+<path fill="none" stroke="black" d="M2174.04,-430.04C2323.05,-419.75 2732.24,-390.64 2791.91,-377.49 2800.82,-375.53 2810.17,-372.64 2818.92,-369.54"/>
+</g>
+<!-- kn_kw -->
+<g id="node15" class="node">
+<title>kn_kw</title>
+<ellipse fill="none" stroke="black" cx="2975.91" cy="-352.74" rx="38.89" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="2975.91" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">关键词</text>
+<text xml:space="preserve" text-anchor="middle" x="2975.91" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">keywords</text>
+</g>
+<!-- knowledge_node&#45;&gt;kn_kw -->
+<g id="edge13" class="edge">
+<title>knowledge_node&#45;&gt;kn_kw</title>
+<path fill="none" stroke="black" d="M2174.01,-430.21C2351.33,-418.59 2904.7,-382.06 2922.91,-377.49 2930.73,-375.53 2938.84,-372.48 2946.29,-369.2"/>
+</g>
+<!-- kn_hint -->
+<g id="node16" class="node">
+<title>kn_hint</title>
+<ellipse fill="none" stroke="black" cx="1283.91" cy="-352.74" rx="50.56" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1283.91" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">示例提示</text>
+<text xml:space="preserve" text-anchor="middle" x="1283.91" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">example_hint</text>
+</g>
+<!-- knowledge_node&#45;&gt;kn_hint -->
+<g id="edge14" class="edge">
+<title>knowledge_node&#45;&gt;kn_hint</title>
+<path fill="none" stroke="black" d="M2065.9,-431.75C1914.16,-425.84 1486.19,-406.98 1348.91,-377.49 1339.98,-375.58 1330.62,-372.7 1321.88,-369.61"/>
+</g>
+<!-- kn_dif -->
+<g id="node17" class="node">
+<title>kn_dif</title>
+<ellipse fill="none" stroke="black" cx="1399.91" cy="-352.74" rx="36.77" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1399.91" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">难度</text>
+<text xml:space="preserve" text-anchor="middle" x="1399.91" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">difficulty</text>
+</g>
+<!-- knowledge_node&#45;&gt;kn_dif -->
+<g id="edge15" class="edge">
+<title>knowledge_node&#45;&gt;kn_dif</title>
+<path fill="none" stroke="black" d="M2065.68,-431.58C1927.99,-425.7 1567.59,-407.8 1451.91,-377.49 1444.03,-375.43 1435.87,-372.25 1428.41,-368.89"/>
+</g>
+<!-- kn_ch -->
+<g id="node18" class="node">
+<title>kn_ch</title>
+<ellipse fill="none" stroke="black" cx="1502.91" cy="-352.74" rx="36.77" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1502.91" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">所属章节</text>
+<text xml:space="preserve" text-anchor="middle" x="1502.91" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">chapter</text>
+</g>
+<!-- knowledge_node&#45;&gt;kn_ch -->
+<g id="edge16" class="edge">
+<title>knowledge_node&#45;&gt;kn_ch</title>
+<path fill="none" stroke="black" d="M2065.75,-434.35C1963.71,-434.18 1736.76,-427.59 1553.91,-377.49 1546.28,-375.4 1538.37,-372.26 1531.12,-368.93"/>
+</g>
+<!-- kn_min -->
+<g id="node19" class="node">
+<title>kn_min</title>
+<ellipse fill="none" stroke="black" cx="1633.91" cy="-352.74" rx="65.41" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1633.91" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">预计时长</text>
+<text xml:space="preserve" text-anchor="middle" x="1633.91" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">expected_minutes</text>
+</g>
+<!-- knowledge_node&#45;&gt;kn_min -->
+<g id="edge17" class="edge">
+<title>knowledge_node&#45;&gt;kn_min</title>
+<path fill="none" stroke="black" d="M2065.93,-428.88C1987.71,-421.25 1838.57,-404.47 1713.91,-377.49 1703.71,-375.29 1692.92,-372.44 1682.68,-369.49"/>
+</g>
+<!-- kn_ctime -->
+<g id="node20" class="node">
+<title>kn_ctime</title>
+<ellipse fill="none" stroke="black" cx="1774.91" cy="-352.74" rx="46.32" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1774.91" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">创建时间</text>
+<text xml:space="preserve" text-anchor="middle" x="1774.91" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">create_time</text>
+</g>
+<!-- knowledge_node&#45;&gt;kn_ctime -->
+<g id="edge18" class="edge">
+<title>knowledge_node&#45;&gt;kn_ctime</title>
+<path fill="none" stroke="black" d="M2065.84,-425.94C2008.2,-416.94 1914.57,-400.4 1835.91,-377.49 1827.61,-375.08 1818.87,-372 1810.67,-368.87"/>
+</g>
+<!-- precedes -->
+<g id="node103" class="node">
+<title>precedes</title>
+<polygon fill="none" stroke="black" points="2479.91,-452.74 2447.28,-434.74 2479.91,-416.74 2512.54,-434.74 2479.91,-452.74"/>
+<text xml:space="preserve" text-anchor="middle" x="2479.91" y="-432.74" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10.00">前置</text>
+</g>
+<!-- knowledge_node&#45;&gt;precedes -->
+<g id="edge91" class="edge">
+<title>knowledge_node&#45;&gt;precedes</title>
+<path fill="none" stroke="black" d="M2174.05,-434.74C2264.85,-434.74 2355.65,-434.74 2446.45,-434.74"/>
+</g>
+<!-- relates_q -->
+<g id="node104" class="node">
+<title>relates_q</title>
+<polygon fill="none" stroke="black" points="1976.91,-370.74 1944.28,-352.74 1976.91,-334.74 2009.54,-352.74 1976.91,-370.74"/>
+<text xml:space="preserve" text-anchor="middle" x="1976.91" y="-350.74" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10.00">关联</text>
+</g>
+<!-- knowledge_node&#45;&gt;relates_q -->
+<g id="edge93" class="edge">
+<title>knowledge_node&#45;&gt;relates_q</title>
+<path fill="none" stroke="black" d="M2083.08,-413.14C2053.79,-396.75 2014.24,-374.63 1992.63,-362.54"/>
+</g>
+<!-- learns -->
+<g id="node105" class="node">
+<title>learns</title>
+<polygon fill="none" stroke="black" points="1171.91,-370.74 1139.28,-352.74 1171.91,-334.74 1204.54,-352.74 1171.91,-370.74"/>
+<text xml:space="preserve" text-anchor="middle" x="1171.91" y="-350.74" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10.00">学习</text>
+</g>
+<!-- knowledge_node&#45;&gt;learns -->
+<g id="edge95" class="edge">
+<title>knowledge_node&#45;&gt;learns</title>
+<path fill="none" stroke="black" d="M2065.82,-433.22C1896.76,-431.13 1379.99,-421.23 1218.91,-377.49 1207.44,-374.38 1195.5,-368.3 1186.52,-363.08"/>
+</g>
+<!-- contains_pd -->
+<g id="node106" class="node">
+<title>contains_pd</title>
+<polygon fill="none" stroke="black" points="1882.91,-370.74 1850.28,-352.74 1882.91,-334.74 1915.54,-352.74 1882.91,-370.74"/>
+<text xml:space="preserve" text-anchor="middle" x="1882.91" y="-350.74" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10.00">包含</text>
+</g>
+<!-- knowledge_node&#45;&gt;contains_pd -->
+<g id="edge97" class="edge">
+<title>knowledge_node&#45;&gt;contains_pd</title>
+<path fill="none" stroke="black" d="M2065.8,-420.51C2027.3,-410.42 1974.67,-395.26 1929.91,-377.49 1919.2,-373.24 1907.65,-367.42 1898.67,-362.61"/>
+</g>
+<!-- has_res -->
+<g id="node107" class="node">
+<title>has_res</title>
+<polygon fill="none" stroke="black" points="2070.91,-370.74 2038.28,-352.74 2070.91,-334.74 2103.54,-352.74 2070.91,-370.74"/>
+<text xml:space="preserve" text-anchor="middle" x="2070.91" y="-350.74" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10.00">拥有</text>
+</g>
+<!-- knowledge_node&#45;&gt;has_res -->
+<g id="edge99" class="edge">
+<title>knowledge_node&#45;&gt;has_res</title>
+<path fill="none" stroke="black" d="M2107.29,-413.14C2098.33,-398.51 2086.57,-379.31 2078.88,-366.76"/>
+</g>
+<!-- relates_ctn -->
+<g id="node112" class="node">
+<title>relates_ctn</title>
+<polygon fill="none" stroke="black" points="3076.91,-370.74 3044.28,-352.74 3076.91,-334.74 3109.54,-352.74 3076.91,-370.74"/>
+<text xml:space="preserve" text-anchor="middle" x="3076.91" y="-350.74" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10.00">关联</text>
+</g>
+<!-- knowledge_node&#45;&gt;relates_ctn -->
+<g id="edge109" class="edge">
+<title>knowledge_node&#45;&gt;relates_ctn</title>
+<path fill="none" stroke="black" d="M2173.91,-430.18C2236.29,-426.08 2342.01,-419.18 2432.91,-413.49 2565.33,-405.21 2900.68,-411.59 3028.91,-377.49 3040.77,-374.34 3053.16,-368.12 3062.38,-362.84"/>
+</g>
+<!-- faved -->
+<g id="node113" class="node">
+<title>faved</title>
+<polygon fill="none" stroke="black" points="2389.91,-370.74 2348.31,-352.74 2389.91,-334.74 2431.5,-352.74 2389.91,-370.74"/>
+<text xml:space="preserve" text-anchor="middle" x="2389.91" y="-350.74" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10.00">被收藏</text>
+</g>
+<!-- knowledge_node&#45;&gt;faved -->
+<g id="edge111" class="edge">
+<title>knowledge_node&#45;&gt;faved</title>
+<path fill="none" stroke="black" d="M2173.75,-421.86C2217.41,-411.69 2280.28,-395.8 2333.91,-377.49 2346.3,-373.26 2359.82,-367.56 2370.48,-362.8"/>
+</g>
+<!-- knowledge_edge -->
+<g id="node21" class="node">
+<title>knowledge_edge</title>
+<polygon fill="none" stroke="black" points="3449.66,-455.99 3342.16,-455.99 3342.16,-413.49 3449.66,-413.49 3449.66,-455.99"/>
+<text xml:space="preserve" text-anchor="middle" x="3395.91" y="-440.59" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">依赖边</text>
+<text xml:space="preserve" text-anchor="middle" x="3395.91" y="-423.34" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">knowledge_edge</text>
+</g>
+<!-- ke_id -->
+<g id="node22" class="node">
+<title>ke_id</title>
+<ellipse fill="none" stroke="black" cx="3224.91" cy="-352.74" rx="27" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="3224.91" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">边ID</text>
+<text xml:space="preserve" text-anchor="middle" x="3224.91" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">id</text>
+</g>
+<!-- knowledge_edge&#45;&gt;ke_id -->
+<g id="edge19" class="edge">
+<title>knowledge_edge&#45;&gt;ke_id</title>
+<path fill="none" stroke="black" d="M3344.34,-413.06C3320.21,-402.97 3291.27,-390.27 3265.91,-377.49 3259.74,-374.38 3253.2,-370.76 3247.2,-367.29"/>
+</g>
+<!-- ke_from -->
+<g id="node23" class="node">
+<title>ke_from</title>
+<ellipse fill="none" stroke="black" cx="3331.91" cy="-352.74" rx="51.09" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="3331.91" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">前置知识点ID</text>
+<text xml:space="preserve" text-anchor="middle" x="3331.91" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">from_node_id</text>
+</g>
+<!-- knowledge_edge&#45;&gt;ke_from -->
+<g id="edge20" class="edge">
+<title>knowledge_edge&#45;&gt;ke_from</title>
+<path fill="none" stroke="black" d="M3379.42,-413.14C3370.39,-401.84 3359.17,-387.83 3349.91,-376.24"/>
+</g>
+<!-- ke_to -->
+<g id="node24" class="node">
+<title>ke_to</title>
+<ellipse fill="none" stroke="black" cx="3460.91" cy="-352.74" rx="48.97" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="3460.91" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">后继知识点ID</text>
+<text xml:space="preserve" text-anchor="middle" x="3460.91" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">to_node_id</text>
+</g>
+<!-- knowledge_edge&#45;&gt;ke_to -->
+<g id="edge21" class="edge">
+<title>knowledge_edge&#45;&gt;ke_to</title>
+<path fill="none" stroke="black" d="M3412.65,-413.14C3421.9,-401.75 3433.4,-387.6 3442.86,-375.96"/>
+</g>
+<!-- ke_type -->
+<g id="node25" class="node">
+<title>ke_type</title>
+<ellipse fill="none" stroke="black" cx="3587.91" cy="-352.74" rx="49.5" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="3587.91" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">关系类型</text>
+<text xml:space="preserve" text-anchor="middle" x="3587.91" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">relation_type</text>
+</g>
+<!-- knowledge_edge&#45;&gt;ke_type -->
+<g id="edge22" class="edge">
+<title>knowledge_edge&#45;&gt;ke_type</title>
+<path fill="none" stroke="black" d="M3445.35,-413.14C3478.13,-399.48 3520.46,-381.85 3550.45,-369.35"/>
+</g>
+<!-- ke_cross -->
+<g id="node26" class="node">
+<title>ke_cross</title>
+<ellipse fill="none" stroke="black" cx="3726.91" cy="-352.74" rx="60.1" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="3726.91" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">是否跨学科</text>
+<text xml:space="preserve" text-anchor="middle" x="3726.91" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">is_cross_subject</text>
+</g>
+<!-- knowledge_edge&#45;&gt;ke_cross -->
+<g id="edge23" class="edge">
+<title>knowledge_edge&#45;&gt;ke_cross</title>
+<path fill="none" stroke="black" d="M3449.69,-423.4C3501.73,-413.04 3582.67,-396.02 3651.91,-377.49 3661.41,-374.95 3671.49,-371.96 3681.09,-368.97"/>
+</g>
+<!-- question -->
+<g id="node27" class="node">
+<title>question</title>
+<polygon fill="none" stroke="black" points="1893.53,-291.99 1830.28,-291.99 1830.28,-249.49 1893.53,-249.49 1893.53,-291.99"/>
+<text xml:space="preserve" text-anchor="middle" x="1861.91" y="-276.59" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">习题</text>
+<text xml:space="preserve" text-anchor="middle" x="1861.91" y="-259.34" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">question</text>
+</g>
+<!-- q_id -->
+<g id="node28" class="node">
+<title>q_id</title>
+<ellipse fill="none" stroke="black" cx="2307.91" cy="-188.75" rx="29.88" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="2307.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">题目ID</text>
+<text xml:space="preserve" text-anchor="middle" x="2307.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">id</text>
+</g>
+<!-- question&#45;&gt;q_id -->
+<g id="edge24" class="edge">
+<title>question&#45;&gt;q_id</title>
+<path fill="none" stroke="black" d="M1893.93,-268.98C1963.01,-266.53 2130.45,-256.29 2262.91,-213.49 2270.14,-211.16 2277.59,-207.71 2284.29,-204.17"/>
+</g>
+<!-- q_nid -->
+<g id="node29" class="node">
+<title>q_nid</title>
+<ellipse fill="none" stroke="black" cx="1360.91" cy="-188.75" rx="48.97" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1360.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">所属知识点ID</text>
+<text xml:space="preserve" text-anchor="middle" x="1360.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">node_id</text>
+</g>
+<!-- question&#45;&gt;q_nid -->
+<g id="edge25" class="edge">
+<title>question&#45;&gt;q_nid</title>
+<path fill="none" stroke="black" d="M1829.83,-268.18C1756.79,-264.07 1572.88,-250.6 1423.91,-213.49 1415.29,-211.35 1406.23,-208.38 1397.76,-205.27"/>
+</g>
+<!-- q_content -->
+<g id="node30" class="node">
+<title>q_content</title>
+<ellipse fill="none" stroke="black" cx="1472.91" cy="-188.75" rx="34.12" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1472.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">题干</text>
+<text xml:space="preserve" text-anchor="middle" x="1472.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">content</text>
+</g>
+<!-- question&#45;&gt;q_content -->
+<g id="edge26" class="edge">
+<title>question&#45;&gt;q_content</title>
+<path fill="none" stroke="black" d="M1830.14,-267.65C1768.98,-262.93 1631.14,-248.98 1520.91,-213.49 1513.74,-211.19 1506.3,-207.96 1499.48,-204.63"/>
+</g>
+<!-- q_opt -->
+<g id="node31" class="node">
+<title>q_opt</title>
+<ellipse fill="none" stroke="black" cx="1568.91" cy="-188.75" rx="33.06" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1568.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">选项</text>
+<text xml:space="preserve" text-anchor="middle" x="1568.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">options</text>
+</g>
+<!-- question&#45;&gt;q_opt -->
+<g id="edge27" class="edge">
+<title>question&#45;&gt;q_opt</title>
+<path fill="none" stroke="black" d="M1829.91,-264.86C1782.47,-257.07 1691.1,-239.96 1616.91,-213.49 1609.73,-210.93 1602.22,-207.58 1595.33,-204.2"/>
+</g>
+<!-- q_ans -->
+<g id="node32" class="node">
+<title>q_ans</title>
+<ellipse fill="none" stroke="black" cx="1663.91" cy="-188.75" rx="32.53" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1663.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">答案</text>
+<text xml:space="preserve" text-anchor="middle" x="1663.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">answer</text>
+</g>
+<!-- question&#45;&gt;q_ans -->
+<g id="edge28" class="edge">
+<title>question&#45;&gt;q_ans</title>
+<path fill="none" stroke="black" d="M1829.97,-259.01C1799.13,-248.37 1751.28,-231.15 1710.91,-213.49 1704.04,-210.49 1696.75,-206.98 1690.01,-203.58"/>
+</g>
+<!-- q_ana -->
+<g id="node33" class="node">
+<title>q_ana</title>
+<ellipse fill="none" stroke="black" cx="1760.91" cy="-188.75" rx="35.18" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1760.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">解析</text>
+<text xml:space="preserve" text-anchor="middle" x="1760.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">analysis</text>
+</g>
+<!-- question&#45;&gt;q_ana -->
+<g id="edge29" class="edge">
+<title>question&#45;&gt;q_ana</title>
+<path fill="none" stroke="black" d="M1835.9,-249.14C1819.76,-236.37 1799.23,-220.1 1783.73,-207.83"/>
+</g>
+<!-- q_dif -->
+<g id="node34" class="node">
+<title>q_dif</title>
+<ellipse fill="none" stroke="black" cx="1861.91" cy="-188.75" rx="36.77" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1861.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">难度</text>
+<text xml:space="preserve" text-anchor="middle" x="1861.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">difficulty</text>
+</g>
+<!-- question&#45;&gt;q_dif -->
+<g id="edge30" class="edge">
+<title>question&#45;&gt;q_dif</title>
+<path fill="none" stroke="black" d="M1861.91,-249.14C1861.91,-238.4 1861.91,-225.2 1861.91,-213.97"/>
+</g>
+<!-- q_type -->
+<g id="node35" class="node">
+<title>q_type</title>
+<ellipse fill="none" stroke="black" cx="1979.91" cy="-188.75" rx="52.68" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1979.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">题型</text>
+<text xml:space="preserve" text-anchor="middle" x="1979.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">question_type</text>
+</g>
+<!-- question&#45;&gt;q_type -->
+<g id="edge31" class="edge">
+<title>question&#45;&gt;q_type</title>
+<path fill="none" stroke="black" d="M1892.29,-249.14C1910.19,-237.01 1932.71,-221.74 1950.44,-209.73"/>
+</g>
+<!-- q_ctime -->
+<g id="node36" class="node">
+<title>q_ctime</title>
+<ellipse fill="none" stroke="black" cx="2107.91" cy="-188.75" rx="46.32" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="2107.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">创建时间</text>
+<text xml:space="preserve" text-anchor="middle" x="2107.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">create_time</text>
+</g>
+<!-- question&#45;&gt;q_ctime -->
+<g id="edge32" class="edge">
+<title>question&#45;&gt;q_ctime</title>
+<path fill="none" stroke="black" d="M1893.9,-260.82C1930.97,-250.29 1993.77,-231.89 2046.91,-213.49 2054.96,-210.71 2063.53,-207.51 2071.63,-204.39"/>
+</g>
+<!-- records_wq -->
+<g id="node110" class="node">
+<title>records_wq</title>
+<polygon fill="none" stroke="black" points="2215.91,-206.75 2183.28,-188.75 2215.91,-170.75 2248.54,-188.75 2215.91,-206.75"/>
+<text xml:space="preserve" text-anchor="middle" x="2215.91" y="-186.75" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10.00">记录</text>
+</g>
+<!-- question&#45;&gt;records_wq -->
+<g id="edge105" class="edge">
+<title>question&#45;&gt;records_wq</title>
+<path fill="none" stroke="black" d="M1893.59,-266.96C1950.13,-261.33 2071.58,-246.24 2168.91,-213.49 2180,-209.76 2191.75,-203.83 2200.72,-198.82"/>
+</g>
+<!-- learning_resource -->
+<g id="node37" class="node">
+<title>learning_resource</title>
+<polygon fill="none" stroke="black" points="3040.41,-291.99 2925.41,-291.99 2925.41,-249.49 3040.41,-249.49 3040.41,-291.99"/>
+<text xml:space="preserve" text-anchor="middle" x="2982.91" y="-276.59" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">学习资源</text>
+<text xml:space="preserve" text-anchor="middle" x="2982.91" y="-259.34" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">learning_resource</text>
+</g>
+<!-- lr_id -->
+<g id="node38" class="node">
+<title>lr_id</title>
+<ellipse fill="none" stroke="black" cx="2521.91" cy="-188.75" rx="29.88" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="2521.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">资源ID</text>
+<text xml:space="preserve" text-anchor="middle" x="2521.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">id</text>
+</g>
+<!-- learning_resource&#45;&gt;lr_id -->
+<g id="edge33" class="edge">
+<title>learning_resource&#45;&gt;lr_id</title>
+<path fill="none" stroke="black" d="M2924.99,-268.28C2843.31,-264.8 2690.45,-253.07 2566.91,-213.49 2559.67,-211.18 2552.22,-207.74 2545.51,-204.19"/>
+</g>
+<!-- lr_nid -->
+<g id="node39" class="node">
+<title>lr_nid</title>
+<ellipse fill="none" stroke="black" cx="2629.91" cy="-188.75" rx="48.97" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="2629.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">所属知识点ID</text>
+<text xml:space="preserve" text-anchor="middle" x="2629.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">node_id</text>
+</g>
+<!-- learning_resource&#45;&gt;lr_nid -->
+<g id="edge34" class="edge">
+<title>learning_resource&#45;&gt;lr_nid</title>
+<path fill="none" stroke="black" d="M2924.96,-261.32C2866.14,-252.1 2772.77,-235.64 2693.91,-213.49 2685.23,-211.06 2676.07,-207.98 2667.47,-204.85"/>
+</g>
+<!-- lr_title -->
+<g id="node40" class="node">
+<title>lr_title</title>
+<ellipse fill="none" stroke="black" cx="2744.91" cy="-188.75" rx="36.77" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="2744.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">资源标题</text>
+<text xml:space="preserve" text-anchor="middle" x="2744.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">title</text>
+</g>
+<!-- learning_resource&#45;&gt;lr_title -->
+<g id="edge35" class="edge">
+<title>learning_resource&#45;&gt;lr_title</title>
+<path fill="none" stroke="black" d="M2925.32,-254.73C2887.97,-244.43 2838.52,-229.73 2795.91,-213.49 2788.79,-210.78 2781.27,-207.52 2774.26,-204.29"/>
+</g>
+<!-- lr_type -->
+<g id="node41" class="node">
+<title>lr_type</title>
+<ellipse fill="none" stroke="black" cx="2863.91" cy="-188.75" rx="53.21" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="2863.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">资源类型</text>
+<text xml:space="preserve" text-anchor="middle" x="2863.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">resource_type</text>
+</g>
+<!-- learning_resource&#45;&gt;lr_type -->
+<g id="edge36" class="edge">
+<title>learning_resource&#45;&gt;lr_type</title>
+<path fill="none" stroke="black" d="M2952.26,-249.14C2934.22,-237.01 2911.51,-221.74 2893.63,-209.73"/>
+</g>
+<!-- lr_url -->
+<g id="node42" class="node">
+<title>lr_url</title>
+<ellipse fill="none" stroke="black" cx="2982.91" cy="-188.75" rx="36.77" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="2982.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">资源链接</text>
+<text xml:space="preserve" text-anchor="middle" x="2982.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">url</text>
+</g>
+<!-- learning_resource&#45;&gt;lr_url -->
+<g id="edge37" class="edge">
+<title>learning_resource&#45;&gt;lr_url</title>
+<path fill="none" stroke="black" d="M2982.91,-249.14C2982.91,-238.4 2982.91,-225.2 2982.91,-213.97"/>
+</g>
+<!-- lr_cover -->
+<g id="node43" class="node">
+<title>lr_cover</title>
+<ellipse fill="none" stroke="black" cx="3086.91" cy="-188.75" rx="38.36" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="3086.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">封面图</text>
+<text xml:space="preserve" text-anchor="middle" x="3086.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">cover_url</text>
+</g>
+<!-- learning_resource&#45;&gt;lr_cover -->
+<g id="edge38" class="edge">
+<title>learning_resource&#45;&gt;lr_cover</title>
+<path fill="none" stroke="black" d="M3009.69,-249.14C3026.06,-236.55 3046.83,-220.57 3062.7,-208.36"/>
+</g>
+<!-- lr_dur -->
+<g id="node44" class="node">
+<title>lr_dur</title>
+<ellipse fill="none" stroke="black" cx="3217.91" cy="-188.75" rx="63.82" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="3217.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">时长(秒)</text>
+<text xml:space="preserve" text-anchor="middle" x="3217.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">duration_seconds</text>
+</g>
+<!-- learning_resource&#45;&gt;lr_dur -->
+<g id="edge39" class="edge">
+<title>learning_resource&#45;&gt;lr_dur</title>
+<path fill="none" stroke="black" d="M3040.69,-250.07C3080.65,-236.47 3133.15,-218.6 3170.61,-205.85"/>
+</g>
+<!-- lr_src -->
+<g id="node45" class="node">
+<title>lr_src</title>
+<ellipse fill="none" stroke="black" cx="3341.91" cy="-188.75" rx="31.47" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="3341.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">来源</text>
+<text xml:space="preserve" text-anchor="middle" x="3341.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">source</text>
+</g>
+<!-- learning_resource&#45;&gt;lr_src -->
+<g id="edge40" class="edge">
+<title>learning_resource&#45;&gt;lr_src</title>
+<path fill="none" stroke="black" d="M3040.74,-264.57C3104.55,-257.68 3209.64,-242.77 3295.91,-213.49 3303.06,-211.07 3310.47,-207.68 3317.2,-204.22"/>
+</g>
+<!-- lr_order -->
+<g id="node46" class="node">
+<title>lr_order</title>
+<ellipse fill="none" stroke="black" cx="3442.91" cy="-188.75" rx="41.01" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="3442.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">排序</text>
+<text xml:space="preserve" text-anchor="middle" x="3442.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">sort_order</text>
+</g>
+<!-- learning_resource&#45;&gt;lr_order -->
+<g id="edge41" class="edge">
+<title>learning_resource&#45;&gt;lr_order</title>
+<path fill="none" stroke="black" d="M3040.58,-266.63C3120.03,-261.24 3267.08,-247.3 3387.91,-213.49 3395.72,-211.31 3403.88,-208.25 3411.44,-205.05"/>
+</g>
+<!-- lr_status -->
+<g id="node47" class="node">
+<title>lr_status</title>
+<ellipse fill="none" stroke="black" cx="3541.91" cy="-188.75" rx="29.34" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="3541.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">状态</text>
+<text xml:space="preserve" text-anchor="middle" x="3541.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">status</text>
+</g>
+<!-- learning_resource&#45;&gt;lr_status -->
+<g id="edge42" class="edge">
+<title>learning_resource&#45;&gt;lr_status</title>
+<path fill="none" stroke="black" d="M3040.78,-266.32C3156.97,-258.96 3414.71,-240.15 3498.91,-213.49 3505.74,-211.33 3512.71,-208.03 3519.01,-204.57"/>
+</g>
+<!-- lr_ctime -->
+<g id="node48" class="node">
+<title>lr_ctime</title>
+<ellipse fill="none" stroke="black" cx="3646.91" cy="-188.75" rx="46.32" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="3646.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">创建时间</text>
+<text xml:space="preserve" text-anchor="middle" x="3646.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">create_time</text>
+</g>
+<!-- learning_resource&#45;&gt;lr_ctime -->
+<g id="edge43" class="edge">
+<title>learning_resource&#45;&gt;lr_ctime</title>
+<path fill="none" stroke="black" d="M3040.71,-269.66C3149.12,-268.34 3389.7,-259.88 3585.91,-213.49 3594.53,-211.46 3603.57,-208.45 3611.96,-205.27"/>
+</g>
+<!-- lr_utime -->
+<g id="node49" class="node">
+<title>lr_utime</title>
+<ellipse fill="none" stroke="black" cx="2414.91" cy="-188.75" rx="47.91" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="2414.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">更新时间</text>
+<text xml:space="preserve" text-anchor="middle" x="2414.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">update_time</text>
+</g>
+<!-- learning_resource&#45;&gt;lr_utime -->
+<g id="edge44" class="edge">
+<title>learning_resource&#45;&gt;lr_utime</title>
+<path fill="none" stroke="black" d="M2924.92,-267.98C2830.18,-264.04 2636.81,-251.66 2477.91,-213.49 2469.15,-211.39 2459.97,-208.41 2451.4,-205.26"/>
+</g>
+<!-- study_record -->
+<g id="node50" class="node">
+<title>study_record</title>
+<polygon fill="none" stroke="black" points="504.91,-291.99 416.91,-291.99 416.91,-249.49 504.91,-249.49 504.91,-291.99"/>
+<text xml:space="preserve" text-anchor="middle" x="460.91" y="-276.59" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">学习记录</text>
+<text xml:space="preserve" text-anchor="middle" x="460.91" y="-259.34" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">study_record</text>
+</g>
+<!-- sr_id -->
+<g id="node51" class="node">
+<title>sr_id</title>
+<ellipse fill="none" stroke="black" cx="154.91" cy="-188.75" rx="29.88" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="154.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">记录ID</text>
+<text xml:space="preserve" text-anchor="middle" x="154.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">id</text>
+</g>
+<!-- study_record&#45;&gt;sr_id -->
+<g id="edge45" class="edge">
+<title>study_record&#45;&gt;sr_id</title>
+<path fill="none" stroke="black" d="M416.72,-264.16C363.76,-256.59 272.89,-240.77 198.91,-213.49 192.06,-210.97 184.98,-207.55 178.54,-204.09"/>
+</g>
+<!-- sr_uid -->
+<g id="node52" class="node">
+<title>sr_uid</title>
+<ellipse fill="none" stroke="black" cx="245.91" cy="-188.75" rx="32.53" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="245.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">学生ID</text>
+<text xml:space="preserve" text-anchor="middle" x="245.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">user_id</text>
+</g>
+<!-- study_record&#45;&gt;sr_uid -->
+<g id="edge46" class="edge">
+<title>study_record&#45;&gt;sr_uid</title>
+<path fill="none" stroke="black" d="M416.76,-256.88C382.49,-246.44 334.06,-230.68 292.91,-213.49 285.99,-210.61 278.68,-207.13 271.94,-203.74"/>
+</g>
+<!-- sr_nid -->
+<g id="node53" class="node">
+<title>sr_nid</title>
+<ellipse fill="none" stroke="black" cx="343.91" cy="-188.75" rx="36.24" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="343.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">知识点ID</text>
+<text xml:space="preserve" text-anchor="middle" x="343.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">node_id</text>
+</g>
+<!-- study_record&#45;&gt;sr_nid -->
+<g id="edge47" class="edge">
+<title>study_record&#45;&gt;sr_nid</title>
+<path fill="none" stroke="black" d="M430.78,-249.14C411.68,-236.09 387.27,-219.4 369.19,-207.03"/>
+</g>
+<!-- sr_mastery -->
+<g id="node54" class="node">
+<title>sr_mastery</title>
+<ellipse fill="none" stroke="black" cx="460.91" cy="-188.75" rx="51.62" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="460.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">掌握度</text>
+<text xml:space="preserve" text-anchor="middle" x="460.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">mastery_level</text>
+</g>
+<!-- study_record&#45;&gt;sr_mastery -->
+<g id="edge48" class="edge">
+<title>study_record&#45;&gt;sr_mastery</title>
+<path fill="none" stroke="black" d="M460.91,-249.14C460.91,-238.4 460.91,-225.2 460.91,-213.97"/>
+</g>
+<!-- sr_rate -->
+<g id="node55" class="node">
+<title>sr_rate</title>
+<ellipse fill="none" stroke="black" cx="588.91" cy="-188.75" rx="47.38" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="588.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">正确率</text>
+<text xml:space="preserve" text-anchor="middle" x="588.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">correct_rate</text>
+</g>
+<!-- study_record&#45;&gt;sr_rate -->
+<g id="edge49" class="edge">
+<title>study_record&#45;&gt;sr_rate</title>
+<path fill="none" stroke="black" d="M493.87,-249.14C514.02,-236.55 539.58,-220.57 559.12,-208.36"/>
+</g>
+<!-- sr_min -->
+<g id="node56" class="node">
+<title>sr_min</title>
+<ellipse fill="none" stroke="black" cx="718.91" cy="-188.75" rx="53.74" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="718.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">学习时长(分)</text>
+<text xml:space="preserve" text-anchor="middle" x="718.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">study_minutes</text>
+</g>
+<!-- study_record&#45;&gt;sr_min -->
+<g id="edge50" class="edge">
+<title>study_record&#45;&gt;sr_min</title>
+<path fill="none" stroke="black" d="M505.24,-257.27C543.87,-246.25 601.3,-229.49 650.91,-213.49 659.48,-210.73 668.6,-207.64 677.3,-204.63"/>
+</g>
+<!-- sr_utime -->
+<g id="node57" class="node">
+<title>sr_utime</title>
+<ellipse fill="none" stroke="black" cx="47.91" cy="-188.75" rx="47.91" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="47.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">更新时间</text>
+<text xml:space="preserve" text-anchor="middle" x="47.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">update_time</text>
+</g>
+<!-- study_record&#45;&gt;sr_utime -->
+<g id="edge51" class="edge">
+<title>study_record&#45;&gt;sr_utime</title>
+<path fill="none" stroke="black" d="M416.66,-265.52C349.67,-258.48 218.86,-242.2 110.91,-213.49 102.32,-211.21 93.28,-208.19 84.81,-205.07"/>
+</g>
+<!-- study_path -->
+<g id="node58" class="node">
+<title>study_path</title>
+<polygon fill="none" stroke="black" points="1878.28,-619.99 1801.53,-619.99 1801.53,-577.49 1878.28,-577.49 1878.28,-619.99"/>
+<text xml:space="preserve" text-anchor="middle" x="1839.91" y="-604.59" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">学习路径</text>
+<text xml:space="preserve" text-anchor="middle" x="1839.91" y="-587.34" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">study_path</text>
+</g>
+<!-- sp_id -->
+<g id="node59" class="node">
+<title>sp_id</title>
+<ellipse fill="none" stroke="black" cx="1794.91" cy="-516.74" rx="29.88" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1794.91" y="-521.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">路径ID</text>
+<text xml:space="preserve" text-anchor="middle" x="1794.91" y="-508.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">id</text>
+</g>
+<!-- study_path&#45;&gt;sp_id -->
+<g id="edge52" class="edge">
+<title>study_path&#45;&gt;sp_id</title>
+<path fill="none" stroke="black" d="M1828.32,-577.14C1821.86,-565.66 1813.82,-551.36 1807.24,-539.67"/>
+</g>
+<!-- sp_uid -->
+<g id="node60" class="node">
+<title>sp_uid</title>
+<ellipse fill="none" stroke="black" cx="1885.91" cy="-516.74" rx="32.53" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1885.91" y="-521.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">学生ID</text>
+<text xml:space="preserve" text-anchor="middle" x="1885.91" y="-508.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">user_id</text>
+</g>
+<!-- study_path&#45;&gt;sp_uid -->
+<g id="edge53" class="edge">
+<title>study_path&#45;&gt;sp_uid</title>
+<path fill="none" stroke="black" d="M1851.75,-577.14C1858.3,-565.75 1866.44,-551.59 1873.13,-539.96"/>
+</g>
+<!-- sp_tnid -->
+<g id="node61" class="node">
+<title>sp_tnid</title>
+<ellipse fill="none" stroke="black" cx="2002.91" cy="-516.74" rx="55.33" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="2002.91" y="-521.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">目标知识点ID</text>
+<text xml:space="preserve" text-anchor="middle" x="2002.91" y="-508.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">target_node_id</text>
+</g>
+<!-- study_path&#45;&gt;sp_tnid -->
+<g id="edge54" class="edge">
+<title>study_path&#45;&gt;sp_tnid</title>
+<path fill="none" stroke="black" d="M1878.54,-578.78C1905.08,-565.75 1940.12,-548.56 1966.23,-535.74"/>
+</g>
+<!-- sp_name -->
+<g id="node62" class="node">
+<title>sp_name</title>
+<ellipse fill="none" stroke="black" cx="2225.91" cy="-516.74" rx="44.19" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="2225.91" y="-521.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">路径名称</text>
+<text xml:space="preserve" text-anchor="middle" x="2225.91" y="-508.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">path_name</text>
+</g>
+<!-- study_path&#45;&gt;sp_name -->
+<g id="edge55" class="edge">
+<title>study_path&#45;&gt;sp_name</title>
+<path fill="none" stroke="black" d="M1878.76,-593.76C1940.62,-586.83 2064.94,-570.43 2166.91,-541.49 2175.09,-539.17 2183.68,-536.1 2191.71,-532.93"/>
+</g>
+<!-- sp_tnodes -->
+<g id="node63" class="node">
+<title>sp_tnodes</title>
+<ellipse fill="none" stroke="black" cx="2344.91" cy="-516.74" rx="45.79" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="2344.91" y="-521.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">节点总数</text>
+<text xml:space="preserve" text-anchor="middle" x="2344.91" y="-508.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">total_nodes</text>
+</g>
+<!-- study_path&#45;&gt;sp_tnodes -->
+<g id="edge56" class="edge">
+<title>study_path&#45;&gt;sp_tnodes</title>
+<path fill="none" stroke="black" d="M1878.61,-596.11C1956.62,-592.12 2137.83,-579.25 2284.91,-541.49 2293.26,-539.34 2302.02,-536.34 2310.18,-533.19"/>
+</g>
+<!-- sp_tmin -->
+<g id="node64" class="node">
+<title>sp_tmin</title>
+<ellipse fill="none" stroke="black" cx="1258.91" cy="-516.74" rx="51.09" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1258.91" y="-521.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">预计总时长</text>
+<text xml:space="preserve" text-anchor="middle" x="1258.91" y="-508.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">total_minutes</text>
+</g>
+<!-- study_path&#45;&gt;sp_tmin -->
+<g id="edge57" class="edge">
+<title>study_path&#45;&gt;sp_tmin</title>
+<path fill="none" stroke="black" d="M1801.18,-596.7C1714.55,-593.7 1498.97,-582.38 1323.91,-541.49 1315.13,-539.44 1305.92,-536.55 1297.28,-533.5"/>
+</g>
+<!-- sp_ai -->
+<g id="node65" class="node">
+<title>sp_ai</title>
+<ellipse fill="none" stroke="black" cx="1384.91" cy="-516.74" rx="46.32" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1384.91" y="-521.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">AI总结</text>
+<text xml:space="preserve" text-anchor="middle" x="1384.91" y="-508.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">ai_summary</text>
+</g>
+<!-- study_path&#45;&gt;sp_ai -->
+<g id="edge58" class="edge">
+<title>study_path&#45;&gt;sp_ai</title>
+<path fill="none" stroke="black" d="M1801.29,-595.18C1730.05,-589.81 1573.56,-574.98 1445.91,-541.49 1437.44,-539.27 1428.55,-536.24 1420.26,-533.08"/>
+</g>
+<!-- sp_status -->
+<g id="node66" class="node">
+<title>sp_status</title>
+<ellipse fill="none" stroke="black" cx="1489.91" cy="-516.74" rx="29.34" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1489.91" y="-521.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">状态</text>
+<text xml:space="preserve" text-anchor="middle" x="1489.91" y="-508.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">status</text>
+</g>
+<!-- study_path&#45;&gt;sp_status -->
+<g id="edge59" class="edge">
+<title>study_path&#45;&gt;sp_status</title>
+<path fill="none" stroke="black" d="M1801.23,-594.54C1742.18,-588.79 1626.64,-574.12 1533.91,-541.49 1526.86,-539.01 1519.59,-535.52 1513.03,-531.97"/>
+</g>
+<!-- sp_ctime -->
+<g id="node67" class="node">
+<title>sp_ctime</title>
+<ellipse fill="none" stroke="black" cx="1594.91" cy="-516.74" rx="46.32" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1594.91" y="-521.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">创建时间</text>
+<text xml:space="preserve" text-anchor="middle" x="1594.91" y="-508.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">create_time</text>
+</g>
+<!-- study_path&#45;&gt;sp_ctime -->
+<g id="edge60" class="edge">
+<title>study_path&#45;&gt;sp_ctime</title>
+<path fill="none" stroke="black" d="M1801.22,-586.83C1763.8,-576.05 1705.61,-558.74 1655.91,-541.49 1647.85,-538.7 1639.28,-535.5 1631.19,-532.38"/>
+</g>
+<!-- composes -->
+<g id="node108" class="node">
+<title>composes</title>
+<polygon fill="none" stroke="black" points="1702.91,-534.74 1670.28,-516.74 1702.91,-498.74 1735.54,-516.74 1702.91,-534.74"/>
+<text xml:space="preserve" text-anchor="middle" x="1702.91" y="-514.74" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10.00">组成</text>
+</g>
+<!-- study_path&#45;&gt;composes -->
+<g id="edge101" class="edge">
+<title>study_path&#45;&gt;composes</title>
+<path fill="none" stroke="black" d="M1804.63,-577.14C1776.72,-560.84 1739.11,-538.88 1718.32,-526.74"/>
+</g>
+<!-- targets -->
+<g id="node109" class="node">
+<title>targets</title>
+<polygon fill="none" stroke="black" points="2119.91,-534.74 2087.28,-516.74 2119.91,-498.74 2152.54,-516.74 2119.91,-534.74"/>
+<text xml:space="preserve" text-anchor="middle" x="2119.91" y="-514.74" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10.00">目标</text>
+</g>
+<!-- study_path&#45;&gt;targets -->
+<g id="edge103" class="edge">
+<title>study_path&#45;&gt;targets</title>
+<path fill="none" stroke="black" d="M1878.65,-591.23C1925.55,-582.7 2006.51,-565.91 2072.91,-541.49 2083.89,-537.45 2095.64,-531.51 2104.64,-526.59"/>
+</g>
+<!-- path_detail -->
+<g id="node68" class="node">
+<title>path_detail</title>
+<polygon fill="none" stroke="black" points="1133.66,-291.99 1056.16,-291.99 1056.16,-249.49 1133.66,-249.49 1133.66,-291.99"/>
+<text xml:space="preserve" text-anchor="middle" x="1094.91" y="-276.59" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">路径详情</text>
+<text xml:space="preserve" text-anchor="middle" x="1094.91" y="-259.34" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">path_detail</text>
+</g>
+<!-- pd_id -->
+<g id="node69" class="node">
+<title>pd_id</title>
+<ellipse fill="none" stroke="black" cx="1252.91" cy="-188.75" rx="29.88" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1252.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">详情ID</text>
+<text xml:space="preserve" text-anchor="middle" x="1252.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">id</text>
+</g>
+<!-- path_detail&#45;&gt;pd_id -->
+<g id="edge61" class="edge">
+<title>path_detail&#45;&gt;pd_id</title>
+<path fill="none" stroke="black" d="M1134.13,-250.83C1156.2,-240.08 1184.2,-226.25 1208.91,-213.49 1215.23,-210.23 1222.02,-206.62 1228.32,-203.22"/>
+</g>
+<!-- pd_pid -->
+<g id="node70" class="node">
+<title>pd_pid</title>
+<ellipse fill="none" stroke="black" cx="834.91" cy="-188.75" rx="33.06" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="834.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">路径ID</text>
+<text xml:space="preserve" text-anchor="middle" x="834.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">path_id</text>
+</g>
+<!-- path_detail&#45;&gt;pd_pid -->
+<g id="edge62" class="edge">
+<title>path_detail&#45;&gt;pd_pid</title>
+<path fill="none" stroke="black" d="M1055.66,-261.97C1012.33,-252.79 940.9,-235.9 881.91,-213.49 875.07,-210.9 867.92,-207.6 861.31,-204.3"/>
+</g>
+<!-- pd_nid -->
+<g id="node71" class="node">
+<title>pd_nid</title>
+<ellipse fill="none" stroke="black" cx="932.91" cy="-188.75" rx="36.24" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="932.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">知识点ID</text>
+<text xml:space="preserve" text-anchor="middle" x="932.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">node_id</text>
+</g>
+<!-- path_detail&#45;&gt;pd_nid -->
+<g id="edge63" class="edge">
+<title>path_detail&#45;&gt;pd_nid</title>
+<path fill="none" stroke="black" d="M1055.69,-250.38C1026.76,-236.09 988.02,-216.96 961.86,-204.04"/>
+</g>
+<!-- pd_order -->
+<g id="node72" class="node">
+<title>pd_order</title>
+<ellipse fill="none" stroke="black" cx="1038.91" cy="-188.75" rx="41.01" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1038.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">学习顺序</text>
+<text xml:space="preserve" text-anchor="middle" x="1038.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">sort_order</text>
+</g>
+<!-- path_detail&#45;&gt;pd_order -->
+<g id="edge64" class="edge">
+<title>path_detail&#45;&gt;pd_order</title>
+<path fill="none" stroke="black" d="M1080.49,-249.14C1072.51,-237.75 1062.6,-223.6 1054.46,-211.96"/>
+</g>
+<!-- pd_fin -->
+<g id="node73" class="node">
+<title>pd_fin</title>
+<ellipse fill="none" stroke="black" cx="1151.91" cy="-188.75" rx="42.6" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1151.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">是否完成</text>
+<text xml:space="preserve" text-anchor="middle" x="1151.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">is_finished</text>
+</g>
+<!-- path_detail&#45;&gt;pd_fin -->
+<g id="edge65" class="edge">
+<title>path_detail&#45;&gt;pd_fin</title>
+<path fill="none" stroke="black" d="M1109.59,-249.14C1117.7,-237.75 1127.79,-223.6 1136.08,-211.96"/>
+</g>
+<!-- wrong_question -->
+<g id="node74" class="node">
+<title>wrong_question</title>
+<polygon fill="none" stroke="black" points="3478.41,-128 3375.41,-128 3375.41,-85.5 3478.41,-85.5 3478.41,-128"/>
+<text xml:space="preserve" text-anchor="middle" x="3426.91" y="-112.6" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">错题</text>
+<text xml:space="preserve" text-anchor="middle" x="3426.91" y="-95.35" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">wrong_question</text>
+</g>
+<!-- wq_id -->
+<g id="node75" class="node">
+<title>wq_id</title>
+<ellipse fill="none" stroke="black" cx="3100.91" cy="-24.75" rx="29.88" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="3100.91" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">错题ID</text>
+<text xml:space="preserve" text-anchor="middle" x="3100.91" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">id</text>
+</g>
+<!-- wrong_question&#45;&gt;wq_id -->
+<g id="edge66" class="edge">
+<title>wrong_question&#45;&gt;wq_id</title>
+<path fill="none" stroke="black" d="M3374.98,-100.1C3317.44,-92.77 3222.52,-77.47 3144.91,-49.5 3138.05,-47.03 3130.95,-43.62 3124.51,-40.16"/>
+</g>
+<!-- wq_uid -->
+<g id="node76" class="node">
+<title>wq_uid</title>
+<ellipse fill="none" stroke="black" cx="3191.91" cy="-24.75" rx="32.53" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="3191.91" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">学生ID</text>
+<text xml:space="preserve" text-anchor="middle" x="3191.91" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">user_id</text>
+</g>
+<!-- wrong_question&#45;&gt;wq_uid -->
+<g id="edge67" class="edge">
+<title>wrong_question&#45;&gt;wq_uid</title>
+<path fill="none" stroke="black" d="M3375,-92.87C3336.77,-82.76 3283.85,-67.41 3238.91,-49.5 3231.94,-46.72 3224.62,-43.29 3217.88,-39.9"/>
+</g>
+<!-- wq_qid -->
+<g id="node77" class="node">
+<title>wq_qid</title>
+<ellipse fill="none" stroke="black" cx="3298.91" cy="-24.75" rx="45.25" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="3298.91" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">题目ID</text>
+<text xml:space="preserve" text-anchor="middle" x="3298.91" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">question_id</text>
+</g>
+<!-- wrong_question&#45;&gt;wq_qid -->
+<g id="edge68" class="edge">
+<title>wrong_question&#45;&gt;wq_qid</title>
+<path fill="none" stroke="black" d="M3393.94,-85.15C3373.65,-72.46 3347.86,-56.34 3328.26,-44.1"/>
+</g>
+<!-- wq_ans -->
+<g id="node78" class="node">
+<title>wq_ans</title>
+<ellipse fill="none" stroke="black" cx="3426.91" cy="-24.75" rx="53.74" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="3426.91" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">错误答案</text>
+<text xml:space="preserve" text-anchor="middle" x="3426.91" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">wrong_answer</text>
+</g>
+<!-- wrong_question&#45;&gt;wq_ans -->
+<g id="edge69" class="edge">
+<title>wrong_question&#45;&gt;wq_ans</title>
+<path fill="none" stroke="black" d="M3426.91,-85.15C3426.91,-74.41 3426.91,-61.2 3426.91,-49.97"/>
+</g>
+<!-- wq_cnt -->
+<g id="node79" class="node">
+<title>wq_cnt</title>
+<ellipse fill="none" stroke="black" cx="3558.91" cy="-24.75" rx="49.5" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="3558.91" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">错误次数</text>
+<text xml:space="preserve" text-anchor="middle" x="3558.91" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">wrong_count</text>
+</g>
+<!-- wrong_question&#45;&gt;wq_cnt -->
+<g id="edge70" class="edge">
+<title>wrong_question&#45;&gt;wq_cnt</title>
+<path fill="none" stroke="black" d="M3460.9,-85.15C3481.68,-72.55 3508.04,-56.58 3528.19,-44.37"/>
+</g>
+<!-- wq_ai -->
+<g id="node80" class="node">
+<title>wq_ai</title>
+<ellipse fill="none" stroke="black" cx="3678.91" cy="-24.75" rx="41.01" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="3678.91" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">AI讲解</text>
+<text xml:space="preserve" text-anchor="middle" x="3678.91" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">ai_explain</text>
+</g>
+<!-- wrong_question&#45;&gt;wq_ai -->
+<g id="edge71" class="edge">
+<title>wrong_question&#45;&gt;wq_ai</title>
+<path fill="none" stroke="black" d="M3478.62,-92.75C3518.45,-82.29 3574.68,-66.57 3622.91,-49.5 3630.57,-46.78 3638.69,-43.55 3646.3,-40.36"/>
+</g>
+<!-- wq_ctime -->
+<g id="node81" class="node">
+<title>wq_ctime</title>
+<ellipse fill="none" stroke="black" cx="3794.91" cy="-24.75" rx="46.32" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="3794.91" y="-29.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">创建时间</text>
+<text xml:space="preserve" text-anchor="middle" x="3794.91" y="-16.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">create_time</text>
+</g>
+<!-- wrong_question&#45;&gt;wq_ctime -->
+<g id="edge72" class="edge">
+<title>wrong_question&#45;&gt;wq_ctime</title>
+<path fill="none" stroke="black" d="M3478.84,-99.43C3540.65,-91.19 3646.59,-74.78 3734.91,-49.5 3742.98,-47.19 3751.48,-44.19 3759.45,-41.11"/>
+</g>
+<!-- cross_theme -->
+<g id="node82" class="node">
+<title>cross_theme</title>
+<polygon fill="none" stroke="black" points="4315.78,-455.99 4182.03,-455.99 4182.03,-413.49 4315.78,-413.49 4315.78,-455.99"/>
+<text xml:space="preserve" text-anchor="middle" x="4248.91" y="-440.59" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">跨学科主题</text>
+<text xml:space="preserve" text-anchor="middle" x="4248.91" y="-423.34" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">cross_subject_theme</text>
+</g>
+<!-- ct_id -->
+<g id="node83" class="node">
+<title>ct_id</title>
+<ellipse fill="none" stroke="black" cx="4620.91" cy="-352.74" rx="29.88" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="4620.91" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">主题ID</text>
+<text xml:space="preserve" text-anchor="middle" x="4620.91" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">id</text>
+</g>
+<!-- cross_theme&#45;&gt;ct_id -->
+<g id="edge73" class="edge">
+<title>cross_theme&#45;&gt;ct_id</title>
+<path fill="none" stroke="black" d="M4316.14,-428.64C4383.58,-422.04 4489.66,-407.61 4576.91,-377.49 4583.8,-375.11 4590.91,-371.74 4597.34,-368.28"/>
+</g>
+<!-- ct_name -->
+<g id="node84" class="node">
+<title>ct_name</title>
+<ellipse fill="none" stroke="black" cx="3959.91" cy="-352.74" rx="49.5" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="3959.91" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">主题名称</text>
+<text xml:space="preserve" text-anchor="middle" x="3959.91" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">theme_name</text>
+</g>
+<!-- cross_theme&#45;&gt;ct_name -->
+<g id="edge74" class="edge">
+<title>cross_theme&#45;&gt;ct_name</title>
+<path fill="none" stroke="black" d="M4181.92,-419.04C4136.89,-408.66 4076.41,-393.74 4023.91,-377.49 4015.53,-374.9 4006.65,-371.82 3998.25,-368.75"/>
+</g>
+<!-- ct_desc -->
+<g id="node85" class="node">
+<title>ct_desc</title>
+<ellipse fill="none" stroke="black" cx="4082.91" cy="-352.74" rx="44.19" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="4082.91" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">描述</text>
+<text xml:space="preserve" text-anchor="middle" x="4082.91" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">description</text>
+</g>
+<!-- cross_theme&#45;&gt;ct_desc -->
+<g id="edge75" class="edge">
+<title>cross_theme&#45;&gt;ct_desc</title>
+<path fill="none" stroke="black" d="M4206.16,-413.14C4178.01,-399.58 4141.72,-382.08 4115.82,-369.6"/>
+</g>
+<!-- ct_dif -->
+<g id="node86" class="node">
+<title>ct_dif</title>
+<ellipse fill="none" stroke="black" cx="4192.91" cy="-352.74" rx="36.77" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="4192.91" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">难度</text>
+<text xml:space="preserve" text-anchor="middle" x="4192.91" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">difficulty</text>
+</g>
+<!-- cross_theme&#45;&gt;ct_dif -->
+<g id="edge76" class="edge">
+<title>cross_theme&#45;&gt;ct_dif</title>
+<path fill="none" stroke="black" d="M4234.49,-413.14C4226.45,-401.66 4216.44,-387.37 4208.26,-375.68"/>
+</g>
+<!-- ct_pub -->
+<g id="node87" class="node">
+<title>ct_pub</title>
+<ellipse fill="none" stroke="black" cx="4305.91" cy="-352.74" rx="46.85" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="4305.91" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">发布教师ID</text>
+<text xml:space="preserve" text-anchor="middle" x="4305.91" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">publisher_id</text>
+</g>
+<!-- cross_theme&#45;&gt;ct_pub -->
+<g id="edge77" class="edge">
+<title>cross_theme&#45;&gt;ct_pub</title>
+<path fill="none" stroke="black" d="M4263.59,-413.14C4271.63,-401.84 4281.62,-387.83 4289.87,-376.24"/>
+</g>
+<!-- ct_status -->
+<g id="node88" class="node">
+<title>ct_status</title>
+<ellipse fill="none" stroke="black" cx="4410.91" cy="-352.74" rx="29.34" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="4410.91" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">状态</text>
+<text xml:space="preserve" text-anchor="middle" x="4410.91" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">status</text>
+</g>
+<!-- cross_theme&#45;&gt;ct_status -->
+<g id="edge78" class="edge">
+<title>cross_theme&#45;&gt;ct_status</title>
+<path fill="none" stroke="black" d="M4293.71,-413.03C4315.86,-402.63 4342.93,-389.67 4366.91,-377.49 4373.41,-374.19 4380.38,-370.5 4386.81,-367.03"/>
+</g>
+<!-- ct_ctime -->
+<g id="node89" class="node">
+<title>ct_ctime</title>
+<ellipse fill="none" stroke="black" cx="4515.91" cy="-352.74" rx="46.32" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="4515.91" y="-357.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">创建时间</text>
+<text xml:space="preserve" text-anchor="middle" x="4515.91" y="-344.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">create_time</text>
+</g>
+<!-- cross_theme&#45;&gt;ct_ctime -->
+<g id="edge79" class="edge">
+<title>cross_theme&#45;&gt;ct_ctime</title>
+<path fill="none" stroke="black" d="M4316.23,-417.26C4356.73,-406.87 4409.14,-392.6 4454.91,-377.49 4463,-374.82 4471.59,-371.68 4479.68,-368.56"/>
+</g>
+<!-- relates_ct -->
+<g id="node111" class="node">
+<title>relates_ct</title>
+<polygon fill="none" stroke="black" points="3848.91,-370.74 3816.28,-352.74 3848.91,-334.74 3881.54,-352.74 3848.91,-370.74"/>
+<text xml:space="preserve" text-anchor="middle" x="3848.91" y="-350.74" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10.00">关联</text>
+</g>
+<!-- cross_theme&#45;&gt;relates_ct -->
+<g id="edge107" class="edge">
+<title>cross_theme&#45;&gt;relates_ct</title>
+<path fill="none" stroke="black" d="M4181.76,-429.25C4109.66,-423.01 3992.44,-408.73 3895.91,-377.49 3884.77,-373.89 3873.02,-367.95 3864.06,-362.92"/>
+</g>
+<!-- cross_theme_node -->
+<g id="node90" class="node">
+<title>cross_theme_node</title>
+<polygon fill="none" stroke="black" points="4218.03,-291.99 4097.78,-291.99 4097.78,-249.49 4218.03,-249.49 4218.03,-291.99"/>
+<text xml:space="preserve" text-anchor="middle" x="4157.91" y="-276.59" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">主题知识点</text>
+<text xml:space="preserve" text-anchor="middle" x="4157.91" y="-259.34" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">cross_theme_node</text>
+</g>
+<!-- ctn_id -->
+<g id="node91" class="node">
+<title>ctn_id</title>
+<ellipse fill="none" stroke="black" cx="4157.91" cy="-188.75" rx="29.88" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="4157.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">关联ID</text>
+<text xml:space="preserve" text-anchor="middle" x="4157.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">id</text>
+</g>
+<!-- cross_theme_node&#45;&gt;ctn_id -->
+<g id="edge80" class="edge">
+<title>cross_theme_node&#45;&gt;ctn_id</title>
+<path fill="none" stroke="black" d="M4157.91,-249.14C4157.91,-238.4 4157.91,-225.2 4157.91,-213.97"/>
+</g>
+<!-- ctn_tid -->
+<g id="node92" class="node">
+<title>ctn_tid</title>
+<ellipse fill="none" stroke="black" cx="4254.91" cy="-188.75" rx="38.36" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="4254.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">主题ID</text>
+<text xml:space="preserve" text-anchor="middle" x="4254.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">theme_id</text>
+</g>
+<!-- cross_theme_node&#45;&gt;ctn_tid -->
+<g id="edge81" class="edge">
+<title>cross_theme_node&#45;&gt;ctn_tid</title>
+<path fill="none" stroke="black" d="M4182.89,-249.14C4197.93,-236.74 4216.96,-221.04 4231.68,-208.9"/>
+</g>
+<!-- ctn_nid -->
+<g id="node93" class="node">
+<title>ctn_nid</title>
+<ellipse fill="none" stroke="black" cx="4358.91" cy="-188.75" rx="36.24" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="4358.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">知识点ID</text>
+<text xml:space="preserve" text-anchor="middle" x="4358.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">node_id</text>
+</g>
+<!-- cross_theme_node&#45;&gt;ctn_nid -->
+<g id="edge82" class="edge">
+<title>cross_theme_node&#45;&gt;ctn_nid</title>
+<path fill="none" stroke="black" d="M4216.37,-249.01C4244.28,-238.81 4278.03,-226.03 4307.91,-213.49 4315.02,-210.51 4322.6,-207.11 4329.68,-203.82"/>
+</g>
+<!-- user_favorite -->
+<g id="node94" class="node">
+<title>user_favorite</title>
+<polygon fill="none" stroke="black" points="3841.28,-291.99 3752.53,-291.99 3752.53,-249.49 3841.28,-249.49 3841.28,-291.99"/>
+<text xml:space="preserve" text-anchor="middle" x="3796.91" y="-276.59" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">用户收藏</text>
+<text xml:space="preserve" text-anchor="middle" x="3796.91" y="-259.34" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">user_favorite</text>
+</g>
+<!-- uf_id -->
+<g id="node95" class="node">
+<title>uf_id</title>
+<ellipse fill="none" stroke="black" cx="3751.91" cy="-188.75" rx="29.88" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="3751.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">收藏ID</text>
+<text xml:space="preserve" text-anchor="middle" x="3751.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">id</text>
+</g>
+<!-- user_favorite&#45;&gt;uf_id -->
+<g id="edge83" class="edge">
+<title>user_favorite&#45;&gt;uf_id</title>
+<path fill="none" stroke="black" d="M3785.32,-249.14C3778.86,-237.66 3770.82,-223.37 3764.24,-211.68"/>
+</g>
+<!-- uf_uid -->
+<g id="node96" class="node">
+<title>uf_uid</title>
+<ellipse fill="none" stroke="black" cx="3842.91" cy="-188.75" rx="32.53" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="3842.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">用户ID</text>
+<text xml:space="preserve" text-anchor="middle" x="3842.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">user_id</text>
+</g>
+<!-- user_favorite&#45;&gt;uf_uid -->
+<g id="edge84" class="edge">
+<title>user_favorite&#45;&gt;uf_uid</title>
+<path fill="none" stroke="black" d="M3808.75,-249.14C3815.3,-237.75 3823.44,-223.6 3830.13,-211.96"/>
+</g>
+<!-- uf_nid -->
+<g id="node97" class="node">
+<title>uf_nid</title>
+<ellipse fill="none" stroke="black" cx="3940.91" cy="-188.75" rx="36.24" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="3940.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">知识点ID</text>
+<text xml:space="preserve" text-anchor="middle" x="3940.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">node_id</text>
+</g>
+<!-- user_favorite&#45;&gt;uf_nid -->
+<g id="edge85" class="edge">
+<title>user_favorite&#45;&gt;uf_nid</title>
+<path fill="none" stroke="black" d="M3833.99,-249.14C3858.82,-235.35 3890.97,-217.49 3913.5,-204.97"/>
+</g>
+<!-- uf_ctime -->
+<g id="node98" class="node">
+<title>uf_ctime</title>
+<ellipse fill="none" stroke="black" cx="4052.91" cy="-188.75" rx="46.32" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="4052.91" y="-193.7" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">创建时间</text>
+<text xml:space="preserve" text-anchor="middle" x="4052.91" y="-180.2" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">create_time</text>
+</g>
+<!-- user_favorite&#45;&gt;uf_ctime -->
+<g id="edge86" class="edge">
+<title>user_favorite&#45;&gt;uf_ctime</title>
+<path fill="none" stroke="black" d="M3841.4,-258.14C3881.16,-247.48 3940.84,-230.76 3991.91,-213.49 3999.98,-210.76 4008.56,-207.6 4016.65,-204.48"/>
+</g>
+<!-- sys_user -->
+<g id="node99" class="node">
+<title>sys_user</title>
+<polygon fill="none" stroke="black" points="2236.91,-783.99 2172.91,-783.99 2172.91,-741.49 2236.91,-741.49 2236.91,-783.99"/>
+<text xml:space="preserve" text-anchor="middle" x="2204.91" y="-768.59" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">用户</text>
+<text xml:space="preserve" text-anchor="middle" x="2204.91" y="-751.34" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12.00">sys_user</text>
+</g>
+<!-- u_id -->
+<g id="node100" class="node">
+<title>u_id</title>
+<ellipse fill="none" stroke="black" cx="1983.91" cy="-680.74" rx="29.88" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="1983.91" y="-685.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">用户ID</text>
+<text xml:space="preserve" text-anchor="middle" x="1983.91" y="-672.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">id</text>
+</g>
+<!-- sys_user&#45;&gt;u_id -->
+<g id="edge87" class="edge">
+<title>sys_user&#45;&gt;u_id</title>
+<path fill="none" stroke="black" d="M2172.6,-753.43C2136.61,-743.73 2077.03,-726.33 2027.91,-705.49 2021.35,-702.71 2014.48,-699.27 2008.17,-695.88"/>
+</g>
+<!-- u_name -->
+<g id="node101" class="node">
+<title>u_name</title>
+<ellipse fill="none" stroke="black" cx="2082.91" cy="-680.74" rx="40.48" ry="24.75"/>
+<text xml:space="preserve" text-anchor="middle" x="2082.91" y="-685.69" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">用户名</text>
+<text xml:space="preserve" text-anchor="middle" x="2082.91" y="-672.19" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="9.00">username</text>
+</g>
+<!-- sys_user&#45;&gt;u_name -->
+<g id="edge88" class="edge">
+<title>sys_user&#45;&gt;u_name</title>
+<path fill="none" stroke="black" d="M2173.49,-741.14C2153.86,-728.27 2128.84,-711.86 2110.07,-699.55"/>
+</g>
+<!-- has_wq -->
+<g id="node114" class="node">
+<title>has_wq</title>
+<polygon fill="none" stroke="black" points="3913.91,-616.74 3881.28,-598.74 3913.91,-580.74 3946.54,-598.74 3913.91,-616.74"/>
+<text xml:space="preserve" text-anchor="middle" x="3913.91" y="-596.74" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10.00">产生</text>
+</g>
+<!-- sys_user&#45;&gt;has_wq -->
+<g id="edge113" class="edge">
+<title>sys_user&#45;&gt;has_wq</title>
+<path fill="none" stroke="black" d="M2237.14,-758.68C2453.2,-738.2 3688.13,-621.14 3886.9,-602.3"/>
+</g>
+<!-- has_sr -->
+<g id="node115" class="node">
+<title>has_sr</title>
+<polygon fill="none" stroke="black" points="1385.91,-616.74 1353.28,-598.74 1385.91,-580.74 1418.54,-598.74 1385.91,-616.74"/>
+<text xml:space="preserve" text-anchor="middle" x="1385.91" y="-596.74" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10.00">记录</text>
+</g>
+<!-- sys_user&#45;&gt;has_sr -->
+<g id="edge115" class="edge">
+<title>sys_user&#45;&gt;has_sr</title>
+<path fill="none" stroke="black" d="M2198.35,-741.26C2189.19,-716.35 2169.96,-675.22 2137.91,-655.99 2106.33,-637.05 1549.36,-607.95 1414.93,-601.18"/>
+</g>
+<!-- has_sp -->
+<g id="node116" class="node">
+<title>has_sp</title>
+<polygon fill="none" stroke="black" points="2243.91,-698.74 2211.28,-680.74 2243.91,-662.74 2276.54,-680.74 2243.91,-698.74"/>
+<text xml:space="preserve" text-anchor="middle" x="2243.91" y="-678.74" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10.00">拥有</text>
+</g>
+<!-- sys_user&#45;&gt;has_sp -->
+<g id="edge117" class="edge">
+<title>sys_user&#45;&gt;has_sp</title>
+<path fill="none" stroke="black" d="M2214.95,-741.14C2221.99,-726.69 2231.2,-707.79 2237.33,-695.24"/>
+</g>
+<!-- favorites -->
+<g id="node117" class="node">
+<title>favorites</title>
+<polygon fill="none" stroke="black" points="2961.91,-452.74 2929.28,-434.74 2961.91,-416.74 2994.54,-434.74 2961.91,-452.74"/>
+<text xml:space="preserve" text-anchor="middle" x="2961.91" y="-432.74" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="10.00">收藏</text>
+</g>
+<!-- sys_user&#45;&gt;favorites -->
+<g id="edge119" class="edge">
+<title>sys_user&#45;&gt;favorites</title>
+<path fill="none" stroke="black" d="M2236.95,-747.94C2365.98,-692.37 2845.28,-485.97 2944.04,-443.44"/>
+</g>
+<!-- contains_cn&#45;&gt;knowledge_node -->
+<g id="edge90" class="edge">
+<title>contains_cn&#45;&gt;knowledge_node</title>
+<path fill="none" stroke="black" d="M911.56,-434.74C1296.35,-434.74 1681.14,-434.74 2065.92,-434.74"/>
+</g>
+<!-- precedes&#45;&gt;knowledge_edge -->
+<g id="edge92" class="edge">
+<title>precedes&#45;&gt;knowledge_edge</title>
+<path fill="none" stroke="black" d="M2505.57,-438.98C2580.67,-450.87 2806.51,-483.15 2994.41,-473.99 3119.1,-467.91 3264.8,-451.27 3341.8,-441.72"/>
+</g>
+<!-- relates_q&#45;&gt;question -->
+<g id="edge94" class="edge">
+<title>relates_q&#45;&gt;question</title>
+<path fill="none" stroke="black" d="M1963.26,-342.25C1945.65,-330 1914.53,-308.35 1891.4,-292.26"/>
+</g>
+<!-- learns&#45;&gt;study_record -->
+<g id="edge96" class="edge">
+<title>learns&#45;&gt;study_record</title>
+<path fill="none" stroke="black" d="M1150.18,-346.46C1127.34,-341.09 1090.29,-332.88 1057.91,-327.99 852.54,-297.03 604.7,-280.16 505.3,-274.23"/>
+</g>
+<!-- contains_pd&#45;&gt;path_detail -->
+<g id="edge98" class="edge">
+<title>contains_pd&#45;&gt;path_detail</title>
+<path fill="none" stroke="black" d="M1868.28,-342.47C1859.3,-337.26 1847.36,-331.19 1835.91,-327.99 1701.69,-290.59 1266.43,-276.26 1133.69,-272.7"/>
+</g>
+<!-- has_res&#45;&gt;learning_resource -->
+<g id="edge100" class="edge">
+<title>has_res&#45;&gt;learning_resource</title>
+<path fill="none" stroke="black" d="M2085.52,-342.42C2094.5,-337.2 2106.44,-331.12 2117.91,-327.99 2270.71,-286.3 2757.07,-275.14 2925.13,-272.49"/>
+</g>
+<!-- composes&#45;&gt;path_detail -->
+<g id="edge102" class="edge">
+<title>composes&#45;&gt;path_detail</title>
+<path fill="none" stroke="black" d="M1687.68,-506.79C1678.69,-501.83 1666.94,-495.9 1655.91,-491.99 1428.31,-411.45 1301,-542.65 1124.91,-377.49 1101.38,-355.43 1095.84,-316.41 1094.8,-292.44"/>
+</g>
+<!-- targets&#45;&gt;knowledge_node -->
+<g id="edge104" class="edge">
+<title>targets&#45;&gt;knowledge_node</title>
+<path fill="none" stroke="black" d="M2119.91,-498.38C2119.91,-486.07 2119.91,-469.48 2119.91,-456.47"/>
+</g>
+<!-- records_wq&#45;&gt;wrong_question -->
+<g id="edge106" class="edge">
+<title>records_wq&#45;&gt;wrong_question</title>
+<path fill="none" stroke="black" d="M2230.42,-178.6C2239.64,-173.3 2252.03,-167.08 2263.91,-164 2478.4,-108.34 3178.55,-106.76 3375.15,-107.45"/>
+</g>
+<!-- relates_ct&#45;&gt;cross_theme_node -->
+<g id="edge108" class="edge">
+<title>relates_ct&#45;&gt;cross_theme_node</title>
+<path fill="none" stroke="black" d="M3864.13,-342.79C3873.12,-337.83 3884.87,-331.89 3895.91,-327.99 3963.02,-304.28 4043.5,-288.82 4097.39,-280.22"/>
+</g>
+<!-- relates_ctn&#45;&gt;cross_theme_node -->
+<g id="edge110" class="edge">
+<title>relates_ctn&#45;&gt;cross_theme_node</title>
+<path fill="none" stroke="black" d="M3098.04,-345.97C3119.49,-340.37 3153.74,-332.12 3183.91,-327.99 3480.24,-287.45 3557.35,-310 3855.91,-291.99 3939.7,-286.94 4036.52,-280.31 4097.47,-276.04"/>
+</g>
+<!-- faved&#45;&gt;user_favorite -->
+<g id="edge112" class="edge">
+<title>faved&#45;&gt;user_favorite</title>
+<path fill="none" stroke="black" d="M2408.02,-342.1C2418.72,-336.9 2432.72,-330.96 2445.91,-327.99 2510.96,-313.35 3525.11,-280.38 3752.08,-273.16"/>
+</g>
+<!-- has_wq&#45;&gt;wrong_question -->
+<g id="edge114" class="edge">
+<title>has_wq&#45;&gt;wrong_question</title>
+<path fill="none" stroke="black" d="M3945.98,-598.04C4092.94,-598.6 4694.91,-591.36 4694.91,-435.74 4694.91,-435.74 4694.91,-435.74 4694.91,-269.74 4694.91,-134.64 4542.15,-191.66 4409.91,-164 4229.41,-126.24 3654.96,-112.17 3478.78,-108.68"/>
+</g>
+<!-- has_sr&#45;&gt;study_record -->
+<g id="edge116" class="edge">
+<title>has_sr&#45;&gt;study_record</title>
+<path fill="none" stroke="black" d="M1359.62,-594.85C1320.57,-589.55 1246.13,-575.52 1192.91,-541.49 1086.88,-473.7 1118.62,-385.93 1006.91,-327.99 919.77,-282.81 619.32,-273.92 505.28,-272.17"/>
+</g>
+<!-- has_sp&#45;&gt;study_path -->
+<g id="edge118" class="edge">
+<title>has_sp&#45;&gt;study_path</title>
+<path fill="none" stroke="black" d="M2227.45,-671.36C2216.73,-666.22 2202.29,-659.89 2188.91,-655.99 2078.88,-623.91 1943.65,-608.7 1878.55,-602.82"/>
+</g>
+<!-- favorites&#45;&gt;user_favorite -->
+<g id="edge120" class="edge">
+<title>favorites&#45;&gt;user_favorite</title>
+<path fill="none" stroke="black" d="M2984.45,-428.62C3016.76,-420.7 3077.45,-403.6 3123.91,-377.49 3154.04,-360.56 3151.94,-341.16 3183.91,-327.99 3286.93,-285.57 3628.76,-274.94 3752.07,-272.45"/>
+</g>
+</g>
 </svg>

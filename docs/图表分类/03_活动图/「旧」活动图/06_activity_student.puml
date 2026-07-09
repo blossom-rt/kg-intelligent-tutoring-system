@@ -1,7 +1,6 @@
 @startuml kg_activity_student
 ' ============================================================
-' 活动图 — 学生完整学习流程
-' 标准 UML：起始/终止节点、活动(圆角矩形)、菱形判断、循环
+' 活动图 — 学生完整学习流程（v2）
 ' ============================================================
 skinparam backgroundColor #FEFEFE
 skinparam defaultFontSize 11
@@ -15,7 +14,7 @@ skinparam diamondBorderColor #F57F17
 skinparam startColor #4CAF50
 skinparam endColor #F44336
 
-title 学生完整学习流程 — 活动图
+title 学生完整学习流程 — 活动图 (v2)
 
 start
 
@@ -39,21 +38,58 @@ else (否)
     endif
 endif
 
-:浏览知识图谱;
+:浏览 3D 知识图谱\n(Three.js 力导向图);
 :选择目标知识点;
 
 :生成学习路径;
 note right
-    系统通过拓扑排序
-    计算前置依赖链
+    拓扑排序计算前置依赖链
+    创建 study_path + path_detail
 end note
 
+:🎉 撒花 (50粒子);
+
 while (还有未完成节点?) is (是)
+    :进入知识点学习页\n(NodeStudy);
+
     :学习知识点内容;
+
+    if (有视频/学习资源?) then (是)
+        :浏览学习资源\n(learning_resource);
+        note right
+            视频、文档、
+            外部链接等
+        end note
+    endif
+
+    if (需要 AI 帮助?) then (是)
+        :AI 划重点;
+        note right
+            调用 DeepSeek
+            提取知识点核心
+        end note
+        :AI 答疑;
+        note right
+            学生提问
+            AI 上下文回答
+        end note
+    endif
+
+    if (想收藏?) then (是)
+        :收藏知识点\n(user_favorite);
+    endif
 
     :完成配套练习;
 
     :提交答案;
+
+    if (答对?) then (是)
+        :🎉 撒花 (80粒子);
+        :自动标记已掌握;
+    else (否)
+        :记录错题\n(wrong_question);
+        :AI 讲解错题;
+    endif
 
     if (正确率 ≥ 80%?) then (是)
         :标记节点已掌握\n(mastery_level = 2);
@@ -64,7 +100,14 @@ while (还有未完成节点?) is (是)
     endif
 endwhile (否)
 
+:🎉 大烟花庆祝\n(2.5s 持续喷射 + 150粒子);
+:路径完成！;
+
 :参加章节测评;
+note right
+    限时答题
+    自动判分
+end note
 
 if (测评通过?) then (是)
     :生成 AI 诊断报告;
@@ -75,12 +118,15 @@ else (否)
 
     :进入错题本;
     :查看错题讲解;
+    :错题重做;
 
-    :复习错题;
-    note right
-        可以按知识点
-        或按时间筛选
-    end note
+    if (重做答对?) then (是)
+        :🎉 撒花 (80粒子);
+        :标记已掌握;
+        :从错题本移除;
+    else (否)
+        :保留在错题本;
+    endif
 
     :再次测评;
     detach

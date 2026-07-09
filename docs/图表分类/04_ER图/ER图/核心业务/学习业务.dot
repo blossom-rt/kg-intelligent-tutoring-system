@@ -1,0 +1,291 @@
+digraph 学习业务ER图 {
+    rankdir=TB;
+    newrank=true;
+    fontname="PingFang SC,Microsoft YaHei,sans-serif";
+    fontsize=16;
+    label="学习业务 ER 图";
+    labelloc=t;
+    dpi=150;
+    nodesep=0.4;
+    ranksep=0.5;
+    compound=true;
+
+    // 实体（矩形）
+    node [shape=box, fontname="PingFang SC,Microsoft YaHei,sans-serif", fontsize=12];
+
+    // 属性（椭圆）
+    node [shape=ellipse, fontname="PingFang SC,Microsoft YaHei,sans-serif", fontsize=9];
+
+    // 关系（菱形）
+    // 使用 diamond 形状
+
+    // ==================== 课程 ====================
+    course [shape=box, fontsize=12, label="课程\ncourse"];
+    { rank=same;
+        c_id [label="课程ID\nid"];
+        c_subject [label="所属学科\nsubject"];
+        c_name [label="课程名称\ncourse_name"];
+        c_desc [label="课程描述\ndescription"];
+        c_teacher [label="负责教师ID\nteacher_id"];
+        c_ctime [label="创建时间\ncreate_time"];
+    }
+
+    // ==================== 知识点 ====================
+    knowledge_node [shape=box, fontsize=12, label="知识点\nknowledge_node"];
+    { rank=same;
+        kn_id [label="知识点ID\nid"];
+        kn_cid [label="所属课程ID\ncourse_id"];
+        kn_name [label="知识点名称\nname"];
+        kn_desc [label="描述\ndescription"];
+        kn_type [label="节点类型\nnode_type"];
+        kn_goal [label="学习目标\nlearning_goal"];
+        kn_kw [label="关键词\nkeywords"];
+        kn_hint [label="示例提示\nexample_hint"];
+        kn_dif [label="难度\ndifficulty"];
+        kn_ch [label="所属章节\nchapter"];
+        kn_min [label="预计时长\nexpected_minutes"];
+        kn_ctime [label="创建时间\ncreate_time"];
+    }
+
+    // ==================== 依赖边 ====================
+    knowledge_edge [shape=box, fontsize=12, label="依赖边\nknowledge_edge"];
+    { rank=same;
+        ke_id [label="边ID\nid"];
+        ke_from [label="前置知识点ID\nfrom_node_id"];
+        ke_to [label="后继知识点ID\nto_node_id"];
+        ke_type [label="关系类型\nrelation_type"];
+        ke_cross [label="是否跨学科\nis_cross_subject"];
+    }
+
+    // ==================== 习题 ====================
+    question [shape=box, fontsize=12, label="习题\nquestion"];
+    { rank=same;
+        q_id [label="题目ID\nid"];
+        q_nid [label="所属知识点ID\nnode_id"];
+        q_content [label="题干\ncontent"];
+        q_opt [label="选项\noptions"];
+        q_ans [label="答案\nanswer"];
+        q_ana [label="解析\nanalysis"];
+        q_dif [label="难度\ndifficulty"];
+        q_type [label="题型\nquestion_type"];
+        q_ctime [label="创建时间\ncreate_time"];
+    }
+
+    // ==================== 学习资源 ====================
+    learning_resource [shape=box, fontsize=12, label="学习资源\nlearning_resource"];
+    { rank=same;
+        lr_id [label="资源ID\nid"];
+        lr_nid [label="所属知识点ID\nnode_id"];
+        lr_title [label="资源标题\ntitle"];
+        lr_type [label="资源类型\nresource_type"];
+        lr_url [label="资源链接\nurl"];
+        lr_cover [label="封面图\ncover_url"];
+        lr_dur [label="时长(秒)\nduration_seconds"];
+        lr_src [label="来源\nsource"];
+        lr_order [label="排序\nsort_order"];
+        lr_status [label="状态\nstatus"];
+        lr_ctime [label="创建时间\ncreate_time"];
+        lr_utime [label="更新时间\nupdate_time"];
+    }
+
+    // ==================== 学习记录 ====================
+    study_record [shape=box, fontsize=12, label="学习记录\nstudy_record"];
+    { rank=same;
+        sr_id [label="记录ID\nid"];
+        sr_uid [label="学生ID\nuser_id"];
+        sr_nid [label="知识点ID\nnode_id"];
+        sr_mastery [label="掌握度\nmastery_level"];
+        sr_rate [label="正确率\ncorrect_rate"];
+        sr_min [label="学习时长(分)\nstudy_minutes"];
+        sr_utime [label="更新时间\nupdate_time"];
+    }
+
+    // ==================== 学习路径 ====================
+    study_path [shape=box, fontsize=12, label="学习路径\nstudy_path"];
+    { rank=same;
+        sp_id [label="路径ID\nid"];
+        sp_uid [label="学生ID\nuser_id"];
+        sp_tnid [label="目标知识点ID\ntarget_node_id"];
+        sp_name [label="路径名称\npath_name"];
+        sp_tnodes [label="节点总数\ntotal_nodes"];
+        sp_tmin [label="预计总时长\ntotal_minutes"];
+        sp_ai [label="AI总结\nai_summary"];
+        sp_status [label="状态\nstatus"];
+        sp_ctime [label="创建时间\ncreate_time"];
+    }
+
+    // ==================== 路径详情 ====================
+    path_detail [shape=box, fontsize=12, label="路径详情\npath_detail"];
+    { rank=same;
+        pd_id [label="详情ID\nid"];
+        pd_pid [label="路径ID\npath_id"];
+        pd_nid [label="知识点ID\nnode_id"];
+        pd_order [label="学习顺序\nsort_order"];
+        pd_fin [label="是否完成\nis_finished"];
+    }
+
+    // ==================== 错题 ====================
+    wrong_question [shape=box, fontsize=12, label="错题\nwrong_question"];
+    { rank=same;
+        wq_id [label="错题ID\nid"];
+        wq_uid [label="学生ID\nuser_id"];
+        wq_qid [label="题目ID\nquestion_id"];
+        wq_ans [label="错误答案\nwrong_answer"];
+        wq_cnt [label="错误次数\nwrong_count"];
+        wq_ai [label="AI讲解\nai_explain"];
+        wq_ctime [label="创建时间\ncreate_time"];
+    }
+
+    // ==================== 跨学科主题 ====================
+    cross_theme [shape=box, fontsize=12, label="跨学科主题\ncross_subject_theme"];
+    { rank=same;
+        ct_id [label="主题ID\nid"];
+        ct_name [label="主题名称\ntheme_name"];
+        ct_desc [label="描述\ndescription"];
+        ct_dif [label="难度\ndifficulty"];
+        ct_pub [label="发布教师ID\npublisher_id"];
+        ct_status [label="状态\nstatus"];
+        ct_ctime [label="创建时间\ncreate_time"];
+    }
+
+    // ==================== 主题知识点 ====================
+    cross_theme_node [shape=box, fontsize=12, label="主题知识点\ncross_theme_node"];
+    { rank=same;
+        ctn_id [label="关联ID\nid"];
+        ctn_tid [label="主题ID\ntheme_id"];
+        ctn_nid [label="知识点ID\nnode_id"];
+    }
+
+    // ==================== 用户收藏 ====================
+    user_favorite [shape=box, fontsize=12, label="用户收藏\nuser_favorite"];
+    { rank=same;
+        uf_id [label="收藏ID\nid"];
+        uf_uid [label="用户ID\nuser_id"];
+        uf_nid [label="知识点ID\nnode_id"];
+        uf_ctime [label="创建时间\ncreate_time"];
+    }
+
+    // ==================== 用户 ====================
+    sys_user [shape=box, fontsize=12, label="用户\nsys_user"];
+    { rank=same;
+        u_id [label="用户ID\nid"];
+        u_name [label="用户名\nusername"];
+    }
+
+    // ========== 实体→属性 连线 ==========
+    edge [arrowhead=none, style=solid];
+    course -> c_id; course -> c_subject; course -> c_name; course -> c_desc;
+    course -> c_teacher; course -> c_ctime;
+
+    knowledge_node -> kn_id; knowledge_node -> kn_cid; knowledge_node -> kn_name;
+    knowledge_node -> kn_desc; knowledge_node -> kn_type; knowledge_node -> kn_goal;
+    knowledge_node -> kn_kw; knowledge_node -> kn_hint; knowledge_node -> kn_dif;
+    knowledge_node -> kn_ch; knowledge_node -> kn_min; knowledge_node -> kn_ctime;
+
+    knowledge_edge -> ke_id; knowledge_edge -> ke_from; knowledge_edge -> ke_to;
+    knowledge_edge -> ke_type; knowledge_edge -> ke_cross;
+
+    question -> q_id; question -> q_nid; question -> q_content; question -> q_opt;
+    question -> q_ans; question -> q_ana; question -> q_dif; question -> q_type;
+    question -> q_ctime;
+
+    learning_resource -> lr_id; learning_resource -> lr_nid; learning_resource -> lr_title;
+    learning_resource -> lr_type; learning_resource -> lr_url; learning_resource -> lr_cover;
+    learning_resource -> lr_dur; learning_resource -> lr_src; learning_resource -> lr_order;
+    learning_resource -> lr_status; learning_resource -> lr_ctime; learning_resource -> lr_utime;
+
+    study_record -> sr_id; study_record -> sr_uid; study_record -> sr_nid;
+    study_record -> sr_mastery; study_record -> sr_rate; study_record -> sr_min;
+    study_record -> sr_utime;
+
+    study_path -> sp_id; study_path -> sp_uid; study_path -> sp_tnid;
+    study_path -> sp_name; study_path -> sp_tnodes; study_path -> sp_tmin;
+    study_path -> sp_ai; study_path -> sp_status; study_path -> sp_ctime;
+
+    path_detail -> pd_id; path_detail -> pd_pid; path_detail -> pd_nid;
+    path_detail -> pd_order; path_detail -> pd_fin;
+
+    wrong_question -> wq_id; wrong_question -> wq_uid; wrong_question -> wq_qid;
+    wrong_question -> wq_ans; wrong_question -> wq_cnt; wrong_question -> wq_ai;
+    wrong_question -> wq_ctime;
+
+    cross_theme -> ct_id; cross_theme -> ct_name; cross_theme -> ct_desc;
+    cross_theme -> ct_dif; cross_theme -> ct_pub; cross_theme -> ct_status;
+    cross_theme -> ct_ctime;
+
+    cross_theme_node -> ctn_id; cross_theme_node -> ctn_tid; cross_theme_node -> ctn_nid;
+
+    user_favorite -> uf_id; user_favorite -> uf_uid; user_favorite -> uf_nid;
+    user_favorite -> uf_ctime;
+
+    sys_user -> u_id; sys_user -> u_name;
+
+    // ========== 实体间关系 ==========
+    edge [fontsize=10];
+
+    // 包含: course 1--n knowledge_node
+    contains_cn [shape=diamond, fontsize=10, label="包含"];
+    course -> contains_cn [arrowhead=none]; contains_cn -> knowledge_node [arrowhead=none];
+    { rank=same; course; contains_cn; knowledge_node; }
+
+    // 前置: knowledge_node 1--n knowledge_edge
+    precedes [shape=diamond, fontsize=10, label="前置"];
+    knowledge_node -> precedes [arrowhead=none]; precedes -> knowledge_edge [arrowhead=none];
+    { rank=same; knowledge_node; precedes; knowledge_edge; }
+
+    // 关联: knowledge_node 1--n question
+    relates_q [shape=diamond, fontsize=10, label="关联"];
+    knowledge_node -> relates_q [arrowhead=none]; relates_q -> question [arrowhead=none];
+
+    // 学习: knowledge_node 1--n study_record
+    learns [shape=diamond, fontsize=10, label="学习"];
+    knowledge_node -> learns [arrowhead=none]; learns -> study_record [arrowhead=none];
+
+    // 包含路径: knowledge_node 1--n path_detail
+    contains_pd [shape=diamond, fontsize=10, label="包含"];
+    knowledge_node -> contains_pd [arrowhead=none]; contains_pd -> path_detail [arrowhead=none];
+
+    // 拥有资源: knowledge_node 1--n learning_resource
+    has_res [shape=diamond, fontsize=10, label="拥有"];
+    knowledge_node -> has_res [arrowhead=none]; has_res -> learning_resource [arrowhead=none];
+
+    // 组成: study_path 1--n path_detail
+    composes [shape=diamond, fontsize=10, label="组成"];
+    study_path -> composes [arrowhead=none]; composes -> path_detail [arrowhead=none];
+
+    // 目标: study_path n--1 knowledge_node
+    targets [shape=diamond, fontsize=10, label="目标"];
+    study_path -> targets [arrowhead=none]; targets -> knowledge_node [arrowhead=none];
+
+    // 记录: question 1--n wrong_question
+    records_wq [shape=diamond, fontsize=10, label="记录"];
+    question -> records_wq [arrowhead=none]; records_wq -> wrong_question [arrowhead=none];
+
+    // 关联主题: cross_theme 1--n cross_theme_node
+    relates_ct [shape=diamond, fontsize=10, label="关联"];
+    cross_theme -> relates_ct [arrowhead=none]; relates_ct -> cross_theme_node [arrowhead=none];
+
+    // 关联知识点: knowledge_node 1--n cross_theme_node
+    relates_ctn [shape=diamond, fontsize=10, label="关联"];
+    knowledge_node -> relates_ctn [arrowhead=none]; relates_ctn -> cross_theme_node [arrowhead=none];
+
+    // 被收藏: knowledge_node 1--n user_favorite
+    faved [shape=diamond, fontsize=10, label="被收藏"];
+    knowledge_node -> faved [arrowhead=none]; faved -> user_favorite [arrowhead=none];
+
+    // 产生错题: sys_user 1--n wrong_question
+    has_wq [shape=diamond, fontsize=10, label="产生"];
+    sys_user -> has_wq [arrowhead=none]; has_wq -> wrong_question [arrowhead=none];
+
+    // 记录学习: sys_user 1--n study_record
+    has_sr [shape=diamond, fontsize=10, label="记录"];
+    sys_user -> has_sr [arrowhead=none]; has_sr -> study_record [arrowhead=none];
+
+    // 拥有路径: sys_user 1--n study_path
+    has_sp [shape=diamond, fontsize=10, label="拥有"];
+    sys_user -> has_sp [arrowhead=none]; has_sp -> study_path [arrowhead=none];
+
+    // 收藏: sys_user 1--n user_favorite
+    favorites [shape=diamond, fontsize=10, label="收藏"];
+    sys_user -> favorites [arrowhead=none]; favorites -> user_favorite [arrowhead=none];
+}

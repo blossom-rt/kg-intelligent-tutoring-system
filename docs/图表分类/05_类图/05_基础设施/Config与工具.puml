@@ -1,0 +1,58 @@
+@startuml 基础设施类
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontSize 11
+skinparam class {
+    BackgroundColor #F3E5F5
+    BorderColor #6A1B9A
+}
+
+title 基础设施 — Config、AOP、Common、DTO
+
+package "config" {
+    class CorsConfig
+    class JwtAuthFilter
+    class MybatisPlusConfig
+    class RestTemplateConfig
+}
+
+package "aspect (AOP)" {
+    class OperLogAspect
+    class OperLog
+}
+
+package "common" {
+    class Result
+    class BusinessException
+    class GlobalExceptionHandler
+    class UserContext
+}
+
+package "ai" {
+    class DeepSeekService
+}
+
+package "email" {
+    class EmailService
+}
+
+package "utils" {
+    class JwtUtil
+}
+
+package "dto" {
+    class LoginDTO
+    class RegisterDTO
+    class LoginVO
+    class ProfileDTO
+    class SendCodeDTO
+    class ResetPasswordDTO
+    class UpdatePasswordDTO
+    class ExamSubmitDTO
+}
+
+JwtAuthFilter --> JwtUtil
+OperLogAspect --> OperLog
+GlobalExceptionHandler --> BusinessException
+DeepSeekService --> RestTemplateConfig
+
+@enduml
