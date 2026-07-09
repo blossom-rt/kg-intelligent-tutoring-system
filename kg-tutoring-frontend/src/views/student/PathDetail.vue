@@ -52,7 +52,7 @@
               <div
                 class="timeline-node"
                 :class="{
-                  clickable: node.displayStatus === 'learning',
+                  clickable: node.displayStatus === 'learning' || node.displayStatus === 'completed',
                   'node-locked': node.displayStatus === 'locked'
                 }"
                 @click="goStudy(node)"
@@ -171,7 +171,7 @@ const formatTime = (time) => {
 }
 
 const goStudy = (node) => {
-  if (node.displayStatus === 'learning') {
+  if (node.displayStatus === 'learning' || node.displayStatus === 'completed') {
     let url = '/student/study/' + (node.nodeId || node.id)
     if (node.detailId) url += '?detailId=' + node.detailId
     router.push(url)
@@ -199,8 +199,10 @@ const progressKey = computed(() => `path_p_${route.params.id}`)
 const lastSaved = computed(() => Number(localStorage.getItem(progressKey.value) || 0))
 
 const hasFiredBig = ref(false)
+const initialLoad = ref(true)
 
 watch(displayProgress, (newVal) => {
+  if (initialLoad.value) { initialLoad.value = false; return }  // 跳过初始加载
   if (!newVal || newVal <= lastSaved.value) return
   if (newVal < 100 && newVal > 0) {
     setTimeout(() => smallCelebrate(), 300)
