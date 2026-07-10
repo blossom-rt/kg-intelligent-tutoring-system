@@ -27,8 +27,9 @@
         <el-table-column prop="totalScore" label="总分" width="80" align="center" />
         <el-table-column prop="courseId" label="课程ID" width="80" align="center" />
         <el-table-column prop="createTime" label="创建时间" width="180" />
-        <el-table-column label="操作" width="120" fixed="right" align="center">
+        <el-table-column label="操作" width="180" fixed="right" align="center">
           <template #default="{ row }">
+            <el-button type="primary" size="small" link @click="openEdit(row)">编辑</el-button>
             <el-button type="danger" size="small" link @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
@@ -45,7 +46,7 @@
     <!-- 创建测评弹窗 -->
     <el-dialog
       v-model="dialogVisible"
-      title="创建测评"
+      :title="displayDialogTitle"
       width="650px"
       :close-on-click-modal="false"
     >
@@ -106,7 +107,7 @@
 import { ref, reactive, onMounted, computed } from 'vue'
 import StudentHeader from '../../components/StudentHeader.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { getExamList, createExam, deleteExam, getQuestionList } from '../../api/teacher'
+import { getExamList, createExam, updateExam, deleteExam, getQuestionList } from '../../api/teacher'
 import { getCourseList } from '../../api/knowledge'
 
 const loading = ref(false)
@@ -265,10 +266,27 @@ const autoPickQuestions = async () => {
   )
 }
 
+const displayDialogTitle = computed(() => editingExamId.value ? '编辑测评' : '创建测评')
+const editingExamId = ref(null)
+
 const openCreate = () => {
+  editingExamId.value = null
   Object.assign(form, { examName: '', courseId: null, questionIds: [], totalScore: 100 })
   autoQuestionCount.value = 5
   questionBank.value = []
+  dialogVisible.value = true
+}
+
+const openEdit = (row) => {
+  editingExamId.value = row.id
+  Object.assign(form, {
+    examName: row.examName || '',
+    courseId: row.courseId || null,
+    questionIds: row.questionIds || [],
+    totalScore: row.totalScore || 100
+  })
+  autoQuestionCount.value = 5
+  if (row.courseId) loadQuestions(row.courseId)
   dialogVisible.value = true
 }
 
@@ -277,13 +295,19 @@ const handleSubmit = async () => {
   if (!valid) return
   submitLoading.value = true
   try {
-    await createExam({
+    const data = {
       examName: form.examName,
       courseId: form.courseId,
       questionIds: form.questionIds,
       totalScore: form.totalScore
-    })
-    ElMessage.success('测评创建成功')
+    }
+    if (editingExamId.value) {
+      await updateExam(editingExamId.value, data)
+      ElMessage.success('测评修改成功')
+    } else {
+      await createExam(data)
+      ElMessage.success('测评创建成功')
+    }
     dialogVisible.value = false
     loadData()
   } catch { } finally {

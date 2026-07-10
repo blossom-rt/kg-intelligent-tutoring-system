@@ -40,14 +40,6 @@ public class CourseController {
     }
 
     /**
-     * 根据 ID 获取课程详情
-     */
-    @GetMapping("/{id}")
-    public Result<Course> getOne(@PathVariable Integer id) {
-        return Result.success(courseService.getById(id));
-    }
-
-    /**
      * 推荐与所选课程相关度高的其他课程
      */
     @GetMapping("/{id}/recommendations/related")

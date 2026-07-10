@@ -96,8 +96,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import {
-  Reading, User, Timer, Collection, Document,
-  Menu, Bell, Warning,
+  Reading, User, Timer, Menu, Bell, Warning,
   School, Grid, Share, EditPen, Tickets, Connection, DataAnalysis
 } from '@element-plus/icons-vue'
 import request from '../utils/request'

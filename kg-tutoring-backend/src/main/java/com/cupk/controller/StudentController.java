@@ -3,7 +3,6 @@ package com.cupk.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.cupk.mapper.*;
 import com.cupk.pojo.*;
-import com.cupk.pojo.PathDetail;
 import com.cupk.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -18,13 +17,9 @@ import java.util.*;
 @RequiredArgsConstructor
 public class StudentController {
 
-    private final CourseMapper courseMapper;
-    private final KnowledgeNodeMapper nodeMapper;
     private final StudyPathMapper pathMapper;
     private final PathDetailMapper detailMapper;
     private final StudyRecordMapper recordMapper;
-    private final ExamRecordMapper examMapper;
-    private final CrossSubjectThemeMapper themeMapper;
     private final JwtUtil jwtUtil;
 
     private Integer getUserId(HttpServletRequest req) {
@@ -80,44 +75,4 @@ public class StudentController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/courses")
-    public ResponseEntity<?> courses() {
-        return ResponseEntity.ok(courseMapper.selectList(null));
-    }
-
-    @GetMapping("/knowledge-nodes")
-    public ResponseEntity<?> knowledgeNodes(@RequestParam(required = false) Integer courseId) {
-        LambdaQueryWrapper<KnowledgeNode> q = new LambdaQueryWrapper<>();
-        if (courseId != null) q.eq(KnowledgeNode::getCourseId, courseId);
-        return ResponseEntity.ok(nodeMapper.selectList(q));
-    }
-
-    @GetMapping("/study-paths")
-    public ResponseEntity<?> studyPaths(HttpServletRequest req) {
-        Integer userId = getUserId(req);
-        if (userId == null) return ResponseEntity.status(401).body(Map.of("error", "未登录"));
-        return ResponseEntity.ok(pathMapper.selectList(
-                new LambdaQueryWrapper<StudyPath>().eq(StudyPath::getUserId, userId)));
-    }
-
-    @GetMapping("/study-records")
-    public ResponseEntity<?> studyRecords(HttpServletRequest req) {
-        Integer userId = getUserId(req);
-        if (userId == null) return ResponseEntity.status(401).body(Map.of("error", "未登录"));
-        return ResponseEntity.ok(recordMapper.selectList(
-                new LambdaQueryWrapper<StudyRecord>().eq(StudyRecord::getUserId, userId)));
-    }
-
-    @GetMapping("/exam-records")
-    public ResponseEntity<?> examRecords(HttpServletRequest req) {
-        Integer userId = getUserId(req);
-        if (userId == null) return ResponseEntity.status(401).body(Map.of("error", "未登录"));
-        return ResponseEntity.ok(examMapper.selectList(
-                new LambdaQueryWrapper<ExamRecord>().eq(ExamRecord::getUserId, userId)));
-    }
-
-    @GetMapping("/cross-subjects")
-    public ResponseEntity<?> crossSubjects() {
-        return ResponseEntity.ok(themeMapper.selectList(null));
-    }
 }

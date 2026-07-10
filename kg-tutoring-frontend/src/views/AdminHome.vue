@@ -68,10 +68,8 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { ElMessage } from 'element-plus'
 import {
-  Setting, User, Lock, School, Bell, Files, Monitor,
-  TrendCharts, Finished, EditPen
+  Setting, User, Lock, School, Bell, Files, Monitor
 } from '@element-plus/icons-vue'
 import { getNoticeList, getUserList, getRoleList, getOperLogs } from '../api/admin'
 import ThemeToggle from '../components/ThemeToggle.vue'

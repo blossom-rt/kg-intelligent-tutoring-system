@@ -28,12 +28,6 @@ public class AuthController {
         return Result.success(vo);
     }
 
-    /** 获取当前用户信息 */
-    @GetMapping("/info")
-    public Result<LoginVO> info() {
-        return Result.success(sysUserService.getCurrentUserInfo());
-    }
-
     /** 学生自主注册 */
     @PostMapping("/register")
     public Result<?> register(@RequestBody RegisterDTO dto) {
