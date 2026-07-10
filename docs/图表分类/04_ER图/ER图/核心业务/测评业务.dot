@@ -1,0 +1,166 @@
+digraph 测评业务ER图 {
+    rankdir=TB;
+    newrank=true;
+    fontname="PingFang SC,Microsoft YaHei,sans-serif";
+    fontsize=16;
+    label="测评业务 ER 图";
+    labelloc=t;
+    dpi=150;
+    nodesep=0.4;
+    ranksep=0.5;
+    compound=true;
+
+    node [shape=box, fontname="PingFang SC,Microsoft YaHei,sans-serif", fontsize=12];
+    node [shape=ellipse, fontname="PingFang SC,Microsoft YaHei,sans-serif", fontsize=9];
+
+    // ==================== 测评 ====================
+    exam [shape=box, fontsize=12, label="测评\nexam"];
+    { rank=same;
+        e_id [label="测评ID\nid"];
+        e_name [label="测评名称\nexam_name"];
+        e_cid [label="所属课程ID\ncourse_id"];
+        e_crid [label="创建者ID\ncreator_id"];
+        e_score [label="试卷总分\ntotal_score"];
+        e_status [label="状态\nstatus"];
+        e_ctime [label="创建时间\ncreate_time"];
+    }
+
+    // ==================== 课程 ====================
+    course [shape=box, fontsize=12, label="课程\ncourse"];
+    { rank=same;
+        c_id [label="课程ID\nid"];
+        c_subject [label="所属学科\nsubject"];
+        c_name [label="课程名称\ncourse_name"];
+        c_desc [label="课程描述\ndescription"];
+        c_teacher [label="负责教师ID\nteacher_id"];
+        c_ctime [label="创建时间\ncreate_time"];
+    }
+
+    // ==================== 用户 ====================
+    sys_user [shape=box, fontsize=12, label="用户\nsys_user"];
+    { rank=same;
+        u_id [label="用户ID\nid"];
+        u_name [label="用户名\nusername"];
+        u_real [label="真实姓名\nreal_name"];
+        u_email [label="邮箱\nemail"];
+        u_pwd [label="密码\npassword"];
+        u_rid [label="角色ID\nrole_id"];
+        u_status [label="状态\nstatus"];
+        u_ctime [label="创建时间\ncreate_time"];
+    }
+
+    // ==================== 题目 ====================
+    question [shape=box, fontsize=12, label="题目\nquestion"];
+    { rank=same;
+        q_id [label="题目ID\nid"];
+        q_nid [label="所属知识点ID\nnode_id"];
+        q_content [label="题干\ncontent"];
+        q_opt [label="选项\noptions"];
+        q_ans [label="答案\nanswer"];
+        q_ana [label="解析\nanalysis"];
+        q_dif [label="难度\ndifficulty"];
+        q_type [label="题型\nquestion_type"];
+        q_ctime [label="创建时间\ncreate_time"];
+    }
+
+    // ==================== 测评记录 ====================
+    exam_record [shape=box, fontsize=12, label="测评记录\nexam_record"];
+    { rank=same;
+        er_id [label="记录ID\nid"];
+        er_uid [label="用户ID\nuser_id"];
+        er_eid [label="测评ID\nexam_id"];
+        er_cid [label="课程ID\ncourse_id"];
+        er_total [label="试卷总分\ntotal_score"];
+        er_score [label="学生得分\nuser_score"];
+        er_ai [label="AI报告\nai_report"];
+        er_start [label="开始时间\nstart_time"];
+        er_ctime [label="完成时间\ncreate_time"];
+    }
+
+    // ==================== 测评题目 ====================
+    exam_question [shape=box, fontsize=12, label="测评题目\nexam_question"];
+    { rank=same;
+        eq_id [label="关联ID\nid"];
+        eq_eid [label="测评ID\nexam_id"];
+        eq_qid [label="题目ID\nquestion_id"];
+        eq_order [label="题目顺序\nsort_order"];
+    }
+
+    // ==================== 错题 ====================
+    wrong_question [shape=box, fontsize=12, label="错题\nwrong_question"];
+    { rank=same;
+        wq_id [label="错题ID\nid"];
+        wq_uid [label="学生ID\nuser_id"];
+        wq_qid [label="题目ID\nquestion_id"];
+        wq_ans [label="错误答案\nwrong_answer"];
+        wq_cnt [label="错误次数\nwrong_count"];
+        wq_ai [label="AI讲解\nai_explain"];
+        wq_ctime [label="创建时间\ncreate_time"];
+    }
+
+    // ========== 实体→属性 连线 ==========
+    edge [arrowhead=none, style=solid];
+    exam -> e_id; exam -> e_name; exam -> e_cid; exam -> e_crid;
+    exam -> e_score; exam -> e_status; exam -> e_ctime;
+
+    course -> c_id; course -> c_subject; course -> c_name; course -> c_desc;
+    course -> c_teacher; course -> c_ctime;
+
+    sys_user -> u_id; sys_user -> u_name; sys_user -> u_real;
+    sys_user -> u_email; sys_user -> u_pwd; sys_user -> u_rid;
+    sys_user -> u_status; sys_user -> u_ctime;
+
+    question -> q_id; question -> q_nid; question -> q_content; question -> q_opt;
+    question -> q_ans; question -> q_ana; question -> q_dif; question -> q_type;
+    question -> q_ctime;
+
+    exam_record -> er_id; exam_record -> er_uid; exam_record -> er_eid;
+    exam_record -> er_cid; exam_record -> er_total; exam_record -> er_score;
+    exam_record -> er_ai; exam_record -> er_start; exam_record -> er_ctime;
+
+    exam_question -> eq_id; exam_question -> eq_eid; exam_question -> eq_qid;
+    exam_question -> eq_order;
+
+    wrong_question -> wq_id; wrong_question -> wq_uid; wrong_question -> wq_qid;
+    wrong_question -> wq_ans; wrong_question -> wq_cnt; wrong_question -> wq_ai;
+    wrong_question -> wq_ctime;
+
+    // ========== 实体间关系 ==========
+    edge [fontsize=10];
+
+    // course 1--n exam
+    has_exam [shape=diamond, fontsize=10, label="拥有"];
+    course -> has_exam [arrowhead=none]; has_exam -> exam [arrowhead=none];
+
+    // sys_user 1--n exam
+    publishes [shape=diamond, fontsize=10, label="发布"];
+    sys_user -> publishes [arrowhead=none]; publishes -> exam [arrowhead=none];
+
+    // sys_user 1--n exam_record
+    takes [shape=diamond, fontsize=10, label="作答"];
+    sys_user -> takes [arrowhead=none]; takes -> exam_record [arrowhead=none];
+
+    // exam 1--n exam_record
+    generates [shape=diamond, fontsize=10, label="产生"];
+    exam -> generates [arrowhead=none]; generates -> exam_record [arrowhead=none];
+
+    // exam 1--n exam_question
+    contains_eq [shape=diamond, fontsize=10, label="包含"];
+    exam -> contains_eq [arrowhead=none]; contains_eq -> exam_question [arrowhead=none];
+
+    // question 1--n exam_question
+    linked [shape=diamond, fontsize=10, label="被关联"];
+    question -> linked [arrowhead=none]; linked -> exam_question [arrowhead=none];
+
+    // exam_record 1--n wrong_question
+    generates_wq [shape=diamond, fontsize=10, label="产生"];
+    exam_record -> generates_wq [arrowhead=none]; generates_wq -> wrong_question [arrowhead=none];
+
+    // question 1--n wrong_question
+    records_wq [shape=diamond, fontsize=10, label="记录"];
+    question -> records_wq [arrowhead=none]; records_wq -> wrong_question [arrowhead=none];
+
+    // sys_user 1--n wrong_question
+    has_wq [shape=diamond, fontsize=10, label="拥有"];
+    sys_user -> has_wq [arrowhead=none]; has_wq -> wrong_question [arrowhead=none];
+}

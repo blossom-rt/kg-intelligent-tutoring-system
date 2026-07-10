@@ -5,9 +5,8 @@ import com.cupk.common.BusinessException;
 import com.cupk.common.UserContext;
 import com.cupk.dto.*;
 import com.cupk.email.EmailService;
-import com.cupk.mapper.SysEmailCodeMapper;
-import com.cupk.mapper.SysRoleMapper;
-import com.cupk.mapper.SysUserMapper;
+import com.cupk.mapper.*;
+import com.cupk.pojo.*;
 import com.cupk.pojo.SysEmailCode;
 import com.cupk.pojo.SysRole;
 import com.cupk.pojo.SysUser;
@@ -33,6 +32,16 @@ public class SysUserServiceImpl implements SysUserService {
     private final SysEmailCodeMapper sysEmailCodeMapper;
     private final JwtUtil jwtUtil;
     private final EmailService emailService;
+    private final StudyPathMapper studyPathMapper;
+    private final PathDetailMapper pathDetailMapper;
+    private final StudyRecordMapper studyRecordMapper;
+    private final ExamRecordMapper examRecordMapper;
+    private final WrongQuestionMapper wrongQuestionMapper;
+    private final UserFavoriteMapper userFavoriteMapper;
+    private final CourseMapper courseMapper;
+    private final ExamMapper examMapper;
+    private final CrossSubjectThemeMapper crossSubjectThemeMapper;
+    private final SysNoticeMapper sysNoticeMapper;
 
     @Override
     public LoginVO login(LoginDTO dto) {
@@ -271,6 +280,21 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Override
     public void deleteUser(Integer id) {
+        // 级联删除：先删所有关联子表数据，再删用户
+        List<StudyPath> userPaths = studyPathMapper.selectList(
+                new LambdaQueryWrapper<StudyPath>().eq(StudyPath::getUserId, id));
+        for (StudyPath p : userPaths) {
+            pathDetailMapper.delete(new LambdaQueryWrapper<PathDetail>().eq(PathDetail::getPathId, p.getId()));
+        }
+        studyPathMapper.delete(new LambdaQueryWrapper<StudyPath>().eq(StudyPath::getUserId, id));
+        studyRecordMapper.delete(new LambdaQueryWrapper<StudyRecord>().eq(StudyRecord::getUserId, id));
+        examRecordMapper.delete(new LambdaQueryWrapper<ExamRecord>().eq(ExamRecord::getUserId, id));
+        wrongQuestionMapper.delete(new LambdaQueryWrapper<WrongQuestion>().eq(WrongQuestion::getUserId, id));
+        userFavoriteMapper.delete(new LambdaQueryWrapper<UserFavorite>().eq(UserFavorite::getUserId, id));
+        courseMapper.delete(new LambdaQueryWrapper<Course>().eq(Course::getTeacherId, id));
+        examMapper.delete(new LambdaQueryWrapper<Exam>().eq(Exam::getCreatorId, id));
+        crossSubjectThemeMapper.delete(new LambdaQueryWrapper<CrossSubjectTheme>().eq(CrossSubjectTheme::getPublisherId, id));
+        sysNoticeMapper.delete(new LambdaQueryWrapper<SysNotice>().eq(SysNotice::getPublisherId, id));
         sysUserMapper.deleteById(id);
     }
 

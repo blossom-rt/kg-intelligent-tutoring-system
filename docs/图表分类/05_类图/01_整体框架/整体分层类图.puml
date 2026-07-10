@@ -1,0 +1,177 @@
+@startuml 整体分层类图
+' ============================================================
+' 类图 — 整体分层架构
+' ============================================================
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontSize 11
+skinparam packageStyle rectangle
+skinparam class {
+    BackgroundColor #E3F2FD
+    BorderColor #1565C0
+}
+skinparam interface {
+    BackgroundColor #FFF9C4
+    BorderColor #F57F17
+}
+skinparam package {
+    BorderColor #555
+    FontSize 12
+    FontStyle bold
+}
+
+top to bottom direction
+
+title KG 智能导学系统 — 整体分层类图
+
+' ===== 表现层 (Controller) =====
+package "表现层 (Controller)" as Ctrl {
+    class AuthController <<登录/注册>>
+    class StudentController <<学生主页>>
+    class StudentPathController <<学习路径>>
+    class StudentPracticeController <<刷题>>
+    class StudentRecordController <<学习记录>>
+    class StudentExamController <<测评>>
+    class StudentWrongController <<错题>>
+    class StudentFavoriteController <<收藏>>
+    class StudentAiController <<AI答疑>>
+    class StudentGraphController <<知识图谱>>
+    class StudentAnalysisController <<学情分析>>
+    class TeacherHomeController <<教师看板>>
+    class TeacherExamController <<教师-测评>>
+    class TeacherAnalysisController <<教师-分析>>
+    class AdminController <<管理员>>
+    class UserController <<用户管理>>
+    class NoticeController <<公告>>
+    class CourseController <<课程>>
+    class EdgeController <<依赖边>>
+    class NodeController <<知识点>>
+    class QuestionController <<题库>>
+    class ThemeController <<跨学科>>
+    class LearningResourceController <<学习资源>>
+}
+
+' ===== 业务层 (Service) =====
+package "业务层 (Service)" as Svc {
+    interface SysUserService
+    interface SysRoleService
+    interface SysNoticeService
+    interface CourseService
+    interface KnowledgeNodeService
+    interface KnowledgeEdgeService
+    interface QuestionService
+    interface StudyPathService
+    interface StudyRecordService
+    interface ExamService
+    interface ExamRecordService
+    interface WrongQuestionService
+    interface LearningResourceService
+    interface CrossSubjectThemeService
+    interface AnalysisService
+    interface LogService
+}
+
+' ===== 服务实现层 (ServiceImpl) =====
+package "服务实现 (ServiceImpl)" as Impl {
+    class SysUserServiceImpl
+    class SysRoleServiceImpl
+    class SysNoticeServiceImpl
+    class CourseServiceImpl
+    class KnowledgeNodeServiceImpl
+    class KnowledgeEdgeServiceImpl
+    class QuestionServiceImpl
+    class StudyPathServiceImpl
+    class StudyRecordServiceImpl
+    class ExamServiceImpl
+    class ExamRecordServiceImpl
+    class WrongQuestionServiceImpl
+    class LearningResourceServiceImpl
+    class CrossSubjectThemeServiceImpl
+    class AnalysisServiceImpl
+    class LogServiceImpl
+}
+
+' ===== 持久层 (Mapper) =====
+package "持久层 (Mapper)" as Mapper {
+    interface SysUserMapper
+    interface SysRoleMapper
+    interface SysNoticeMapper
+    interface SysOperLogMapper
+    interface SysEmailCodeMapper
+    interface AiCallLogMapper
+    interface CourseMapper
+    interface KnowledgeNodeMapper
+    interface KnowledgeEdgeMapper
+    interface QuestionMapper
+    interface StudyPathMapper
+    interface PathDetailMapper
+    interface StudyRecordMapper
+    interface ExamMapper
+    interface ExamQuestionMapper
+    interface ExamRecordMapper
+    interface WrongQuestionMapper
+    interface LearningResourceMapper
+    interface CrossSubjectThemeMapper
+    interface CrossThemeNodeMapper
+    interface UserFavoriteMapper
+}
+
+' ===== 实体层 (POJO) =====
+package "实体层 (POJO)" as Pojo {
+    class SysUser
+    class SysRole
+    class SysNotice
+    class SysOperLog
+    class SysEmailCode
+    class AiCallLog
+    class Course
+    class KnowledgeNode
+    class KnowledgeEdge
+    class Question
+    class StudyPath
+    class PathDetail
+    class StudyRecord
+    class Exam
+    class ExamQuestion
+    class ExamRecord
+    class WrongQuestion
+    class LearningResource
+    class CrossSubjectTheme
+    class CrossThemeNode
+    class UserFavorite
+}
+
+' ===== 基础设施层 =====
+package "基础设施 (Infrastructure)" as Infra {
+    class DeepSeekService <<AI服务>>
+    class EmailService <<邮件>>
+    class JwtUtil <<JWT工具>>
+    class CorsConfig <<配置>>
+    class JwtAuthFilter <<过滤器>>
+    class MybatisPlusConfig <<配置>>
+    class RestTemplateConfig <<配置>>
+    class OperLogAspect <<AOP切面>>
+    class GlobalExceptionHandler <<异常处理>>
+    class Result <<统一响应>>
+    class BusinessException <<异常>>
+    class UserContext <<上下文>>
+    package "DTO" as Dto {
+        class LoginDTO
+        class RegisterDTO
+        class LoginVO
+        class ProfileDTO
+        class SendCodeDTO
+        class ExamSubmitDTO
+        class ResetPasswordDTO
+        class UpdatePasswordDTO
+    }
+}
+
+' ===== 关系 =====
+Ctrl --> Svc : 依赖
+Svc <|.. Impl : 实现
+Impl --> Mapper : 依赖
+Mapper --> Pojo : 映射
+Impl --> Infra : 依赖
+Ctrl --> Infra : 依赖
+
+@enduml

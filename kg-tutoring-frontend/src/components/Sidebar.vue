@@ -77,6 +77,7 @@ const menuItems = computed(() => {
       { path: '/teacher/exams', label: '测评管理', icon: Tickets },
       { path: '/teacher/themes', label: '跨学科主题', icon: Connection },
       { path: '/teacher/analysis', label: '学情分析', icon: DataAnalysis },
+      { path: '/teacher/student-paths', label: '学习路径督导', icon: MapLocation },
     ],
     admin: [
       { path: '/admin', label: '管理后台', icon: HomeFilled },

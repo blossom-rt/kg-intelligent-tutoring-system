@@ -1,0 +1,139 @@
+@startuml functional_architecture
+' ============================================================
+' KG 智能导学系统 — 功能架构图 (UML Component Diagram)
+' ============================================================
+skinparam backgroundColor white
+skinparam defaultFontName "Times-Roman"
+skinparam component {
+    BackgroundColor white
+    BorderColor black
+    FontSize 11
+}
+skinparam package {
+    BackgroundColor white
+    BorderColor black
+    FontSize 12
+    FontStyle bold
+}
+skinparam arrow {
+    Color black
+    FontSize 9
+}
+
+top to bottom direction
+
+' ====== 用户入口 ======
+actor "学生" as Student
+actor "教师" as Teacher
+actor "管理员" as Admin
+
+' ====== 前端层 ======
+package "Vue 前端 (Element Plus + ECharts)" as Frontend {
+    component "登录/注册\nLogin" as C_Login
+    component "学生首页\nStudentHome" as C_StuHome
+    component "知识图谱\nGraphView" as C_Graph
+    component "学习路径\nPathList/Detail" as C_Path
+    component "在线刷题\nPractice" as C_Practice
+    component "测评中心\nExamList/Take" as C_ExamStu
+    component "错题本\nWrongBook" as C_Wrong
+    component "跨学科主题\nThemeList" as C_ThemeStu
+    component "个性化推荐\nPersonalization" as C_Recommend
+    component "教师工作台\nTeacherHome" as C_TeachHome
+    component "课程/知识点管理\nCourse/Node Mgr" as C_CourseMgr
+    component "题库/测评管理\nQuestion/Exam Mgr" as C_QMgr
+    component "图谱编辑\nGraphEdit" as C_GraphEdit
+    component "学情分析\nClassAnalysis" as C_Analysis
+    component "管理后台\nAdminHome" as C_Admin
+    component "用户/角色/公告/日志\nAdmin CRUD" as C_AdminMgr
+    component "学习伙伴\nStudyPet" as C_Pet
+    component "侧边栏导航\nSidebar" as C_Sidebar
+}
+
+' ====== 后端层 ======
+package "Spring Boot 后端 (MyBatis-Plus)" as Backend {
+    component "认证接口\nAuthController" as B_Auth
+    component "学生接口\nStudent*Controller" as B_Stu
+    component "教师接口\nTeacher*Controller" as B_Teach
+    component "管理接口\nAdminController" as B_Admin
+    component "课程/节点/边\nCRUD Controllers" as B_CRUD
+    component "AI 服务\nStudentAiController" as B_AI
+    component "邮件服务\nEmailService" as B_Email
+    component "JWT 鉴权\nJwtAuthFilter" as B_JWT
+    component "操作日志AOP\nOperLogAspect" as B_Log
+}
+
+' ====== 数据层 ======
+package "MySQL 数据库 (19 张表)" as Database {
+    database "权限\nsys_user\nsys_role" as DB_Auth
+    database "课程图谱\ncourse\nknowledge_node\nknowledge_edge" as DB_Graph
+    database "题库测评\nquestion\nexam\nexam_question\nexam_record" as DB_Exam
+    database "学习记录\nstudy_record\nstudy_path\npath_detail" as DB_Study
+    database "错题本\nwrong_question" as DB_Wrong
+    database "跨学科\ncross_subject_theme\ncross_theme_node" as DB_Theme
+    database "运维\nsys_notice\nsys_oper_log\nai_call_log" as DB_Ops
+}
+
+' ====== 外部服务 ======
+cloud "DeepSeek AI" as AI_Cloud
+
+' ====== 用户 → 前端 ======
+Student --> C_Login
+Student --> C_StuHome
+Student --> C_Graph
+Student --> C_Path
+Student --> C_Practice
+Student --> C_ExamStu
+Student --> C_Wrong
+Student --> C_ThemeStu
+Teacher --> C_Login
+Teacher --> C_TeachHome
+Teacher --> C_CourseMgr
+Teacher --> C_QMgr
+Teacher --> C_GraphEdit
+Teacher --> C_Analysis
+Teacher --> C_ThemeStu
+Admin --> C_Login
+Admin --> C_Admin
+Admin --> C_AdminMgr
+
+' ====== 前端 → 后端 ======
+C_Login --> B_Auth
+C_StuHome --> B_Stu
+C_Graph --> B_Stu
+C_Path --> B_Stu
+C_Practice --> B_Stu
+C_ExamStu --> B_Stu
+C_Wrong --> B_Stu
+C_ThemeStu --> B_Stu
+C_Recommend --> B_Stu
+C_TeachHome --> B_Teach
+C_CourseMgr --> B_CRUD
+C_QMgr --> B_CRUD
+C_GraphEdit --> B_CRUD
+C_Analysis --> B_Teach
+C_Admin --> B_Admin
+C_AdminMgr --> B_Admin
+C_Pet --> B_Stu : <<答对/答错>>
+
+' ====== 后端内部 ======
+B_Auth --> B_JWT
+B_Auth --> B_Email
+B_Stu --> B_AI : <<AI讲解/诊断>>
+B_AI --> AI_Cloud : <<API调用>>
+B_Log ..> B_Admin : <<AOP拦截>>
+
+' ====== 后端 → 数据库 ======
+B_Auth --> DB_Auth
+B_Stu --> DB_Graph
+B_Stu --> DB_Study
+B_Stu --> DB_Wrong
+B_Stu --> DB_Theme
+B_Stu --> DB_Exam
+B_Teach --> DB_Study
+B_Teach --> DB_Exam
+B_CRUD --> DB_Graph
+B_CRUD --> DB_Exam
+B_Admin --> DB_Auth
+B_Admin --> DB_Ops
+
+@enduml

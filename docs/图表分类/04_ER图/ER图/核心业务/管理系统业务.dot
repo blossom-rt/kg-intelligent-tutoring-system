@@ -1,0 +1,129 @@
+digraph 管理系统业务ER图 {
+    rankdir=TB;
+    newrank=true;
+    fontname="PingFang SC,Microsoft YaHei,sans-serif";
+    fontsize=16;
+    label="管理系统业务 ER 图";
+    labelloc=t;
+    dpi=150;
+    nodesep=0.4;
+    ranksep=0.5;
+    compound=true;
+
+    node [shape=box, fontname="PingFang SC,Microsoft YaHei,sans-serif", fontsize=12];
+    node [shape=ellipse, fontname="PingFang SC,Microsoft YaHei,sans-serif", fontsize=9];
+
+    // ==================== 系统角色 ====================
+    sys_role [shape=box, fontsize=12, label="系统角色\nsys_role"];
+    { rank=same;
+        r_id [label="角色ID\nid"];
+        r_code [label="角色编码\nrole_code"];
+        r_name [label="角色名称\nrole_name"];
+        r_desc [label="角色描述\ndescription"];
+    }
+
+    // ==================== 系统用户 ====================
+    sys_user [shape=box, fontsize=12, label="系统用户\nsys_user"];
+    { rank=same;
+        u_id [label="用户ID\nid"];
+        u_user [label="登录账号\nusername"];
+        u_real [label="真实姓名\nreal_name"];
+        u_email [label="绑定邮箱\nemail"];
+        u_pwd [label="密码\npassword"];
+        u_rid [label="角色ID\nrole_id"];
+        u_status [label="账号状态\nstatus"];
+        u_ctime [label="创建时间\ncreate_time"];
+    }
+
+    // ==================== 邮箱验证码 ====================
+    sys_email_code [shape=box, fontsize=12, label="邮箱验证码\nsys_email_code"];
+    { rank=same;
+        ec_id [label="验证码ID\nid"];
+        ec_email [label="目标邮箱\nemail"];
+        ec_code [label="验证码\ncode"];
+        ec_type [label="验证类型\ntype"];
+        ec_expire [label="过期时间\nexpire_time"];
+        ec_used [label="是否使用\nis_used"];
+        ec_ctime [label="创建时间\ncreate_time"];
+    }
+
+    // ==================== 系统公告 ====================
+    sys_notice [shape=box, fontsize=12, label="系统公告\nsys_notice"];
+    { rank=same;
+        n_id [label="公告ID\nid"];
+        n_title [label="公告标题\ntitle"];
+        n_content [label="公告正文\ncontent"];
+        n_pub [label="发布者ID\npublisher_id"];
+        n_target [label="推送对象\ntarget_role"];
+        n_ctime [label="发布时间\ncreate_time"];
+    }
+
+    // ==================== 操作日志 ====================
+    sys_oper_log [shape=box, fontsize=12, label="操作日志\nsys_oper_log"];
+    { rank=same;
+        log_id [label="日志ID\nid"];
+        log_uid [label="用户ID\nuser_id"];
+        log_mod [label="操作模块\nmodule"];
+        log_op [label="操作内容\noperation"];
+        log_ip [label="IP地址\nip"];
+        log_ctime [label="操作时间\ncreate_time"];
+    }
+
+    // ==================== AI调用日志 ====================
+    ai_call_log [shape=box, fontsize=12, label="AI调用日志\nai_call_log"];
+    { rank=same;
+        ai_id [label="日志ID\nid"];
+        ai_uid [label="用户ID\nuser_id"];
+        ai_scene [label="调用场景\nscene"];
+        ai_prompt [label="提示词\nprompt"];
+        ai_result [label="返回结果\nresult"];
+        ai_dur [label="耗时(秒)\ncall_duration"];
+        ai_status [label="状态\nstatus"];
+        ai_ctime [label="调用时间\ncreate_time"];
+    }
+
+    // ========== 实体→属性 连线 ==========
+    edge [arrowhead=none, style=solid];
+    sys_role -> r_id; sys_role -> r_code; sys_role -> r_name; sys_role -> r_desc;
+
+    sys_user -> u_id; sys_user -> u_user; sys_user -> u_real;
+    sys_user -> u_email; sys_user -> u_pwd; sys_user -> u_rid;
+    sys_user -> u_status; sys_user -> u_ctime;
+
+    sys_email_code -> ec_id; sys_email_code -> ec_email; sys_email_code -> ec_code;
+    sys_email_code -> ec_type; sys_email_code -> ec_expire; sys_email_code -> ec_used;
+    sys_email_code -> ec_ctime;
+
+    sys_notice -> n_id; sys_notice -> n_title; sys_notice -> n_content;
+    sys_notice -> n_pub; sys_notice -> n_target; sys_notice -> n_ctime;
+
+    sys_oper_log -> log_id; sys_oper_log -> log_uid; sys_oper_log -> log_mod;
+    sys_oper_log -> log_op; sys_oper_log -> log_ip; sys_oper_log -> log_ctime;
+
+    ai_call_log -> ai_id; ai_call_log -> ai_uid; ai_call_log -> ai_scene;
+    ai_call_log -> ai_prompt; ai_call_log -> ai_result; ai_call_log -> ai_dur;
+    ai_call_log -> ai_status; ai_call_log -> ai_ctime;
+
+    // ========== 实体间关系 ==========
+    edge [fontsize=10];
+
+    // sys_role 1--n sys_user
+    has_user [shape=diamond, fontsize=10, label="拥有"];
+    sys_role -> has_user [arrowhead=none]; has_user -> sys_user [arrowhead=none];
+
+    // sys_user 1--n sys_notice
+    publishes [shape=diamond, fontsize=10, label="发布"];
+    sys_user -> publishes [arrowhead=none]; publishes -> sys_notice [arrowhead=none];
+
+    // sys_user 1--n sys_oper_log
+    generates [shape=diamond, fontsize=10, label="产生"];
+    sys_user -> generates [arrowhead=none]; generates -> sys_oper_log [arrowhead=none];
+
+    // sys_user 1--n ai_call_log
+    calls_ai [shape=diamond, fontsize=10, label="调用"];
+    sys_user -> calls_ai [arrowhead=none]; calls_ai -> ai_call_log [arrowhead=none];
+
+    // sys_user 1--n sys_email_code
+    requests [shape=diamond, fontsize=10, label="请求"];
+    sys_user -> requests [arrowhead=none]; requests -> sys_email_code [arrowhead=none];
+}

@@ -1,0 +1,110 @@
+@startuml kg_seq_ai_qa
+' ============================================================
+' 顺序图 — AI 答疑 & 划重点（新增）
+' ============================================================
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontSize 11
+skinparam sequenceMessageAlign center
+
+title AI 答疑 & 划重点 — 顺序图
+
+actor "学生" as S
+participant "Vue 前端" as F
+participant "SpringBoot\n后端" as B
+database "MySQL" as D
+participant "DeepSeek AI" as AI
+
+== AI 划重点 ==
+
+S -> F : 进入知识点学习页\n(NodeStudy)
+activate F
+
+F -> B : GET /student/node/{nodeId}
+activate B
+B -> D : SELECT * FROM knowledge_node\nLEFT JOIN learning_resource\nWHERE id = ?
+activate D
+D --> B : 知识点详情 + 学习资源列表
+deactivate D
+B --> F : JSON
+deactivate B
+
+F -> F : 渲染知识点内容\n+ 视频资源列表
+
+S -> F : 点击"AI 划重点"
+F -> B : POST /student/ai/highlight\n{nodeId, content}
+activate B
+
+B -> AI : 请求提取重点\n(知识点描述 + 学习目标)
+activate AI
+AI --> B : 重点摘要（Markdown）
+deactivate AI
+
+B -> D : INSERT INTO ai_call_log\n(user_id, scene='highlight',\nprompt, result)
+activate D
+D --> B : OK
+deactivate D
+
+B --> F : {summary: "**重点:**\n1. ...\n2. ..."}
+deactivate B
+
+F -> F : markdown.js 渲染
+F --> S : 展示重点标注
+
+|||
+
+== AI 答疑 ==
+
+S -> F : 在答疑框输入问题
+F -> B : POST /student/ai/qa\n{nodeId, question}
+activate B
+
+B -> AI : 发送上下文\n(知识点内容 + 学生问题)
+activate AI
+AI --> B : AI 回答（Markdown）
+deactivate AI
+
+B -> D : INSERT INTO ai_call_log\n(user_id, scene='qa',\nprompt, result)
+activate D
+D --> B : OK
+deactivate D
+
+B --> F : {answer: "..."}
+deactivate B
+
+F -> F : markdown.js 渲染\n支持代码块、公式
+F --> S : 展示 AI 回答
+
+|||
+
+== 收藏知识点 ==
+
+S -> F : 点击收藏按钮\n(星标)
+F -> B : POST /student/favorite/toggle\n{nodeId}
+activate B
+
+B -> D : SELECT * FROM user_favorite\nWHERE user_id = ? AND node_id = ?
+activate D
+D --> B : 查询结果
+deactivate D
+
+alt 未收藏
+    B -> D : INSERT INTO user_favorite\n(user_id, node_id)
+    activate D
+    D --> B : OK
+    deactivate D
+    B --> F : {favorited: true}
+else 已收藏
+    B -> D : DELETE FROM user_favorite\nWHERE user_id = ? AND node_id = ?
+    activate D
+    D --> B : OK
+    deactivate D
+    B --> F : {favorited: false}
+end
+deactivate B
+
+F -> F : 切换星标状态
+F --> S : 收藏状态更新
+
+deactivate F
+
+@enduml

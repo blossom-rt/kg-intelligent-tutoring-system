@@ -1,0 +1,55 @@
+@startuml 业务服务层
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontSize 11
+skinparam interface {
+    BackgroundColor #FFF9C4
+    BorderColor #F57F17
+}
+skinparam class {
+    BackgroundColor #FFFDE7
+    BorderColor #F9A825
+}
+
+title Service 层 — 接口与实现
+
+package "学习业务" {
+    interface KnowledgeNodeService
+    interface KnowledgeEdgeService
+    interface QuestionService
+    interface StudyPathService
+    interface StudyRecordService
+    interface WrongQuestionService
+    interface LearningResourceService
+    interface CrossSubjectThemeService
+}
+package "测评业务" {
+    interface ExamService
+    interface ExamRecordService
+}
+package "系统业务" {
+    interface SysUserService
+    interface SysRoleService
+    interface SysNoticeService
+    interface CourseService
+    interface AnalysisService
+    interface LogService
+}
+
+class KnowledgeNodeServiceImpl implements KnowledgeNodeService
+class KnowledgeEdgeServiceImpl implements KnowledgeEdgeService
+class QuestionServiceImpl implements QuestionService
+class StudyPathServiceImpl implements StudyPathService
+class StudyRecordServiceImpl implements StudyRecordService
+class WrongQuestionServiceImpl implements WrongQuestionService
+class LearningResourceServiceImpl implements LearningResourceService
+class CrossSubjectThemeServiceImpl implements CrossSubjectThemeService
+class ExamServiceImpl implements ExamService
+class ExamRecordServiceImpl implements ExamRecordService
+class SysUserServiceImpl implements SysUserService
+class SysRoleServiceImpl implements SysRoleService
+class SysNoticeServiceImpl implements SysNoticeService
+class CourseServiceImpl implements CourseService
+class AnalysisServiceImpl implements AnalysisService
+class LogServiceImpl implements LogService
+
+@enduml

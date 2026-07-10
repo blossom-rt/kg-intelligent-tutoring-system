@@ -1,0 +1,120 @@
+@startuml kg_seq_social
+' ============================================================
+' 顺序图 — 错题重做 + 撒花联动（新增）
+' ============================================================
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontSize 11
+skinparam sequenceMessageAlign center
+
+title 错题重做 & 撒花庆祝 — 顺序图
+
+actor "学生" as S
+participant "Vue 前端\n(canvas-confetti)" as F
+participant "SpringBoot\n后端" as B
+database "MySQL" as D
+
+== 进入错题本 ==
+
+S -> F : 进入错题本页面
+activate F
+
+F -> B : GET /student/wrong-questions
+activate B
+
+B -> D : SELECT wq.*, q.content, q.answer, q.analysis\nFROM wrong_question wq\nJOIN question q ON wq.question_id = q.id\nWHERE wq.user_id = ?
+activate D
+D --> B : 错题列表（含题目详情）
+deactivate D
+
+B --> F : 错题 JSON 列表
+deactivate B
+
+F --> S : 展示错题卡片
+
+|||
+
+== 错题重做 ==
+
+S -> F : 点击某道错题\n开始重做
+F -> F : 展示题目（含选项）
+S -> F : 提交答案
+
+F -> B : POST /student/wrong-question/redo\n{questionId, userAnswer}
+activate B
+
+B -> D : SELECT answer FROM question\nWHERE id = ?
+activate D
+D --> B : 正确答案
+deactivate D
+
+B -> B : 比对答案
+
+alt 答对
+    B -> D : UPDATE wrong_question\nSET wrong_count = wrong_count - 1\n(若归零则 DELETE 或标记已掌握)
+    activate D
+    D --> B : OK
+    deactivate D
+    B --> F : {correct: true}
+    deactivate B
+
+    F -> F : 🎉 canvas-confetti\n(80 粒子撒花)
+    F --> S : 撒花 + "答对了！已标记掌握"
+
+else 答错
+    B -> D : UPDATE wrong_question\nSET wrong_count = wrong_count + 1
+    activate D
+    D --> B : OK
+    deactivate D
+
+    B -> AI : 请求讲解（可选）
+    B -> D : UPDATE wrong_question\nSET ai_explain = ?
+    activate D
+    D --> B : OK
+    deactivate D
+
+    B --> F : {correct: false, aiExplain}
+    deactivate B
+
+    F --> S : 展示 AI 讲解 + 正确答案
+end
+
+|||
+
+== 学习路径完成庆祝 ==
+
+S -> F : 完成最后一个节点
+F -> B : POST /student/study-path/complete\n{pathId}
+activate B
+
+B -> D : SELECT COUNT(*) FROM path_detail\nWHERE path_id = ? AND is_finished = 1
+activate D
+D --> B : finishedCount
+deactivate D
+
+B -> D : SELECT COUNT(*) FROM path_detail\nWHERE path_id = ?
+activate D
+D --> B : totalCount
+deactivate D
+
+alt finishedCount == totalCount (100%)
+    B -> D : UPDATE study_path\nSET status = 2 (已完成)
+    activate D
+    D --> B : OK
+    deactivate D
+    B --> F : {completed: true, progress: 100}
+    deactivate B
+
+    F -> F : 🎉 canvas-confetti\n大烟花模式\n(2.5s 持续喷射 + 150粒子)
+    F --> S : "太厉害了！全部完成了！"
+
+else 进度上涨
+    B --> F : {progress: xx%}
+    deactivate B
+
+    F -> F : 🎉 canvas-confetti\n小撒花模式 (50粒子)
+    F --> S : 进度更新 + 撒花
+end
+
+deactivate F
+
+@enduml

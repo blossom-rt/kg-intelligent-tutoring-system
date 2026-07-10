@@ -1,0 +1,116 @@
+digraph 系统总体活动图 {
+    size="14,10.5!";
+    ratio="fill";
+    rankdir=TB;
+    splines=ortho;
+    newrank=true;
+    fontname="PingFang SC,Microsoft YaHei,sans-serif";
+    fontsize=22;
+    label="KG 智能导学系统 — 总体活动图";
+    labelloc=t;
+    dpi=300;
+    nodesep=0.4;
+    ranksep=0.25;
+    compound=true;
+
+    // 起始
+    start [shape=point, width=0.3, fillcolor=black];
+
+    // 登录
+    node [shape=box, style="rounded, filled", fillcolor="#f9f9f9", color="#333333", fontname="PingFang SC,Microsoft YaHei,sans-serif", fontsize=14, penwidth=1.5];
+    login [label="用户登录", width=1.8];
+
+    // 角色判断
+    node [shape=diamond, style=filled, fillcolor="#ffffff", color="#333333", fontname="PingFang SC,Microsoft YaHei,sans-serif", fontsize=12, penwidth=1.5];
+    role [label="角色?", width=1.2];
+
+    // ===== 学生泳道 =====
+    subgraph cluster_student {
+        label="学  生";
+        fontname="PingFang SC,Microsoft YaHei,sans-serif";
+        fontsize=16;
+        style="dashed";
+        color="#333333";
+        fillcolor="#f0f4f8";
+        bgcolor="#f0f4f8";
+        penwidth=1.5;
+
+        node [shape=box, style="rounded, filled", fillcolor="#ffffff", color="#333333", fontname="PingFang SC,Microsoft YaHei,sans-serif", fontsize=14, penwidth=1.2];
+        s1 [label="浏览知识图谱", width=1.8];
+        s2 [label="生成学习路径", width=1.8];
+        s3 [label="知识点学习\n+ 配套练习", width=1.8];
+        s4 [label="参加测评", width=1.8];
+        s5 [label="查看AI诊断\n+ 错题重做", width=1.8];
+
+        stop_s [shape=doublecircle, style=filled, fillcolor=black, width=0.25, label=""];
+    }
+
+    // ===== 教师泳道 =====
+    subgraph cluster_teacher {
+        label="教  师";
+        fontname="PingFang SC,Microsoft YaHei,sans-serif";
+        fontsize=16;
+        style="dashed";
+        color="#333333";
+        fillcolor="#f5f5f5";
+        bgcolor="#f5f5f5";
+        penwidth=1.5;
+
+        node [shape=box, style="rounded, filled", fillcolor="#ffffff", color="#333333", fontname="PingFang SC,Microsoft YaHei,sans-serif", fontsize=14, penwidth=1.2];
+        t1 [label="课程管理", width=1.8];
+        t2 [label="知识点与\n题库管理", width=1.8];
+        t3 [label="测评管理\n+ 组卷发布", width=1.8];
+        t4 [label="学情分析\n查看成绩与报告", width=1.8];
+
+        stop_t [shape=doublecircle, style=filled, fillcolor=black, width=0.25, label=""];
+    }
+
+    // ===== 管理员泳道 =====
+    subgraph cluster_admin {
+        label="管 理 员";
+        fontname="PingFang SC,Microsoft YaHei,sans-serif";
+        fontsize=16;
+        style="dashed";
+        color="#333333";
+        fillcolor="#fef9f0";
+        bgcolor="#fef9f0";
+        penwidth=1.5;
+
+        node [shape=box, style="rounded, filled", fillcolor="#ffffff", color="#333333", fontname="PingFang SC,Microsoft YaHei,sans-serif", fontsize=14, penwidth=1.2];
+        a1 [label="用户与角色\n管理", width=1.8];
+        a2 [label="课程审核\n公告发布", width=1.8];
+        a3 [label="操作审计\n日志查看", width=1.8];
+
+        stop_a [shape=doublecircle, style=filled, fillcolor=black, width=0.25, label=""];
+    }
+
+    // ===== 行对齐 =====
+    { rank=same; s1; t1; a1; }
+    { rank=same; s2; t2; a2; }
+    { rank=same; s3; t3; a3; }
+    { rank=same; s4; t4; stop_a; }
+    { rank=same; s5; stop_t; }
+
+    // ===== 连线 =====
+    edge [fontname="PingFang SC,Microsoft YaHei,sans-serif", fontsize=11, color="#444444", penwidth=1.5];
+
+    start -> login;
+    login -> role;
+
+    role -> s1 [xlabel="学生"];
+    role -> t1 [xlabel="教师"];
+    role -> a1 [xlabel="管理员", fontsize=10];
+
+    // 学生流
+    s1 -> s2; s2 -> s3; s3 -> s4; s4 -> s5; s5 -> stop_s;
+
+    // 教师流
+    t1 -> t2; t2 -> t3; t3 -> t4; t4 -> stop_t;
+
+    // 管理员流
+    a1 -> a2; a2 -> a3; a3 -> stop_a;
+
+    // 虚线：教师输出支撑学生
+    t2 -> s1 [style=dashed, color="#999999", arrowhead=none, constraint=false, penwidth=1.2];
+    t3 -> s4 [style=dashed, color="#999999", arrowhead=none, constraint=false, penwidth=1.2];
+}
