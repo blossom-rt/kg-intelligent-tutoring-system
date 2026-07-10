@@ -53,14 +53,21 @@ public class DeepSeekService {
 
             HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
             log.info("调用 DeepSeek API, model={}", model);
-            ResponseEntity<Map> response = restTemplate.exchange(apiUrl, HttpMethod.POST, entity, Map.class);
+            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(apiUrl, HttpMethod.POST, entity, (Class<Map<String, Object>>) (Class<?>) Map.class);
             log.info("DeepSeek API 响应状态: {}", response.getStatusCode());
 
             if (response.getBody() != null && response.getBody().containsKey("choices")) {
-                List<Map<String, Object>> choices = (List<Map<String, Object>>) response.getBody().get("choices");
-                if (!choices.isEmpty()) {
-                    Map<String, Object> message = (Map<String, Object>) choices.get(0).get("message");
-                    return (String) message.get("content");
+                Object choicesObj = response.getBody().get("choices");
+                if (choicesObj instanceof List) {
+                    List<Map<String, Object>> choices = (List<Map<String, Object>>) choicesObj;
+                    if (!choices.isEmpty()) {
+                        Object msgObj = choices.get(0).get("message");
+                        if (msgObj instanceof Map) {
+                            Map<String, Object> message = (Map<String, Object>) msgObj;
+                            Object content = message.get("content");
+                            if (content instanceof String) return (String) content;
+                        }
+                    }
                 }
             }
             log.warn("DeepSeek API 返回异常: {}", response.getBody());

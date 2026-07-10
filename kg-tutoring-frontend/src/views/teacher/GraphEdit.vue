@@ -123,7 +123,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted, onBeforeUnmount, nextTick, watch } from 'vue'
+import { ref, reactive, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import * as d3 from 'd3'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Warning, CircleCheck, Connection } from '@element-plus/icons-vue'

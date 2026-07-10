@@ -99,7 +99,7 @@ public class ExamRecordServiceImpl implements ExamRecordService {
             String wrongDetail = wrongDetails.length() > 0
                     ? "\n\n【错题详情】\n" + wrongDetails.toString().substring(0, Math.min(wrongDetails.length(), 2000))
                     : "\n\n本次答题全部正确，无错题。";
-            String prompt = "请为以下测评成绩生成一份诊断报告，包含成绩分析、薄弱环节诊断和后续学习建议。\n\n"
+            String prompt = "请为以下测评成绩生成一份诊断报告，包含成绩分析、薄弱环节诊断和后续学习建议。不要使用 LaTeX 语法（反斜杠加符号的形式），数学符号用 Unicode 或普通文本表示。\n\n"
                     + "得分：" + userScore + " / " + totalScore
                     + "（" + (totalScore > 0 ? String.format("%.1f", userScore * 100.0 / totalScore) : "0") + "%）"
                     + "\n共 " + totalScore + " 题，答对 " + userScore + " 题，答错 " + (totalScore - userScore) + " 题。"

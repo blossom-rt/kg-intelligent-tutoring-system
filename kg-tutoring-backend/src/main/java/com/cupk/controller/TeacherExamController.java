@@ -41,6 +41,7 @@ public class TeacherExamController {
         checkTeacher();
         Integer courseId = (Integer) body.get("courseId");
         String examName = (String) body.get("examName");
+        @SuppressWarnings("unchecked")
         List<Integer> questionIds = (List<Integer>) body.get("questionIds");
         Integer totalScore = (Integer) body.get("totalScore");
         examService.createExam(examName, courseId, questionIds, totalScore);

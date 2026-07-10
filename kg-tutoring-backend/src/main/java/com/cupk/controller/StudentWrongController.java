@@ -90,12 +90,4 @@ public class StudentWrongController {
         return Result.success("已收录错题");
     }
 
-    /**
-     * 从错题本中移除某道错题
-     */
-    @DeleteMapping("/wrong-questions/{id}")
-    public Result<?> removeWrongQuestion(@PathVariable Integer id) {
-        wrongQuestionService.remove(id, UserContext.getUserId());
-        return Result.success("错题已移除");
-    }
 }
