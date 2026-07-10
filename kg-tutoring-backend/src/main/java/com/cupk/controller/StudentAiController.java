@@ -5,6 +5,7 @@ import com.cupk.common.Result;
 import com.cupk.common.UserContext;
 import com.cupk.mapper.AiCallLogMapper;
 import com.cupk.mapper.KnowledgeNodeMapper;
+import com.cupk.service.KnowledgeNodeService;
 import com.cupk.mapper.QuestionMapper;
 import com.cupk.pojo.AiCallLog;
 import com.cupk.pojo.KnowledgeNode;
@@ -27,6 +28,7 @@ import java.util.Map;
 public class StudentAiController {
 
     private final DeepSeekService deepSeekService;
+    private final KnowledgeNodeService knowledgeNodeService;
     private final KnowledgeNodeMapper knowledgeNodeMapper;
     private final QuestionMapper questionMapper;
     private final AiCallLogMapper aiCallLogMapper;
@@ -35,13 +37,13 @@ public class StudentAiController {
     public Result<Map<String, Object>> nodeSummary(@RequestBody Map<String, Object> body) {
         long start = System.currentTimeMillis();
         Integer nodeId = (Integer) body.get("nodeId");
-        KnowledgeNode node = knowledgeNodeMapper.selectById(nodeId);
+        KnowledgeNode node = knowledgeNodeService.getById(nodeId);
         if (node == null) return Result.error("知识点不存在");
 
         String userPrompt = "请为以下知识点生成一份学习总结，包含核心概念、学习要点和掌握目标。不要使用 LaTeX 语法（反斜杠加符号的形式），数学符号用 Unicode 或普通文本表示。\n\n"
                 + "知识点名称：" + node.getName() + "\n"
                 + "难度等级：" + (node.getDifficulty() != null ? node.getDifficulty() : "中等") + "\n"
-                + "所属章节：" + (node.getChapter() != null ? node.getChapter() : "无") + "\n"
+                + "所属章节：" + (node.getChapterName() != null ? node.getChapterName() : "无") + "\n"
                 + "内容描述：" + (node.getDescription() != null ? node.getDescription() : "无") + "\n"
                 + "建议时长：" + (node.getExpectedMinutes() != null ? node.getExpectedMinutes() : 30) + " 分钟";
 
@@ -93,7 +95,7 @@ public class StudentAiController {
 
         String nodeContext = "";
         if (nodeId != null) {
-            KnowledgeNode node = knowledgeNodeMapper.selectById(nodeId);
+            KnowledgeNode node = knowledgeNodeService.getById(nodeId);
             if (node != null) {
                 nodeContext = "\n\n相关知识点：" + (node.getName() != null ? node.getName() : "")
                         + "\n内容：" + (node.getDescription() != null ? node.getDescription() : "");

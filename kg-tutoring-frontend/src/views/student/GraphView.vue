@@ -22,7 +22,7 @@
           <el-descriptions-item label="难度等级">
             <el-tag :type="diffTag(currentNode.difficulty)" size="small">{{ diffLabel(currentNode.difficulty) }}</el-tag>
           </el-descriptions-item>
-          <el-descriptions-item label="所属章节">{{ currentNode.chapter || '无' }}</el-descriptions-item>
+          <el-descriptions-item label="所属章节">{{ currentNode.chapterName || '无' }}</el-descriptions-item>
           <el-descriptions-item label="预计时长">{{ currentNode.expectedMinutes || '-' }} 分钟</el-descriptions-item>
           <el-descriptions-item v-if="currentNode.keywords" label="关键词">{{ currentNode.keywords }}</el-descriptions-item>
         </el-descriptions>

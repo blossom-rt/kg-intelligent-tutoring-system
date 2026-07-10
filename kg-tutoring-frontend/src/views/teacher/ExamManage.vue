@@ -69,6 +69,11 @@
             <el-button size="small" @click="form.questionIds = []">清空已选</el-button>
           </div>
         </el-form-item>
+        <el-form-item label="按章节筛选" v-if="form.courseId">
+          <el-select v-model="examChapterFilter" placeholder="全部章节" clearable style="width:200px" @change="onExamChapterChange">
+            <el-option v-for="ch in examChapterList" :key="ch.id" :label="ch.chapterName" :value="ch.id" />
+          </el-select>
+        </el-form-item>
         <el-form-item label="选择题目" prop="questionIds">
           <el-select
             v-model="form.questionIds"
@@ -81,14 +86,14 @@
             :max-collapse-tags="3"
           >
             <el-option
-              v-for="q in questionBank"
+              v-for="q in filteredQuestionBank"
               :key="q.id"
               :label="`[${typeLabel(q.questionType)}] ${truncate(q.content, 30)}`"
               :value="q.id"
             />
           </el-select>
           <div style="font-size: 12px; color: #a09a92; margin-top: 4px;">
-            题库共 {{ questionBank.length }} 道，已选 {{ form.questionIds.length }} 道
+            题库共 {{ questionBank.length }} 道，筛选 {{ filteredQuestionBank.length }} 道，已选 {{ form.questionIds.length }} 道
           </div>
         </el-form-item>
         <el-form-item label="总分" prop="totalScore">
@@ -108,7 +113,7 @@ import { ref, reactive, onMounted, computed } from 'vue'
 import StudentHeader from '../../components/StudentHeader.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { getExamList, createExam, updateExam, deleteExam, getQuestionList } from '../../api/teacher'
-import { getCourseList } from '../../api/knowledge'
+import { getCourseList, getChapterList, getNodeList } from '../../api/knowledge'
 
 const loading = ref(false)
 const submitLoading = ref(false)
@@ -118,6 +123,16 @@ const formRef = ref(null)
 const tableData = ref([])
 const courseList = ref([])
 const questionBank = ref([])
+const examChapterFilter = ref(null)
+const examChapterList = ref([])
+const nodeChapterMap = ref({})
+const filteredQuestionBank = computed(() => {
+  if (!examChapterFilter.value) return questionBank.value
+  const map = nodeChapterMap.value
+  return questionBank.value.filter(q => {
+    return map[q.nodeId] === examChapterFilter.value
+  })
+})
 const autoQuestionCount = ref(5)
 
 const filterForm = reactive({
@@ -193,7 +208,27 @@ const resetFilter = () => {
 
 const onCourseChange = (courseId) => {
   form.questionIds = []
+  examChapterFilter.value = null
   loadQuestions(courseId)
+  loadExamChapters(courseId)
+}
+
+const loadExamChapters = async (courseId) => {
+  if (!courseId) { examChapterList.value = []; nodeChapterMap.value = {}; return }
+  try {
+    const res = await getChapterList({ courseId })
+    examChapterList.value = Array.isArray(res) ? res : []
+    // 同时获取节点→章节映射
+    const nodeRes = await getNodeList({ courseId, page: 1, size: 999 })
+    const nodes = Array.isArray(nodeRes) ? nodeRes : (nodeRes?.records || [])
+    const map = {}
+    nodes.forEach(n => { if (n.chapterId != null) map[n.id] = n.chapterId })
+    nodeChapterMap.value = map
+  } catch { examChapterList.value = [] }
+}
+
+const onExamChapterChange = () => {
+  form.questionIds = []
 }
 
 const loadQuestions = async (courseId) => {

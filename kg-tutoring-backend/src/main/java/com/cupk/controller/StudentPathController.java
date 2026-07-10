@@ -8,6 +8,7 @@ import com.cupk.mapper.KnowledgeNodeMapper;
 import com.cupk.pojo.KnowledgeNode;
 import com.cupk.pojo.PathDetail;
 import com.cupk.pojo.StudyPath;
+import com.cupk.service.KnowledgeNodeService;
 import com.cupk.service.StudyPathService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,7 @@ public class StudentPathController {
     private final StudyPathService studyPathService;
     private final PathDetailMapper pathDetailMapper;
     private final KnowledgeNodeMapper knowledgeNodeMapper;
+    private final KnowledgeNodeService knowledgeNodeService;
 
     /**
      * 根据目标知识点节点生成学习路径
@@ -107,7 +109,7 @@ public class StudentPathController {
 
         List<Map<String, Object>> nodeList = new ArrayList<>();
         for (PathDetail d : details) {
-            KnowledgeNode node = knowledgeNodeMapper.selectById(d.getNodeId());
+            KnowledgeNode node = knowledgeNodeService.getById(d.getNodeId());
             if (node != null) {
                 Map<String, Object> item = new LinkedHashMap<>();
                 item.put("detailId", d.getId());
@@ -115,7 +117,7 @@ public class StudentPathController {
                 item.put("id", node.getId());
                 item.put("name", node.getName());
                 item.put("difficulty", node.getDifficulty());
-                item.put("chapter", node.getChapter());
+                item.put("chapterName", node.getChapterName());
                 item.put("description", node.getDescription());
                 item.put("sortOrder", d.getSortOrder());
                 item.put("status", d.getIsFinished() == 1 ? "completed" : "learning");

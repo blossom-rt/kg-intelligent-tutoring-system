@@ -27,3 +27,10 @@ export function deleteNodeResource(id) { return request.delete(`/resources/${id}
 export function getEdgeList(params) { return request.get('/edges', { params }) }
 export function createEdge(data) { return request.post('/edges', data) }
 export function deleteEdge(id) { return request.delete(`/edges/${id}`) }
+
+// ===== 章节管理 =====
+export function getChapterList(params) { return request.get('/chapters', { params }) }
+export function getChapterById(id) { return request.get(`/chapters/${id}`) }
+export function createChapter(data) { return request.post('/chapters', data) }
+export function updateChapter(id, data) { return request.put(`/chapters/${id}`, data) }
+export function deleteChapter(id) { return request.delete(`/chapters/${id}`) }

@@ -63,6 +63,7 @@
                     <Loading v-else-if="node.displayStatus === 'learning'" style="color:#ff7b3d" />
                     <Lock v-else style="color:var(--text-muted)" />
                   </el-icon>
+                  <span v-if="node.chapterName" class="node-chapter-tag">{{ node.chapterName }}</span>
                   <span class="node-title" :class="{ 'text-locked': node.displayStatus === 'locked', 'text-completed': node.displayStatus === 'completed' }">{{ node.nodeName || node.name || '未命名节点' }}</span>
                   <el-tag :type="difficultyTagType(node.difficulty)" size="small">
                     {{ difficultyLabel(node.difficulty) }}
@@ -440,6 +441,16 @@ onMounted(fetchDetail)
   font-weight: 600;
   color: var(--text-primary);
   flex: 1;
+}
+
+.node-chapter-tag {
+  font-size: 12px;
+  color: var(--accent);
+  padding: 1px 6px;
+  background: var(--accent-soft);
+  border-radius: 4px;
+  font-weight: 500;
+  flex-shrink: 0;
 }
 
 .node-desc {

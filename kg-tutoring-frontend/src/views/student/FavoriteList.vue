@@ -12,7 +12,7 @@
             <el-button text type="danger" size="small" @click.stop="remove(item)">取消收藏</el-button>
           </div>
           <h4 class="fav-name">{{ item.nodeName }}</h4>
-          <p class="fav-chapter">{{ item.chapter || '未分章' }}</p>
+          <p class="fav-chapter">{{ item.chapterName || '未分章' }}</p>
           <div class="fav-time">收藏于 {{ formatTime(item.createTime) }}</div>
         </div>
       </div>
