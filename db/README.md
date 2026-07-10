@@ -16,6 +16,7 @@ db/
 │   └── enrich_learning_materials.sql ← 第 3 步：补充知识点学习资料
 └── migrate/                  ← 维护/迁移脚本
     ├── cleanup.sql               ← 清空业务数据（保留主账号）
+    ├── add_knowledge_node_model_fields.sql ← 旧库升级：补 node_type 等字段
     ├── add_learning_resource.sql ← 旧库升级：补 learning_resource 表
     ├── seed_learning_resource_demo.sql ← 为知识点生成演示视频资源
     └── migrate_exam.sql          ← 旧库升级：补 exam 表 + 演示测评
@@ -63,6 +64,12 @@ mysql -u root -p < db/init/enrich_learning_materials.sql
 mysql -u root -p < db/migrate/migrate_exam.sql
 ```
 
+如果旧库还没有 `node_type`、`learning_goal` 等知识点扩展字段：
+
+```bash
+mysql -u root -p < db/migrate/add_knowledge_node_model_fields.sql
+```
+
 如果旧库还没有 learning_resource 表：
 
 ```bash
@@ -95,7 +102,7 @@ mysql -u root -p < db/init/enrich_learning_materials.sql
 
 ## 导入后主要数据量
 
-执行 `init_full.sql`（或分步执行三个脚本）后，数据库共有 **20 张表**，主要数据量约：
+执行 `init_full.sql`（或分步执行三个脚本）后，数据库共有 **21 张表**，主要数据量约：
 
 | 表 | 数量 | 说明 |
 |---|---:|---|
@@ -114,6 +121,7 @@ mysql -u root -p < db/init/enrich_learning_materials.sql
 | `exam_question` | 13 | |
 | `exam_record` | 40 | |
 | `wrong_question` | 66 | |
+| `user_favorite` | 0 | 用户收藏（运行时产生） |
 | `cross_subject_theme` | 3 | |
 | `cross_theme_node` | 12 | |
 | `sys_notice` | 2 | |
