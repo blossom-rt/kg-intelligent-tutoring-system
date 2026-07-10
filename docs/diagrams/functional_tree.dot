@@ -1,0 +1,143 @@
+/*
+ * KG 智能导学系统 — 功能树形结构图
+ */
+digraph FuncTree {
+    rankdir=TB;
+    splines=ortho;
+    fontname="Times-Roman";
+    fontsize=16;
+    label="智能导学系统 — 功能结构图";
+    bgcolor="white";
+    nodesep=0.3;
+    ranksep=0.6;
+
+    node [fontname="Times-Roman", fontsize=11, color=black, fontcolor=black,
+          shape=box, style=solid, penwidth=1.5];
+
+    /* ====== 根节点 ====== */
+    root [label="智能导学系统", fontsize=14, penwidth=2.5];
+
+    /* ====== 一级模块 ====== */
+    node [fontsize=12, penwidth=2];
+    m1 [label="用户认证与安全"];
+    m2 [label="学生端功能"];
+    m3 [label="教师端功能"];
+    m4 [label="管理员端功能"];
+    m5 [label="系统基础服务"];
+
+    /* ====== 二级：认证 ====== */
+    node [fontsize=10, penwidth=1];
+    { rank=same; a1 [label="登录"]; a2 [label="注册"]; a3 [label="邮箱验证码"]; a4 [label="找回密码"]; a5 [label="JWT 鉴权\n与路由守卫"]; }
+
+    /* ====== 二级：学生 ====== */
+    node [fontsize=10];
+    { rank=same;
+        s1 [label="学习首页看板\n(统计+入口+公告)"];
+        s2 [label="知识图谱\n(ECharts力导向图)"];
+        s3 [label="个性化推荐"];
+        s4 [label="学情分析\n(掌握度+正确率)"];
+        s5 [label="学习伙伴\n(StudyPet交互)"];
+    }
+
+    /* ====== 三级：学生-知识图谱下级 ====== */
+    node [fontsize=9];
+    { rank=same;
+        s2a [label="学习路径\n(拓扑排序自动生成)"];
+        s2b [label="跨学科主题\n(多学科融合学习)"];
+    }
+
+    /* ====== 四级：学生-学习路径下级 ====== */
+    { rank=same;
+        s2a1 [label="在线刷题\n(即时判分+解析)"];
+    }
+
+    /* ====== 五级：学生-刷题下级 ====== */
+    { rank=same;
+        s2a1a [label="错题本\n(收录+重做+AI讲解)"];
+        s2a1b [label="测评中心\n(参加测评+AI报告)"];
+    }
+
+    /* ====== 二级：教师 ====== */
+    node [fontsize=10];
+    { rank=same;
+        t1 [label="工作台看板\n(统计+薄弱TOP5)"];
+        t2 [label="课程管理 (CRUD)"];
+        t3 [label="学情分析\n(班级+个体报告)"];
+    }
+
+    /* ====== 三级：教师-课程下 ====== */
+    node [fontsize=9];
+    { rank=same;
+        t2a [label="知识点管理\n(CRUD+难度+章节)"];
+    }
+
+    /* ====== 四级：教师-知识点下 ====== */
+    { rank=same;
+        t2a1 [label="图谱编辑\n(可视化节点/边)"];
+        t2a2 [label="题库管理\n(CRUD+知识点关联)"];
+    }
+
+    /* ====== 五级：教师-题库下 ====== */
+    { rank=same;
+        t2a2a [label="测评管理\n(组卷+阅卷)"];
+        t2a2b [label="跨学科主题管理\n(发布+关联)"];
+        t2a2c [label="学习路径督导"];
+    }
+
+    /* ====== 二级：管理员 ====== */
+    node [fontsize=10];
+    { rank=same;
+        d1 [label="管理后台看板"];
+        d2 [label="用户管理\n(账号CRUD+状态)"];
+        d3 [label="公告管理\n(发布+推送)"];
+        d4 [label="操作日志审计"];
+    }
+
+    /* ====== 三级：管理员下 ====== */
+    node [fontsize=9];
+    { rank=same;
+        d2a [label="角色管理\n(权限配置)"];
+        d3a [label="课程管理\n(全局课程编排)"];
+        d4a [label="AI调用日志监控"];
+    }
+
+    /* ====== 二级：基础服务 ====== */
+    node [fontsize=10];
+    { rank=same;
+        b1 [label="AI 诊断\n(DeepSeek API)"];
+        b2 [label="邮件发送服务"];
+        b3 [label="操作日志 AOP"];
+        b4 [label="颗粒纹理\n+暗黑模式"];
+        b5 [label="侧边栏导航"];
+        b6 [label="响应式布局"];
+    }
+
+    /* ====== 连线 ====== */
+    edge [color=black, penwidth=1];
+
+    root -> m1; root -> m2; root -> m3; root -> m4; root -> m5;
+
+    /* 认证 */
+    m1 -> a1; m1 -> a2; m1 -> a3; m1 -> a4; m1 -> a5;
+
+    /* 学生 */
+    m2 -> s1; m2 -> s2; m2 -> s3; m2 -> s4; m2 -> s5;
+    s2 -> s2a; s2 -> s2b;
+    s2a -> s2a1;
+    s2a1 -> s2a1a; s2a1 -> s2a1b;
+
+    /* 教师 */
+    m3 -> t1; m3 -> t2; m3 -> t3;
+    t2 -> t2a;
+    t2a -> t2a1; t2a -> t2a2;
+    t2a2 -> t2a2a; t2a2 -> t2a2b; t2a2 -> t2a2c;
+
+    /* 管理员 */
+    m4 -> d1; m4 -> d2; m4 -> d3; m4 -> d4;
+    d2 -> d2a;
+    d3 -> d3a;
+    d4 -> d4a;
+
+    /* 基础服务 */
+    m5 -> b1; m5 -> b2; m5 -> b3; m5 -> b4; m5 -> b5; m5 -> b6;
+}

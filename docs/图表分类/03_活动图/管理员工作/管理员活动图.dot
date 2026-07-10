@@ -1,0 +1,74 @@
+digraph 管理员活动图 {
+    rankdir=TB;
+    splines=ortho;
+    newrank=true;
+    fontname="PingFang SC,Microsoft YaHei,sans-serif";
+    fontsize=12;
+    xlabel="管理员工作流程 — 活动图";
+    labelloc=t;
+    dpi=120;
+    nodesep=0.2;
+    ranksep=0.25;
+
+    subgraph cluster_admin {
+        xlabel="管理员"; style=dashed; color=gray; fontname="PingFang SC,Microsoft YaHei,sans-serif"; fontsize=8;
+
+        start [shape=point, width=0.3, fillcolor=black];
+
+        node [shape=box, style="rounded, filled", fillcolor=white, fontname="PingFang SC,Microsoft YaHei,sans-serif", fontsize=8];
+        a1 [xlabel="登录系统"];
+        a2 [xlabel="进入管理后台"];
+        a3 [xlabel="查看用户列表\n(sys_user 全字段)"];
+        a4 [xlabel="创建/编辑/禁用/删除用户\n(分配角色, 设置密码)"];
+        a5 [xlabel="管理系统角色\n(sys_role)"];
+        a6 [xlabel="配置角色权限"];
+        a7 [xlabel="审核/管理课程\n(course)"];
+        a8 [xlabel="发布系统公告\n(sys_notice)"];
+        a9 [xlabel="全站推送"];
+        a10 [xlabel="按角色推送"];
+        a11 [xlabel="查看操作日志\n(sys_oper_log)"];
+        a12 [xlabel="查看 AI 调用日志\n(ai_call_log)"];
+        a13 [xlabel="标记/告警"];
+        a14 [xlabel="归档日志"];
+
+        stop_node [shape=doublecircle, style=filled, fillcolor=black, width=0.25, xlabel=""];
+
+        // 判断
+        node [shape=diamond, style=filled, fillcolor=white, fontsize=7.5];
+        d1 [xlabel="操作\n类型?"];
+        d2 [xlabel="紧急\n公告?"];
+        d3 [xlabel="异常\n操作?"];
+    }
+
+    edge [fontname="PingFang SC,Microsoft YaHei,sans-serif", fontsize=7.5];
+
+    start -> a1;
+    a1 -> a2;
+    a2 -> d1;
+
+    d1 -> a3 [xlabel="用户管理"];
+    a3 -> a4;
+    a4 -> stop_node;
+
+    d1 -> a5 [xlabel="角色管理"];
+    a5 -> a6;
+    a6 -> stop_node;
+
+    d1 -> a7 [xlabel="课程管理"];
+    a7 -> stop_node;
+
+    d1 -> a8 [xlabel="公告管理"];
+    a8 -> d2;
+    d2 -> a9 [xlabel="是"];
+    d2 -> a10 [xlabel="否"];
+    a9 -> stop_node;
+    a10 -> stop_node;
+
+    d1 -> a11 [xlabel="操作审计"];
+    a11 -> a12;
+    a12 -> d3;
+    d3 -> a13 [xlabel="是"];
+    d3 -> a14 [xlabel="否"];
+    a13 -> stop_node;
+    a14 -> stop_node;
+}
