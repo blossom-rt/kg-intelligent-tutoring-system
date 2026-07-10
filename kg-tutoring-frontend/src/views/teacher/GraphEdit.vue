@@ -130,7 +130,7 @@ import { Warning, CircleCheck, Connection } from '@element-plus/icons-vue'
 import StudentHeader from '../../components/StudentHeader.vue'
 import { getEdgeList, createEdge, deleteEdge, getNodeList, getCourseList } from '../../api/knowledge'
 
-// ─── 状态 ───
+// 状态
 const loading = ref(false)
 const submitLoading = ref(false)
 const dialogVisible = ref(false)
@@ -155,13 +155,13 @@ const paginatedEdgeList = computed(() => {
   return edgeList.value.slice(start, start + pagination.size)
 })
 
-// ─── 编辑模式 ───
+// 编辑模式
 const isEditMode = ref(false)
 const sourceNode = ref(null)
 const targetNode = ref(null)
 const edgeCreated = ref(false)
 
-// ─── d3 引用 ───
+// d3 引用
 let svg = null
 let zoomG = null
 let zoom = null
@@ -170,7 +170,7 @@ let linkGroup = null
 let currentLinkSelection = null
 let currentNodeSelection = null
 
-// ─── 样式工具 ───
+// 样式工具
 const diffLabel = (v) => ({ 1: '简', 2: '中', 3: '难' }[v] || '-')
 const diffTag = (v) => ({ 1: 'success', 2: 'warning', 3: 'danger' }[v] || 'info')
 const colorByDifficulty = (d) => d?.difficulty === 3 ? '#e74c3c' : d?.difficulty === 2 ? '#f39c12' : '#409eff'
@@ -181,7 +181,7 @@ const nodeName = (id) => {
   return n ? n.name : ('节点-' + id)
 }
 
-// ─── 数据加载 ───
+// 数据加载
 const loadCourses = async () => {
   try {
     const res = await getCourseList({ page: 1, size: 999 })
@@ -215,7 +215,7 @@ const onCourseChange = () => {
   loadData()
 }
 
-// ─── 编辑模式 ───
+// 编辑模式
 const onEditModeChange = (val) => {
   if (!val) cancelEdit()
   if (val && nodeList.value.length < 2) {
@@ -234,7 +234,7 @@ const cancelEdit = () => {
   }
 }
 
-// ─── 图谱渲染 ───
+// 图谱渲染
 function renderGraph() {
   if (!chartRef.value) return
   d3.select(chartRef.value).selectAll('svg').remove()
@@ -347,7 +347,7 @@ function renderGraph() {
     linkGroup.selectAll('line').style('opacity', 1)
   })
 
-  // ─── 点击：编辑模式连线 / 浏览模式选中 ───
+  // 点击：编辑模式连线 / 浏览模式选中
   currentNodeSelection.on('click', (ev, d) => {
     if (!isEditMode.value) {
       selectedNode.value = d.id
@@ -368,7 +368,7 @@ function renderGraph() {
   updateNodeStyles()
 }
 
-// ─── 编辑模式：节点点击逻辑 ───
+// 编辑模式：节点点击逻辑
 function handleGraphNodeClick(d) {
   if (!sourceNode.value) {
     // 第一步：选中前置节点
@@ -443,13 +443,13 @@ function handleGraphNodeClick(d) {
   }
 }
 
-// ─── 更新节点样式（高亮、光标） ───
+// 更新节点样式（高亮、光标）
 function updateNodeStyles() {
   if (!currentNodeSelection) return
   currentNodeSelection.style('cursor', isEditMode.value ? 'pointer' : 'grab')
 }
 
-// ─── 对话框添加 ───
+// 对话框添加
 const openAddEdge = () => {
   if (nodeList.value.length < 2) {
     ElMessage.warning('当前课程下知识点不足，请至少拥有2个知识点')
@@ -485,7 +485,7 @@ const handleDelete = (row) => {
   }).catch(() => { })
 }
 
-// ─── 生命周期 ───
+// 生命周期
 onMounted(() => {
   loadCourses()
   loadData()

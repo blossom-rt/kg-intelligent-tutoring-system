@@ -179,7 +179,7 @@ const todos = ref([])
 const stats = ref({ studyDays: 0, totalMinutes: 0, masteredNodes: 0, correctRate: 0 })
 const weakNodes = ref([])
 
-// ── 新手引导 ──
+// 新手引导
 const guideDialogVisible = ref(false)
 
 const dismissGuide = () => {
@@ -195,7 +195,7 @@ const quickLinks = [
   { key: 'wrong', label: '错题本', icon: Notebook, path: '/student/wrong' },
 ]
 
-// ── 时间感知问候 ──
+// 时间感知问候
 const tips = [
   '每一步积累，都在靠近目标',
   '今天的学习，是明天的底气',
@@ -261,7 +261,7 @@ const showNotice = (n) => { currentNotice.value = n; noticeDialog.value = true }
 <style scoped>
 .student-home { min-height: 100vh; background: var(--bg-root); }
 
-/* ── 顶栏 ── */
+/* 顶栏 */
 .top-bar {
   display: flex; justify-content: space-between; align-items: center;
   padding: 20px 36px;
@@ -272,7 +272,7 @@ const showNotice = (n) => { currentNotice.value = n; noticeDialog.value = true }
 .user-info h2 { margin: 0; font-size: 20px; font-weight: 600; }
 .user-info p { margin: 2px 0 0; font-size: 13px; color: #8a847e; }
 
-/* ── 时间问候小组件 ── */
+/* 时间问候小组件 */
 .greeting-widget {
   width: 48px; height: 48px; border-radius: 14px;
   display: flex; align-items: center; justify-content: center;
@@ -304,7 +304,7 @@ const showNotice = (n) => { currentNotice.value = n; noticeDialog.value = true }
 }
 @keyframes orbit { to { transform: rotate(360deg); } }
 
-/* ── 卡片 ── */
+/* 卡片 */
 .dashboard { display: flex; gap: 24px; padding: 24px 36px; }
 .main-col { flex: 2; display: flex; flex-direction: column; gap: 20px; }
 .side-col { flex: 1; display: flex; flex-direction: column; gap: 20px; }
@@ -330,16 +330,16 @@ const showNotice = (n) => { currentNotice.value = n; noticeDialog.value = true }
 .recommend-entry strong { display: block; margin-bottom: 6px; color: var(--text-primary); font-size: 15px; }
 .recommend-entry span { color: var(--text-muted); font-size: 13px; }
 
-/* ── 路径列表 ── */
+/* 路径列表 */
 .path-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; }
 .path-item:not(:last-child) { border-bottom: 1px solid var(--border-subtle); }
 .path-info { flex: 1; }
 .path-title { font-size: 14px; color: var(--text-primary); margin-bottom: 6px; font-weight: 500; display: block; }
 
-/* ── 待办 ── */
+/* 待办 */
 .todo-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; font-size: 14px; color: var(--text-secondary); }
 
-/* ── 学情统计 ── */
+/* 学情统计 */
 .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .stat-item { text-align: center; }
 .stat-circle {
@@ -353,7 +353,7 @@ const showNotice = (n) => { currentNotice.value = n; noticeDialog.value = true }
 .stat-circle.orange { background: linear-gradient(135deg, #f5a623, #d4881a); }
 .stat-item span { font-size: 12px; color: var(--text-muted); }
 
-/* ── 快捷入口 ── */
+/* 快捷入口 */
 .quick-links { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .weak-list { display: flex; flex-direction: column; gap: 10px; }
 .weak-item { display: flex; align-items: center; gap: 8px; }
@@ -373,7 +373,7 @@ const showNotice = (n) => { currentNotice.value = n; noticeDialog.value = true }
 }
 .quick-label { font-size: 13px; font-weight: 500; color: var(--text-secondary); }
 
-/* ── 新手引导 ── */
+/* 新手引导 */
 .guide-body { display: flex; flex-direction: column; gap: 20px; padding: 8px 0; }
 .guide-item { display: flex; align-items: flex-start; gap: 14px; }
 .guide-icon {
@@ -386,7 +386,7 @@ const showNotice = (n) => { currentNotice.value = n; noticeDialog.value = true }
 .guide-text { font-size: 14px; line-height: 1.7; color: #555; }
 .guide-text strong { color: var(--text-primary); }
 
-/* ── 响应式 ── */
+/* 响应式 */
 @media (max-width: 900px) {
   .dashboard { flex-direction: column; }
   .user-info h2 { font-size: 17px; }

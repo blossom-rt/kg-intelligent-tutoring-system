@@ -205,7 +205,7 @@ const hasExercises = computed(() => {
   return node.value?.exercises && node.value.exercises.length > 0
 })
 
-// ---- 收藏夹 ----
+// 收藏夹
 const isFav = ref(false)
 const favId = ref(null)
 const favIcon = computed(() => isFav.value ? StarFilled : Star)
@@ -242,7 +242,7 @@ const fetchFavStatus = async () => {
   } catch { }
 }
 
-// ---- 前置知识 ----
+// 前置知识
 const prerequisiteNodes = ref([])
 
 const fetchPrerequisites = async () => {
@@ -258,7 +258,7 @@ const goStudyNode = (p) => {
   router.push('/student/study/' + p.id)
 }
 
-// ---- AI 划重点 ----
+// AI 划重点
 const aiSummaryVisible = ref(false)
 const aiSummaryLoading = ref(false)
 const aiSummaryTitle = ref('')
@@ -290,7 +290,7 @@ const showAiSummary = async () => {
   }
 }
 
-// ---- AI 答疑 ----
+// AI 答疑
 const qaInput = ref('')
 const qaLoading = ref(false)
 const qaMessages = ref([])

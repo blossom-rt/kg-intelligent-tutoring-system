@@ -159,9 +159,7 @@ if (remembered) { form.username = remembered; rememberAccount.value = true }
 </script>
 
 <style scoped>
-/* ============================================
-   根容器 — 浅底暖调 + 不对称分栏
-   ============================================ */
+/* 根容器 — 浅底暖调 + 不对称分栏 */
 .login-root {
   display: flex;
   min-height: 100vh;
@@ -176,9 +174,7 @@ if (remembered) { form.username = remembered; rememberAccount.value = true }
   z-index: 10;
 }
 
-/* ============================================
-   左侧 — 品牌 + 插画
-   ============================================ */
+/* 左侧 — 品牌 + 插画 */
 .brand-side {
   flex: 1;
   display: flex;
@@ -220,9 +216,7 @@ if (remembered) { form.username = remembered; rememberAccount.value = true }
   margin: 0 0 40px;
 }
 
-/* ============================================
-   右侧 — 表单卡片
-   ============================================ */
+/* 右侧 — 表单卡片 */
 .form-side {
   flex: 1;
   display: flex;
@@ -249,7 +243,7 @@ if (remembered) { form.username = remembered; rememberAccount.value = true }
   margin: 0 0 24px;
 }
 
-/* ── 角色切换 ── */
+/* 角色切换 */
 .role-tabs {
   display: flex;
   gap: 0;
@@ -275,7 +269,7 @@ if (remembered) { form.username = remembered; rememberAccount.value = true }
   color: #fff;
 }
 
-/* ── 表单输入 ── */
+/* 表单输入 */
 .form-card :deep(.el-input__wrapper) {
   background: var(--bg-input);
   border: 1px solid var(--border-subtle);
@@ -311,7 +305,7 @@ if (remembered) { form.username = remembered; rememberAccount.value = true }
 }
 .pwd-eye:hover { color: var(--accent); }
 
-/* ── 记住 & 忘记 ── */
+/* 记住 + 忘记 */
 .form-row {
   display: flex;
   justify-content: space-between;
@@ -331,7 +325,7 @@ if (remembered) { form.username = remembered; rememberAccount.value = true }
 }
 .forgot:hover { color: var(--accent); }
 
-/* ── 提交按钮 ── */
+/* 提交按钮 */
 .submit-btn {
   width: 100%;
   padding: 12px 0;
@@ -365,7 +359,7 @@ if (remembered) { form.username = remembered; rememberAccount.value = true }
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ── 底部链接 ── */
+/* 底部链接 */
 .form-footer {
   text-align: center;
   margin-top: 20px;
@@ -388,9 +382,7 @@ if (remembered) { form.username = remembered; rememberAccount.value = true }
   color: var(--text-muted);
 }
 
-/* ============================================
-   角色主题微调 — 只用暖调变化
-   ============================================ */
+/* 角色主题微调 — 只用暖调变化 */
 .role-teacher .brand-eyebrow { color: var(--accent-green); }
 .role-teacher .role-tab.on { background: var(--accent-green); }
 .role-teacher .submit-btn { background: var(--accent-green); }
@@ -421,9 +413,7 @@ if (remembered) { form.username = remembered; rememberAccount.value = true }
   --el-checkbox-checked-text-color: #fff;
 }
 
-/* ============================================
-   响应式
-   ============================================ */
+/* 响应式 */
 @media (max-width: 768px) {
   .login-root { flex-direction: column; }
   .brand-side {

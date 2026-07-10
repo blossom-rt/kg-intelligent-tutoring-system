@@ -254,7 +254,7 @@ const nextQuestion = async () => {
       submitRes = await submitPractice(submitData)
     } catch { /* 后台静默记录 */ }
 
-    // 正确率 >= 60% 时自动跳转，不展示结果页
+    // 正确率 >= 80% 时自动跳转，不展示结果页
     const correctRate = submitRes?.correctRate ?? scorePercent.value
     if (correctRate >= 80) {
       // 标记路径节点完成（如果是从路径进入的练习）
@@ -268,7 +268,7 @@ const nextQuestion = async () => {
       return
     }
 
-    // 正确率不足 60% 时展示结果页
+    // 正确率不足 80% 时展示结果页
     finished.value = true
   }
 }

@@ -63,7 +63,7 @@ const blackRef = ref(null)
 const orangeRef = ref(null)
 const yellowRef = ref(null)
 
-// ── 鼠标追踪 ──
+// 鼠标追踪
 const onMouseMove = (e) => {
   mouseX.value = e.clientX
   mouseY.value = e.clientY
@@ -94,7 +94,7 @@ const blackPupilStyle = computed(() => pupilStyle(blackPos.value))
 const orangePupilStyle = computed(() => pupilStyle(orangePos.value))
 const yellowPupilStyle = computed(() => pupilStyle(yellowPos.value))
 
-// 鼠标追踪位移 — 身体随鼠标轻微摆动，底部保持对齐
+// 鼠标追踪位移，身体随鼠标轻微摆动，底部保持对齐
 const charStyle = (pos) => {
   return {
     transform: [
@@ -111,7 +111,7 @@ const blackStyle = computed(() => charStyle(blackPos.value))
 const orangeStyle = computed(() => charStyle(orangePos.value))
 const yellowStyle = computed(() => charStyle(yellowPos.value))
 
-// ── 眨眼 ──
+// 眨眼
 let timers = []
 const setT = (fn, ms) => {
   const t = setTimeout(fn, ms)
@@ -160,7 +160,7 @@ onUnmounted(() => {
   border-radius: 50% 50% 0 0;
 }
 
-/* ── 尺寸 & 位置 ── */
+/* 尺寸、位置 */
 .purple {
   left: 40px;
   width: 170px;
@@ -286,8 +286,8 @@ onUnmounted(() => {
   transform-origin: center center;
 }
 
-/* ── 密码可见时 — 嘴巴变惊讶 O 形 ── */
-/* ── 待机呼吸动画 ── */
+/* 密码可见时，嘴巴变惊讶 O 形 */
+/* 待机呼吸动画 */
 .char-body {
   animation: breathe 3.5s ease infinite;
 }

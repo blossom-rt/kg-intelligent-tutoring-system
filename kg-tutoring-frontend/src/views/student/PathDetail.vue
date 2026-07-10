@@ -178,7 +178,7 @@ const goStudy = (node) => {
   }
 }
 
-// ── 撒花动画 ──
+// 撒花动画
 const smallCelebrate = () => {
   confetti({ particleCount: 50, spread: 50, origin: { x: 0.5, y: 0.6 }, colors: ['#ff7b3d','#f5a623','#5eaf83','#d4a853'], disableForReducedMotion: true })
 }
@@ -234,7 +234,7 @@ const fetchDetail = async () => {
   }
 }
 
-// ---- 思维导图导出 ----
+// 思维导图导出
 const mindMapRef = ref(null)
 const exportLoading = ref(false)
 

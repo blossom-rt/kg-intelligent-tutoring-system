@@ -34,7 +34,7 @@ public interface SysUserService {
     /** 修改个人信息 */
     void updateProfile(Integer userId, ProfileDTO dto);
 
-    // 管理员方法 =====
+    // 管理员方法
 
     /** 查询用户列表 */
     List<SysUser> listUsers(String keyword, Integer roleId);

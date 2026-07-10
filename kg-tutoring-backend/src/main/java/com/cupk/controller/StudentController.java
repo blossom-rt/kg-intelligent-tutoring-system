@@ -75,4 +75,13 @@ public class StudentController {
         return ResponseEntity.ok(result);
     }
 
+
+    @GetMapping("/study-records")
+    public ResponseEntity<?> studyRecords(HttpServletRequest req) {
+        Integer userId = getUserId(req);
+        if (userId == null) return ResponseEntity.status(401).body(Map.of("error", "未登录"));
+        return ResponseEntity.ok(recordMapper.selectList(
+                new LambdaQueryWrapper<StudyRecord>().eq(StudyRecord::getUserId, userId)));
+    }
+
 }

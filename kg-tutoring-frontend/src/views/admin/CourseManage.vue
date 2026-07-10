@@ -47,7 +47,7 @@
         <el-form-item label="所属学科" prop="subject">
           <el-input v-model="form.subject" placeholder="如：数学、物理、信息技术" />
         </el-form-item>
-<el-form-item label="授课教师" prop="teacherId">
+        <el-form-item label="授课教师" prop="teacherId">
           <el-input v-model="form.teacherId" placeholder="请输入教师ID" />
         </el-form-item>
         <el-form-item label="课程描述" prop="description">

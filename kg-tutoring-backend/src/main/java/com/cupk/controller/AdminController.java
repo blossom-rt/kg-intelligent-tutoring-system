@@ -38,7 +38,7 @@ public class AdminController {
         }
     }
 
-    // 角色管理 ========================
+    // 角色管理
 
     /**
      * 获取所有角色列表
@@ -83,7 +83,7 @@ public class AdminController {
         return Result.success("删除角色成功");
     }
 
-    // 用户管理 ========================
+    // 用户管理
 
     /**
      * 查询用户列表
@@ -144,7 +144,7 @@ public class AdminController {
         return Result.success(status == 1 ? "用户已启用" : "用户已禁用");
     }
 
-    // 日志管理 ========================
+    // 日志管理
 
     /**
      * 查询 AI 调用日志

@@ -105,7 +105,7 @@ public class AnalysisServiceImpl implements AnalysisService {
         weakNodes.sort((a, b) -> Integer.compare((int) a.get("masteryRate"), (int) b.get("masteryRate")));
         result.put("weakNodes", weakNodes.size() > 5 ? weakNodes.subList(0, 5) : weakNodes);
 
-        // ===== 掌握度分布（用于饼图） =====
+        // 掌握度分布（用于饼图）
         int poor = 0, fair = 0, good = 0, excellent = 0;
         for (Integer uid : studentIds) {
             long masteredCount = allRecords.stream()
@@ -124,7 +124,7 @@ public class AnalysisServiceImpl implements AnalysisService {
         Map<String, Object> d4 = new LinkedHashMap<>(); d4.put("name", "优秀（>=80%）"); d4.put("value", excellent); masteryDistribution.add(d4);
         result.put("masteryDistribution", masteryDistribution);
 
-        // ===== 知识点平均正确率（用于柱状图） =====
+        // 知识点平均正确率（用于柱状图）
         List<Map<String, Object>> nodeCorrectRates = new ArrayList<>();
         for (KnowledgeNode node : nodes) {
             double nodeAvg = allRecords.stream()
@@ -141,7 +141,7 @@ public class AnalysisServiceImpl implements AnalysisService {
         nodeCorrectRates.sort((a, b) -> Integer.compare((int) b.get("correctRate"), (int) a.get("correctRate")));
         result.put("nodeCorrectRates", nodeCorrectRates);
 
-        // ===== 学习趋势（最近7天每日学习人数） =====
+        // 学习趋势（最近7天每日学习人数）
         List<Map<String, Object>> studyTrend = new ArrayList<>();
         for (int i = 6; i >= 0; i--) {
             java.time.LocalDate day = java.time.LocalDate.now().minusDays(i);
@@ -159,7 +159,7 @@ public class AnalysisServiceImpl implements AnalysisService {
         }
         result.put("studyTrend", studyTrend);
 
-        // ===== 薄弱知识点排行（按正确率升序） =====
+        // 薄弱知识点排行（按正确率升序）
         List<Map<String, Object>> weakRank = new ArrayList<>();
         for (KnowledgeNode node : nodes) {
             double nodeAvg = allRecords.stream()

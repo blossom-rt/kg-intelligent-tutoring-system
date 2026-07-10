@@ -148,7 +148,7 @@ onMounted(async () => {
   // 从教师首页看板接口获取统计数据
   try { const res = await request.get('/teacher/dashboard'); if (res) stats.value = res } catch { }
 
-  // 补充：从现有接口统计课程数、知识点数
+  // 从现有接口统计课程数、知识点数
   try {
     const courses = await getCourseList()
     if (Array.isArray(courses)) stats.value.courseCount = courses.length
