@@ -67,7 +67,7 @@ public class StudentPracticeController {
 
             Question question = questionService.getById(questionId);
             String correctAnswer = question != null ? question.getAnswer() : null;
-            boolean isCorrect = correctAnswer != null && correctAnswer.equals(userAnswer);
+            boolean isCorrect = correctAnswer != null && normalizeAnswer(correctAnswer).equals(normalizeAnswer(userAnswer));
 
             if (isCorrect) {
                 correctCount++;
@@ -145,5 +145,18 @@ public class StudentPracticeController {
         result.put("message", correctRate >= 80 ? "表现优秀！" : (correctRate >= 60 ? "继续加油！" : "建议重新学习该知识点"));
 
         return Result.success(result);
+    }
+
+    private String normalizeAnswer(String answer) {
+        if (answer == null) {
+            return "";
+        }
+        return Arrays.stream(answer.split(","))
+                .map(String::trim)
+                .filter(item -> !item.isEmpty())
+                .map(String::toUpperCase)
+                .sorted()
+                .reduce((left, right) -> left + "," + right)
+                .orElse("");
     }
 }

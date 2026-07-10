@@ -8,10 +8,14 @@ services:
       - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./db/init/init_all.sql:/docker-entrypoint-initdb.d/init_all.sql:ro
-      - ./db/init/seed_all.sql:/docker-entrypoint-initdb.d/seed_all.sql:ro
-      - ./db/init/enrich_learning_materials.sql:/docker-entrypoint-initdb.d/enrich_learning_materials.sql:ro
-      - ./db/docker-init.sql:/docker-entrypoint-initdb.d/docker-init.sql:ro
+      - ./db/init/init_all.sql:/docker-entrypoint-initdb.d/01_init_all.sql:ro
+      - ./db/init/seed_all.sql:/docker-entrypoint-initdb.d/02_seed_all.sql:ro
+      - ./db/init/init8.sql:/docker-entrypoint-initdb.d/03_init8.sql:ro
+      - ./db/init/init9.sql:/docker-entrypoint-initdb.d/04_init9.sql:ro
+      - ./db/init/enrich_learning_materials.sql:/docker-entrypoint-initdb.d/05_enrich_learning_materials.sql:ro
+      - ./db/migrate/add_practice_question_types.sql:/docker-entrypoint-initdb.d/06_add_practice_question_types.sql:ro
+      - ./db/migrate/top_up_practice_questions_to_7.sql:/docker-entrypoint-initdb.d/07_top_up_practice_questions_to_7.sql:ro
+      - ./db/docker-init.sql:/docker-entrypoint-initdb.d/99_docker-init.sql:ro
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s

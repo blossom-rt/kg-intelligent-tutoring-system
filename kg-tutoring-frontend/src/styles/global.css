@@ -1,6 +1,7 @@
 /* 智能导学系统 — 全局设计系统，浅底暖调，反主流，教育温馨 */
 
 :root {
+  color-scheme: light;
   /* 背景层次 */
   --bg-root: #faf7f2;
   --bg-surface: #fffdf9;
@@ -67,6 +68,7 @@
 
 /* 暗色模式，深暖底（暗而不冷） */
 [data-theme="dark"] {
+  color-scheme: dark;
   --bg-root: #1f1b16;
   --bg-surface: #2a2520;
   --bg-input: #2f2a24;
