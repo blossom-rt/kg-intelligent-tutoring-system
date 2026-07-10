@@ -1,6 +1,6 @@
 # 前后端接口文档
 
-最后更新：2026-07-06（同步 7/4、7/6 新增/修复的接口）
+最后更新：2026-07-10（按当前 Controller 注解和前端 `src/api` 调用核对）
 
 本文档根据当前前端 `src/api` 调用和后端 `controller` 代码整理，用于组员联调、答辩说明和后续维护。
 
@@ -130,7 +130,9 @@ login(data)
 }
 ```
 
-### 2.2 获取当前登录信息
+### 2.2 获取当前登录信息（前端预留，后端未实现）
+
+> 当前 `AuthController` 没有该映射。前端 `getUserInfo()` 调用此路径会失败；需要用户资料时请使用 `GET /api/user/profile`。如需保留该调用，应先补充后端接口。
 
 ```text
 GET /api/auth/info
@@ -501,14 +503,9 @@ nodeId 可选
 | 功能 | 方法 | 路径 | 前端函数 | 状态 |
 |---|---|---|---|---|
 | 学习看板 | GET | `/api/student/dashboard` | `getStudentDashboard()` | 已实现 |
-| 课程列表 | GET | `/api/student/courses` | `getStudentCourses()` | 已实现 |
-| 知识点列表 | GET | `/api/student/knowledge-nodes` | `getStudentNodes()` | 已实现 |
-| 学习路径列表 | GET | `/api/student/study-paths` | `getStudentPaths()` | 已实现 |
-| 学习记录列表 | GET | `/api/student/study-records` | `getStudentRecords()` | 已实现 |
-| 测评记录列表 | GET | `/api/student/exam-records` | `getStudentExamRecords()` | 已实现 |
-| 跨学科主题列表 | GET | `/api/student/cross-subjects` | `getStudentThemes()` | 已实现 |
+| 学习记录列表 | GET | `/api/student/study-records` | `getStudyRecords()` | 前端预留，后端未实现 |
 
-这些是"我的学习总览"系列接口，返回当前登录学生的学习聚合数据。
+当前 `StudentController` 已实现学习看板 `GET /api/student/dashboard`。课程、图谱、路径、测评与主题分别由其专用 Controller 提供接口；不要使用本节之外的历史聚合路径。
 
 ### 7.1 知识图谱
 
@@ -872,7 +869,7 @@ courseId 必填
 | 管理员接口（admin） | 基本完成 | 角色、用户、公告、操作/AI 日志 CRUD |
 | 课程/知识点/知识边 | 基本完成 | |
 | 题库管理 | 基本完成 | |
-| 学生通用接口（7.0） | 已实现 | dashboard、courses、paths、records 等聚合接口 |
+| 学生通用接口（7.0） | 部分实现 | 已实现 dashboard；`study-records` 仍只有前端预留调用 |
 | 知识图谱 | 已实现 | |
 | 学习路径 | 已实现 | 主表+详情+完成状态更新 |
 | 练习 | 已实现 | 提交后自动写入错题本 |

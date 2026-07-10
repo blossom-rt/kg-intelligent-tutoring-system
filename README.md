@@ -18,13 +18,13 @@ db/                     ← 数据库初始化脚本（按顺序执行）
 
 | 层 | 技术 |
 |------|---------|
-| 后端框架 | Spring Boot 3.5 + MyBatis Plus 3.5 |
+| 后端框架 | Spring Boot 3.5.16 + MyBatis-Plus 3.5.5 |
 | 数据库 | MySQL 8.0 + HikariCP 连接池 |
 | 认证 | JWT + MD5 密码加密 |
-| 前端框架 | Vue 3.5 + Vite + Element Plus 2.x |
+| 前端框架 | Vue 3.5 + Vite 8 + Element Plus 2.14 |
 | 状态管理 | Pinia |
-| 路由 | Vue Router 5 |
-| 可视化 | ECharts 6.x |
+| 路由 | Vue Router 5.1 |
+| 可视化 | ECharts 6.1、D3、Three.js |
 
 ---
 
@@ -125,8 +125,8 @@ ai_call_log           ← AI 调用日志
 |------|------|
 | JDK | 21 |
 | Maven | 3.9.10 |
-| Node.js | v24.14.0 |
-| MySQL | 8.0.46 |
+| Node.js | `^22.18.0` 或 `>=24.12.0` |
+| MySQL | 8.0 |
 
 ---
 
@@ -185,6 +185,17 @@ npm run dev
 
 前端运行在 `http://localhost:5173`，API 请求通过 Vite 代理转发到后端。
 
+### 4. Docker Compose（可选）
+
+```bash
+docker compose up -d --build
+```
+
+启动后访问 `http://localhost`；MySQL 映射到宿主机 `3307`，后端映射到 `8080`。
+首次启动会自动导入演示数据。若需要重新初始化，请先执行 `docker compose down -v`，这会删除 Docker 数据卷中的数据库数据。
+
+> `docker-compose.yml` 中的数据库密码仅供本地演示。部署到共享环境前，请改用环境变量或未提交的 `.env` 文件，并同时替换 JWT 密钥和 DeepSeek API Key。
+
 ---
 
 ## 测试账号
@@ -194,6 +205,20 @@ npm run dev
 | `student` | `123456` | 学生 |
 | `teacher` | `123456` | 教师 |
 | `admin` | `admin123` | 管理员 |
+
+---
+
+## 文档索引
+
+| 文档 | 用途 |
+|---|---|
+| [开发与维护指南](docs/开发与维护指南.md) | 目录职责、配置项、联调路径与常见排查 |
+| [接口文档](docs/api.md) | 当前后端 Controller 与前端 API 调用的接口清单 |
+| [数据库说明](db/README.md) | 初始化、重置、迁移及演示数据说明 |
+| [系统功能架构](docs/系统功能架构.md) | 业务模块和分层架构说明 |
+| [图表说明](docs/diagrams.md) | UML 图及其源文件说明 |
+
+接口文档以 Controller 为准；前端 `src/api` 中尚未落地后端的调用会在文档中明确标注。
 
 ---
 
