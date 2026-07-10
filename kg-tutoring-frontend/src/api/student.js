@@ -26,16 +26,13 @@ export function submitExam(data) { return request.post('/student/exam/submit', d
 
 // 错题
 export function getWrongQuestions(params) { return request.get('/student/wrong-questions', { params }) }
-export function deleteWrongQuestion(id) { return request.delete(`/student/wrong-questions/${id}`) }
 
 // AI
 export function aiNodeSummary(data) { return request.post('/student/ai/node-summary', data) }
 export function aiWrongExplain(data) { return request.post('/student/ai/wrong-explain', data) }
-export function aiExamReport(data) { return request.post('/student/ai/exam-report', data) }
 export function aiChat(data) { return request.post('/student/ai/chat', data) }
 
 // 个人分析
-export function getPersonalAnalysis() { return request.get('/student/analysis/personal') }
 export function getWeakAnalysis() { return request.get('/student/analysis/weak') }
 
 // 学生仪表盘

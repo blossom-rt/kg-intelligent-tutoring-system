@@ -9,7 +9,9 @@
     <el-card class="filter-card">
       <el-form :inline="true" :model="filterForm" @submit.prevent>
         <el-form-item label="所属学科">
-          <el-input v-model="filterForm.subject" placeholder="输入学科名称搜索" clearable @clear="loadData" @keyup.enter="loadData" />
+          <el-select v-model="filterForm.subject" placeholder="全部学科" clearable @change="loadData" style="width:160px">
+            <el-option v-for="s in subjectOptions" :key="s" :label="s" :value="s" />
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="loadData">查询</el-button>
@@ -49,7 +51,9 @@
     >
       <el-form ref="formRef" :model="form" :rules="rules" label-width="90px">
         <el-form-item label="所属学科" prop="subject">
-          <el-input v-model="form.subject" placeholder="请输入学科名称" />
+          <el-select v-model="form.subject" placeholder="请选择或输入学科" filterable allow-create style="width:100%">
+            <el-option v-for="s in subjectOptions" :key="s" :label="s" :value="s" />
+          </el-select>
         </el-form-item>
         <el-form-item label="课程名称" prop="courseName">
           <el-input v-model="form.courseName" placeholder="请输入课程名称" />
@@ -70,7 +74,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, computed } from 'vue'
+import { ref, reactive, onMounted, computed, watch } from 'vue'
 import StudentHeader from '../../components/StudentHeader.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { getCourseList, createCourse, updateCourse, deleteCourse } from '../../api/knowledge'
@@ -96,6 +100,18 @@ const paginatedTableData = computed(() => {
   const start = (pagination.page - 1) * pagination.size
   return tableData.value.slice(start, start + pagination.size)
 })
+
+// 所有不重复的学科列表
+const subjectOptions = ref([])
+
+const fetchSubjects = async () => {
+  try {
+    const res = await getCourseList({ page: 1, size: 999 })
+    const list = Array.isArray(res) ? res : (res?.records || [])
+    const subjects = [...new Set(list.map(r => r.subject).filter(Boolean))].sort()
+    subjectOptions.value = subjects
+  } catch { }
+}
 
 const form = reactive({
   id: null,
@@ -193,6 +209,7 @@ const handleDelete = (row) => {
 
 onMounted(() => {
   loadData()
+  fetchSubjects()
 })
 </script>
 

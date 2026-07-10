@@ -190,7 +190,7 @@ import { ElMessage } from 'element-plus'
 import { Promotion, ArrowRight, Star, StarFilled } from '@element-plus/icons-vue'
 import StudentHeader from '../../components/StudentHeader.vue'
 import { getNodeById, getNodeResources } from '../../api/knowledge'
-import { updateStudyRecord, getStudyRecords, aiNodeSummary, aiChat, addFavorite, deleteFavorite, getFavoriteList, getPrerequisiteNodes } from '../../api/student'
+import { getStudyRecords, aiNodeSummary, aiChat, addFavorite, deleteFavorite, getFavoriteList, getPrerequisiteNodes } from '../../api/student'
 import { renderMarkdown } from '../../utils/markdown'
 
 const router = useRouter()
