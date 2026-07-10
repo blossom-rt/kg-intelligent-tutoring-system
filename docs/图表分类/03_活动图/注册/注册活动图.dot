@@ -1,0 +1,91 @@
+digraph 注册活动图 {
+    rankdir=TB;
+    splines=ortho;
+    newrank=true;
+    fontname="PingFang SC,Microsoft YaHei,sans-serif";
+    fontsize=12;
+    xlabel="注册与验证码流程 — 活动图";
+    labelloc=t;
+    dpi=120;
+    nodesep=0.2;
+    ranksep=0.25;
+
+    // 起始
+    start [shape=point, width=0.3, fillcolor=black];
+
+    // 活动
+    node [shape=box, style="rounded, filled", fillcolor=white, fontname="PingFang SC,Microsoft YaHei,sans-serif", fontsize=8];
+
+    a1 [xlabel="进入注册页面"];
+    a2 [xlabel="填写信息\n(用户名、邮箱、密码)"];
+    a3 [xlabel="输入邮箱"];
+    a4 [xlabel="等待倒计时\n(前端禁用按钮)"];
+    a5 [xlabel="生成6位随机验证码"];
+    a6 [xlabel="存入 sys_email_code\n(email,code,type,expire_time)"];
+    a7 [xlabel="输出验证码\n(console/邮件)"];
+    a8 [xlabel="输入验证码"];
+    a9 [xlabel="提交注册表单"];
+    a10 [xlabel="提示\"验证码错误\""];
+    a11 [xlabel="重新输入验证码"];
+    a12 [xlabel="提示\"验证码已过期\""];
+    a13 [xlabel="重新获取验证码"];
+    a14 [xlabel="提示\"账号已存在\""];
+    a15 [xlabel="修改用户名"];
+    a16 [xlabel="MD5 加密密码"];
+    a17 [xlabel="INSERT INTO\nsys_user"];
+    a18 [xlabel="标记验证码已使用\n(UPDATE is_used=1)"];
+    a19 [xlabel="提示\"注册成功\""];
+    a20 [xlabel="跳转登录页"];
+
+    // 判断节点 (菱形)
+    node [shape=diamond, style=filled, fillcolor=white, fontsize=7.5];
+    d1 [xlabel="60秒内\n已发送?"];
+    d2 [xlabel="验证码\n正确?"];
+    d3 [xlabel="5分钟\n内?"];
+    d4 [xlabel="账号\n唯一?"];
+
+    // 终止
+    stop_node [shape=doublecircle, style=filled, fillcolor=black, width=0.25, xlabel=""];
+    detach1 [shape=circle, style=filled, fillcolor=black, width=0.15, xlabel=""];
+    detach2 [shape=circle, style=filled, fillcolor=black, width=0.15, xlabel=""];
+    detach3 [shape=circle, style=filled, fillcolor=black, width=0.15, xlabel=""];
+
+    // 连线
+    edge [fontname="PingFang SC,Microsoft YaHei,sans-serif", fontsize=7.5];
+
+    start -> a1;
+    a1 -> a2;
+    a2 -> a3;
+    a3 -> d1;
+
+    d1 -> a4 [xlabel="是"];
+    a4 -> a8;
+    d1 -> a5 [xlabel="否"];
+    a5 -> a6;
+    a6 -> a7;
+    a7 -> a8;
+
+    a8 -> a9;
+    a9 -> d2;
+
+    d2 -> a10 [xlabel="否"];
+    a10 -> a11;
+    a11 -> detach1;
+    d2 -> d3 [xlabel="是"];
+
+    d3 -> a12 [xlabel="否"];
+    a12 -> a13;
+    a13 -> detach2;
+    d3 -> d4 [xlabel="是"];
+
+    d4 -> a14 [xlabel="否"];
+    a14 -> a15;
+    a15 -> detach3;
+    d4 -> a16 [xlabel="是"];
+
+    a16 -> a17;
+    a17 -> a18;
+    a18 -> a19;
+    a19 -> a20;
+    a20 -> stop_node;
+}

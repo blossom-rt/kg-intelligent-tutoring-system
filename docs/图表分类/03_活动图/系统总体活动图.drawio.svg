@@ -1,0 +1,166 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#333"/>
+    </marker>
+    <marker id="arrowDashed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#999"/>
+    </marker>
+    <filter id="shadow" x="-2%" y="-2%" width="104%" height="104%">
+      <feDropShadow dx="1" dy="1" stdDeviation="1.5" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+
+  <!-- 背景 -->
+  <rect width="1200" height="800" fill="#FFFFFF"/>
+
+  <!-- ===== 标题 ===== -->
+  <text x="600" y="28" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="20" font-weight="bold" fill="#222">KG 智能导学系统 — 总体活动图</text>
+
+  <!-- ===== 三个泳道背景 ===== -->
+  <!-- 学生泳道 (左) -->
+  <rect x="10" y="45" width="390" height="745" fill="#E8F0FE" stroke="#333" stroke-width="2" rx="4"/>
+  <rect x="10" y="45" width="390" height="36" fill="#333" stroke="#333" stroke-width="2" rx="4"/>
+  <rect x="10" y="65" width="390" height="16" fill="#333"/>
+  <text x="205" y="70" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="15" font-weight="bold" fill="#FFFFFF">学  生</text>
+
+  <!-- 教师泳道 (中) -->
+  <rect x="405" y="45" width="390" height="745" fill="#F0F0F0" stroke="#333" stroke-width="2" rx="4"/>
+  <rect x="405" y="45" width="390" height="36" fill="#555" stroke="#333" stroke-width="2" rx="4"/>
+  <rect x="405" y="65" width="390" height="16" fill="#555"/>
+  <text x="600" y="70" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="15" font-weight="bold" fill="#FFFFFF">教  师</text>
+
+  <!-- 管理员泳道 (右) -->
+  <rect x="800" y="45" width="390" height="745" fill="#FEF6E4" stroke="#333" stroke-width="2" rx="4"/>
+  <rect x="800" y="45" width="390" height="36" fill="#777" stroke="#333" stroke-width="2" rx="4"/>
+  <rect x="800" y="65" width="390" height="16" fill="#777"/>
+  <text x="995" y="70" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="15" font-weight="bold" fill="#FFFFFF">管 理 员</text>
+
+  <!-- ===== 公共区域（泳道之上） ===== -->
+  <!-- 起始 -->
+  <circle cx="600" cy="115" r="11" fill="#333" stroke="#333" stroke-width="2"/>
+
+  <!-- 用户登录 -->
+  <rect x="505" y="140" width="190" height="42" rx="21" ry="21" fill="#FFF" stroke="#333" stroke-width="2" filter="url(#shadow)"/>
+  <text x="600" y="166" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="14">用户登录</text>
+  <line x1="600" y1="126" x2="600" y2="140" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 登录判断 (菱形) -->
+  <polygon points="600,215 650,250 600,285 550,250" fill="#FFF" stroke="#333" stroke-width="2"/>
+  <text x="600" y="254" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13">成功?</text>
+  <line x1="600" y1="182" x2="600" y2="215" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 失败→return -->
+  <rect x="660" y="235" width="80" height="32" rx="16" ry="16" fill="#FFF" stroke="#333" stroke-width="1.5"/>
+  <text x="700" y="256" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12">提示错误</text>
+  <line x1="650" y1="250" x2="660" y2="251" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- 成功→进入系统 -->
+  <rect x="505" y="310" width="190" height="42" rx="21" ry="21" fill="#FFF" stroke="#333" stroke-width="2" filter="url(#shadow)"/>
+  <text x="600" y="336" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="14">进入角色首页</text>
+  <line x1="600" y1="285" x2="600" y2="310" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 分叉到三泳道 -->
+  <line x1="600" y1="352" x2="205" y2="352" stroke="#333" stroke-width="2"/>
+  <line x1="205" y1="352" x2="205" y2="390" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="600" y1="352" x2="600" y2="390" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="600" y1="352" x2="995" y2="352" stroke="#333" stroke-width="2"/>
+  <line x1="995" y1="352" x2="995" y2="390" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ===== 学生泳道内容 ===== -->
+  <!-- S1 -->
+  <rect x="105" y="395" width="200" height="40" rx="20" ry="20" fill="#FFF" stroke="#333" stroke-width="1.8" filter="url(#shadow)"/>
+  <text x="205" y="420" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13">浏览3D知识图谱</text>
+
+  <!-- S2 -->
+  <rect x="105" y="460" width="200" height="40" rx="20" ry="20" fill="#FFF" stroke="#333" stroke-width="1.8" filter="url(#shadow)"/>
+  <text x="205" y="485" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13">生成学习路径</text>
+  <line x1="205" y1="435" x2="205" y2="460" stroke="#333" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+  <!-- S3 -->
+  <rect x="105" y="525" width="200" height="40" rx="20" ry="20" fill="#FFF" stroke="#333" stroke-width="1.8" filter="url(#shadow)"/>
+  <text x="205" y="550" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13">知识点学习与练习</text>
+  <line x1="205" y1="500" x2="205" y2="525" stroke="#333" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+  <!-- S4 判断 -->
+  <polygon points="205,595 245,625 205,655 165,625" fill="#FFF" stroke="#333" stroke-width="1.8"/>
+  <text x="205" y="629" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12">测评\n通过?</text>
+  <line x1="205" y1="565" x2="205" y2="595" stroke="#333" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+  <!-- S5 是 -->
+  <rect x="105" y="680" width="200" height="40" rx="20" ry="20" fill="#FFF" stroke="#333" stroke-width="1.8" filter="url(#shadow)"/>
+  <text x="205" y="705" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13">AI诊断 × 查看报告</text>
+  <line x1="245" y1="625" x2="205" y2="680" stroke="#333" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <text x="262" y="648" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12" fill="#555">是</text>
+
+  <!-- S6 否 -->
+  <rect x="255" y="680" width="120" height="40" rx="20" ry="20" fill="#FFF" stroke="#333" stroke-width="1.8" filter="url(#shadow)"/>
+  <text x="315" y="705" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13">错题重做</text>
+  <line x1="165" y1="625" x2="315" y2="680" stroke="#333" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <text x="135" y="648" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12" fill="#555">否</text>
+
+  <!-- S 终止 -->
+  <circle cx="205" cy="760" r="11" fill="#333" stroke="#333" stroke-width="2"/>
+  <circle cx="205" cy="760" r="5" fill="#FFF"/>
+  <line x1="205" y1="720" x2="205" y2="749" stroke="#333" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <line x1="315" y1="720" x2="315" y2="760" stroke="#333" stroke-width="1.8"/>
+  <line x1="315" y1="760" x2="222" y2="760" stroke="#333" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+  <!-- ===== 教师泳道内容 ===== -->
+  <!-- T1 -->
+  <rect x="500" y="395" width="200" height="40" rx="20" ry="20" fill="#FFF" stroke="#333" stroke-width="1.8" filter="url(#shadow)"/>
+  <text x="600" y="420" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13">课程与知识点管理</text>
+
+  <!-- T2 -->
+  <rect x="500" y="460" width="200" height="40" rx="20" ry="20" fill="#FFF" stroke="#333" stroke-width="1.8" filter="url(#shadow)"/>
+  <text x="600" y="485" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13">题库与测评管理</text>
+  <line x1="600" y1="435" x2="600" y2="460" stroke="#333" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+  <!-- T3 -->
+  <rect x="500" y="525" width="200" height="40" rx="20" ry="20" fill="#FFF" stroke="#333" stroke-width="1.8" filter="url(#shadow)"/>
+  <text x="600" y="550" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13">学情分析与导出</text>
+  <line x1="600" y1="500" x2="600" y2="525" stroke="#333" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+  <!-- T 终止 -->
+  <circle cx="600" cy="605" r="11" fill="#333" stroke="#333" stroke-width="2"/>
+  <circle cx="600" cy="605" r="5" fill="#FFF"/>
+  <line x1="600" y1="565" x2="600" y2="594" stroke="#333" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+  <!-- ===== 管理员泳道内容 ===== -->
+  <!-- A1 -->
+  <rect x="895" y="395" width="200" height="40" rx="20" ry="20" fill="#FFF" stroke="#333" stroke-width="1.8" filter="url(#shadow)"/>
+  <text x="995" y="420" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13">用户与角色管理</text>
+
+  <!-- A2 -->
+  <rect x="895" y="460" width="200" height="40" rx="20" ry="20" fill="#FFF" stroke="#333" stroke-width="1.8" filter="url(#shadow)"/>
+  <text x="995" y="485" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13">课程审核与公告发布</text>
+  <line x1="995" y1="435" x2="995" y2="460" stroke="#333" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+  <!-- A3 -->
+  <rect x="895" y="525" width="200" height="40" rx="20" ry="20" fill="#FFF" stroke="#333" stroke-width="1.8" filter="url(#shadow)"/>
+  <text x="995" y="550" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13">操作审计</text>
+  <line x1="995" y1="500" x2="995" y2="525" stroke="#333" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+  <!-- A 终止 -->
+  <circle cx="995" cy="605" r="11" fill="#333" stroke="#333" stroke-width="2"/>
+  <circle cx="995" cy="605" r="5" fill="#FFF"/>
+  <line x1="995" y1="565" x2="995" y2="594" stroke="#333" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+  <!-- ===== 跨泳道虚线依赖 ===== -->
+  <!-- 教师→学生: 知识点/题库支撑 -->
+  <line x1="500" y1="420" x2="315" y2="398" stroke="#999" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrowDashed)"/>
+  <text x="420" y="400" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="11" fill="#888">知识点/题库支撑</text>
+
+  <!-- 教师→学生: 测评支撑 -->
+  <line x1="500" y1="485" x2="315" y2="530" stroke="#999" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrowDashed)"/>
+  <text x="420" y="500" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="11" fill="#888">测评支撑</text>
+
+  <!-- 管理员→教师: 账号管理 -->
+  <line x1="895" y1="420" x2="710" y2="418" stroke="#999" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrowDashed)"/>
+  <text x="818" y="408" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="11" fill="#888">账号权限</text>
+
+  <!-- 管理员→学生: 公告推送 -->
+  <line x1="895" y1="485" x2="315" y2="680" stroke="#999" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrowDashed)"/>
+  <text x="620" y="605" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="11" fill="#888">公告推送</text>
+
+</svg>

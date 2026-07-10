@@ -1,0 +1,130 @@
+@startuml functional_tree
+' ============================================================
+' KG 智能导学系统 — 功能树形图 (Hierarchical Tree)
+' ============================================================
+skinparam backgroundColor white
+skinparam defaultFontName "Times-Roman"
+skinparam defaultFontSize 12
+skinparam rectangle {
+    BackgroundColor white
+    BorderColor black
+    FontSize 10
+}
+skinparam arrow {
+    Color black
+    FontSize 8
+}
+
+top to bottom direction
+
+' ====== 根节点 ======
+rectangle "智能导学系统" as Root #white
+
+' ====== 一级模块 ======
+rectangle "用户认证与安全" as M1 #white
+rectangle "学生端功能" as M2 #white
+rectangle "教师端功能" as M3 #white
+rectangle "管理员端功能" as M4 #white
+rectangle "系统基础服务" as M5 #white
+
+' ====== 用户认证子模块 ======
+rectangle "登录" as S1_1 #white
+rectangle "注册" as S1_2 #white
+rectangle "邮箱验证码" as S1_3 #white
+rectangle "找回密码" as S1_4 #white
+rectangle "JWT 鉴权与路由守卫" as S1_5 #white
+
+' ====== 学生端子模块 ======
+rectangle "学习首页看板\n(统计+快捷入口+公告)" as S2_1 #white
+rectangle "知识图谱\n(ECharts力导向图)" as S2_2 #white
+rectangle "学习路径\n(拓扑排序自动生成)" as S2_3 #white
+rectangle "在线刷题\n(即时判分+解析)" as S2_4 #white
+rectangle "测评中心\n(参加测评+AI报告)" as S2_5 #white
+rectangle "错题本\n(收录+重做+AI讲解)" as S2_6 #white
+rectangle "跨学科主题\n(多学科融合学习)" as S2_7 #white
+rectangle "个性化推荐" as S2_8 #white
+rectangle "学情分析\n(掌握度+正确率)" as S2_9 #white
+rectangle "学习伙伴\n(StudyPet交互)" as S2_10 #white
+
+' ====== 教师端子模块 ======
+rectangle "工作台看板\n(统计+薄弱TOP5)" as S3_1 #white
+rectangle "课程管理\n(CRUD)" as S3_2 #white
+rectangle "知识点管理\n(CRUD+难度章节)" as S3_3 #white
+rectangle "题库管理\n(CRUD+知识点关联)" as S3_4 #white
+rectangle "测评管理\n(组卷+阅卷)" as S3_5 #white
+rectangle "图谱编辑\n(可视化节点/边)" as S3_6 #white
+rectangle "跨学科主题管理\n(发布+关联)" as S3_7 #white
+rectangle "学情分析\n(班级+个体报告)" as S3_8 #white
+rectangle "学习路径督导" as S3_9 #white
+
+' ====== 管理员端子模块 ======
+rectangle "管理后台看板" as S4_1 #white
+rectangle "用户管理\n(账号CRUD+状态)" as S4_2 #white
+rectangle "角色管理\n(权限配置)" as S4_3 #white
+rectangle "课程管理\n(全局课程编排)" as S4_4 #white
+rectangle "公告管理\n(发布+推送)" as S4_5 #white
+rectangle "操作日志审计" as S4_6 #white
+rectangle "AI调用日志监控" as S4_7 #white
+
+' ====== 基础服务子模块 ======
+rectangle "AI 诊断\n(DeepSeek API)" as S5_1 #white
+rectangle "邮件发送服务" as S5_2 #white
+rectangle "操作日志 AOP" as S5_3 #white
+rectangle "颗粒纹理 + 暗黑模式" as S5_4 #white
+rectangle "侧边栏导航" as S5_5 #white
+rectangle "响应式布局" as S5_6 #white
+
+' ====== 连线 ======
+Root --> M1
+Root --> M2
+Root --> M3
+Root --> M4
+Root --> M5
+
+M1 --> S1_1
+M1 --> S1_2
+M1 --> S1_3
+M1 --> S1_4
+M1 --> S1_5
+
+M2 --> S2_1
+M2 --> S2_2
+M2 --> S2_8
+M2 --> S2_9
+M2 --> S2_10
+
+S2_2 --> S2_3
+S2_2 --> S2_7
+S2_3 --> S2_4
+S2_4 --> S2_6
+S2_4 --> S2_5
+
+M3 --> S3_1
+M3 --> S3_2
+M3 --> S3_3
+M3 --> S3_6
+M3 --> S3_8
+
+S3_3 --> S3_4
+S3_3 --> S3_6
+S3_2 --> S3_3
+S3_4 --> S3_5
+S3_5 --> S3_8
+
+M4 --> S4_1
+M4 --> S4_2
+M4 --> S4_3
+M4 --> S4_5
+M4 --> S4_6
+
+S4_5 --> S4_4
+S4_2 --> S4_3
+
+M5 --> S5_1
+M5 --> S5_2
+M5 --> S5_3
+M5 --> S5_4
+M5 --> S5_5
+M5 --> S5_6
+
+@enduml

@@ -1,0 +1,92 @@
+@startuml 系统总体活动图
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontSize 13
+skinparam defaultFontName PingFang SC
+skinparam conditionStyle diamond
+skinparam activity {
+    BackgroundColor #FFFFFF
+    BorderColor #333333
+    FontSize 14
+    BorderThickness 1.5
+}
+skinparam diamondBackgroundColor #FFFFFF
+skinparam diamondBorderColor #333333
+skinparam diamondFontSize 12
+skinparam startColor #333333
+skinparam endColor #333333
+skinparam partitionBorderColor #333333
+skinparam partitionBorderThickness 2
+skinparam partitionBackgroundColor #FAFAFA
+skinparam arrowColor #333333
+skinparam arrowThickness 1.5
+skinparam note {
+    BackgroundColor #FFFFF0
+    BorderColor #BBBBBB
+    FontSize 10
+}
+
+title KG 智能导学系统 — 总体活动图
+
+|公共|
+start
+:用户登录;
+if (成功?) then (否)
+    :提示错误;
+    stop
+else (是)
+endif
+:进入系统首页;
+
+fork
+
+|学生|
+    :浏览3D知识图谱;
+    :选择目标知识点;
+    :生成学习路径;
+    note right
+        拓扑排序计算前置依赖
+    end note
+    :知识点学习与配套练习;
+    note right
+        AI划重点 / AI答疑
+        浏览学习资源
+    end note
+    :参加章节测评;
+    if (测评通过?) then (是)
+        :查看AI诊断报告;
+    else (否)
+        :错题收录至错题本;
+        :错题重做与复习;
+    endif
+    stop
+
+fork again
+|教师|
+    :课程与知识点管理;
+    note right
+        配置属性/设定前置依赖
+        上传学习资源
+    end note
+    :题库管理;
+    :创建测评并组卷发布;
+    :学情分析与报表导出;
+    note right
+        掌握度统计
+        错题分布分析
+    end note
+    stop
+
+fork again
+|管理员|
+    :用户与角色管理;
+    note right
+        创建/编辑/禁用用户
+        分配角色权限
+    end note
+    :课程审核与公告发布;
+    :操作日志与AI调用审计;
+    stop
+
+end fork
+
+@enduml
