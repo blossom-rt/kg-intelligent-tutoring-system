@@ -51,9 +51,14 @@
         <div class="card" style="flex:1">
           <div class="card-header">
             <el-icon class="card-head-icon"><Bell /></el-icon>
-            待处理事项
+            数据概览
           </div>
-          <div class="empty-hint">暂无待处理事项</div>
+          <div class="todo-list">
+            <div class="todo-item"><el-tag size="small" type="primary" round>课程</el-tag><span>共 {{ stats.courseCount || stats.totalCourses || 0 }} 门课程</span></div>
+            <div class="todo-item"><el-tag size="small" type="success" round>学生</el-tag><span>{{ stats.activeStudents || 0 }} 名活跃学生</span></div>
+            <div class="todo-item"><el-tag size="small" type="warning" round>本周</el-tag><span>{{ stats.weekStudy || 0 }} 人次学习</span></div>
+            <div class="todo-item"><el-tag size="small" type="info" round>题库</el-tag><span>共 {{ stats.totalQuestions || 0 }} 道题目</span></div>
+          </div>
         </div>
         <div class="card" style="flex:1">
           <div class="card-header">
@@ -268,4 +273,6 @@ const showNotice = (n) => { currentNotice.value = n; noticeDialog.value = true }
   .bottom-row { flex-direction: column; }
   .content { padding: 16px; }
 }
+.todo-list { display: flex; flex-direction: column; gap: 12px; }
+.todo-item { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--text-secondary); }
 </style>
