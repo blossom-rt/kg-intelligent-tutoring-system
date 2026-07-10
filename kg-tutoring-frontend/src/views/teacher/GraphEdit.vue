@@ -397,6 +397,8 @@ function handleGraphNodeClick(d) {
 
     // 立即更新 d3 视图
     const newEdge = { fromNodeId: sourceNode.value.id, toNodeId: targetNode.value.id }
+    const savedSourceId = sourceNode.value.id
+    const savedTargetId = targetNode.value.id
     edgeList.value.push(newEdge)
     pagination.total = edgeList.value.length
     edgeCreated.value = true
@@ -417,16 +419,15 @@ function handleGraphNodeClick(d) {
     }
 
     // 异步调用后端
-    createEdge({ fromNodeId: sourceNode.value.id, toNodeId: targetNode.value.id })
+    createEdge({ fromNodeId: savedSourceId, toNodeId: savedTargetId })
       .then((res) => {
-        // 用后端返回的真实 ID 更新本地数据，确保删除时能找到
         if (res?.id) newEdge.id = res.id
         ElMessage.success('依赖边创建成功')
       })
       .catch((err) => {
         ElMessage.error(err?.response?.data?.message || '创建失败')
         // 后端失败则回滚前端
-        const idx = edgeList.value.findIndex(e => e.fromNodeId === sourceNode.value.id && e.toNodeId === targetNode.value.id)
+        const idx = edgeList.value.findIndex(e => e.fromNodeId === savedSourceId && e.toNodeId === savedTargetId)
         if (idx >= 0) edgeList.value.splice(idx, 1)
         pagination.total = edgeList.value.length
         renderGraph()

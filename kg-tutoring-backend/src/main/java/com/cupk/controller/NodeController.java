@@ -16,8 +16,6 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 /**
  * 知识点节点控制器 — 知识节点的增删改查（教师操作）
  */

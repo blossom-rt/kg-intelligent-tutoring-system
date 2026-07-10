@@ -12,12 +12,9 @@ import com.cupk.pojo.Question;
 import com.cupk.service.QuestionService;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * 题目控制器 —— 题目的增删改查（教师操作）

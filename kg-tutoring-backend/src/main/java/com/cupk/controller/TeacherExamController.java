@@ -9,12 +9,10 @@ import com.cupk.pojo.Course;
 import com.cupk.service.ExamService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * 教师考试管理控制器

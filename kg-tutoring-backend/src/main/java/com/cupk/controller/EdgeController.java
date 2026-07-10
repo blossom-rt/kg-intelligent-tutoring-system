@@ -69,6 +69,27 @@ public class EdgeController {
         if (knowledgeEdgeService.existsByFromNodeAndToNode(fromNodeId, toNodeId)) {
             return Result.error("该依赖关系已存在");
         }
+        // 环检测：从 toNode 出发 BFS，如果能走回 fromNode 则成环
+        java.util.Queue<Integer> queue = new java.util.LinkedList<>();
+        java.util.Set<Integer> visited = new java.util.HashSet<>();
+        queue.add(toNodeId);
+        visited.add(toNodeId);
+        boolean hasCycle = false;
+        while (!queue.isEmpty()) {
+            Integer cur = queue.poll();
+            if (cur.equals(fromNodeId)) { hasCycle = true; break; }
+            List<KnowledgeEdge> outEdges = knowledgeEdgeService.listByFromNode(cur);
+            for (KnowledgeEdge e : outEdges) {
+                if (!visited.contains(e.getToNodeId())) {
+                    visited.add(e.getToNodeId());
+                    queue.add(e.getToNodeId());
+                }
+            }
+        }
+        if (hasCycle) {
+            return Result.error("添加该依赖边会形成环路，请检查依赖关系");
+        }
+
         KnowledgeEdge edge = new KnowledgeEdge();
         edge.setFromNodeId(fromNodeId);
         edge.setToNodeId(toNodeId);
