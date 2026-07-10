@@ -21,8 +21,6 @@ public class StudentController {
     private final PathDetailMapper detailMapper;
     private final StudyRecordMapper recordMapper;
     private final WrongQuestionMapper wrongQuestionMapper;
-    private final ExamMapper examMapper;
-    private final ExamRecordMapper examRecordMapper;
     private final JwtUtil jwtUtil;
 
     private Integer getUserId(HttpServletRequest req) {

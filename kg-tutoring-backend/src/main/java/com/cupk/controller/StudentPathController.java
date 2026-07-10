@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.cupk.common.Result;
 import com.cupk.common.UserContext;
 import com.cupk.mapper.PathDetailMapper;
-import com.cupk.mapper.KnowledgeNodeMapper;
 import com.cupk.pojo.KnowledgeNode;
 import com.cupk.pojo.PathDetail;
 import com.cupk.pojo.StudyPath;
@@ -25,7 +24,6 @@ public class StudentPathController {
 
     private final StudyPathService studyPathService;
     private final PathDetailMapper pathDetailMapper;
-    private final KnowledgeNodeMapper knowledgeNodeMapper;
     private final KnowledgeNodeService knowledgeNodeService;
 
     /**

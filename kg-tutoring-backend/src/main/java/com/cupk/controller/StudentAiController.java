@@ -4,7 +4,6 @@ import com.cupk.ai.DeepSeekService;
 import com.cupk.common.Result;
 import com.cupk.common.UserContext;
 import com.cupk.mapper.AiCallLogMapper;
-import com.cupk.mapper.KnowledgeNodeMapper;
 import com.cupk.service.KnowledgeNodeService;
 import com.cupk.mapper.QuestionMapper;
 import com.cupk.pojo.AiCallLog;
@@ -29,7 +28,6 @@ public class StudentAiController {
 
     private final DeepSeekService deepSeekService;
     private final KnowledgeNodeService knowledgeNodeService;
-    private final KnowledgeNodeMapper knowledgeNodeMapper;
     private final QuestionMapper questionMapper;
     private final AiCallLogMapper aiCallLogMapper;
 

@@ -40,40 +40,51 @@
             <span class="card-title">学习节点</span>
           </template>
           <el-empty v-if="!nodes.length" description="暂无学习节点" :image-size="60" />
-          <el-timeline v-else>
-            <el-timeline-item
-              v-for="(node, index) in computedNodes"
-              :key="node.id || index"
-              :timestamp="node.completedTime ? formatTime(node.completedTime) : ''"
-              placement="top"
-              :color="timelineColor(node.displayStatus)"
-              :hollow="node.displayStatus !== 'completed' && node.displayStatus !== 'learning'"
-            >
-              <div
-                class="timeline-node"
-                :class="{
-                  clickable: node.displayStatus === 'learning' || node.displayStatus === 'completed',
-                  'node-locked': node.displayStatus === 'locked'
-                }"
-                @click="goStudy(node)"
-              >
-                <div class="node-title-row">
-                  <el-icon :size="18" class="status-icon" :class="'icon-' + node.displayStatus">
-                    <CircleCheck v-if="node.displayStatus === 'completed'" style="color:#67c23a" />
-                    <Loading v-else-if="node.displayStatus === 'learning'" style="color:#ff7b3d" />
-                    <Lock v-else style="color:var(--text-muted)" />
-                  </el-icon>
-                  <span v-if="node.chapterName" class="node-chapter-tag">{{ node.chapterName }}</span>
-                  <span class="node-title" :class="{ 'text-locked': node.displayStatus === 'locked', 'text-completed': node.displayStatus === 'completed' }">{{ node.nodeName || node.name || '未命名节点' }}</span>
-                  <el-tag :type="difficultyTagType(node.difficulty)" size="small">
-                    {{ difficultyLabel(node.difficulty) }}
-                  </el-tag>
-                </div>
-                <p class="node-desc">{{ truncate(node.description || node.desc || '', 60) }}</p>
-                <span class="node-status-text" :class="'status-' + node.displayStatus">{{ statusLabel(node.displayStatus) }}</span>
+          <div v-else class="chapter-timeline">
+            <template v-for="(group, gi) in groupedNodes" :key="group.chapterName || gi">
+              <!-- 章节标题 -->
+              <div class="chapter-section-header">
+                <span class="chapter-dot"></span>
+                <span class="chapter-section-title">{{ group.chapterName || '未分章' }}</span>
+                <span class="chapter-progress">
+                  {{ group.completedCount }} / {{ group.nodes.length }} 完成
+                </span>
               </div>
-            </el-timeline-item>
-          </el-timeline>
+              <el-timeline>
+                <el-timeline-item
+                  v-for="(node, index) in group.nodes"
+                  :key="node.id || index"
+                  :timestamp="node.completedTime ? formatTime(node.completedTime) : ''"
+                  placement="top"
+                  :color="timelineColor(node.displayStatus)"
+                  :hollow="node.displayStatus !== 'completed' && node.displayStatus !== 'learning'"
+                >
+                  <div
+                    class="timeline-node"
+                    :class="{
+                      clickable: node.displayStatus === 'learning' || node.displayStatus === 'completed',
+                      'node-locked': node.displayStatus === 'locked'
+                    }"
+                    @click="goStudy(node)"
+                  >
+                    <div class="node-title-row">
+                      <el-icon :size="18" class="status-icon" :class="'icon-' + node.displayStatus">
+                        <CircleCheck v-if="node.displayStatus === 'completed'" style="color:#67c23a" />
+                        <Loading v-else-if="node.displayStatus === 'learning'" style="color:#ff7b3d" />
+                        <Lock v-else style="color:var(--text-muted)" />
+                      </el-icon>
+                      <span class="node-title" :class="{ 'text-locked': node.displayStatus === 'locked', 'text-completed': node.displayStatus === 'completed' }">{{ node.nodeName || node.name || '未命名节点' }}</span>
+                      <el-tag :type="difficultyTagType(node.difficulty)" size="small">
+                        {{ difficultyLabel(node.difficulty) }}
+                      </el-tag>
+                    </div>
+                    <p class="node-desc">{{ truncate(node.description || node.desc || '', 60) }}</p>
+                    <span class="node-status-text" :class="'status-' + node.displayStatus">{{ statusLabel(node.displayStatus) }}</span>
+                  </div>
+                </el-timeline-item>
+              </el-timeline>
+            </template>
+          </div>
         </el-card>
       </template>
       <el-empty v-else description="路径不存在或已删除" :image-size="80" />
@@ -122,6 +133,23 @@ const computedNodes = computed(() => {
     result.push(node)
   }
   return result
+})
+
+// 按章节分组（保持原始排序，同章节点在同一组）
+const groupedNodes = computed(() => {
+  const sorted = computedNodes.value
+  const groups = []
+  let currentGroup = null
+  for (const node of sorted) {
+    const chName = node.chapterName || '未分章'
+    if (!currentGroup || currentGroup.chapterName !== chName) {
+      currentGroup = { chapterName: chName, nodes: [], completedCount: 0 }
+      groups.push(currentGroup)
+    }
+    if (node.status === 'completed') currentGroup.completedCount++
+    currentGroup.nodes.push(node)
+  }
+  return groups
 })
 
 const progressPercent = computed(() => {
@@ -443,14 +471,22 @@ onMounted(fetchDetail)
   flex: 1;
 }
 
-.node-chapter-tag {
-  font-size: 12px;
-  color: var(--accent);
-  padding: 1px 6px;
-  background: var(--accent-soft);
-  border-radius: 4px;
-  font-weight: 500;
-  flex-shrink: 0;
+.chapter-timeline { display: flex; flex-direction: column; }
+.chapter-section-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 16px; margin: 8px 0 4px;
+  background: var(--bg-root); border-radius: 8px;
+}
+.chapter-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--accent); flex-shrink: 0;
+}
+.chapter-section-title {
+  font-size: 15px; font-weight: 700; color: var(--text-primary);
+  flex: 1;
+}
+.chapter-progress {
+  font-size: 12px; color: var(--text-muted);
 }
 
 .node-desc {

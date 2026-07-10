@@ -47,7 +47,7 @@
                     <p>{{ node.exampleHint }}</p>
                   </div>
                 </div>
-                <div class="desc-section" v-html="formattedContent"></div>
+                <div class="desc-section markdown-body" v-html="formattedContent"></div>
               </div>
             </el-card>
           </el-tab-pane>
@@ -314,11 +314,7 @@ const sendQuestion = async () => {
 
 const formattedContent = computed(() => {
   const content = node.value?.content || node.value?.description || node.value?.desc || '暂无学习内容'
-  // 保留换行转为 <br>，同时允许后端返回 HTML
-  if (/<[^>]+>/.test(content)) {
-    return content
-  }
-  return content.replace(/\n/g, '<br>')
+  return renderMarkdown(content)
 })
 
 const difficultyLabel = (level) => {
