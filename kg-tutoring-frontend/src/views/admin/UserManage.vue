@@ -24,8 +24,18 @@
     <el-card class="table-card">
       <div class="table-toolbar">
         <el-button type="primary" @click="openAddDialog">新增用户</el-button>
+        <el-button @click="handleExport">导出 CSV</el-button>
+        <el-upload
+          :show-file-list="false"
+          accept=".csv"
+          :before-upload="handleImport"
+          style="display:inline-block;margin-left:8px"
+        >
+          <el-button>导入 CSV</el-button>
+        </el-upload>
       </div>
       <el-table :data="paginatedUserList" v-loading="loading" border stripe>
+        <el-table-column prop="id" label="ID" width="70" align="center" />
         <el-table-column prop="username" label="用户名" min-width="120" />
         <el-table-column prop="realName" label="姓名" min-width="100" />
         <el-table-column prop="email" label="邮箱" min-width="180" />
@@ -105,7 +115,7 @@
 import StudentHeader from '../../components/StudentHeader.vue'
 import { ref, reactive, onMounted, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { getUserList, createUser, updateUser, deleteUser, toggleUserStatus, getRoleList } from '../../api/admin'
+import { getUserList, createUser, updateUser, deleteUser, toggleUserStatus, getRoleList, exportUsers, importUsers } from '../../api/admin'
 
 const loading = ref(false)
 const submitLoading = ref(false)
@@ -269,6 +279,32 @@ function handleToggleStatus(row) {
       fetchList()
     } catch { /* ignore */ }
   }).catch(() => { /* 取消 */ })
+}
+
+const handleExport = async () => {
+  try {
+    const res = await exportUsers()
+    const blob = new Blob([res], { type: 'text/csv;charset=utf-8' })
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(blob)
+    a.download = 'users.csv'
+    a.click()
+    URL.revokeObjectURL(a.href)
+    ElMessage.success('导出成功')
+  } catch { ElMessage.error('导出失败') }
+}
+
+const handleImport = async (file) => {
+  const reader = new FileReader()
+  reader.onload = async (e) => {
+    try {
+      const res = await importUsers({ csvData: e.target.result })
+      ElMessage.success(`导入成功 ${res.success} 条${res.fail ? '，失败 ' + res.fail + ' 条' : ''}`)
+      fetchList()
+    } catch { ElMessage.error('导入失败，请检查 CSV 格式') }
+  }
+  reader.readAsText(file)
+  return false // 阻止默认上传
 }
 
 function handleDelete(row) {

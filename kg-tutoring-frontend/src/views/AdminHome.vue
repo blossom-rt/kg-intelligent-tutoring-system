@@ -10,9 +10,6 @@
           <p>系统管理后台</p>
         </div>
       </div>
-      <div class="top-actions">
-        <ThemeToggle />
-      </div>
     </header>
 
     <div class="content">
@@ -72,8 +69,6 @@ import {
   Setting, User, Lock, School, Bell, Files, Monitor
 } from '@element-plus/icons-vue'
 import { getNoticeList, getUserList, getRoleList, getOperLogs } from '../api/admin'
-import ThemeToggle from '../components/ThemeToggle.vue'
-
 const router = useRouter()
 const greeting = computed(() => {
   const h = new Date().getHours()
@@ -175,7 +170,6 @@ onMounted(async () => {
 .user-info h2 { margin: 0; font-size: 18px; font-weight: 700; color: var(--text-primary); }
 .user-info p { margin: 2px 0 0; font-size: 13px; color: var(--text-secondary); }
 
-.top-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
 .logout-btn:hover {
   background: var(--accent-gold) !important;
   color: #fff !important;

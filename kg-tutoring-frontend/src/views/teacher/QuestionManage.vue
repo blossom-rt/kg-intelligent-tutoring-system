@@ -40,7 +40,7 @@
             <el-tag :type="diffTag(row.difficulty)" size="small">{{ diffLabel(row.difficulty) }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="nodeId" label="知识点ID" width="140" />
+        <el-table-column prop="nodeName" label="关联知识点" min-width="140" />
         <el-table-column label="操作" width="160" fixed="right">
           <template #default="{ row }">
             <el-button type="primary" size="small" link @click="openEdit(row)">编辑</el-button>

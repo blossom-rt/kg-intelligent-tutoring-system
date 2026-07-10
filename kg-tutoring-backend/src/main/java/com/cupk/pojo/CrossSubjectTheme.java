@@ -1,6 +1,7 @@
 package com.cupk.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -28,6 +29,10 @@ public class CrossSubjectTheme {
 
     /** 发布教师ID */
     private Integer publisherId;
+
+    /** 发布教师姓名（联表查询） */
+    @TableField(exist = false)
+    private String publisherName;
 
     /** 状态：0下架 1发布 */
     private Integer status;

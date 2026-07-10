@@ -4,11 +4,15 @@ import com.cupk.aspect.OperLog;
 import com.cupk.common.BusinessException;
 import com.cupk.common.Result;
 import com.cupk.common.UserContext;
+import com.cupk.mapper.CourseMapper;
+import com.cupk.pojo.Course;
 import com.cupk.pojo.KnowledgeNode;
 import com.cupk.service.KnowledgeNodeService;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +27,7 @@ import java.util.List;
 public class NodeController {
 
     private final KnowledgeNodeService knowledgeNodeService;
+    private final CourseMapper courseMapper;
 
     private void checkTeacher() {
         if (!"teacher".equals(UserContext.getRole())) {
@@ -38,6 +43,17 @@ public class NodeController {
             @RequestParam(required = false) Integer courseId,
             @RequestParam(required = false) Integer chapterId,
             @RequestParam(required = false) String name) {
+        // 教师角色时，未指定课程则限制为该教师负责的课程
+        if (courseId == null && "teacher".equals(UserContext.getRole())) {
+            List<Course> myCourses = courseMapper.selectList(
+                    new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<Course>()
+                            .eq(Course::getTeacherId, UserContext.getUserId()));
+            List<Integer> ids = myCourses.stream().map(Course::getId).collect(Collectors.toList());
+            if (ids.isEmpty()) return Result.success(List.of());
+            List<KnowledgeNode> all = knowledgeNodeService.list(null, chapterId, name);
+            all.removeIf(n -> !ids.contains(n.getCourseId()));
+            return Result.success(all);
+        }
         return Result.success(knowledgeNodeService.list(courseId, chapterId, name));
     }
 

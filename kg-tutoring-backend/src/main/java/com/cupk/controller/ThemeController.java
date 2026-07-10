@@ -4,7 +4,9 @@ import com.cupk.aspect.OperLog;
 import com.cupk.common.BusinessException;
 import com.cupk.common.Result;
 import com.cupk.common.UserContext;
+import com.cupk.mapper.SysUserMapper;
 import com.cupk.pojo.CrossSubjectTheme;
+import com.cupk.pojo.SysUser;
 import com.cupk.service.CrossSubjectThemeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,7 @@ import java.util.List;
 public class ThemeController {
 
     private final CrossSubjectThemeService crossSubjectThemeService;
+    private final SysUserMapper sysUserMapper;
 
     /**
      * 检查当前用户是否为教师，否则抛出无权限异常
@@ -37,7 +40,28 @@ public class ThemeController {
     public Result<List<CrossSubjectTheme>> list(
             @RequestParam(required = false) Integer difficulty,
             @RequestParam(required = false) Integer status) {
-        return Result.success(crossSubjectThemeService.list(difficulty, status));
+        // 教师角色时自动只显示自己发布的主题
+        if ("teacher".equals(UserContext.getRole())) {
+            List<CrossSubjectTheme> all = crossSubjectThemeService.list(difficulty, status);
+            all.removeIf(t -> t.getPublisherId() == null || !t.getPublisherId().equals(UserContext.getUserId()));
+            // 填充教师姓名
+            for (CrossSubjectTheme t : all) {
+                if (t.getPublisherId() != null) {
+                    SysUser user = sysUserMapper.selectById(t.getPublisherId());
+                    if (user != null) t.setPublisherName(user.getRealName());
+                }
+            }
+            return Result.success(all);
+        }
+        List<CrossSubjectTheme> list = crossSubjectThemeService.list(difficulty, status);
+        // 填充发布教师姓名
+        for (CrossSubjectTheme t : list) {
+            if (t.getPublisherId() != null) {
+                SysUser user = sysUserMapper.selectById(t.getPublisherId());
+                if (user != null) t.setPublisherName(user.getRealName());
+            }
+        }
+        return Result.success(list);
     }
 
     /**

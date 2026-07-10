@@ -25,7 +25,7 @@
         <el-table-column prop="id" label="测评ID" min-width="80" />
         <el-table-column prop="examName" label="测评名称" min-width="180" />
         <el-table-column prop="totalScore" label="总分" width="80" align="center" />
-        <el-table-column prop="courseId" label="课程ID" width="80" align="center" />
+        <el-table-column prop="courseName" label="课程" width="120" />
         <el-table-column prop="createTime" label="创建时间" width="180" />
         <el-table-column label="操作" width="180" fixed="right" align="center">
           <template #default="{ row }">

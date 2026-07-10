@@ -1,6 +1,7 @@
 package com.cupk.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -40,4 +41,8 @@ public class Question {
 
     /** 创建时间 */
     private LocalDateTime createTime;
+
+    /** 知识点名称（联表查询填充） */
+    @TableField(exist = false)
+    private String nodeName;
 }

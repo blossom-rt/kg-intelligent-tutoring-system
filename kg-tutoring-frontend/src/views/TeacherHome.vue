@@ -140,6 +140,7 @@ const statsList = computed(() => [
 
 const entries = [
   { key: 'courses', icon: School, label: '课程管理', desc: '创建与编排课程', path: '/teacher/courses', bg: '#e8f5ec', color: '#2d8a4e' },
+  { key: 'chapters', icon: Grid, label: '章节管理', desc: '课程章节编排', path: '/teacher/chapters', bg: '#eef2f8', color: '#3d5a8e' },
   { key: 'nodes', icon: Grid, label: '知识点管理', desc: '知识节点与依赖', path: '/teacher/nodes', bg: '#fff3e8', color: '#e06830' },
   { key: 'edges', icon: Share, label: '图谱编辑', desc: '可视化调整依赖关系', path: '/teacher/edges', bg: '#eef2f8', color: '#3d5a8e' },
   { key: 'questions', icon: EditPen, label: '题库管理', desc: '习题录入与维护', path: '/teacher/questions', bg: '#e8f0f8', color: '#5a7dba' },

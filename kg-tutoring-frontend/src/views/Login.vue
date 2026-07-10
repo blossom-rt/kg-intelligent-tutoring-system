@@ -144,6 +144,7 @@ const submit = async () => {
     const res = await login({ ...form, role: role.value })
     localStorage.setItem('token', res.token)
     localStorage.setItem('role', res.role)
+    if (res.userId) localStorage.setItem('userId', res.userId)
     if (res.role === 'student') router.push('/student')
     else if (res.role === 'teacher') router.push('/teacher')
     else router.push('/admin')

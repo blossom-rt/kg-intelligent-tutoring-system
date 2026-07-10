@@ -1,7 +1,9 @@
 package com.cupk.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.cupk.mapper.KnowledgeNodeMapper;
 import com.cupk.mapper.QuestionMapper;
+import com.cupk.pojo.KnowledgeNode;
 import com.cupk.pojo.Question;
 import com.cupk.service.QuestionService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import java.util.List;
 public class QuestionServiceImpl implements QuestionService {
 
     private final QuestionMapper questionMapper;
+    private final KnowledgeNodeMapper knowledgeNodeMapper;
 
     @Override
     public List<Question> list(Integer nodeId, Integer courseId, Integer difficulty) {
@@ -31,7 +34,15 @@ public class QuestionServiceImpl implements QuestionService {
             wrapper.eq(Question::getDifficulty, difficulty);
         }
         wrapper.orderByDesc(Question::getCreateTime);
-        return questionMapper.selectList(wrapper);
+        List<Question> questions = questionMapper.selectList(wrapper);
+        // 填充知识点名称
+        for (Question q : questions) {
+            if (q.getNodeId() != null) {
+                KnowledgeNode node = knowledgeNodeMapper.selectById(q.getNodeId());
+                if (node != null) q.setNodeName(node.getName());
+            }
+        }
+        return questions;
     }
 
     @Override

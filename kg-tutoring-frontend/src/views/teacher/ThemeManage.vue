@@ -43,7 +43,7 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="publisherId" label="发布教师ID" width="120" align="center" />
+        <el-table-column prop="publisherName" label="发布教师" min-width="120" />
         <el-table-column label="操作" width="260" fixed="right">
           <template #default="{ row }">
             <el-button type="primary" size="small" link @click="openEdit(row)">编辑</el-button>

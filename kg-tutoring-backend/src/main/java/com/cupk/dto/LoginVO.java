@@ -11,4 +11,5 @@ import lombok.Data;
 public class LoginVO {
     private String token;
     private String role;
+    private Integer userId;
 }

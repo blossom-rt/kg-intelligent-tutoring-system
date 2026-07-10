@@ -24,7 +24,7 @@
       <el-table :data="paginatedTableData" v-loading="loading" stripe border>
         <el-table-column prop="courseName" label="课程名称" min-width="160" />
         <el-table-column prop="subject" label="所属学科" width="140" />
-        <el-table-column prop="teacherId" label="教师ID" width="120" />
+        <el-table-column prop="teacherName" label="负责教师" width="120" />
         <el-table-column prop="createTime" label="创建时间" width="180" />
         <el-table-column label="操作" width="160" fixed="right">
           <template #default="{ row }">
