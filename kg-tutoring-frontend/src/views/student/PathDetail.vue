@@ -199,10 +199,8 @@ const progressKey = computed(() => `path_p_${route.params.id}`)
 const lastSaved = computed(() => Number(localStorage.getItem(progressKey.value) || 0))
 
 const hasFiredBig = ref(false)
-const initialLoad = ref(true)
 
 watch(displayProgress, (newVal) => {
-  if (initialLoad.value) { initialLoad.value = false; return }  // 跳过初始加载
   if (!newVal || newVal <= lastSaved.value) return
   if (newVal < 100 && newVal > 0) {
     setTimeout(() => smallCelebrate(), 300)
@@ -227,6 +225,11 @@ const fetchDetail = async () => {
     const res = await getPathDetail(id)
     detail.value = res
     nodes.value = res.nodes || res.nodeList || []
+    // 首次加载记录进度，防止 watch 误触发撒花
+    const key = `path_p_${id}`
+    if (!localStorage.getItem(key)) {
+      localStorage.setItem(key, String(displayProgress.value))
+    }
   } catch {
     ElMessage.error('加载路径详情失败')
   } finally {

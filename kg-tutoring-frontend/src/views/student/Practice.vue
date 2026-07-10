@@ -206,10 +206,9 @@ const submitAnswer = () => {
   if (isCorrect.value) {
     correctCount.value++
     pet.celebrate()
-    // 从错题本来的，答对自动标记为已掌握
+    setTimeout(() => confetti({ particleCount: 80, spread: 70, origin: { x: 0.5, y: 0.6 }, colors: ["#ff7b3d","#f5a623","#5eaf83","#d4a853"], disableForReducedMotion: true }), 100)
+    // 从错题本来的，答对标记已掌握
     if (route.query.fromWrong === 'true') {
-      // 错题做对：撒花 + 标记已掌握
-      setTimeout(() => confetti({ particleCount: 80, spread: 70, origin: { x: 0.5, y: 0.6 }, colors: ['#ff7b3d','#f5a623','#5eaf83','#d4a853'], disableForReducedMotion: true }), 100)
       try {
         const reviewed = JSON.parse(localStorage.getItem('reviewedWrongQuestions') || '{}')
         reviewed[currentQuestion.value.id] = new Date().toISOString()
