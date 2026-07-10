@@ -18,6 +18,8 @@ db/
     ├── cleanup.sql               ← 清空业务数据（保留主账号）
     ├── add_knowledge_node_model_fields.sql ← 旧库升级：补 node_type 等字段
     ├── add_learning_resource.sql ← 旧库升级：补 learning_resource 表
+    ├── init8.sql ← 新库升级：建 chapter 表 + 迁移章节数据
+    ├── init9.sql ← 新库升级：删除旧 chapter 列
     ├── seed_learning_resource_demo.sql ← 为知识点生成演示视频资源
     └── migrate_exam.sql          ← 旧库升级：补 exam 表 + 演示测评
 ```
@@ -102,7 +104,7 @@ mysql -u root -p < db/init/enrich_learning_materials.sql
 
 ## 导入后主要数据量
 
-执行 `init_full.sql`（或分步执行三个脚本）后，数据库共有 **21 张表**，主要数据量约：
+执行 `init_full.sql`（或分步执行三个脚本）后，数据库共有 **22 张表**，主要数据量约：
 
 | 表 | 数量 | 说明 |
 |---|---:|---|
@@ -110,6 +112,7 @@ mysql -u root -p < db/init/enrich_learning_materials.sql
 | `sys_user` | 18 | 3 主账号 + 3 教师 + 12 学生 |
 | `sys_email_code` | 0 | 邮箱验证码（运行时产生） |
 | `course` | 9 | 含 1 门跨学科课程 |
+| `chapter` | — | 章节（迁移后自动生成） |
 | `knowledge_node` | 56 | |
 | `learning_resource` | 0 | 教师配置知识点视频/资料后产生 |
 | `knowledge_edge` | 55 | 含跨学科 support 边 |
