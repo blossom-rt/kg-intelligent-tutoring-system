@@ -1,0 +1,51 @@
+---
+config:
+  theme: neutral
+  look: neo
+  fontSize: 18
+---
+flowchart TB
+    subgraph 学生泳道[" "]
+        direction TB
+        S1["浏览3D知识图谱"]
+        S2["生成学习路径"]
+        S3["知识点学习+配套练习"]
+        S4{"测评通过?"}
+        S5["查看AI诊断报告"]
+        S6["错题重做"]
+        S7(("结束"))
+    end
+
+    subgraph 教师泳道[" "]
+        direction TB
+        T1["课程与知识点管理"]
+        T2["题库与测评管理"]
+        T3["学情分析"]
+        T4(("结束"))
+    end
+
+    subgraph 管理员泳道[" "]
+        direction TB
+        A1["用户与角色管理"]
+        A2["课程审核/公告发布"]
+        A3["操作审计"]
+        A4(("结束"))
+    end
+
+    Start([开始]) --> Login["用户登录"]
+    Login --> Role{"角色?"}
+
+    Role -->|"学生"| S1
+    Role -->|"教师"| T1
+    Role -->|"管理员"| A1
+
+    S1 --> S2 --> S3 --> S4
+    S4 -->|"是"| S5 --> S7
+    S4 -->|"否"| S6 --> S7
+
+    T1 --> T2 --> T3 --> T4
+
+    A1 --> A2 --> A3 --> A4
+
+    T1 -.->|数据支撑| S1
+    T2 -.->|数据支撑| S4

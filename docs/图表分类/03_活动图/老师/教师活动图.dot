@@ -1,0 +1,96 @@
+digraph 教师活动图 {
+    rankdir=TB;
+    splines=ortho;
+    newrank=true;
+    fontname="PingFang SC,Microsoft YaHei,sans-serif";
+    fontsize=12;
+    xlabel="教师工作流程 — 活动图";
+    labelloc=t;
+    dpi=120;
+    nodesep=0.2;
+    ranksep=0.25;
+
+    // 泳道提示：用 cluster 模拟
+    subgraph cluster_teacher {
+        xlabel="教师"; style=dashed; color=gray; fontname="PingFang SC,Microsoft YaHei,sans-serif"; fontsize=8;
+
+        start [shape=point, width=0.3, fillcolor=black];
+
+        node [shape=box, style="rounded, filled", fillcolor=white, fontname="PingFang SC,Microsoft YaHei,sans-serif", fontsize=8];
+        a1 [xlabel="登录系统"];
+        a2 [xlabel="进入工作台看板"];
+        a3 [xlabel="创建/编辑课程\n(course)"];
+        a4 [xlabel="管理知识点\n(knowledge_node)"];
+        a5 [xlabel="配置知识点属性\n(name, difficulty, chapter...)"];
+        a6 [xlabel="设定前置依赖关系\n(knowledge_edge)"];
+        a7 [xlabel="管理学习资源\n(learning_resource)"];
+        a8 [xlabel="管理题库\n(question)"];
+        a9 [xlabel="题目关联知识点"];
+        a10 [xlabel="创建测评\n(exam)"];
+        a11 [xlabel="从题库选题\n(exam_question)"];
+        a12 [xlabel="发布测评"];
+        a13 [xlabel="查看学生成绩\n(exam_record)"];
+        a14 [xlabel="查看AI诊断报告"];
+        a15 [xlabel="创建跨学科主题\n(cross_subject_theme)"];
+        a16 [xlabel="关联多学科知识点\n(cross_theme_node)"];
+        a17 [xlabel="发布到学生端"];
+        a18 [xlabel="选择班级/课程"];
+        a19 [xlabel="查看整体掌握度\n(study_record)"];
+        a20 [xlabel="查看学生个体详情"];
+        a21 [xlabel="查看错题统计\n(wrong_question)"];
+        a22 [xlabel="导出学情报表"];
+        a23 [xlabel="发布系统公告\n(sys_notice)"];
+        a24 [xlabel="更新教学内容"];
+
+        stop_node [shape=doublecircle, style=filled, fillcolor=black, width=0.25, xlabel=""];
+
+        // 判断节点
+        node [shape=diamond, style=filled, fillcolor=white, fontsize=7.5];
+        d1 [xlabel="操作\n类型?"];
+    }
+
+    // 连线
+    edge [fontname="PingFang SC,Microsoft YaHei,sans-serif", fontsize=7.5];
+
+    start -> a1;
+    a1 -> a2;
+    a2 -> d1;
+
+    // 分支1: 课程与知识点
+    d1 -> a3 [xlabel="课程"];
+    a3 -> a4;
+    a4 -> a5;
+    a5 -> a6;
+    a6 -> a7;
+    a7 -> a8;
+    a8 -> a9;
+    a9 -> a24;
+
+    // 分支2: 测评管理
+    d1 -> a10 [xlabel="测评"];
+    a10 -> a11;
+    a11 -> a12;
+    a12 -> a13;
+    a13 -> a14;
+    a14 -> a24;
+
+    // 分支3: 跨学科主题
+    d1 -> a15 [xlabel="跨学科"];
+    a15 -> a16;
+    a16 -> a17;
+    a17 -> a24;
+
+    // 分支4: 学情分析
+    d1 -> a18 [xlabel="学情"];
+    a18 -> a19;
+    a19 -> a20;
+    a20 -> a21;
+    a21 -> a22;
+    a22 -> a24;
+
+    // 分支5: 公告
+    d1 -> a23 [xlabel="公告"];
+    a23 -> a24;
+
+    a24 -> stop_node;
+}
