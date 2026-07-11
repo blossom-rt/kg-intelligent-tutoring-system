@@ -13,15 +13,14 @@ db/
 ├── init/                     ← 分步初始化脚本
 │   ├── init_all.sql              ← 第 1 步：建库建表 + 角色 + admin
 │   ├── seed_all.sql              ← 第 2 步：导入全部演示数据
-│   ├── init8.sql                 ← 第 3 步：建 chapter 表 + 回填 chapter_id
-│   ├── init9.sql                 ← 第 4 步：删除旧 chapter 文本字段
-│   └── enrich_learning_materials.sql ← 第 5 步：补充知识点学习资料
+│   └── enrich_learning_materials.sql ← 第 3 步：补充知识点学习资料
 └── migrate/                  ← 维护/迁移脚本
     ├── cleanup.sql               ← 清空业务数据（保留主账号）
     ├── add_knowledge_node_model_fields.sql ← 旧库升级：补 node_type 等字段
     ├── add_learning_resource.sql ← 旧库升级：补 learning_resource 表
-    ├── init8.sql ← 旧库升级：建 chapter 表 + 迁移章节数据
-    ├── init9.sql ← 旧库升级：删除旧 chapter 列
+    ├── add_user_favorite.sql     ← 旧库升级：补 user_favorite 表
+    ├── add_exam_record_start_time.sql ← 旧库升级：补 exam_record.start_time 字段
+    ├── migrate_chapters.sql      ← 旧库升级：迁移章节表并删除旧 chapter 列
     ├── seed_learning_resource_demo.sql ← 为知识点生成演示视频资源
     ├── add_practice_question_types.sql ← 旧库升级：为每个知识点补多选题/判断题
     ├── top_up_practice_questions_to_7.sql ← 旧库升级：把每个知识点题量补到约 7 道
@@ -36,16 +35,16 @@ db/
 mysql -u root -p < db/init_full.sql
 ```
 
-一条命令完成：建库 → 建表 → 导入全部演示数据 → 迁移章节表 → 补充学习资料 → 补齐练习题。
+一条命令完成：建库 → 建表 → 导入全部演示数据 → 补充学习资料 → 补多选/判断题 → 迁移章节表 → 补齐练习题。
 
 ### 方式 B：分步执行
 
 ```bash
 mysql -u root -p < db/init/init_all.sql
 mysql -u root -p < db/init/seed_all.sql
-mysql -u root -p < db/init/init8.sql
-mysql -u root -p < db/init/init9.sql
 mysql -u root -p < db/init/enrich_learning_materials.sql
+mysql -u root -p < db/migrate/add_practice_question_types.sql
+mysql -u root -p < db/migrate/migrate_chapters.sql
 mysql -u root -p < db/migrate/top_up_practice_questions_to_7.sql
 ```
 
@@ -53,7 +52,7 @@ mysql -u root -p < db/migrate/top_up_practice_questions_to_7.sql
 
 ### 方式 C：Docker
 
-使用项目根目录的 `docker-compose.yml`，它会按数字前缀自动执行初始化脚本：建表 → 导入演示数据 → 迁移章节表 → 补学习资料 → 补多选/判断题 → 将每个知识点题量补到约 7 道。`docker-init.sql` 仅保留为兼容入口，不再负责串联脚本。
+使用项目根目录的 `docker-compose.yml`，它会按数字前缀自动执行初始化脚本：建表 → 导入演示数据 → 补学习资料 → 补多选/判断题 → 迁移章节表 → 将每个知识点题量补到约 7 道。`docker-init.sql` 仅保留为兼容入口，不再负责串联脚本。
 
 ## 数据重置
 
@@ -64,7 +63,7 @@ mysql -u root -p -e "DROP DATABASE IF EXISTS kg_tutoring_db;"
 mysql -u root -p < db/init_full.sql
 ```
 
-`cleanup.sql` 只用于清空业务数据调试，不建议再接 `seed_all.sql` 作为完整重置流程；当前后端使用 `chapter_id`，而 `seed_all.sql` 是导入演示数据的中间步骤，需要在 `init8.sql`、`init9.sql` 迁移前执行。
+`cleanup.sql` 只用于清空业务数据调试，不建议再接 `seed_all.sql` 作为完整重置流程；当前后端使用 `chapter_id`，而 `seed_all.sql` 是导入演示数据的中间步骤，需要在 `migrate_chapters.sql` 迁移前执行。
 
 ## 旧库升级顺序
 
@@ -76,17 +75,34 @@ mysql -u root -p < db/init_full.sql
 mysql -u root -p < db/migrate/migrate_exam.sql
 ```
 
+如果旧库的 `exam_record` 还没有 `start_time` 字段：
+
+```bash
+mysql -u root -p < db/migrate/add_exam_record_start_time.sql
+```
+
+如果旧库还没有 `user_favorite` 表：
+
+```bash
+mysql -u root -p < db/migrate/add_user_favorite.sql
+```
+
 如果旧库还没有 `node_type`、`learning_goal` 等知识点扩展字段：
 
 ```bash
 mysql -u root -p < db/migrate/add_knowledge_node_model_fields.sql
 ```
 
+如果旧库需要补充知识点学习资料：
+
+```bash
+mysql -u root -p < db/init/enrich_learning_materials.sql
+```
+
 如果旧库还没有 `chapter` 表，或 `knowledge_node` 仍是旧的 `chapter` 文本字段：
 
 ```bash
-mysql -u root -p < db/migrate/init8.sql
-mysql -u root -p < db/migrate/init9.sql
+mysql -u root -p < db/migrate/migrate_chapters.sql
 ```
 
 如果旧库还没有 learning_resource 表：
@@ -109,12 +125,6 @@ mysql -u root -p < db/migrate/top_up_practice_questions_to_7.sql
 ```
 
 上述脚本会先为每个知识点追加 1 道多选题和 1 道判断题，再按当前题量动态补齐到约 7 道；题型字段使用 `single`、`multi`、`judge`，多选答案使用英文逗号分隔，例如 `A,B,C`。
-
-最后补学习资料：
-
-```bash
-mysql -u root -p < db/init/enrich_learning_materials.sql
-```
 
 ## 测试账号
 

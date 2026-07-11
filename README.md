@@ -165,6 +165,8 @@ db/                          数据库初始化脚本
 | `teacher` | `123456` | 教师 |
 | `admin` | `admin123` | 管理员 |
 
+更多演示教师和学生账号见 [`db/README.md`](db/README.md)。
+
 ---
 
 ## 用户流程

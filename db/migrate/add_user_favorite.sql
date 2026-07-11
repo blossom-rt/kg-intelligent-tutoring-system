@@ -1,4 +1,5 @@
 USE kg_tutoring_db;
+
 CREATE TABLE IF NOT EXISTS user_favorite (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL COMMENT '用户ID',
