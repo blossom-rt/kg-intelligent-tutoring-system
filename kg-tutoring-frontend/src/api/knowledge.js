@@ -34,3 +34,4 @@ export function getChapterById(id) { return request.get(`/chapters/${id}`) }
 export function createChapter(data) { return request.post('/chapters', data) }
 export function updateChapter(id, data) { return request.put(`/chapters/${id}`, data) }
 export function deleteChapter(id) { return request.delete(`/chapters/${id}`) }
+export function updateChapterSort(id, data) { return request.put(`/chapters/${id}/sort`, data) }

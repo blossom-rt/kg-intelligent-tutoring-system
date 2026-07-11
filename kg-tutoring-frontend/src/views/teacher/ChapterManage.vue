@@ -71,7 +71,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import StudentHeader from '../../components/StudentHeader.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { getChapterList, createChapter, updateChapter, deleteChapter, getCourseList } from '../../api/knowledge'
+import { getChapterList, createChapter, updateChapter, updateChapterSort, deleteChapter, getCourseList } from '../../api/knowledge'
 
 const loading = ref(false)
 const submitLoading = ref(false)
@@ -100,7 +100,13 @@ const loadData = async () => {
   loading.value = true
   try {
     const res = await getChapterList({ courseId: filterForm.courseId })
-    tableData.value = Array.isArray(res) ? res : []
+    let list = Array.isArray(res) ? res : []
+    // 如果所有章节序号都相同（迁移默认都是1），自动重排
+    const sorts = new Set(list.map(r => r.sort))
+    if (sorts.size <= 1 && list.length > 1) {
+      list = list.map((r, i) => ({ ...r, sort: i + 1 }))
+    }
+    tableData.value = list
   } catch { tableData.value = [] }
   finally { loading.value = false }
 }
@@ -140,7 +146,7 @@ const moveUp = (row) => {
   if (idx <= 0) return;
   [tableData.value[idx - 1], tableData.value[idx]] = [tableData.value[idx], tableData.value[idx - 1]]
   tableData.value.forEach((r, i) => { r.sort = i + 1 })
-  updateChapter(row.id, { sort: row.sort - 1, courseId: row.courseId, chapterName: row.chapterName }).catch(() => {})
+  updateChapterSort(row.id, { sort: row.sort - 1 }).catch(() => {})
 }
 
 const moveDown = (row) => {
@@ -148,7 +154,7 @@ const moveDown = (row) => {
   if (idx < 0 || idx >= tableData.value.length - 1) return;
   [tableData.value[idx], tableData.value[idx + 1]] = [tableData.value[idx + 1], tableData.value[idx]]
   tableData.value.forEach((r, i) => { r.sort = i + 1 })
-  updateChapter(row.id, { sort: row.sort + 1, courseId: row.courseId, chapterName: row.chapterName }).catch(() => {})
+  updateChapterSort(row.id, { sort: row.sort + 1 }).catch(() => {})
 }
 
 onMounted(() => { loadCourses() })
