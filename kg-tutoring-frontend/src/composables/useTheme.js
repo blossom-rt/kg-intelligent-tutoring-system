@@ -2,15 +2,19 @@ import { ref } from 'vue'
 
 const STORAGE_KEY = 'theme-mode'
 
-// 界面设计默认使用浅色主题，避免操作系统的深色外观将页面变成黑底。
-// 旧版保存过的 auto 也迁移为 light；用户主动选择的 dark 仍然保留。
-const savedMode = localStorage.getItem(STORAGE_KEY)
-const initialMode = savedMode === 'dark' ? 'dark' : 'light'
-const mode = ref(initialMode)
+// 'light' | 'dark' | 'auto'（auto 跟随系统）
+const mode = ref(localStorage.getItem(STORAGE_KEY) || 'auto')
 const resolved = ref('light')
+let mq = null
+
+function systemDark() {
+  return typeof window !== 'undefined' && window.matchMedia
+    ? window.matchMedia('(prefers-color-scheme: dark)').matches
+    : false
+}
 
 function resolve() {
-  return mode.value === 'dark' ? 'dark' : 'light'
+  return mode.value === 'auto' ? (systemDark() ? 'dark' : 'light') : mode.value
 }
 
 function apply() {
@@ -29,10 +33,11 @@ function toggle() {
 }
 
 function init() {
-  if (savedMode === 'auto') {
-    localStorage.setItem(STORAGE_KEY, 'light')
-  }
   apply()
+  if (typeof window !== 'undefined' && window.matchMedia) {
+    mq = window.matchMedia('(prefers-color-scheme: dark)')
+    mq.addEventListener('change', () => { if (mode.value === 'auto') apply() })
+  }
 }
 
 export function useTheme() {
