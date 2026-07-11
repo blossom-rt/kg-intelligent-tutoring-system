@@ -101,7 +101,9 @@ const isActive = (item) => {
 }
 
 const logout = () => {
-  localStorage.clear()
+  localStorage.removeItem('token')
+  localStorage.removeItem('role')
+  localStorage.removeItem('userId')
   router.push('/login')
 }
 </script>

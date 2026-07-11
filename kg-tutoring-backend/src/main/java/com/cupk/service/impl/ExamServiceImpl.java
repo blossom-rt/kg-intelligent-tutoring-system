@@ -109,11 +109,8 @@ public class ExamServiceImpl implements ExamService {
     @Override
     @Transactional
     public void deleteExam(Integer id) {
-        Long recordCount = examRecordMapper.selectCount(
-                new LambdaQueryWrapper<ExamRecord>().eq(ExamRecord::getExamId, id));
-        if (recordCount != null && recordCount > 0) {
-            throw new BusinessException("已有学生提交记录，不能删除");
-        }
+        // 级联删除：先删考试记录、题目关联，再删测评本身
+        examRecordMapper.delete(new LambdaQueryWrapper<ExamRecord>().eq(ExamRecord::getExamId, id));
         examQuestionMapper.delete(new LambdaQueryWrapper<ExamQuestion>().eq(ExamQuestion::getExamId, id));
         examMapper.deleteById(id);
     }
