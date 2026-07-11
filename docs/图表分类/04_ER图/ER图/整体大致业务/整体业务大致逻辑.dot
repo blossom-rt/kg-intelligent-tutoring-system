@@ -127,20 +127,15 @@ digraph ER_Chen {
     sys_user -> R_notifies [label="1"];   R_notifies -> sys_notice [label="N"];
     sys_user -> R_favorites [label="N"];  R_favorites -> knode [label="N"];
 
-    /* 弱关联 */
-    edge [color=black, penwidth=0.8, style=dashed];
-    sys_user -> R_operates [label="0..1"];
-    R_operates -> sys_log [label="N"];
-    R_operates [style="dashed,solid"];
-    sys_user -> R_calls [label="0..1"];
-    R_calls -> ai_log [label="N"];
-    R_calls [style="dashed,solid"];
+    /* 日志与审计 */
+    sys_user -> R_operates [label="1"];   R_operates -> sys_log [label="N"];
+    sys_user -> R_calls [label="1"];      R_calls -> ai_log [label="N"];
 
     /* 图例 */
     subgraph cluster_legend {
         label="图例"; fontsize=10;
         style=solid; color=black; bgcolor="white";
         node [shape=plaintext, fontsize=8];
-        l1 [label="□ 实体    ◇ 关系    ○ 属性    ── 强关联    ╌╌ 弱关联    1/N 基数    {PK} 主键"];
+        l1 [label="□ 实体    ◇ 关系    ○ 属性    ── 关联    1/N 基数    {PK} 主键"];
     }
 }
