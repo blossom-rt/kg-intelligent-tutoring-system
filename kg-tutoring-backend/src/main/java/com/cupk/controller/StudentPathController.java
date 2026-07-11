@@ -123,9 +123,17 @@ public class StudentPathController {
             }
         }
 
+        // 查询目标知识点名称作为学习目标
+        String targetName = null;
+        if (path.getTargetNodeId() != null) {
+            KnowledgeNode targetNode = knowledgeNodeService.getById(path.getTargetNodeId());
+            if (targetNode != null) targetName = targetNode.getName();
+        }
+
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("id", path.getId());
         result.put("pathName", path.getPathName());
+        result.put("target", targetName);
         result.put("totalNodes", path.getTotalNodes());
         result.put("totalMinutes", path.getTotalMinutes());
         result.put("aiSummary", path.getAiSummary());
