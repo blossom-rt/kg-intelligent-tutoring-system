@@ -1,6 +1,5 @@
 /*
- * KG 智能导学系统 — 技术架构图
- * 每层8个槽位，实际内容居中，空位用invis占位
+ * KG 智能导学系统 — 技术架构图（按实际技术栈）
  */
 digraph TechArch {
     rankdir=TB;
@@ -9,8 +8,8 @@ digraph TechArch {
     fontsize=16;
     label="智能导学系统 — 技术架构图";
     bgcolor="white";
-    nodesep=0.1;
-    ranksep=0.45;
+    nodesep=0.08;
+    ranksep=0.4;
     compound=true;
     newrank=true;
 
@@ -18,22 +17,22 @@ digraph TechArch {
     node [fontname="Times-Roman", shape=box, style="filled,bold", fontsize=10,
           width=0.55, height=0.85, fixedsize=true, penwidth=0];
 
-    L1 [label="访\n问\n层",     fillcolor="#43A047", color="#43A047", fontcolor=white];
-    L2 [label="前\n端\n框\n架", fillcolor="#C62828", color="#C62828", fontcolor=white];
-    L3 [label="功\n能\n模\n块", fillcolor="#1565C0", color="#1565C0", fontcolor=white];
-    L4 [label="业\n务\n逻\n辑", fillcolor="#4527A0", color="#4527A0", fontcolor=white];
-    L5 [label="中\n间\n件\n/\n服\n务\n层", fillcolor="#E65100", color="#E65100", fontcolor=white,
-         width=0.58, height=1.2, fontsize=8];
-    L6 [label="数\n据\n库\n/\n基\n础\n设\n施", fillcolor="#B71C1C", color="#B71C1C", fontcolor=white,
+    L1 [label="访\n问\n层",       fillcolor="#43A047", color="#43A047", fontcolor=white];
+    L2 [label="前\n端\n框\n架",   fillcolor="#C62828", color="#C62828", fontcolor=white];
+    L3 [label="功\n能\n模\n块",   fillcolor="#1565C0", color="#1565C0", fontcolor=white];
+    L4 [label="业\n务\n服\n务",   fillcolor="#4527A0", color="#4527A0", fontcolor=white];
+    L5 [label="中\n间\n件\n/\n框\n架\n层", fillcolor="#E65100", color="#E65100", fontcolor=white,
          width=0.58, height=1.35, fontsize=8];
+    L6 [label="数\n据\n/\n基\n础\n设\n施", fillcolor="#B71C1C", color="#B71C1C", fontcolor=white,
+         width=0.58, height=1.5, fontsize=8];
 
     /* item 通用大小 */
     node [fontname="Times-Roman", fontsize=9, shape=box, style="rounded,filled",
-          width=1.3, height=0.55, penwidth=1.2];
+          width=1.25, height=0.5, penwidth=1.2];
 
     /* ====== 第1层：访问层 (绿) ====== */
     subgraph cluster_A { style="rounded,filled"; fillcolor="#E8F5E9"; color="#A5D6A7"; penwidth=2.2; label=""; margin=10;
-        node [fillcolor="#C8E6C9", color="#66BB6A", fontcolor="#1B5E20", fontsize=10];
+        node [fillcolor="#C8E6C9", color="#66BB6A", fontcolor="#1B5E20"];
         { rank=same;
             _1a [style=invis]; _1b [style=invis];
             a1 [label="PC 浏览器"]; a2 [label="手机浏览器"]; a3 [label="IntelliJ IDEA"];
@@ -41,13 +40,13 @@ digraph TechArch {
         }
     }
 
-    /* ====== 第2层：前端 (粉红) ====== */
+    /* ====== 第2层：前端框架 (粉红) ====== */
     subgraph cluster_B { style="rounded,filled"; fillcolor="#FCE4EC"; color="#F48FB1"; penwidth=2.2; label=""; margin=10;
-        node [fillcolor="#F8BBD0", color="#E57373", fontcolor="#880E4F"];
+        node [fillcolor="#F8BBD0", color="#E57373", fontcolor="#880E4F", fontsize=8];
         { rank=same;
-            _2a [style=invis];
-            f1 [label="Vue 3"]; f2 [label="Vite 8"]; f3 [label="Element\nPlus 2"];
-            f4 [label="ECharts 5"]; f5 [label="Pinia"]; f6 [label="Vue\nRouter 4"]; f7 [label="Axios"];
+            f1 [label="Vue 3.5"]; f2 [label="Vite 8"]; f3 [label="Element\nPlus 2"];
+            f4 [label="ECharts 6"]; f5 [label="D3.js"]; f6 [label="Three.js"];
+            f7 [label="Pinia 3"]; f8 [label="Vue\nRouter 5"]; f9 [label="Axios"];
         }
     }
 
@@ -55,44 +54,44 @@ digraph TechArch {
     subgraph cluster_C { style="rounded,filled"; fillcolor="#E3F2FD"; color="#90CAF9"; penwidth=2.2; label=""; margin=10;
         node [fillcolor="#BBDEFB", color="#64B5F6", fontcolor="#0D47A1", height=0.6];
         { rank=same;
-            _3a [style=invis]; _3b [style=invis];
-            m1 [label="学生端\n15个页面"]; m2 [label="教师端\n10个页面"];
-            m3 [label="管理员端\n7个页面"]; m4 [label="认证页\n3个页面"];
-            _3c [style=invis]; _3d [style=invis];
+            _3a [style=invis];
+            m1 [label="学生端\n15 页面"]; m2 [label="教师端\n10 页面"];
+            m3 [label="管理员端\n7 页面"]; m4 [label="认证模块\n注册/登录/找回"];
+            _3b [style=invis];
         }
     }
 
-    /* ====== 第4层：业务 (紫) ====== */
+    /* ====== 第4层：业务服务 (紫) ====== */
     subgraph cluster_D { style="rounded,filled"; fillcolor="#EDE7F6"; color="#B39DDB"; penwidth=2.2; label=""; margin=10;
-        node [fillcolor="#D1C4E9", color="#7E57C2", fontcolor="#311B92", fontsize=8, height=0.65];
+        node [fillcolor="#D1C4E9", color="#7E57C2", fontcolor="#311B92", fontsize=7.5, height=0.65];
         { rank=same;
             b1 [label="知识图谱\n拓扑排序"]; b2 [label="学习路径\n自动生成"];
-            b3 [label="在线刷题\n即时判分"]; b4 [label="测评中心\nAI诊断"];
-            b5 [label="错题本\nAI讲解"]; b6 [label="跨学科\n主题融合"];
-            b7 [label="学情分析\n数据统计"]; b8 [label="学习伙伴\nCSS动画"];
+            b3 [label="在线刷题\n即时判分"]; b4 [label="测评中心\nAI 诊断"];
+            b5 [label="错题本\nAI 讲解"]; b6 [label="跨学科\n主题融合"];
+            b7 [label="学情分析\n数据统计"]; b8 [label="学习伙伴\nCSS 动画"];
         }
     }
 
-    /* ====== 第5层：中间件 (橙) ====== */
+    /* ====== 第5层：中间件/框架 (橙) ====== */
     subgraph cluster_E { style="rounded,filled"; fillcolor="#FFF3E0"; color="#FFCC80"; penwidth=2.2; label=""; margin=10;
-        node [fillcolor="#FFE0B2", color="#FF9800", fontcolor="#BF360C"];
+        node [fillcolor="#FFE0B2", color="#FF9800", fontcolor="#BF360C", fontsize=8];
         { rank=same;
-            _5a [style=invis];
-            s1 [label="Spring Boot\n3.5"]; s2 [label="MyBatis\nPlus"];
-            s3 [label="JWT 鉴权"]; s4 [label="JavaMail"];
-            s5 [label="AOP 日志"]; s6 [label="Maven"];
-            _5b [style=invis];
+            s1 [label="Spring Boot\n3.5.16"]; s2 [label="MyBatis\nPlus 3.5.5"];
+            s3 [label="JWT\n(jjwt)"]; s4 [label="JavaMail\n(QQ SMTP)"];
+            s5 [label="AOP\n操作日志"]; s6 [label="RestTemplate\n(HTTP)"];
+            s7 [label="HikariCP\n连接池"]; s8 [label="Lombok"];
         }
     }
 
-    /* ====== 第6层：数据库 (红) ====== */
+    /* ====== 第6层：数据/基础设施 (红) ====== */
     subgraph cluster_F { style="rounded,filled"; fillcolor="#FFEBEE"; color="#EF9A9A"; penwidth=2.2; label=""; margin=10;
-        node [fillcolor="#FFCDD2", color="#E57373", fontcolor="#B71C1C", height=0.6];
+        node [fillcolor="#FFCDD2", color="#E57373", fontcolor="#B71C1C", fontsize=8, height=0.6];
         { rank=same;
-            _6a [style=invis]; _6b [style=invis];
-            d1 [label="MySQL 8.0\n19 张表"]; d2 [label="Docker\n容器化"];
+            _6a [style=invis];
+            d1 [label="MySQL 8.0\n22 张表"]; d2 [label="Docker\n多阶段构建"];
             d3 [label="数据脚本\ninit/seed/migrate"];
-            _6c [style=invis]; _6d [style=invis]; _6e [style=invis];
+            d4 [label="DeepSeek\nAPI (外部)"]; d5 [label="QQ 邮箱\nSMTP (外部)"];
+            _6b [style=invis];
         }
     }
 
