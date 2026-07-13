@@ -31,6 +31,7 @@ const routes = [
   { path: '/teacher', component: () => import('../views/TeacherHome.vue'), meta: { roles: ['teacher'] } },
   { path: '/teacher/courses', component: () => import('../views/teacher/CourseManage.vue'), meta: { roles: ['teacher'] } },
   { path: '/teacher/nodes', component: () => import('../views/teacher/NodeManage.vue'), meta: { roles: ['teacher'] } },
+  { path: '/teacher/chapters', component: () => import('../views/teacher/ChapterManage.vue'), meta: { roles: ['teacher'] } },
   { path: '/teacher/edges', component: () => import('../views/teacher/GraphEdit.vue'), meta: { roles: ['teacher'] } },
   { path: '/teacher/questions', component: () => import('../views/teacher/QuestionManage.vue'), meta: { roles: ['teacher'] } },
   { path: '/teacher/exams', component: () => import('../views/teacher/ExamManage.vue'), meta: { roles: ['teacher'] } },

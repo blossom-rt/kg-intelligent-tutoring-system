@@ -20,6 +20,7 @@ public class StudentController {
     private final StudyPathMapper pathMapper;
     private final PathDetailMapper detailMapper;
     private final StudyRecordMapper recordMapper;
+    private final WrongQuestionMapper wrongQuestionMapper;
     private final JwtUtil jwtUtil;
 
     private Integer getUserId(HttpServletRequest req) {
@@ -65,7 +66,44 @@ public class StudentController {
             })
             .filter(m -> (int) m.get("progress") < 100)
             .toList());
-        result.put("todos", List.of());
+        // 生成待办提醒
+        List<Map<String, Object>> todos = new ArrayList<>();
+        // 未完成的错题（超过 3 道错题的知识点）
+        if (userId != null) {
+            List<WrongQuestion> wqs = wrongQuestionMapper.selectList(
+                    new LambdaQueryWrapper<WrongQuestion>().eq(WrongQuestion::getUserId, userId));
+            Map<Integer, Long> wqCount = wqs.stream()
+                    .collect(java.util.stream.Collectors.groupingBy(WrongQuestion::getQuestionId, java.util.stream.Collectors.counting()));
+            if (wqCount.size() > 3) {
+                Map<String, Object> todo = new LinkedHashMap<>();
+                todo.put("id", 1);
+                todo.put("content", "有 " + wqCount.size() + " 道错题待重做");
+                todo.put("tagType", "danger");
+                todo.put("label", "错题");
+                todos.add(todo);
+            }
+        }
+        // 未完成的路径
+        List<StudyPath> activePaths = pathMapper.selectList(
+                new LambdaQueryWrapper<StudyPath>().eq(StudyPath::getUserId, userId).eq(StudyPath::getStatus, 0));
+        if (!activePaths.isEmpty()) {
+            long totalUnfinished = 0;
+            for (StudyPath p : activePaths) {
+                totalUnfinished += detailMapper.selectCount(
+                        new LambdaQueryWrapper<PathDetail>()
+                                .eq(PathDetail::getPathId, p.getId())
+                                .eq(PathDetail::getIsFinished, 0));
+            }
+            if (totalUnfinished > 0) {
+                Map<String, Object> todo = new LinkedHashMap<>();
+                todo.put("id", 2);
+                todo.put("content", totalUnfinished + " 个学习节点待完成");
+                todo.put("tagType", "primary");
+                todo.put("label", "路径");
+                todos.add(todo);
+            }
+        }
+        result.put("todos", todos);
         result.put("stats", Map.of(
                 "studyDays", records.isEmpty() ? 0 : 1,
                 "totalMinutes", totalMin,
@@ -73,6 +111,15 @@ public class StudentController {
                 "correctRate", displayCorrectRate
         ));
         return ResponseEntity.ok(result);
+    }
+
+
+    @GetMapping("/study-records")
+    public ResponseEntity<?> studyRecords(HttpServletRequest req) {
+        Integer userId = getUserId(req);
+        if (userId == null) return ResponseEntity.status(401).body(Map.of("error", "未登录"));
+        return ResponseEntity.ok(recordMapper.selectList(
+                new LambdaQueryWrapper<StudyRecord>().eq(StudyRecord::getUserId, userId)));
     }
 
 }

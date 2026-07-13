@@ -12,6 +12,8 @@ export function createUser(data) { return request.post('/admin/users', data) }
 export function updateUser(id, data) { return request.put(`/admin/users/${id}`, data) }
 export function deleteUser(id) { return request.delete(`/admin/users/${id}`) }
 export function toggleUserStatus(id, data) { return request.put(`/admin/users/${id}/status`, data) }
+export function exportUsers() { return request.get('/admin/users/export', { responseType: 'blob' }) }
+export function importUsers(data) { return request.post('/admin/users/import', data) }
 
 // 公告管理
 export function getNoticeList(params) { return request.get('/notices', { params }) }

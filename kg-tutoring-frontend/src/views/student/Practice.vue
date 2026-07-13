@@ -65,8 +65,10 @@
 
         <div class="question-body">
           <p class="question-text">{{ currentQuestion.content }}</p>
+          <div class="question-type-hint">{{ questionTypeLabel }}{{ isMultiQuestion ? '，可选择多个答案' : '' }}</div>
 
           <el-radio-group
+            v-if="!isMultiQuestion"
             v-model="selectedAnswer"
             class="options-group"
             :disabled="answered"
@@ -83,6 +85,24 @@
             </div>
           </el-radio-group>
 
+          <el-checkbox-group
+            v-else
+            v-model="selectedAnswers"
+            class="options-group"
+            :disabled="answered"
+          >
+            <div
+              v-for="(opt, oi) in parsedOptions"
+              :key="oi"
+              class="option-item"
+              :class="optionClass(oi)"
+            >
+              <el-checkbox :label="opt.key" :value="opt.key" size="large">
+                <span class="option-text">{{ opt.label }}</span>
+              </el-checkbox>
+            </div>
+          </el-checkbox-group>
+
           <!-- 反馈 -->
           <div v-if="answered" class="feedback-area">
             <el-alert
@@ -92,7 +112,7 @@
               show-icon
             >
               <template v-if="!isCorrect">
-                <p class="correct-answer">正确答案：{{ currentQuestion.answer }}</p>
+                <p class="correct-answer">正确答案：{{ formatAnswer(currentQuestion.answer) }}</p>
                 <p v-if="explainText" class="explanation">{{ explainText }}</p>
               </template>
             </el-alert>
@@ -100,7 +120,7 @@
         </div>
 
         <div class="question-actions">
-          <el-button v-if="!answered" type="primary" size="large" @click="submitAnswer" :disabled="!selectedAnswer">
+          <el-button v-if="!answered" type="primary" size="large" @click="submitAnswer" :disabled="!hasSelectedAnswer">
             提交答案
           </el-button>
           <el-button v-else size="large" @click="nextQuestion">
@@ -128,6 +148,7 @@ const loading = ref(false)
 const questions = ref([])
 const currentIndex = ref(0)
 const selectedAnswer = ref('')
+const selectedAnswers = ref([])
 const answered = ref(false)
 const isCorrect = ref(false)
 const correctCount = ref(0)
@@ -139,6 +160,17 @@ const currentQuestion = computed(() => {
 })
 const explainText = computed(() => {
   return currentQuestion.value.analysis || ''
+})
+
+const isMultiQuestion = computed(() => currentQuestion.value.questionType === 'multi')
+
+const questionTypeLabel = computed(() => {
+  const map = { single: '单选题', multi: '多选题', judge: '判断题' }
+  return map[currentQuestion.value.questionType] || '练习题'
+})
+
+const hasSelectedAnswer = computed(() => {
+  return isMultiQuestion.value ? selectedAnswers.value.length > 0 : !!selectedAnswer.value
 })
 
 const parsedOptions = computed(() => {
@@ -181,35 +213,41 @@ const diffTagType = (level) => {
   return map[level] || 'info'
 }
 
-// 将答案统一转为索引（A→0, B→1, C→2, D→3），兼容数字索引
-const normalizeAnswer = (ans) => {
-  if (!ans && ans !== 0) return ''
-  const s = String(ans).trim().toUpperCase()
-  const letterMap = { A: '0', B: '1', C: '2', D: '3', E: '4', F: '5' }
-  return letterMap[s] || s
+const normalizeAnswer = (answer) => {
+  if (Array.isArray(answer)) return answer.map(item => String(item).trim().toUpperCase()).filter(Boolean).sort().join(',')
+  return String(answer ?? '').split(',').map(item => item.trim().toUpperCase()).filter(Boolean).sort().join(',')
+}
+
+const currentUserAnswer = () => {
+  return isMultiQuestion.value ? normalizeAnswer(selectedAnswers.value) : normalizeAnswer(selectedAnswer.value)
+}
+
+const formatAnswer = (answer) => {
+  return normalizeAnswer(answer).replaceAll(',', '、')
 }
 
 const optionClass = (oi) => {
   if (!answered.value) return {}
   const key = parsedOptions.value[oi]?.key
   const correctKey = normalizeAnswer(currentQuestion.value.answer)
+  const userKeys = normalizeAnswer(isMultiQuestion.value ? selectedAnswers.value : selectedAnswer.value).split(',')
   return {
-    'option-correct': String(key) === correctKey,
-    'option-wrong': !isCorrect.value && key === selectedAnswer.value
+    'option-correct': correctKey.split(',').includes(String(key).toUpperCase()),
+    'option-wrong': !isCorrect.value && userKeys.includes(String(key).toUpperCase()) && !correctKey.split(',').includes(String(key).toUpperCase())
   }
 }
 
 const submitAnswer = () => {
-  if (!selectedAnswer.value) return
+  if (!hasSelectedAnswer.value) return
+  const userAnswer = currentUserAnswer()
   answered.value = true
-  isCorrect.value = String(selectedAnswer.value) === String(currentQuestion.value.answer || '')
+  isCorrect.value = userAnswer === normalizeAnswer(currentQuestion.value.answer)
   if (isCorrect.value) {
     correctCount.value++
     pet.celebrate()
-    // 从错题本来的，答对自动标记为已掌握
+    setTimeout(() => confetti({ particleCount: 80, spread: 70, origin: { x: 0.5, y: 0.6 }, colors: ["#ff7b3d","#f5a623","#5eaf83","#d4a853"], disableForReducedMotion: true }), 100)
+    // 从错题本来的，答对标记已掌握
     if (route.query.fromWrong === 'true') {
-      // 错题做对：撒花 + 标记已掌握
-      setTimeout(() => confetti({ particleCount: 80, spread: 70, origin: { x: 0.5, y: 0.6 }, colors: ['#ff7b3d','#f5a623','#5eaf83','#d4a853'], disableForReducedMotion: true }), 100)
       try {
         const reviewed = JSON.parse(localStorage.getItem('reviewedWrongQuestions') || '{}')
         reviewed[currentQuestion.value.id] = new Date().toISOString()
@@ -222,12 +260,12 @@ const submitAnswer = () => {
     pet.comfort()
     addWrongQuestion({
       questionId: currentQuestion.value.id,
-      wrongAnswer: selectedAnswer.value
+      wrongAnswer: userAnswer
     }).catch(() => {})
   }
   userAnswers.value.push({
     questionId: currentQuestion.value.id,
-    answer: selectedAnswer.value,
+    answer: userAnswer,
     correct: isCorrect.value
   })
 }
@@ -236,6 +274,7 @@ const nextQuestion = async () => {
   if (currentIndex.value < questions.value.length - 1) {
     currentIndex.value++
     selectedAnswer.value = ''
+    selectedAnswers.value = []
     answered.value = false
     isCorrect.value = false
   } else {
@@ -254,7 +293,7 @@ const nextQuestion = async () => {
       submitRes = await submitPractice(submitData)
     } catch { /* 后台静默记录 */ }
 
-    // 正确率 >= 60% 时自动跳转，不展示结果页
+    // 正确率 >= 80% 时自动跳转，不展示结果页
     const correctRate = submitRes?.correctRate ?? scorePercent.value
     if (correctRate >= 80) {
       // 标记路径节点完成（如果是从路径进入的练习）
@@ -268,7 +307,7 @@ const nextQuestion = async () => {
       return
     }
 
-    // 正确率不足 60% 时展示结果页
+    // 正确率不足 80% 时展示结果页
     finished.value = true
   }
 }
@@ -276,6 +315,7 @@ const nextQuestion = async () => {
 const restart = () => {
   currentIndex.value = 0
   selectedAnswer.value = ''
+  selectedAnswers.value = []
   answered.value = false
   isCorrect.value = false
   correctCount.value = 0
@@ -440,7 +480,17 @@ onMounted(fetchQuestions)
   font-size: 16px;
   color: var(--text-primary);
   line-height: 1.8;
-  margin: 0 0 24px;
+  margin: 0 0 8px;
+}
+
+.question-type-hint {
+  display: inline-flex;
+  margin-bottom: 16px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--bg-soft);
+  color: var(--text-secondary);
+  font-size: 13px;
 }
 
 .options-group {
@@ -461,6 +511,10 @@ onMounted(fetchQuestions)
 }
 
 .option-item :deep(.el-radio) {
+  width: 100%;
+}
+
+.option-item :deep(.el-checkbox) {
   width: 100%;
 }
 

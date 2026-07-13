@@ -6,7 +6,7 @@ UPDATE knowledge_node
 SET description = CONCAT(
     '## 学习目标\n',
     '- 说清楚「', name, '」要解决的核心问题。\n',
-    '- 能把本知识点和章节「', COALESCE(chapter, '未分章'), '」中的前后内容联系起来。\n',
+    '- 能把本知识点和所在章节中的前后内容联系起来。\n',
     '- 能完成基础题，并能解释每一步使用了哪个概念或规则。\n\n',
     '## 核心概念\n',
     COALESCE(NULLIF(description, ''), CONCAT('围绕「', name, '」建立基础理解，先掌握定义，再练习典型应用。')), '\n\n',

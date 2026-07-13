@@ -20,11 +20,14 @@ public class CourseServiceImpl implements CourseService {
     private final CourseMapper courseMapper;
 
     @Override
-    public List<Course> list(String subject) {
+    public List<Course> list(String subject, Integer teacherId) {
         LambdaQueryWrapper<Course> wrapper = new LambdaQueryWrapper<Course>()
                 .orderByDesc(Course::getCreateTime);
         if (subject != null && !subject.isEmpty()) {
             wrapper.like(Course::getSubject, subject);
+        }
+        if (teacherId != null) {
+            wrapper.eq(Course::getTeacherId, teacherId);
         }
         return courseMapper.selectList(wrapper);
     }

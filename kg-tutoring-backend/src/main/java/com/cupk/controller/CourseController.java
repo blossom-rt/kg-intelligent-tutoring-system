@@ -4,7 +4,9 @@ import com.cupk.aspect.OperLog;
 import com.cupk.common.BusinessException;
 import com.cupk.common.Result;
 import com.cupk.common.UserContext;
+import com.cupk.mapper.SysUserMapper;
 import com.cupk.pojo.Course;
+import com.cupk.pojo.SysUser;
 import com.cupk.service.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,7 @@ import java.util.Map;
 public class CourseController {
 
     private final CourseService courseService;
+    private final SysUserMapper sysUserMapper;
 
     /**
      * 检查当前用户是否为管理员，否则抛出无权限异常
@@ -35,8 +38,23 @@ public class CourseController {
      * 查询课程列表
      */
     @GetMapping
-    public Result<List<Course>> list(@RequestParam(required = false) String subject) {
-        return Result.success(courseService.list(subject));
+    public Result<List<Course>> list(
+            @RequestParam(required = false) String subject,
+            @RequestParam(required = false) Integer teacherId) {
+        // 教师角色自动按当前教师过滤
+        Integer autoTeacherId = teacherId;
+        if ("teacher".equals(UserContext.getRole())) {
+            autoTeacherId = UserContext.getUserId();
+        }
+        List<Course> courses = courseService.list(subject, autoTeacherId);
+        // 填充教师姓名
+        for (Course c : courses) {
+            if (c.getTeacherId() != null) {
+                SysUser teacher = sysUserMapper.selectById(c.getTeacherId());
+                if (teacher != null) c.setTeacherName(teacher.getRealName());
+            }
+        }
+        return Result.success(courses);
     }
 
     /**

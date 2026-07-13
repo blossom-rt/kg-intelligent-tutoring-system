@@ -71,6 +71,7 @@ const menuItems = computed(() => {
     teacher: [
       { path: '/teacher', label: '工作台', icon: HomeFilled },
       { path: '/teacher/courses', label: '课程管理', icon: School },
+      { path: '/teacher/chapters', label: '章节管理', icon: Grid },
       { path: '/teacher/nodes', label: '知识点管理', icon: Grid },
       { path: '/teacher/edges', label: '图谱编辑', icon: Share },
       { path: '/teacher/questions', label: '题库管理', icon: EditPen },
@@ -100,7 +101,9 @@ const isActive = (item) => {
 }
 
 const logout = () => {
-  localStorage.clear()
+  localStorage.removeItem('token')
+  localStorage.removeItem('role')
+  localStorage.removeItem('userId')
   router.push('/login')
 }
 </script>

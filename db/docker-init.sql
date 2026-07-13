@@ -1,3 +1,2 @@
-SOURCE /docker-entrypoint-initdb.d/init/init_all.sql;
-SOURCE /docker-entrypoint-initdb.d/init/seed_all.sql;
-SOURCE /docker-entrypoint-initdb.d/init/enrich_learning_materials.sql;
+-- Docker Compose mounts the initialization scripts with numeric prefixes.
+-- This file is intentionally kept as a no-op compatibility entry.

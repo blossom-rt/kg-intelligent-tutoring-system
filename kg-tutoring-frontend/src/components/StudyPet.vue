@@ -36,7 +36,7 @@ let blinkTimer = null
 let idleTimer = null
 let pid = 0
 
-// ── 表情映射 ──
+// 表情映射
 const moodConfig = {
   idle:    { left: '●', right: '●', mouth: '﹀' },
   happy:   { left: '★', right: '★', mouth: '▼' },
@@ -55,7 +55,7 @@ const applyMood = (m) => {
   mouthIcon.value = cfg.mouth
 }
 
-// ── 粒子特效 ──
+// 粒子特效
 const spawnParticles = (emojiList, count = 6) => {
   for (let i = 0; i < count; i++) {
     const id = ++pid
@@ -79,7 +79,7 @@ const spawnParticles = (emojiList, count = 6) => {
   }
 }
 
-// ── 公共方法 ──
+// 公共方法
 const celebrate = () => {
   applyMood('happy')
   isJumping.value = true
@@ -115,7 +115,7 @@ const poke = () => {
   setTimeout(() => isJumping.value = false, 500)
 }
 
-// ── 定时眨眼 ──
+// 定时眨眼
 const setupBlink = () => {
   blinkTimer = setInterval(() => {
     blinking.value = true
@@ -123,7 +123,7 @@ const setupBlink = () => {
   }, 2500 + Math.random() * 4000)
 }
 
-// ── 空闲小动作 ──
+// 空闲小动作
 const setupIdle = () => {
   idleTimer = setInterval(() => {
     if (mood.value !== 'idle') return
@@ -156,7 +156,7 @@ defineExpose({ celebrate, comfort, say, fireUp, poke })
 }
 .pet-container.hidden { opacity: 0; pointer-events: none; }
 
-/* ── 宠物身体 ── */
+/* 宠物身体 */
 .pet-body {
   width: 64px; height: 64px;
   border-radius: 50%;
@@ -192,7 +192,7 @@ defineExpose({ celebrate, comfort, say, fireUp, poke })
   100% { transform: translateY(0) scale(1); }
 }
 
-/* ── 眼睛 ── */
+/* 眼睛 */
 .eyes {
   display: flex; gap: 8px;
   margin-bottom: 2px;
@@ -206,14 +206,14 @@ defineExpose({ celebrate, comfort, say, fireUp, poke })
 }
 .eye.blink { transform: scaleY(0.1); }
 
-/* ── 嘴巴 ── */
+/* 嘴巴 */
 .mouth {
   font-size: 12px; line-height: 1;
   color: rgba(0,0,0,0.5);
   transition: all 0.2s ease;
 }
 
-/* ── 腮红 ── */
+/* 腮红 */
 .blush {
   position: absolute; width: 10px; height: 6px;
   background: rgba(255,255,255,0.3); border-radius: 50%;
@@ -222,7 +222,7 @@ defineExpose({ celebrate, comfort, say, fireUp, poke })
 .left-blush  { left: 10px; }
 .right-blush { right: 10px; }
 
-/* ── 气泡 ── */
+/* 气泡 */
 .speech-bubble {
   position: absolute;
   bottom: 76px;
@@ -245,7 +245,7 @@ defineExpose({ celebrate, comfort, say, fireUp, poke })
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* ── 粒子 ── */
+/* 粒子 */
 .particle {
   position: absolute;
   bottom: 30px;

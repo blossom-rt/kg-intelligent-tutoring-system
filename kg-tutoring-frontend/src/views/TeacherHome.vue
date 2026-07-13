@@ -51,9 +51,14 @@
         <div class="card" style="flex:1">
           <div class="card-header">
             <el-icon class="card-head-icon"><Bell /></el-icon>
-            待处理事项
+            数据概览
           </div>
-          <div class="empty-hint">暂无待处理事项</div>
+          <div class="todo-list">
+            <div class="todo-item"><el-tag size="small" type="primary" round>课程</el-tag><span>共 {{ stats.courseCount || stats.totalCourses || 0 }} 门课程</span></div>
+            <div class="todo-item"><el-tag size="small" type="success" round>学生</el-tag><span>{{ stats.activeStudents || 0 }} 名活跃学生</span></div>
+            <div class="todo-item"><el-tag size="small" type="warning" round>本周</el-tag><span>{{ stats.weekStudy || 0 }} 人次学习</span></div>
+            <div class="todo-item"><el-tag size="small" type="info" round>题库</el-tag><span>共 {{ stats.totalQuestions || 0 }} 道题目</span></div>
+          </div>
         </div>
         <div class="card" style="flex:1">
           <div class="card-header">
@@ -135,6 +140,7 @@ const statsList = computed(() => [
 
 const entries = [
   { key: 'courses', icon: School, label: '课程管理', desc: '创建与编排课程', path: '/teacher/courses', bg: '#e8f5ec', color: '#2d8a4e' },
+  { key: 'chapters', icon: Grid, label: '章节管理', desc: '课程章节编排', path: '/teacher/chapters', bg: '#eef2f8', color: '#3d5a8e' },
   { key: 'nodes', icon: Grid, label: '知识点管理', desc: '知识节点与依赖', path: '/teacher/nodes', bg: '#fff3e8', color: '#e06830' },
   { key: 'edges', icon: Share, label: '图谱编辑', desc: '可视化调整依赖关系', path: '/teacher/edges', bg: '#eef2f8', color: '#3d5a8e' },
   { key: 'questions', icon: EditPen, label: '题库管理', desc: '习题录入与维护', path: '/teacher/questions', bg: '#e8f0f8', color: '#5a7dba' },
@@ -148,7 +154,7 @@ onMounted(async () => {
   // 从教师首页看板接口获取统计数据
   try { const res = await request.get('/teacher/dashboard'); if (res) stats.value = res } catch { }
 
-  // 补充：从现有接口统计课程数、知识点数
+  // 从现有接口统计课程数、知识点数
   try {
     const courses = await getCourseList()
     if (Array.isArray(courses)) stats.value.courseCount = courses.length
@@ -268,4 +274,6 @@ const showNotice = (n) => { currentNotice.value = n; noticeDialog.value = true }
   .bottom-row { flex-direction: column; }
   .content { padding: 16px; }
 }
+.todo-list { display: flex; flex-direction: column; gap: 12px; }
+.todo-item { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--text-secondary); }
 </style>

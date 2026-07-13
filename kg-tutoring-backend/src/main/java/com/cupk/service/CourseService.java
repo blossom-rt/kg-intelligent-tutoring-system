@@ -10,8 +10,8 @@ import java.util.Map;
  */
 public interface CourseService {
 
-    /** 查询课程列表 */
-    List<Course> list(String subject);
+    /** 查询课程列表（可按学科、教师过滤） */
+    List<Course> list(String subject, Integer teacherId);
 
     /** 根据ID查询课程 */
     Course getById(Integer id);

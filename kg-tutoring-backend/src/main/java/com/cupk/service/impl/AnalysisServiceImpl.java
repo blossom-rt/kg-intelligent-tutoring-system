@@ -1,12 +1,14 @@
 package com.cupk.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.cupk.mapper.ChapterMapper;
 import com.cupk.mapper.ExamRecordMapper;
 import com.cupk.mapper.KnowledgeNodeMapper;
 import com.cupk.mapper.QuestionMapper;
 import com.cupk.mapper.StudyRecordMapper;
 import com.cupk.mapper.SysUserMapper;
 import com.cupk.mapper.WrongQuestionMapper;
+import com.cupk.pojo.Chapter;
 import com.cupk.pojo.ExamRecord;
 import com.cupk.pojo.KnowledgeNode;
 import com.cupk.pojo.Question;
@@ -34,6 +36,7 @@ public class AnalysisServiceImpl implements AnalysisService {
     private final KnowledgeNodeMapper knowledgeNodeMapper;
     private final QuestionMapper questionMapper;
     private final SysUserMapper sysUserMapper;
+    private final ChapterMapper chapterMapper;
 
     @Override
     public Map<String, Object> classAnalysis(Integer courseId) {
@@ -105,7 +108,7 @@ public class AnalysisServiceImpl implements AnalysisService {
         weakNodes.sort((a, b) -> Integer.compare((int) a.get("masteryRate"), (int) b.get("masteryRate")));
         result.put("weakNodes", weakNodes.size() > 5 ? weakNodes.subList(0, 5) : weakNodes);
 
-        // ===== 掌握度分布（用于饼图） =====
+        // 掌握度分布（用于饼图）
         int poor = 0, fair = 0, good = 0, excellent = 0;
         for (Integer uid : studentIds) {
             long masteredCount = allRecords.stream()
@@ -124,7 +127,7 @@ public class AnalysisServiceImpl implements AnalysisService {
         Map<String, Object> d4 = new LinkedHashMap<>(); d4.put("name", "优秀（>=80%）"); d4.put("value", excellent); masteryDistribution.add(d4);
         result.put("masteryDistribution", masteryDistribution);
 
-        // ===== 知识点平均正确率（用于柱状图） =====
+        // 知识点平均正确率（用于柱状图）
         List<Map<String, Object>> nodeCorrectRates = new ArrayList<>();
         for (KnowledgeNode node : nodes) {
             double nodeAvg = allRecords.stream()
@@ -141,7 +144,7 @@ public class AnalysisServiceImpl implements AnalysisService {
         nodeCorrectRates.sort((a, b) -> Integer.compare((int) b.get("correctRate"), (int) a.get("correctRate")));
         result.put("nodeCorrectRates", nodeCorrectRates);
 
-        // ===== 学习趋势（最近7天每日学习人数） =====
+        // 学习趋势（最近7天每日学习人数）
         List<Map<String, Object>> studyTrend = new ArrayList<>();
         for (int i = 6; i >= 0; i--) {
             java.time.LocalDate day = java.time.LocalDate.now().minusDays(i);
@@ -159,7 +162,7 @@ public class AnalysisServiceImpl implements AnalysisService {
         }
         result.put("studyTrend", studyTrend);
 
-        // ===== 薄弱知识点排行（按正确率升序） =====
+        // 薄弱知识点排行（按正确率升序）
         List<Map<String, Object>> weakRank = new ArrayList<>();
         for (KnowledgeNode node : nodes) {
             double nodeAvg = allRecords.stream()
@@ -175,6 +178,32 @@ public class AnalysisServiceImpl implements AnalysisService {
         }
         weakRank.sort((a, b) -> Integer.compare((int) a.get("correctRate"), (int) b.get("correctRate")));
         result.put("weakRank", weakRank.size() > 10 ? weakRank.subList(0, 10) : weakRank);
+
+        // 章节掌握度（按章节分组的平均正确率）
+        List<Chapter> chapters = chapterMapper.selectList(
+                new LambdaQueryWrapper<Chapter>().eq(Chapter::getCourseId, courseId).orderByAsc(Chapter::getSort));
+        List<Map<String, Object>> chapterMastery = new ArrayList<>();
+        Map<Integer, List<StudyRecord>> chapterRecords = new HashMap<>();
+        for (KnowledgeNode node : nodes) {
+            if (node.getChapterId() != null) {
+                chapterRecords.computeIfAbsent(node.getChapterId(), k -> new ArrayList<>());
+                allRecords.stream().filter(r -> r.getNodeId().equals(node.getId()))
+                        .forEach(r -> chapterRecords.get(node.getChapterId()).add(r));
+            }
+        }
+        for (Chapter ch : chapters) {
+            List<StudyRecord> crs = chapterRecords.getOrDefault(ch.getId(), Collections.emptyList());
+            double avg = crs.stream().filter(r -> r.getCorrectRate() != null)
+                    .mapToDouble(r -> r.getCorrectRate().doubleValue()).average().orElse(0);
+            Map<String, Object> item = new LinkedHashMap<>();
+            item.put("chapterId", ch.getId());
+            item.put("chapterName", ch.getChapterName());
+            item.put("chapterSort", ch.getSort());
+            item.put("avgCorrectRate", (int) Math.round(avg));
+            item.put("studentCount", crs.stream().map(StudyRecord::getUserId).distinct().count());
+            chapterMastery.add(item);
+        }
+        result.put("chapterMastery", chapterMastery);
 
         return result;
     }

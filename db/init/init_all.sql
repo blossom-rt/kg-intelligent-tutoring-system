@@ -95,6 +95,14 @@ CREATE TABLE IF NOT EXISTS knowledge_edge (
     CONSTRAINT fk_edge_to_node FOREIGN KEY (to_node_id) REFERENCES knowledge_node(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='知识点依赖边表';
 
+CREATE TABLE IF NOT EXISTS user_favorite (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL COMMENT '用户ID',
+    node_id INT NOT NULL COMMENT '知识点ID',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '收藏时间',
+    UNIQUE KEY uk_user_node (user_id, node_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户收藏表';
+
 CREATE TABLE IF NOT EXISTS question (
     id INT PRIMARY KEY AUTO_INCREMENT COMMENT '题目主键ID',
     node_id INT NOT NULL COMMENT '关联知识点ID',
@@ -184,6 +192,7 @@ CREATE TABLE IF NOT EXISTS exam_record (
     total_score INT DEFAULT NULL COMMENT '试卷总分',
     user_score DECIMAL(5,2) DEFAULT NULL COMMENT '学生得分',
     ai_report TEXT DEFAULT NULL COMMENT '诊断报告',
+    start_time DATETIME DEFAULT NULL COMMENT '开始答题时间',
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '完成时间',
     KEY idx_user_id (user_id),
     KEY idx_exam_id (exam_id),

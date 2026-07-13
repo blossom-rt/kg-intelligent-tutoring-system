@@ -60,6 +60,19 @@
       </div>
     </el-card>
 
+    <!-- 章节掌握度 -->
+    <el-card v-if="chapterMastery.length" class="section-card">
+      <template #header><span class="panel-title">章节掌握度</span></template>
+      <div class="weak-list">
+        <div v-for="(item, idx) in chapterMastery" :key="item.chapterId" class="weak-item">
+          <span class="weak-rank" :style="{ background: item.avgCorrectRate >= 80 ? '#67c23a' : item.avgCorrectRate >= 60 ? '#e6a23c' : '#f56c6c' }" style="width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:12px;flex-shrink:0;">{{ idx + 1 }}</span>
+          <span class="weak-name" style="flex:1;font-size:13px;">{{ item.chapterName }}</span>
+          <el-progress :percentage="item.avgCorrectRate || 0" :stroke-width="6" style="flex:2" :color="weakColor(item.avgCorrectRate || 0)" />
+          <span style="width:40px;text-align:right;font-size:12px;color:var(--text-muted);">{{ item.studentCount }}人</span>
+        </div>
+      </div>
+    </el-card>
+
     <div class="data-panels">
       <!-- 学生列表 -->
       <el-card class="panel-main">
@@ -131,6 +144,7 @@ const masteryDistribution = ref([])
 const nodeCorrectRates = ref([])
 const studyTrend = ref([])
 const weakRank = ref([])
+const chapterMastery = ref([])
 
 const filterForm = reactive({
   courseId: null
@@ -298,6 +312,7 @@ const loadData = async () => {
       nodeCorrectRates.value = res.nodeCorrectRates || []
       studyTrend.value = res.studyTrend || []
       weakRank.value = res.weakRank || []
+      chapterMastery.value = (res.chapterMastery || []).sort((a, b) => (a.avgCorrectRate || 0) - (b.avgCorrectRate || 0))
 
       // 渲染图表
       await nextTick()

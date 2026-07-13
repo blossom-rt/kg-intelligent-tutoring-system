@@ -71,7 +71,7 @@ const roleLabel = computed(() => {
   return map[profile.role] || profile.role || '-'
 })
 
-// ---- 个人信息表单 ----
+// 个人信息表单
 const profileFormRef = ref(null)
 const profileLoading = ref(false)
 const profileForm = reactive({
@@ -84,7 +84,7 @@ const profileRules = {
   email: [{ type: 'email', message: '请输入正确的邮箱格式', trigger: 'blur' }]
 }
 
-// ---- 密码表单 ----
+// 密码表单
 const passwordFormRef = ref(null)
 const passwordLoading = ref(false)
 const passwordForm = reactive({

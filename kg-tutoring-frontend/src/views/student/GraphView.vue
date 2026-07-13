@@ -5,6 +5,9 @@
         <el-select v-model="selectedCourseId" placeholder="选择课程" clearable size="default" style="width:200px" @change="onCourseChange">
           <el-option v-for="c in courses" :key="c.id" :label="c.courseName" :value="c.id" />
         </el-select>
+        <el-select v-model="selectedChapterId" placeholder="全部章节" clearable size="default" style="width:180px" @change="renderChart" :disabled="!selectedCourseId">
+          <el-option v-for="ch in chapterList" :key="ch.id" :label="ch.chapterName" :value="ch.id" />
+        </el-select>
         <el-button @click="resetView" round>重置视角</el-button>
       </template>
     </StudentHeader>
@@ -22,7 +25,7 @@
           <el-descriptions-item label="难度等级">
             <el-tag :type="diffTag(currentNode.difficulty)" size="small">{{ diffLabel(currentNode.difficulty) }}</el-tag>
           </el-descriptions-item>
-          <el-descriptions-item label="所属章节">{{ currentNode.chapter || '无' }}</el-descriptions-item>
+          <el-descriptions-item label="所属章节">{{ currentNode.chapterName || '无' }}</el-descriptions-item>
           <el-descriptions-item label="预计时长">{{ currentNode.expectedMinutes || '-' }} 分钟</el-descriptions-item>
           <el-descriptions-item v-if="currentNode.keywords" label="关键词">{{ currentNode.keywords }}</el-descriptions-item>
         </el-descriptions>
@@ -32,7 +35,7 @@
         </div>
         <div class="detail-desc">
           <h4>详细描述</h4>
-          <p>{{ currentNode.description || '暂无详细描述' }}</p>
+          <div v-html="renderMarkdown(currentNode.description) || '暂无详细描述'" class="markdown-body"></div>
         </div>
         <div v-if="currentNode.exampleHint" class="detail-desc">
           <h4>例题提示</h4>
@@ -57,7 +60,8 @@ import { ElMessage } from 'element-plus'
 import StudentHeader from '../../components/StudentHeader.vue'
 import { usePet } from '../../composables/usePet'
 import { getStudentGraph, generatePath } from '../../api/student'
-import { getCourseList } from '../../api/knowledge'
+import { getCourseList, getChapterList } from '../../api/knowledge'
+import { renderMarkdown } from '../../utils/markdown'
 
 const router = useRouter()
 const route = useRoute()
@@ -69,6 +73,8 @@ const learnedNodeIds = ref(new Set())
 const pathNodeIds = ref(new Set())
 const courses = ref([])
 const selectedCourseId = ref('')
+const selectedChapterId = ref(null)
+const chapterList = ref([])
 const dialogVisible = ref(false)
 const currentNode = ref(null)
 const genLoading = ref(false)
@@ -96,16 +102,16 @@ const getCssVar = (name, fallback) => {
   return value || fallback
 }
 
-const colorByDifficulty = (node) => {
-  if (node.difficulty === 3) return 0xe74c3c
-  if (node.difficulty === 2) return 0xf5a623
-  return 0x4aa3ff
-}
-
 const radiusByDifficulty = (node) => {
   if (node.difficulty === 3) return 2.9
   if (node.difficulty === 2) return 2.4
   return 2
+}
+
+const getNodeColor = (node) => {
+  if (node.difficulty === 3) return 0xe74c3c
+  if (node.difficulty === 2) return 0xf5a623
+  return 0x4aa3ff
 }
 
 const getNodeState = (node) => {
@@ -126,6 +132,9 @@ const getFilteredData = () => {
   let list = nodes.value
   if (selectedCourseId.value) {
     list = nodes.value.filter(n => Number(n.courseId) === Number(selectedCourseId.value))
+  }
+  if (selectedChapterId.value) {
+    list = list.filter(n => Number(n.chapterId) === Number(selectedChapterId.value))
   }
   const nodeIds = new Set(list.map(n => Number(n.id)))
   const edgeList = edges.value.filter(e => nodeIds.has(Number(e.fromNodeId)) && nodeIds.has(Number(e.toNodeId)))
@@ -337,12 +346,12 @@ const renderChart = () => {
   placedNodes.forEach(node => {
     const state = getNodeState(node)
     const material = new THREE.MeshStandardMaterial({
-      color: colorByDifficulty(node),
+      color: getNodeColor(node),
       roughness: 0.38,
       metalness: 0.1,
       transparent: true,
       opacity: nodeOpacity(node),
-      emissive: colorByDifficulty(node),
+      emissive: getNodeColor(node),
       emissiveIntensity: state === 'learned' ? 0.35 : (state === 'path' ? 0.16 : 0.04)
     })
     const mesh = new THREE.Mesh(new THREE.SphereGeometry(radiusByDifficulty(node), 32, 24), material)
@@ -455,10 +464,20 @@ const resetView = () => {
 }
 
 const onCourseChange = () => {
+  selectedChapterId.value = null
   hoveredNodeId = null
+  loadChapters(selectedCourseId.value)
   renderChart()
   resetView()
   speakForCourse(selectedCourseId.value)
+}
+
+const loadChapters = async (courseId) => {
+  if (!courseId) { chapterList.value = []; return }
+  try {
+    const res = await getChapterList({ courseId })
+    chapterList.value = Array.isArray(res) ? res : []
+  } catch { chapterList.value = [] }
 }
 
 const getCourseMessage = (course) => {

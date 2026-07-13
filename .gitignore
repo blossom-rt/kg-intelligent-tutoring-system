@@ -15,3 +15,7 @@ Thumbs.db
 *.env
 *.env.local
 application.properties
+
+# 前端本地工具/文档（不入库）
+kg-tutoring-frontend/.claude/
+kg-tutoring-frontend/docs/

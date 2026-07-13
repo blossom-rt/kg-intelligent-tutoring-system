@@ -11,6 +11,14 @@
       <el-button type="primary" :loading="submitLoading" @click="handleSubmit">提交测评</el-button>
     </div>
 
+    <!-- 提交中遮罩 -->
+    <div v-if="submitLoading" class="submit-overlay">
+      <div class="submit-loading-box">
+        <el-icon class="is-loading" :size="32"><Loading /></el-icon>
+        <p class="submit-tip">{{ submitTip }}</p>
+      </div>
+    </div>
+
     <div v-loading="loading">
       <el-empty v-if="!questions.length" description="暂无题目" :image-size="80" />
       <div v-else class="question-list">
@@ -34,13 +42,15 @@
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { ArrowLeft } from '@element-plus/icons-vue'
+import { ArrowLeft, Loading } from '@element-plus/icons-vue'
 import { getExamPaper, submitExam } from '../../api/student'
 
 const route = useRoute()
 const router = useRouter()
 const loading = ref(false)
 const submitLoading = ref(false)
+const submitTip = ref('')
+let submitTipTimer = null
 const paper = ref(null)
 const answers = reactive({})
 
@@ -82,6 +92,14 @@ const handleSubmit = async () => {
   if (!confirmed) return
 
   submitLoading.value = true
+  const examTips = ['正在批阅答卷...', '正在生成AI诊断报告...', '分析薄弱环节中...', '整理错题数据...']
+  submitTip.value = examTips[0]
+  let tipIdx = 1
+  submitTipTimer = setInterval(() => {
+    submitTip.value = examTips[tipIdx % examTips.length]
+    tipIdx++
+  }, 2500)
+
   try {
     await submitExam({
       examId: paper.value.id,
@@ -96,6 +114,7 @@ const handleSubmit = async () => {
     router.push('/student/exams')
   } catch {
   } finally {
+    if (submitTipTimer) { clearInterval(submitTipTimer); submitTipTimer = null }
     submitLoading.value = false
   }
 }
@@ -173,5 +192,20 @@ onMounted(loadPaper)
   gap: 8px;
   margin-top: 14px;
   padding-left: 34px;
+}
+
+/* 提交遮罩 */
+.submit-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,0.45); display: flex;
+  align-items: center; justify-content: center;
+}
+.submit-loading-box {
+  background: var(--bg-surface); border-radius: 16px;
+  padding: 48px 56px; text-align: center;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+}
+.submit-tip {
+  margin-top: 20px; font-size: 16px; color: var(--text-secondary);
 }
 </style>

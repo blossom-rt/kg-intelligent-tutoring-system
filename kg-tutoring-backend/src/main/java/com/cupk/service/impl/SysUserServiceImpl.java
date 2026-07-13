@@ -71,7 +71,7 @@ public class SysUserServiceImpl implements SysUserService {
         // 设置用户上下文，使 AOP 操作日志能记录 userId
         UserContext.set(user.getId(), user.getUsername(), role.getRoleCode());
         String token = jwtUtil.generateToken(user.getId(), user.getUsername(), role.getRoleCode());
-        return new LoginVO(token, role.getRoleCode());
+        return new LoginVO(token, role.getRoleCode(), user.getId());
     }
 
     @Override
@@ -80,7 +80,7 @@ public class SysUserServiceImpl implements SysUserService {
         if (user == null) return null;
         SysRole role = sysRoleMapper.selectById(user.getRoleId());
         String token = jwtUtil.generateToken(user.getId(), user.getUsername(), role.getRoleCode());
-        return new LoginVO(token, role.getRoleCode());
+        return new LoginVO(token, role.getRoleCode(), user.getId());
     }
 
     @Override
@@ -242,7 +242,12 @@ public class SysUserServiceImpl implements SysUserService {
         sysUserMapper.updateById(user);
     }
 
-    // 管理员方法 =====
+    // 管理员方法
+
+    @Override
+    public List<SysRole> listRoles() {
+        return sysRoleMapper.selectList(null);
+    }
 
     @Override
     public List<SysUser> listUsers(String keyword, Integer roleId) {

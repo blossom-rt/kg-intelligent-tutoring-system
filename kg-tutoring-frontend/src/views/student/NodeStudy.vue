@@ -47,7 +47,7 @@
                     <p>{{ node.exampleHint }}</p>
                   </div>
                 </div>
-                <div class="desc-section" v-html="formattedContent"></div>
+                <div class="desc-section markdown-body" v-html="formattedContent"></div>
               </div>
             </el-card>
           </el-tab-pane>
@@ -135,7 +135,7 @@
                 </div>
                 <div v-if="qaLoading" class="qa-message qa-assistant">
                   <div class="qa-avatar">AI</div>
-                  <div class="qa-bubble qa-thinking">思考中...</div>
+                  <div class="qa-bubble qa-thinking">{{ loadingTip || '思考中...' }}</div>
                 </div>
               </div>
               <el-empty v-else description="向 AI 老师提问，获得即时解答" :image-size="60" />
@@ -173,7 +173,11 @@
 
     <!-- AI 划重点弹窗 -->
     <el-dialog v-model="aiSummaryVisible" :title="aiSummaryTitle" width="680px">
-      <div v-loading="aiSummaryLoading" style="min-height:100px;">
+      <div style="min-height:100px;">
+        <div v-if="aiSummaryLoading" class="loading-tip">
+          <el-icon class="is-loading" :size="28" style="margin-bottom:16px"><Loading /></el-icon>
+          <div>{{ loadingTip }}</div>
+        </div>
         <div v-if="aiSummaryContent" class="ai-summary-body markdown-body" v-html="formattedAiSummary"></div>
       </div>
       <template #footer>
@@ -184,10 +188,10 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { Promotion, ArrowRight, Star, StarFilled } from '@element-plus/icons-vue'
+import { Promotion, ArrowRight, Star, StarFilled, Loading } from '@element-plus/icons-vue'
 import StudentHeader from '../../components/StudentHeader.vue'
 import { getNodeById, getNodeResources } from '../../api/knowledge'
 import { getStudyRecords, aiNodeSummary, aiChat, addFavorite, deleteFavorite, getFavoriteList, getPrerequisiteNodes } from '../../api/student'
@@ -205,7 +209,7 @@ const hasExercises = computed(() => {
   return node.value?.exercises && node.value.exercises.length > 0
 })
 
-// ---- 收藏夹 ----
+// 收藏夹
 const isFav = ref(false)
 const favId = ref(null)
 const favIcon = computed(() => isFav.value ? StarFilled : Star)
@@ -242,7 +246,7 @@ const fetchFavStatus = async () => {
   } catch { }
 }
 
-// ---- 前置知识 ----
+// 前置知识
 const prerequisiteNodes = ref([])
 
 const fetchPrerequisites = async () => {
@@ -258,13 +262,44 @@ const goStudyNode = (p) => {
   router.push('/student/study/' + p.id)
 }
 
-// ---- AI 划重点 ----
+// AI 划重点
 const aiSummaryVisible = ref(false)
 const aiSummaryLoading = ref(false)
 const aiSummaryTitle = ref('')
 const aiSummaryContent = ref('')
 const formattedAiSummary = computed(() => renderMarkdown(aiSummaryContent.value))
 const renderAiMarkdown = (content) => renderMarkdown(content)
+const loadingTip = ref('')
+
+const summaryTips = [
+  '正在分析知识点结构...',
+  '梳理核心概念中...',
+  '提炼学习要点...',
+  '整理重点难点...',
+  '生成学习建议...',
+  '马上就好，再等一下...'
+]
+
+const chatTips = [
+  '正在思考你的问题...',
+  '查阅相关资料中...',
+  '组织语言回答...',
+  '快要完成了...',
+  '马上就好...'
+]
+
+let tipTimer = null
+const startTipRotation = (tips) => {
+  loadingTip.value = tips[0]
+  let i = 1
+  tipTimer = setInterval(() => {
+    loadingTip.value = tips[i % tips.length]
+    i++
+  }, 2500)
+}
+const stopTipRotation = () => {
+  if (tipTimer) { clearInterval(tipTimer); tipTimer = null }
+}
 
 const showAiSummary = async () => {
   const nodeId = node.value?.nodeId || node.value?.id
@@ -276,6 +311,7 @@ const showAiSummary = async () => {
   aiSummaryVisible.value = true
   aiSummaryTitle.value = 'AI 正在生成总结...'
   aiSummaryContent.value = ''
+  startTipRotation(summaryTips)
   try {
     const res = await aiNodeSummary({ nodeId })
     if (res) {
@@ -286,11 +322,12 @@ const showAiSummary = async () => {
     aiSummaryContent.value = 'AI 总结生成失败，请稍后重试'
     aiSummaryTitle.value = '生成失败'
   } finally {
+    stopTipRotation()
     aiSummaryLoading.value = false
   }
 }
 
-// ---- AI 答疑 ----
+// AI 答疑
 const qaInput = ref('')
 const qaLoading = ref(false)
 const qaMessages = ref([])
@@ -300,6 +337,7 @@ const sendQuestion = async () => {
   if (!text || qaLoading.value) return
   qaMessages.value.push({ role: 'user', content: text })
   qaInput.value = ''
+  startTipRotation(chatTips)
   qaLoading.value = true
   const nodeId = node.value?.nodeId || node.value?.id
   try {
@@ -308,17 +346,14 @@ const sendQuestion = async () => {
   } catch {
     qaMessages.value.push({ role: 'assistant', content: '请求失败，请检查网络后重试。' })
   } finally {
+    stopTipRotation()
     qaLoading.value = false
   }
 }
 
 const formattedContent = computed(() => {
   const content = node.value?.content || node.value?.description || node.value?.desc || '暂无学习内容'
-  // 保留换行转为 <br>，同时允许后端返回 HTML
-  if (/<[^>]+>/.test(content)) {
-    return content
-  }
-  return content.replace(/\n/g, '<br>')
+  return renderMarkdown(content)
 })
 
 const difficultyLabel = (level) => {
@@ -413,6 +448,8 @@ const fetchNode = async () => {
 }
 
 onMounted(fetchNode)
+
+onBeforeUnmount(() => { stopTipRotation() })
 
 // 路由参数变化时重新加载（前置知识跳转等）
 watch(() => route.params.nodeId, () => {
@@ -641,6 +678,11 @@ watch(() => route.params.nodeId, () => {
 }
 
 /* ── AI 总结弹窗 ── */
+.loading-tip {
+  text-align: center; font-size: 16px; color: var(--text-primary);
+  padding: 80px 0 60px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
 .ai-summary-body {
   font-size: 15px;
   line-height: 1.9;

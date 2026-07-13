@@ -9,12 +9,17 @@
     <el-card class="filter-card">
       <el-form :inline="true" :model="filterForm" @submit.prevent>
         <el-form-item label="所属课程">
-          <el-select v-model="filterForm.courseId" placeholder="全部课程" clearable style="width:220px" @change="loadData">
+          <el-select v-model="filterForm.courseId" placeholder="全部课程" clearable style="width:200px" @change="onFilterCourseChange">
             <el-option v-for="c in courseList" :key="c.id" :label="c.courseName" :value="c.id" />
           </el-select>
         </el-form-item>
+        <el-form-item label="所属章节">
+          <el-select v-model="filterForm.chapterId" placeholder="全部章节" clearable style="width:200px" @change="loadData" :disabled="!filterForm.courseId">
+            <el-option v-for="ch in filterChapterList" :key="ch.id" :label="ch.chapterName" :value="ch.id" />
+          </el-select>
+        </el-form-item>
         <el-form-item label="知识点名称">
-          <el-input v-model="filterForm.name" placeholder="输入关键词搜索" clearable @clear="loadData" @keyup.enter="loadData" />
+          <el-input v-model="filterForm.name" placeholder="输入关键词搜索" clearable @clear="loadData" @keyup.enter="loadData" style="width:180px" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="loadData">查询</el-button>
@@ -26,7 +31,8 @@
     <el-card>
       <el-table :data="paginatedTableData" v-loading="loading" stripe border>
         <el-table-column prop="name" label="知识点名称" min-width="160" />
-        <el-table-column prop="courseId" label="课程ID" width="160" />
+        <el-table-column prop="courseName" label="课程" width="120" />
+        <el-table-column prop="chapterName" label="章节" width="140" />
         <el-table-column prop="difficulty" label="难度" width="80" align="center">
           <template #default="{ row }">
             <el-tag :type="diffTag(row.difficulty)" size="small">{{ diffLabel(row.difficulty) }}</el-tag>
@@ -37,7 +43,6 @@
             <el-tag size="small" effect="plain">{{ nodeTypeLabel(row.nodeType) }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="chapter" label="章节" width="140" />
         <el-table-column prop="expectedMinutes" label="预计时长(分)" width="120" align="center" />
         <el-table-column label="操作" width="220" fixed="right">
           <template #default="{ row }">
@@ -91,15 +96,17 @@
         <el-form-item label="例题提示" prop="exampleHint">
           <el-input v-model="form.exampleHint" type="textarea" :rows="2" maxlength="300" show-word-limit placeholder="可填写一个典型题型或学习提醒" />
         </el-form-item>
+        <el-form-item label="所属章节" prop="chapterId">
+          <el-select v-model="form.chapterId" placeholder="请先选择课程" style="width:100%" :disabled="!form.courseId" filterable>
+            <el-option v-for="ch in formChapterList" :key="ch.id" :label="ch.chapterName" :value="ch.id" />
+          </el-select>
+        </el-form-item>
         <el-form-item label="难度" prop="difficulty">
           <el-select v-model="form.difficulty" placeholder="请选择难度" style="width: 100%">
             <el-option label="简单 (1)" :value="1" />
             <el-option label="中等 (2)" :value="2" />
             <el-option label="困难 (3)" :value="3" />
           </el-select>
-        </el-form-item>
-        <el-form-item label="章节" prop="chapter">
-          <el-input v-model="form.chapter" placeholder="请输入章节" />
         </el-form-item>
         <el-form-item label="预计时长(分)" prop="expectedMinutes">
           <el-input-number v-model="form.expectedMinutes" :min="1" :max="240" style="width: 100%" />
@@ -214,6 +221,7 @@ import {
   updateNode,
   deleteNode,
   getCourseList,
+  getChapterList,
   getNodeResources,
   createNodeResource,
   updateNodeResource,
@@ -234,8 +242,12 @@ const resourceDialogVisible = ref(false)
 const resourceLoading = ref(false)
 const resourceSubmitLoading = ref(false)
 
+const filterChapterList = ref([])
+const formChapterList = ref([])
+
 const filterForm = reactive({
   courseId: null,
+  chapterId: null,
   name: ''
 })
 
@@ -253,6 +265,7 @@ const paginatedTableData = computed(() => {
 const form = reactive({
   id: null,
   courseId: null,
+  chapterId: null,
   name: '',
   description: '',
   nodeType: 'concept',
@@ -260,7 +273,6 @@ const form = reactive({
   keywords: '',
   exampleHint: '',
   difficulty: 1,
-  chapter: '',
   expectedMinutes: 30
 })
 
@@ -321,11 +333,27 @@ const loadCourses = async () => {
   }
 }
 
+const loadChapterList = async (courseId) => {
+  if (!courseId) { filterChapterList.value = []; formChapterList.value = []; return }
+  try {
+    const res = await getChapterList({ courseId })
+    filterChapterList.value = Array.isArray(res) ? res : []
+    formChapterList.value = Array.isArray(res) ? res : []
+  } catch { filterChapterList.value = []; formChapterList.value = [] }
+}
+
+const onFilterCourseChange = () => {
+  filterForm.chapterId = null
+  loadChapterList(filterForm.courseId)
+  loadData()
+}
+
 const loadData = async () => {
   loading.value = true
   try {
     const params = {}
     if (filterForm.courseId) params.courseId = filterForm.courseId
+    if (filterForm.chapterId) params.chapterId = filterForm.chapterId
     if (filterForm.name) params.name = filterForm.name
     const res = await getNodeList(params)
     if (Array.isArray(res)) {
@@ -342,20 +370,22 @@ const loadData = async () => {
   }
 }
 
-// 无
-
 const resetFilter = () => {
   filterForm.courseId = null
+  filterForm.chapterId = null
   filterForm.name = ''
+  filterChapterList.value = []
   pagination.page = 1
   loadData()
 }
 
 const openAdd = () => {
   isEdit.value = false
+  formChapterList.value = []
   Object.assign(form, {
     id: null,
     courseId: null,
+    chapterId: null,
     name: '',
     description: '',
     nodeType: 'concept',
@@ -363,7 +393,6 @@ const openAdd = () => {
     keywords: '',
     exampleHint: '',
     difficulty: 1,
-    chapter: '',
     expectedMinutes: 30
   })
   dialogVisible.value = true
@@ -371,9 +400,11 @@ const openAdd = () => {
 
 const openEdit = (row) => {
   isEdit.value = true
+  if (row.courseId) loadChapterList(row.courseId)
   Object.assign(form, {
     id: row.id,
     courseId: row.courseId || null,
+    chapterId: row.chapterId || null,
     name: row.name || '',
     description: row.description || '',
     nodeType: row.nodeType || 'concept',
@@ -381,7 +412,6 @@ const openEdit = (row) => {
     keywords: row.keywords || '',
     exampleHint: row.exampleHint || '',
     difficulty: row.difficulty || 1,
-    chapter: row.chapter || '',
     expectedMinutes: row.expectedMinutes || 30
   })
   dialogVisible.value = true
@@ -394,6 +424,7 @@ const handleSubmit = async () => {
   try {
     const data = {
       courseId: form.courseId,
+      chapterId: form.chapterId,
       name: form.name,
       description: form.description,
       nodeType: form.nodeType,
@@ -401,7 +432,6 @@ const handleSubmit = async () => {
       keywords: form.keywords,
       exampleHint: form.exampleHint,
       difficulty: form.difficulty,
-      chapter: form.chapter,
       expectedMinutes: form.expectedMinutes
     }
     if (isEdit.value) {

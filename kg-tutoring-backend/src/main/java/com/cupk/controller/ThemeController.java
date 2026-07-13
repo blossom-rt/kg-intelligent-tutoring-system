@@ -4,8 +4,16 @@ import com.cupk.aspect.OperLog;
 import com.cupk.common.BusinessException;
 import com.cupk.common.Result;
 import com.cupk.common.UserContext;
+import com.cupk.mapper.CrossThemeNodeMapper;
+import com.cupk.mapper.KnowledgeNodeMapper;
+import com.cupk.mapper.SysUserMapper;
 import com.cupk.pojo.CrossSubjectTheme;
+import com.cupk.pojo.CrossThemeNode;
+import com.cupk.pojo.Course;
+import com.cupk.pojo.KnowledgeNode;
+import com.cupk.pojo.SysUser;
 import com.cupk.service.CrossSubjectThemeService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +28,10 @@ import java.util.List;
 public class ThemeController {
 
     private final CrossSubjectThemeService crossSubjectThemeService;
+    private final SysUserMapper sysUserMapper;
+    private final CrossThemeNodeMapper crossThemeNodeMapper;
+    private final KnowledgeNodeMapper knowledgeNodeMapper;
+    private final com.cupk.mapper.CourseMapper courseMapper;
 
     /**
      * 检查当前用户是否为教师，否则抛出无权限异常
@@ -37,15 +49,76 @@ public class ThemeController {
     public Result<List<CrossSubjectTheme>> list(
             @RequestParam(required = false) Integer difficulty,
             @RequestParam(required = false) Integer status) {
-        return Result.success(crossSubjectThemeService.list(difficulty, status));
+        // 教师角色时自动只显示自己发布的主题
+        if ("teacher".equals(UserContext.getRole())) {
+            List<CrossSubjectTheme> all = crossSubjectThemeService.list(difficulty, status);
+            all.removeIf(t -> t.getPublisherId() == null || !t.getPublisherId().equals(UserContext.getUserId()));
+            // 填充教师姓名
+            for (CrossSubjectTheme t : all) {
+                if (t.getPublisherId() != null) {
+                    SysUser user = sysUserMapper.selectById(t.getPublisherId());
+                    if (user != null) t.setPublisherName(user.getRealName());
+                }
+            }
+            return Result.success(all);
+        }
+        List<CrossSubjectTheme> list = crossSubjectThemeService.list(difficulty, status);
+        // 填充发布教师姓名
+        for (CrossSubjectTheme t : list) {
+            if (t.getPublisherId() != null) {
+                SysUser user = sysUserMapper.selectById(t.getPublisherId());
+                if (user != null) t.setPublisherName(user.getRealName());
+            }
+        }
+        return Result.success(list);
     }
 
     /**
      * 获取主题详情
      */
     @GetMapping("/{id}")
-    public Result<CrossSubjectTheme> detail(@PathVariable Integer id) {
-        return Result.success(crossSubjectThemeService.getById(id));
+    public Result<?> detail(@PathVariable Integer id) {
+        CrossSubjectTheme theme = crossSubjectThemeService.getById(id);
+        if (theme == null) return Result.error("主题不存在");
+        java.util.Map<String, Object> result = new java.util.LinkedHashMap<>();
+        result.put("id", theme.getId());
+        result.put("themeName", theme.getThemeName());
+        result.put("description", theme.getDescription());
+        result.put("difficulty", theme.getDifficulty());
+        result.put("status", theme.getStatus());
+        result.put("createTime", theme.getCreateTime());
+        // 计算预计学习时长和涉及学科
+        List<CrossThemeNode> mappings = crossThemeNodeMapper.selectList(
+                new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<CrossThemeNode>()
+                        .eq(CrossThemeNode::getThemeId, id));
+        if (!mappings.isEmpty()) {
+            List<Integer> nodeIds = mappings.stream().map(CrossThemeNode::getNodeId).toList();
+            List<KnowledgeNode> nodes = knowledgeNodeMapper.selectList(
+                    new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<KnowledgeNode>()
+                            .in(KnowledgeNode::getId, nodeIds));
+            int totalMinutes = nodes.stream()
+                    .mapToInt(n -> n.getExpectedMinutes() != null ? n.getExpectedMinutes() : 0)
+                    .sum();
+            result.put("estimatedTime", totalMinutes);
+            // 涉及学科
+            List<Integer> courseIds = nodes.stream()
+                    .map(KnowledgeNode::getCourseId).filter(java.util.Objects::nonNull).distinct().toList();
+            if (!courseIds.isEmpty()) {
+                List<Course> courses = courseMapper.selectList(
+                        new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<Course>()
+                                .in(Course::getId, courseIds));
+                List<String> subjectNames = courses.stream()
+                        .map(c -> c.getSubject() != null ? c.getSubject() : c.getCourseName())
+                        .distinct().toList();
+                result.put("subjects", subjectNames);
+            } else {
+                result.put("subjects", java.util.Collections.emptyList());
+            }
+        } else {
+            result.put("estimatedTime", 0);
+            result.put("subjects", java.util.Collections.emptyList());
+        }
+        return Result.success(result);
     }
 
     /**

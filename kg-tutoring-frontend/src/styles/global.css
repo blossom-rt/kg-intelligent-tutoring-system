@@ -1,9 +1,7 @@
-/* ============================================
-   智能导学系统 — 全局设计系统
-   浅底暖调 · 反主流 · 教育温馨
-   ============================================ */
+/* 智能导学系统 — 全局设计系统，浅底暖调，反主流，教育温馨 */
 
 :root {
+  color-scheme: light;
   /* 背景层次 */
   --bg-root: #faf7f2;
   --bg-surface: #fffdf9;
@@ -68,10 +66,9 @@
   --danger-soft: rgba(239, 95, 95, 0.1);
 }
 
-/* ============================================
-   暗色模式 — 深暖底（暗而不冷）
-   ============================================ */
+/* 暗色模式，深暖底（暗而不冷） */
 [data-theme="dark"] {
+  color-scheme: dark;
   --bg-root: #1f1b16;
   --bg-surface: #2a2520;
   --bg-input: #2f2a24;
@@ -136,7 +133,7 @@ html, body {
   overflow-x: hidden;
 }
 
-/* ── 响应式基准 ── */
+/* 响应式基准 */
 @media (max-width: 768px) {
   .el-table { font-size: 13px; }
   .el-card { padding: 16px; }
@@ -145,7 +142,7 @@ html, body {
   .page-container, .content { padding: 12px !important; }
 }
 
-/* ── Element Plus 全局覆盖 ── */
+/* Element Plus 全局覆盖 */
 .el-card {
   background: var(--bg-surface) !important;
   border: 1px solid var(--border-subtle) !important;
@@ -235,7 +232,7 @@ html, body {
 .el-tag--success { background: rgba(61, 138, 94, 0.1); border-color: rgba(61, 138, 94, 0.25); color: var(--accent-green); }
 .el-tag--warning { background: rgba(184, 144, 48, 0.1); border-color: rgba(184, 144, 48, 0.25); color: var(--accent-gold); }
 
-/* ── 表单控件：默认跟随暖橙主题色 ── */
+/* 表单控件：默认跟随暖橙主题色 */
 :root {
   --el-checkbox-checked-bg-color: var(--accent);
   --el-checkbox-checked-border-color: var(--accent);
@@ -269,7 +266,7 @@ html, body {
 a { color: var(--accent); text-decoration: none; }
 a:hover { color: var(--accent-hover); }
 
-/* ── 可访问性 ── */
+/* 可访问性 */
 [clickable], .clickable,
 div[onClick], button:not([disabled]),
 .quick-item, .entry-item, .path-item, .todo-item, .exercise-item,

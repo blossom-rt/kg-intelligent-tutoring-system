@@ -4,12 +4,15 @@ import com.cupk.aspect.OperLog;
 import com.cupk.common.BusinessException;
 import com.cupk.common.Result;
 import com.cupk.common.UserContext;
+import com.cupk.mapper.CourseMapper;
+import com.cupk.pojo.Course;
 import com.cupk.service.ExamService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 教师考试管理控制器
@@ -20,6 +23,7 @@ import java.util.Map;
 public class TeacherExamController {
 
     private final ExamService examService;
+    private final CourseMapper courseMapper;
 
     private void checkTeacher() {
         if (!"teacher".equals(UserContext.getRole())) {
@@ -31,6 +35,18 @@ public class TeacherExamController {
     @GetMapping
     public Result<?> list(@RequestParam(required = false) Integer courseId) {
         checkTeacher();
+        if (courseId == null) {
+            List<Course> myCourses = courseMapper.selectList(
+                    new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<Course>()
+                            .eq(Course::getTeacherId, UserContext.getUserId()));
+            List<Integer> ids = myCourses.stream().map(Course::getId).collect(Collectors.toList());
+            if (ids.isEmpty()) return Result.success(List.of());
+            List<Map<String, Object>> all = new java.util.ArrayList<>();
+            for (Integer id : ids) {
+                all.addAll(examService.listForTeacher(id));
+            }
+            return Result.success(all);
+        }
         return Result.success(examService.listForTeacher(courseId));
     }
 

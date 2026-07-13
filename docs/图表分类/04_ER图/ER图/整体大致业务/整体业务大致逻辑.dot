@@ -1,12 +1,12 @@
 /*
- * KG 智能导学系统 — ER 图 (Chen 记法 · 21 张表)
+ * KG 智能导学系统 — ER 图 (Chen 记法 · 22 张表)
  */
 digraph ER_Chen {
     rankdir=LR;
     splines=polyline;
     fontname="Times-Roman";
     fontsize=14;
-    label="智能导学系统ER图";
+    label="智能导学系统 ER 图（22 张表）";
     bgcolor="white";
 
     node [fontname="Times-Roman", fontsize=10, color=black, fontcolor=black];
@@ -19,6 +19,7 @@ digraph ER_Chen {
     sys_user     [label="sys_user\n系统用户"];
     sys_email    [label="sys_email_code\n邮箱验证码"];
     course       [label="course\n课程"];
+    chapter      [label="chapter\n课程章节"];
     knode        [label="knowledge_node\n知识点节点"];
     kedge        [label="knowledge_edge\n知识点依赖边"];
     question     [label="question\n习题库"];
@@ -40,87 +41,101 @@ digraph ER_Chen {
     /* ====== 关系 ====== */
     node [shape=diamond, style=solid, color=black, penwidth=1.5, fillcolor=none];
 
-    R_has_user   [label="拥有"];
-    R_teaches    [label="授课"];
-    R_contains   [label="包含"];
-    R_prereq     [label="前置"];
-    R_leads_to   [label="后继"];
-    R_belongs    [label="属于"];
-    R_creates    [label="创建"];
-    R_exam_course[label="关联"];
-    R_links      [label="关联题目"];
-    R_takes      [label="参加"];
-    R_studies    [label="学习"];
-    R_generates  [label="生成"];
-    R_details    [label="包含节点"];
-    R_wrong      [label="做错"];
-    R_publishes  [label="发布"];
-    R_theme_node [label="关联"];
-    R_notifies   [label="发布"];
-    R_operates   [label="操作"];
-    R_calls      [label="调用"];
-    R_resources  [label="提供资源"];
-    R_favorites  [label="收藏"];
+    R_has_user     [label="拥有"];
+    R_teaches      [label="授课"];
+    R_has_chapter  [label="分章"];
+    R_contains     [label="包含"];
+    R_chapter_knode[label="章节\n知识点"];
+    R_prereq       [label="前置"];
+    R_leads_to     [label="后继"];
+    R_belongs      [label="属于"];
+    R_creates      [label="创建"];
+    R_exam_course  [label="关联"];
+    R_links        [label="组卷"];
+    R_takes        [label="参加"];
+    R_studies      [label="学习"];
+    R_generates    [label="生成"];
+    R_details      [label="包含节点"];
+    R_wrong        [label="做错"];
+    R_publishes    [label="发布"];
+    R_theme_node   [label="关联"];
+    R_notifies     [label="发布"];
+    R_operates     [label="操作"];
+    R_calls        [label="调用"];
+    R_resources    [label="提供资源"];
+    R_favorites    [label="收藏"];
 
     /* ====== 属性 ====== */
     node [shape=ellipse, style=solid, color=black, penwidth=0.8, fillcolor=none, fontsize=8];
 
-    A_role_id    [label="id {PK}"];     A_user_id  [label="id {PK}"];
-    A_course_id  [label="id {PK}"];     A_node_id  [label="id {PK}"];
-    A_q_id       [label="id {PK}"];     A_exam_id  [label="id {PK}"];
-    A_sr_id      [label="id {PK}"];     A_sp_id    [label="id {PK}"];
-    A_wq_id      [label="id {PK}"];     A_theme_id [label="id {PK}"];
-    A_notice_id  [label="id {PK}"];     A_lr_id    [label="id {PK}"];
-    A_fav_id     [label="id {PK}"];
+    A_role_id    [label="id {PK}"];     A_user_id    [label="id {PK}"];
+    A_course_id  [label="id {PK}"];     A_chapter_id [label="id {PK}"];
+    A_node_id    [label="id {PK}"];     A_q_id       [label="id {PK}"];
+    A_exam_id    [label="id {PK}"];     A_sr_id      [label="id {PK}"];
+    A_sp_id      [label="id {PK}"];     A_wq_id      [label="id {PK}"];
+    A_theme_id   [label="id {PK}"];     A_notice_id  [label="id {PK}"];
+    A_lr_id      [label="id {PK}"];     A_fav_id     [label="id {PK}"];
 
     /* ====== 属性连线 ====== */
     edge [color=black, penwidth=0.8, arrowhead=none];
-    sys_role -> A_role_id; sys_user -> A_user_id;
-    course -> A_course_id; knode -> A_node_id;
-    question -> A_q_id; exam -> A_exam_id;
-    study_record -> A_sr_id; study_path -> A_sp_id;
-    wrong_q -> A_wq_id; theme -> A_theme_id;
-    sys_notice -> A_notice_id;
-    learn_res -> A_lr_id; user_fav -> A_fav_id;
+    sys_role -> A_role_id;   sys_user -> A_user_id;
+    course -> A_course_id;   chapter -> A_chapter_id;
+    knode -> A_node_id;      question -> A_q_id;
+    exam -> A_exam_id;       study_record -> A_sr_id;
+    study_path -> A_sp_id;   wrong_q -> A_wq_id;
+    theme -> A_theme_id;     sys_notice -> A_notice_id;
+    learn_res -> A_lr_id;    user_fav -> A_fav_id;
 
     /* ====== 关系连线 ====== */
     edge [color=black, penwidth=1.2, arrowhead=none, fontsize=7, style=solid];
 
-    sys_role -> R_has_user [label="1"];  R_has_user -> sys_user [label="N"];
-    sys_user -> R_teaches [label="1"];   R_teaches -> course [label="N"];
+    /* 用户与角色 */
+    sys_role -> R_has_user [label="1"];   R_has_user -> sys_user [label="N"];
+
+    /* 课程体系：教师 → 课程 → 章节 → 知识点 */
+    sys_user -> R_teaches [label="1"];    R_teaches -> course [label="N"];
+    course -> R_has_chapter [label="1"];  R_has_chapter -> chapter [label="N"];
     course -> R_contains [label="1"];     R_contains -> knode [label="N"];
+    chapter -> R_chapter_knode [label="1"]; R_chapter_knode -> knode [label="N"];
+
+    /* 知识点依赖 */
     knode -> R_prereq [label="N"];        R_prereq -> kedge [label="1"];
     kedge -> R_leads_to [label="1"];      R_leads_to -> knode [label="N"];
+
+    /* 题库与学习资源 */
     knode -> R_belongs [label="1"];       R_belongs -> question [label="N"];
+    knode -> R_resources [label="1"];     R_resources -> learn_res [label="N"];
+
+    /* 测评体系 */
     sys_user -> R_creates [label="1"];    R_creates -> exam [label="N"];
     course -> R_exam_course [label="1"];  R_exam_course -> exam [label="N"];
     exam -> R_links [label="N"];          R_links -> exam_q [label="1"];
     exam_q -> question [label="N"];
+
+    /* 学习过程 */
     sys_user -> R_takes [label="1"];      R_takes -> exam_record [label="N"];
     sys_user -> R_studies [label="1"];    R_studies -> study_record [label="N"];
     sys_user -> R_generates [label="1"];  R_generates -> study_path [label="N"];
     study_path -> R_details [label="1"];  R_details -> path_detail [label="N"];
     sys_user -> R_wrong [label="1"];      R_wrong -> wrong_q [label="N"];
+
+    /* 跨学科主题 */
     sys_user -> R_publishes [label="1"];  R_publishes -> theme [label="N"];
     theme -> R_theme_node [label="N"];    R_theme_node -> theme_node [label="1"];
+
+    /* 公告与收藏 */
     sys_user -> R_notifies [label="1"];   R_notifies -> sys_notice [label="N"];
-    knode -> R_resources [label="1"];     R_resources -> learn_res [label="N"];
     sys_user -> R_favorites [label="N"];  R_favorites -> knode [label="N"];
 
-    /* 弱关联 */
-    edge [color=black, penwidth=0.8, style=dashed];
-    sys_user -> R_operates [label="0..1"];
-    R_operates -> sys_log [label="N"];
-    R_operates [style="dashed,solid"];
-    sys_user -> R_calls [label="0..1"];
-    R_calls -> ai_log [label="N"];
-    R_calls [style="dashed,solid"];
+    /* 日志与审计 */
+    sys_user -> R_operates [label="1"];   R_operates -> sys_log [label="N"];
+    sys_user -> R_calls [label="1"];      R_calls -> ai_log [label="N"];
 
     /* 图例 */
     subgraph cluster_legend {
         label="图例"; fontsize=10;
         style=solid; color=black; bgcolor="white";
         node [shape=plaintext, fontsize=8];
-        l1 [label="□ 实体    ◇ 关系    ○ 属性    ── 强关联    ╌╌ 弱关联    1/N 基数    {PK} 主键"];
+        l1 [label="□ 实体    ◇ 关系    ○ 属性    ── 关联    1/N 基数    {PK} 主键"];
     }
 }

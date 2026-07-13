@@ -1,58 +1,59 @@
 @startuml 教师用例图
-' ============================================================
-' 用例图 — 教师角色
-' ============================================================
-skinparam backgroundColor #FEFEFE
+skinparam backgroundColor #FFFFFF
 skinparam defaultFontSize 12
 skinparam actorStyle awesome
 skinparam usecase {
-    BackgroundColor #E8F5E9
-    BorderColor #2E7D32
+    BackgroundColor #FFFFFF
+    BorderColor #333333
     FontSize 12
 }
 skinparam rectangle {
     BorderColor #333333
     FontSize 14
     FontStyle bold
-    BackgroundColor #FAFAFA
+    BackgroundColor #FFFFFF
 }
 
 left to right direction
 
-actor "教师" as Teacher
+actor "教师" as T
 
 rectangle "KG 智能导学系统 — 教师端" {
 
-    usecase "登录" as UC_Login
+    usecase "登录" as UC1
 
-    usecase "知识点管理" as UC_NodeMgr
-    usecase "题库管理" as UC_QuestionMgr
-    usecase "测评管理" as UC_ExamMgr
-    usecase "学习资源管理" as UC_ResourceMgr
-    usecase "跨学科主题" as UC_CrossTheme
-    usecase "学情分析" as UC_Analytics
+    usecase "课程管理" as UC2
+    usecase "章节管理" as UC3
+    usecase "知识点管理" as UC4
+    usecase "题库管理" as UC5
+    usecase "测评管理" as UC6
+    usecase "学习资源管理" as UC7
+    usecase "跨学科主题" as UC8
+    usecase "学情分析" as UC9
 
-    usecase "配置前置依赖" as UC_EdgeConfig
-    usecase "组卷选题" as UC_SelectQ
-    usecase "查看成绩/AI报告" as UC_ViewReport
-    usecase "上传视频/资料" as UC_UploadRes
-    usecase "关联多学科知识点" as UC_LinkNode
-    usecase "导出学情报表" as UC_Export
+    usecase "配置前置依赖" as UC10
+    usecase "组卷选题" as UC11
+    usecase "查看成绩/AI报告" as UC12
+    usecase "上传视频/资料" as UC13
+    usecase "关联多学科知识点" as UC14
+    usecase "导出学情报表" as UC15
 
-    UC_NodeMgr ..> UC_EdgeConfig : <<extend>>
-    UC_ExamMgr ..> UC_SelectQ : <<extend>>
-    UC_ExamMgr ..> UC_ViewReport : <<extend>>
-    UC_ResourceMgr ..> UC_UploadRes : <<extend>>
-    UC_CrossTheme ..> UC_LinkNode : <<extend>>
-    UC_Analytics ..> UC_Export : <<extend>>
+    UC4 ..> UC10 : <<extend>>
+    UC6 ..> UC11 : <<extend>>
+    UC6 ..> UC12 : <<extend>>
+    UC7 ..> UC13 : <<extend>>
+    UC8 ..> UC14 : <<extend>>
+    UC9 ..> UC15 : <<extend>>
 }
 
-Teacher --> UC_Login
-Teacher --> UC_NodeMgr
-Teacher --> UC_QuestionMgr
-Teacher --> UC_ExamMgr
-Teacher --> UC_ResourceMgr
-Teacher --> UC_CrossTheme
-Teacher --> UC_Analytics
+T --> UC1
+T --> UC2
+T --> UC3
+T --> UC4
+T --> UC5
+T --> UC6
+T --> UC7
+T --> UC8
+T --> UC9
 
 @enduml

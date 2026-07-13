@@ -10,9 +10,6 @@
           <p>系统管理后台</p>
         </div>
       </div>
-      <div class="top-actions">
-        <ThemeToggle />
-      </div>
     </header>
 
     <div class="content">
@@ -72,8 +69,6 @@ import {
   Setting, User, Lock, School, Bell, Files, Monitor
 } from '@element-plus/icons-vue'
 import { getNoticeList, getUserList, getRoleList, getOperLogs } from '../api/admin'
-import ThemeToggle from '../components/ThemeToggle.vue'
-
 const router = useRouter()
 const greeting = computed(() => {
   const h = new Date().getHours()
@@ -127,7 +122,7 @@ onMounted(async () => {
     getOperLogs()
   ])
 
-  // 公告列表（可正常显示）
+  // 公告列表
   if (noticeRes.status === 'fulfilled' && noticeRes.value) {
     const list = extractArray(noticeRes.value)
     notices.value = list
@@ -157,7 +152,7 @@ onMounted(async () => {
 <style scoped>
 .admin-home { min-height: 100vh; background: var(--bg-root); }
 
-/* ── 顶栏 ── */
+/* 顶栏 */
 .top-bar {
   display: flex; justify-content: space-between; align-items: center;
   padding: 16px 36px; background: var(--bg-surface);
@@ -175,7 +170,6 @@ onMounted(async () => {
 .user-info h2 { margin: 0; font-size: 18px; font-weight: 700; color: var(--text-primary); }
 .user-info p { margin: 2px 0 0; font-size: 13px; color: var(--text-secondary); }
 
-.top-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
 .logout-btn:hover {
   background: var(--accent-gold) !important;
   color: #fff !important;
@@ -184,7 +178,7 @@ onMounted(async () => {
 
 .content { padding: 24px 36px; display: flex; flex-direction: column; gap: 20px; }
 
-/* ── 统计卡 ── */
+/* 统计卡 */
 .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
 .stat-card {
   background: var(--bg-surface); border-radius: 14px; padding: 20px 24px;
@@ -208,7 +202,7 @@ onMounted(async () => {
 .section-card { border-radius: 14px; }
 .section-title { font-weight: 700; color: var(--text-primary); }
 
-/* ── 管理入口卡片网格 ── */
+/* 管理入口卡片网格 */
 .entry-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
 .entry-item {
   display: flex; flex-direction: column; gap: 8px;
@@ -229,7 +223,7 @@ onMounted(async () => {
 .entry-label { font-size: 15px; font-weight: 600; color: var(--text-primary); }
 .entry-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
 
-/* ── 公告 ── */
+/* 公告 */
 .notice-item {
   display: flex; align-items: center; justify-content: space-between;
   gap: 12px; padding: 10px 4px; cursor: pointer;

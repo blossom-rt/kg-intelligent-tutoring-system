@@ -1,6 +1,7 @@
 package com.cupk.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -19,6 +20,9 @@ public class KnowledgeNode {
 
     /** 所属课程ID */
     private Integer courseId;
+
+    /** 所属章节ID */
+    private Integer chapterId;
 
     /** 知识点名称 */
     private String name;
@@ -41,12 +45,17 @@ public class KnowledgeNode {
     /** 难度：1基础 2进阶 3困难 */
     private Integer difficulty;
 
-    /** 所属章节 */
-    private String chapter;
-
     /** 预计学习时长(分钟) */
     private Integer expectedMinutes;
 
     /** 创建时间 */
     private LocalDateTime createTime;
+
+    /** 课程名称（联表查询填充，不持久化） */
+    @TableField(exist = false)
+    private String courseName;
+
+    /** 章节名称（联表查询填充，不持久化） */
+    @TableField(exist = false)
+    private String chapterName;
 }

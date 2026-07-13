@@ -8,6 +8,8 @@ import com.cupk.mapper.SysUserMapper;
 import com.cupk.pojo.SysOperLog;
 import com.cupk.pojo.SysRole;
 import com.cupk.pojo.SysUser;
+
+import org.springframework.http.*;
 import com.cupk.service.LogService;
 import com.cupk.service.SysRoleService;
 import com.cupk.service.SysUserService;
@@ -38,7 +40,7 @@ public class AdminController {
         }
     }
 
-    // 角色管理 ========================
+    // 角色管理
 
     /**
      * 获取所有角色列表
@@ -83,7 +85,7 @@ public class AdminController {
         return Result.success("删除角色成功");
     }
 
-    // 用户管理 ========================
+    // 用户管理
 
     /**
      * 查询用户列表
@@ -144,7 +146,79 @@ public class AdminController {
         return Result.success(status == 1 ? "用户已启用" : "用户已禁用");
     }
 
-    // 日志管理 ========================
+    /**
+     * 导出用户（CSV）
+     */
+    @GetMapping("/users/export")
+    public ResponseEntity<byte[]> exportUsers() {
+        checkAdmin();
+        List<SysUser> users = sysUserService.listUsers(null, null);
+        StringBuilder csv = new StringBuilder("用户名,姓名,邮箱,角色,状态\n");
+        for (SysUser u : users) {
+            String roleName = u.getRole() != null ? u.getRole().getRoleName() : "";
+            String status = u.getStatus() != null && u.getStatus() == 1 ? "启用" : "禁用";
+            csv.append(String.format("%s,%s,%s,%s,%s\n",
+                    u.getUsername() != null ? u.getUsername() : "",
+                    u.getRealName() != null ? u.getRealName() : "",
+                    u.getEmail() != null ? u.getEmail() : "",
+                    roleName, status));
+        }
+        String csvStr = csv.toString();
+        byte[] bom = new byte[]{(byte)0xEF, (byte)0xBB, (byte)0xBF};
+        byte[] csvBytes = csvStr.getBytes(java.nio.charset.StandardCharsets.UTF_8);
+        byte[] bytes = new byte[bom.length + csvBytes.length];
+        System.arraycopy(bom, 0, bytes, 0, bom.length);
+        System.arraycopy(csvBytes, 0, bytes, bom.length, csvBytes.length);
+        org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+        headers.setContentType(org.springframework.http.MediaType.parseMediaType("text/csv; charset=UTF-8"));
+        headers.setContentDisposition(org.springframework.http.ContentDisposition.attachment().filename("users.csv").build());
+        return new ResponseEntity<>(bytes, headers, org.springframework.http.HttpStatus.OK);
+    }
+
+    /**
+     * 导入用户（CSV）
+     */
+    @OperLog(module = "用户管理", operation = "批量导入用户")
+    @PostMapping("/users/import")
+    public Result<?> importUsers(@RequestBody Map<String, Object> body) {
+        checkAdmin();
+        String csvData = (String) body.get("csvData");
+        if (csvData == null || csvData.isBlank()) return Result.error("数据为空");
+        String[] lines = csvData.split("\n");
+        int success = 0, fail = 0;
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i].trim();
+            if (line.isBlank() || line.startsWith("用户名")) continue;
+            String[] parts = line.split(",");
+            if (parts.length < 3) { fail++; continue; }
+            try {
+                SysUser user = new SysUser();
+                user.setUsername(parts[0].trim());
+                user.setRealName(parts.length > 1 ? parts[1].trim() : parts[0].trim());
+                user.setEmail(parts.length > 2 && !parts[2].isBlank() ? parts[2].trim() : null);
+                user.setPassword("e10adc3949ba59abbe56e057f20f883e"); // 默认 123456
+                // 角色：通过角色名查找
+                if (parts.length > 3 && !parts[3].isBlank()) {
+                    List<com.cupk.pojo.SysRole> roles = sysUserService.listRoles();
+                    for (com.cupk.pojo.SysRole r : roles) {
+                        if (r.getRoleName().equals(parts[3].trim())) {
+                            user.setRoleId(r.getId()); break;
+                        }
+                    }
+                }
+                if (user.getRoleId() == null) user.setRoleId(3);
+                user.setStatus(1);
+                sysUserService.createUser(user);
+                success++;
+            } catch (Exception e) { fail++; }
+        }
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("success", success);
+        result.put("fail", fail);
+        return Result.success(result);
+    }
+
+    // 日志管理
 
     /**
      * 查询 AI 调用日志

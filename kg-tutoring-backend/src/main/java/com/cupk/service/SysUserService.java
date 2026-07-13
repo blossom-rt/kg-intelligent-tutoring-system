@@ -1,6 +1,7 @@
 package com.cupk.service;
 
 import com.cupk.dto.*;
+import com.cupk.pojo.SysRole;
 import com.cupk.pojo.SysUser;
 
 import java.util.List;
@@ -34,7 +35,10 @@ public interface SysUserService {
     /** 修改个人信息 */
     void updateProfile(Integer userId, ProfileDTO dto);
 
-    // 管理员方法 =====
+    // 管理员方法
+
+    /** 查询角色列表 */
+    List<SysRole> listRoles();
 
     /** 查询用户列表 */
     List<SysUser> listUsers(String keyword, Integer roleId);

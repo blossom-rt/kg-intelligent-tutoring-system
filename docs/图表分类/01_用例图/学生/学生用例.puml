@@ -1,69 +1,66 @@
 @startuml 学生用例图
-' ============================================================
-' 用例图 — 学生角色
-' ============================================================
-skinparam backgroundColor #FEFEFE
+skinparam backgroundColor #FFFFFF
 skinparam defaultFontSize 12
 skinparam actorStyle awesome
 skinparam usecase {
-    BackgroundColor #E3F2FD
-    BorderColor #1565C0
+    BackgroundColor #FFFFFF
+    BorderColor #333333
     FontSize 12
 }
 skinparam rectangle {
     BorderColor #333333
     FontSize 14
     FontStyle bold
-    BackgroundColor #FAFAFA
+    BackgroundColor #FFFFFF
 }
 
 left to right direction
 
-actor "学生" as Student
-actor "邮箱服务" as Email <<外部>>
+actor "学生" as S
+actor "邮箱服务" as E <<外部>>
 actor "DeepSeek AI" as AI <<外部>>
 
 rectangle "KG 智能导学系统 — 学生端" {
 
-    usecase "登录 / 注册" as UC_Auth
-    usecase "浏览3D知识图谱" as UC_BrowseKG
-    usecase "生成学习路径" as UC_GenPath
-    usecase "刷题练习" as UC_Practice
-    usecase "浏览学习资源" as UC_Resource
-    usecase "AI 答疑" as UC_AIQA
-    usecase "AI 划重点" as UC_AIHigh
-    usecase "收藏知识点" as UC_Favorite
-    usecase "参加测评" as UC_Exam
-    usecase "查看错题本" as UC_WrongBook
-    usecase "查看学情报告" as UC_Report
+    usecase "登录 / 注册" as UC1
+    usecase "浏览3D知识图谱" as UC2
+    usecase "生成学习路径" as UC3
+    usecase "刷题练习" as UC4
+    usecase "浏览学习资源" as UC5
+    usecase "AI 答疑" as UC6
+    usecase "AI 划重点" as UC7
+    usecase "收藏知识点" as UC8
+    usecase "参加测评" as UC9
+    usecase "查看错题本" as UC10
+    usecase "查看学情报告" as UC11
 
-    usecase "发送验证码" as UC_SendCode
-    usecase "拓扑排序" as UC_TopoSort
-    usecase "AI 诊断分析" as UC_AIDiag
-    usecase "撒花庆祝" as UC_Confetti
+    usecase "发送验证码" as UC12
+    usecase "拓扑排序" as UC13
+    usecase "AI 诊断分析" as UC14
+    usecase "撒花庆祝" as UC15
 
-    UC_Auth ..> UC_SendCode : <<extend>>
-    UC_GenPath ..> UC_TopoSort : <<include>>
-    UC_Exam ..> UC_AIDiag : <<include>>
-    UC_Practice ..> UC_Confetti : <<extend>>
-    UC_GenPath ..> UC_Confetti : <<extend>>
+    UC1 ..> UC12 : <<extend>>
+    UC3 ..> UC13 : <<include>>
+    UC9 ..> UC14 : <<include>>
+    UC4 ..> UC15 : <<extend>>
+    UC3 ..> UC15 : <<extend>>
 }
 
-Student --> UC_Auth
-Student --> UC_BrowseKG
-Student --> UC_GenPath
-Student --> UC_Practice
-Student --> UC_Resource
-Student --> UC_AIQA
-Student --> UC_AIHigh
-Student --> UC_Favorite
-Student --> UC_Exam
-Student --> UC_WrongBook
-Student --> UC_Report
+S --> UC1
+S --> UC2
+S --> UC3
+S --> UC4
+S --> UC5
+S --> UC6
+S --> UC7
+S --> UC8
+S --> UC9
+S --> UC10
+S --> UC11
 
-Email --> UC_SendCode
-AI --> UC_AIDiag
-AI --> UC_AIQA
-AI --> UC_AIHigh
+E --> UC12
+AI --> UC14
+AI --> UC6
+AI --> UC7
 
 @enduml

@@ -3,9 +3,9 @@ package com.cupk.controller;
 import com.cupk.common.Result;
 import com.cupk.common.UserContext;
 import com.cupk.mapper.UserFavoriteMapper;
-import com.cupk.mapper.KnowledgeNodeMapper;
 import com.cupk.pojo.UserFavorite;
 import com.cupk.pojo.KnowledgeNode;
+import com.cupk.service.KnowledgeNodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class StudentFavoriteController {
 
     private final UserFavoriteMapper userFavoriteMapper;
-    private final KnowledgeNodeMapper knowledgeNodeMapper;
+    private final KnowledgeNodeService knowledgeNodeService;
 
     /** 获取当前用户的所有收藏（含知识点名称） */
     @GetMapping
@@ -36,9 +36,7 @@ public class StudentFavoriteController {
         Set<Integer> nodeIds = list.stream().map(UserFavorite::getNodeId).collect(Collectors.toSet());
         Map<Integer, KnowledgeNode> nodeMap = new HashMap<>();
         if (!nodeIds.isEmpty()) {
-            List<KnowledgeNode> nodes = knowledgeNodeMapper.selectList(
-                    new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<KnowledgeNode>()
-                            .in(KnowledgeNode::getId, nodeIds));
+            List<KnowledgeNode> nodes = knowledgeNodeService.listByIds(new ArrayList<>(nodeIds));
             nodeMap = nodes.stream().collect(Collectors.toMap(KnowledgeNode::getId, n -> n));
         }
         final Map<Integer, KnowledgeNode> finalNodeMap = nodeMap;
@@ -51,7 +49,7 @@ public class StudentFavoriteController {
             KnowledgeNode node = finalNodeMap.get(fav.getNodeId());
             item.put("nodeName", node != null ? node.getName() : "未知");
             item.put("difficulty", node != null ? node.getDifficulty() : null);
-            item.put("chapter", node != null ? node.getChapter() : null);
+            item.put("chapterName", node != null ? node.getChapterName() : null);
             return item;
         }).collect(Collectors.toList());
 
@@ -66,7 +64,6 @@ public class StudentFavoriteController {
 
         Integer userId = UserContext.getUserId();
 
-        // 查重
         Long exist = userFavoriteMapper.selectCount(
                 new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<UserFavorite>()
                         .eq(UserFavorite::getUserId, userId)

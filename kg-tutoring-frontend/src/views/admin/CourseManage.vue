@@ -9,7 +9,8 @@
       <el-table :data="paginatedCourseList" v-loading="loading" border stripe>
         <el-table-column prop="courseName" label="课程名称" min-width="180" />
         <el-table-column prop="subject" label="所属学科" min-width="140" />
-        <el-table-column prop="teacherId" label="教师ID" min-width="120" />
+        <el-table-column prop="teacherId" label="教师ID" width="80" align="center" />
+        <el-table-column prop="teacherName" label="负责教师" min-width="120" />
         <el-table-column label="状态" min-width="80">
           <template #default>
             <el-tag type="success" size="small">启用</el-tag>
@@ -47,7 +48,7 @@
         <el-form-item label="所属学科" prop="subject">
           <el-input v-model="form.subject" placeholder="如：数学、物理、信息技术" />
         </el-form-item>
-<el-form-item label="授课教师" prop="teacherId">
+        <el-form-item label="授课教师" prop="teacherId">
           <el-input v-model="form.teacherId" placeholder="请输入教师ID" />
         </el-form-item>
         <el-form-item label="课程描述" prop="description">
