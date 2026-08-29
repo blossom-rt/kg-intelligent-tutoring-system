@@ -21,7 +21,10 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 数据分析服务实现（教师/学生统计）
@@ -42,62 +45,121 @@ public class AnalysisServiceImpl implements AnalysisService {
     public Map<String, Object> classAnalysis(Integer courseId) {
         Map<String, Object> result = new LinkedHashMap<>();
 
-        // 课程相关知识点
-        Long totalNodes = knowledgeNodeMapper.selectCount(
+        // 课程相关知识点（先查节点，学习记录需按节点 ID 集合过滤）
+        List<KnowledgeNode> nodes = knowledgeNodeMapper.selectList(
                 new LambdaQueryWrapper<KnowledgeNode>().eq(KnowledgeNode::getCourseId, courseId));
+        int totalNodes = nodes.size();
         result.put("totalNodes", totalNodes);
 
-        // 该课程下所有学习记录
-        List<StudyRecord> allRecords = studyRecordMapper.selectList(
-                new LambdaQueryWrapper<StudyRecord>()
-                        .inSql(StudyRecord::getNodeId,
-                                "SELECT id FROM knowledge_node WHERE course_id = " + courseId));
+        // 该课程下所有学习记录（参数化 in 查询；无节点时直接短路，避免空 in 集合）
+        List<Integer> nodeIds = nodes.stream().map(KnowledgeNode::getId).toList();
+        List<StudyRecord> allRecords = nodeIds.isEmpty() ? List.of()
+                : studyRecordMapper.selectList(
+                        new LambdaQueryWrapper<StudyRecord>().in(StudyRecord::getNodeId, nodeIds));
         result.put("totalRecords", allRecords.size());
 
-        // 去重学生数 + 平均统计
-        Set<Integer> studentIds = new HashSet<>();
-        double sumMastery = 0, sumCorrect = 0;
+        // 单遍建立 节点→记录、学生→记录 两个索引，供下方各统计块复用
+        Map<Integer, List<StudyRecord>> recordsByNode = new HashMap<>();
+        Map<Integer, List<StudyRecord>> recordsByUser = new HashMap<>();
         for (StudyRecord r : allRecords) {
-            studentIds.add(r.getUserId());
-            if (r.getMasteryLevel() != null) sumMastery += r.getMasteryLevel();
-            if (r.getCorrectRate() != null) sumCorrect += r.getCorrectRate().doubleValue();
+            recordsByNode.computeIfAbsent(r.getNodeId(), k -> new ArrayList<>()).add(r);
+            recordsByUser.computeIfAbsent(r.getUserId(), k -> new ArrayList<>()).add(r);
         }
+        Set<Integer> studentIds = new TreeSet<>(recordsByUser.keySet());
         long totalStudents = studentIds.size();
-        int masteryAvg = totalStudents > 0 ? (int) Math.round(sumMastery / allRecords.stream().filter(r -> r.getMasteryLevel() != null).count()) : 0;
-        int correctAvg = totalStudents > 0 ? (int) Math.round(sumCorrect / allRecords.stream().filter(r -> r.getCorrectRate() != null).count()) : 0;
+
+        // 每个学生的已掌握节点数（学生明细与掌握度分布共用）
+        Map<Integer, Long> masteredCountByUser = new HashMap<>();
+        for (Integer uid : studentIds) {
+            masteredCountByUser.put(uid, recordsByUser.get(uid).stream()
+                    .filter(r -> r.getMasteryLevel() != null && r.getMasteryLevel() >= 2)
+                    .count());
+        }
+
+        // 平均掌握度：每学生"已掌握节点占比"的平均（百分比口径，与掌握度分布分档一致）
+        int masteryAvg = 0;
+        if (totalNodes > 0 && totalStudents > 0) {
+            double sumPct = 0;
+            for (Integer uid : studentIds) {
+                sumPct += masteredCountByUser.get(uid) * 100.0 / totalNodes;
+            }
+            masteryAvg = (int) Math.round(sumPct / totalStudents);
+        }
+        int correctAvg = (int) Math.round(avgCorrectRate(allRecords, 0));
         result.put("totalStudents", totalStudents);
         result.put("avgMastery", masteryAvg);
         result.put("avgCorrectRate", correctAvg);
         result.put("activeStudents", totalStudents);
 
+        // 学生姓名批量查询
+        Map<Integer, SysUser> usersById = studentIds.isEmpty() ? Map.of()
+                : sysUserMapper.selectBatchIds(studentIds).stream()
+                        .collect(Collectors.toMap(SysUser::getId, u -> u));
+
         // 学生明细列表
+        result.put("studentList", buildStudentStats(studentIds, recordsByUser, masteredCountByUser, usersById));
+
+        // 薄弱知识点 TOP5
+        result.put("weakNodes", buildWeakNodes(nodes, recordsByNode));
+
+        // 掌握度分布（用于饼图）
+        result.put("masteryDistribution", buildMasteryDistribution(studentIds, masteredCountByUser, totalNodes));
+
+        // 知识点平均正确率（用于柱状图）
+        result.put("nodeCorrectRates", buildNodeCorrectRates(nodes, recordsByNode));
+
+        // 学习趋势（最近7天每日学习人数）
+        result.put("studyTrend", buildStudyTrend(allRecords));
+
+        // 薄弱知识点排行（按正确率升序）
+        result.put("weakRank", buildWeakRank(nodes, recordsByNode));
+
+        // 章节掌握度（按章节分组的平均正确率）
+        List<Chapter> chapters = chapterMapper.selectList(
+                new LambdaQueryWrapper<Chapter>().eq(Chapter::getCourseId, courseId).orderByAsc(Chapter::getSort));
+        result.put("chapterMastery", buildChapterMastery(chapters, nodes, recordsByNode));
+
+        return result;
+    }
+
+    /**
+     * 记录列表中非空 correctRate 的平均值，无有效记录时返回 defaultIfEmpty
+     */
+    private double avgCorrectRate(List<StudyRecord> records, double defaultIfEmpty) {
+        return records.stream()
+                .filter(r -> r.getCorrectRate() != null)
+                .mapToDouble(r -> r.getCorrectRate().doubleValue())
+                .average()
+                .orElse(defaultIfEmpty);
+    }
+
+    private List<Map<String, Object>> buildStudentStats(Set<Integer> studentIds,
+                                                        Map<Integer, List<StudyRecord>> recordsByUser,
+                                                        Map<Integer, Long> masteredCountByUser,
+                                                        Map<Integer, SysUser> usersById) {
         List<Map<String, Object>> studentList = new ArrayList<>();
         for (Integer uid : studentIds) {
-            SysUser user = sysUserMapper.selectById(uid);
+            List<StudyRecord> rs = recordsByUser.getOrDefault(uid, List.of());
+            SysUser user = usersById.get(uid);
             Map<String, Object> s = new LinkedHashMap<>();
             s.put("userId", uid);
             s.put("studentName", user != null ? user.getRealName() : "学生" + uid);
-            // 该学生在本课程下的统计
-            long masterC = allRecords.stream().filter(r -> r.getUserId().equals(uid) && r.getMasteryLevel() != null && r.getMasteryLevel() >= 2).count();
-            double cr = allRecords.stream().filter(r -> r.getUserId().equals(uid) && r.getCorrectRate() != null)
-                    .mapToDouble(r -> r.getCorrectRate().doubleValue()).average().orElse(0);
-            int min = allRecords.stream().filter(r -> r.getUserId().equals(uid) && r.getStudyMinutes() != null)
-                    .mapToInt(StudyRecord::getStudyMinutes).sum();
-            s.put("masteryLevel", (int) masterC);
-            s.put("correctRate", (int) Math.round(cr));
-            s.put("studyMinutes", min);
+            s.put("masteryLevel", masteredCountByUser.get(uid).intValue());
+            s.put("correctRate", (int) Math.round(avgCorrectRate(rs, 0)));
+            s.put("studyMinutes", rs.stream()
+                    .filter(r -> r.getStudyMinutes() != null)
+                    .mapToInt(StudyRecord::getStudyMinutes).sum());
             studentList.add(s);
         }
-        result.put("studentList", studentList);
+        return studentList;
+    }
 
-        // 薄弱知识点 TOP5
+    private List<Map<String, Object>> buildWeakNodes(List<KnowledgeNode> nodes,
+                                                     Map<Integer, List<StudyRecord>> recordsByNode) {
         List<Map<String, Object>> weakNodes = new ArrayList<>();
-        List<KnowledgeNode> nodes = knowledgeNodeMapper.selectList(
-                new LambdaQueryWrapper<KnowledgeNode>().eq(KnowledgeNode::getCourseId, courseId));
         for (KnowledgeNode node : nodes) {
-            double nodeAvg = allRecords.stream()
-                    .filter(r -> r.getNodeId().equals(node.getId()) && r.getCorrectRate() != null)
-                    .mapToDouble(r -> r.getCorrectRate().doubleValue()).average().orElse(100);
+            // 无有效记录的节点视为 100 分，不进入薄弱列表
+            double nodeAvg = avgCorrectRate(recordsByNode.getOrDefault(node.getId(), List.of()), 100);
             if (nodeAvg < 70) {
                 Map<String, Object> wn = new LinkedHashMap<>();
                 wn.put("nodeName", node.getName());
@@ -106,15 +168,15 @@ public class AnalysisServiceImpl implements AnalysisService {
             }
         }
         weakNodes.sort((a, b) -> Integer.compare((int) a.get("masteryRate"), (int) b.get("masteryRate")));
-        result.put("weakNodes", weakNodes.size() > 5 ? weakNodes.subList(0, 5) : weakNodes);
+        return weakNodes.size() > 5 ? new ArrayList<>(weakNodes.subList(0, 5)) : weakNodes;
+    }
 
-        // 掌握度分布（用于饼图）
+    private List<Map<String, Object>> buildMasteryDistribution(Set<Integer> studentIds,
+                                                               Map<Integer, Long> masteredCountByUser,
+                                                               int totalNodes) {
         int poor = 0, fair = 0, good = 0, excellent = 0;
         for (Integer uid : studentIds) {
-            long masteredCount = allRecords.stream()
-                    .filter(r -> r.getUserId().equals(uid) && r.getMasteryLevel() != null && r.getMasteryLevel() >= 2)
-                    .count();
-            double pct = totalNodes > 0 ? (masteredCount * 100.0 / totalNodes) : 0;
+            double pct = totalNodes > 0 ? (masteredCountByUser.get(uid) * 100.0 / totalNodes) : 0;
             if (pct < 30) poor++;
             else if (pct < 60) fair++;
             else if (pct < 80) good++;
@@ -125,87 +187,82 @@ public class AnalysisServiceImpl implements AnalysisService {
         Map<String, Object> d2 = new LinkedHashMap<>(); d2.put("name", "一般（30%-60%）"); d2.put("value", fair); masteryDistribution.add(d2);
         Map<String, Object> d3 = new LinkedHashMap<>(); d3.put("name", "良好（60%-80%）"); d3.put("value", good); masteryDistribution.add(d3);
         Map<String, Object> d4 = new LinkedHashMap<>(); d4.put("name", "优秀（>=80%）"); d4.put("value", excellent); masteryDistribution.add(d4);
-        result.put("masteryDistribution", masteryDistribution);
+        return masteryDistribution;
+    }
 
-        // 知识点平均正确率（用于柱状图）
+    private List<Map<String, Object>> buildNodeCorrectRates(List<KnowledgeNode> nodes,
+                                                            Map<Integer, List<StudyRecord>> recordsByNode) {
         List<Map<String, Object>> nodeCorrectRates = new ArrayList<>();
         for (KnowledgeNode node : nodes) {
-            double nodeAvg = allRecords.stream()
-                    .filter(r -> r.getNodeId().equals(node.getId()) && r.getCorrectRate() != null)
-                    .mapToDouble(r -> r.getCorrectRate().doubleValue())
-                    .average()
-                    .orElse(0);
+            // 无有效记录的节点正确率记 0
+            double nodeAvg = avgCorrectRate(recordsByNode.getOrDefault(node.getId(), List.of()), 0);
             Map<String, Object> nc = new LinkedHashMap<>();
             nc.put("nodeName", node.getName());
             nc.put("correctRate", (int) Math.round(nodeAvg));
             nodeCorrectRates.add(nc);
         }
-        // 按正确率排序
         nodeCorrectRates.sort((a, b) -> Integer.compare((int) b.get("correctRate"), (int) a.get("correctRate")));
-        result.put("nodeCorrectRates", nodeCorrectRates);
+        return nodeCorrectRates;
+    }
 
-        // 学习趋势（最近7天每日学习人数）
+    private List<Map<String, Object>> buildStudyTrend(List<StudyRecord> allRecords) {
+        Map<LocalDate, Long> countsByDay = new HashMap<>();
+        for (StudyRecord r : allRecords) {
+            LocalDateTime updateTime = r.getUpdateTime();
+            if (updateTime != null) {
+                countsByDay.merge(updateTime.toLocalDate(), 1L, Long::sum);
+            }
+        }
         List<Map<String, Object>> studyTrend = new ArrayList<>();
+        LocalDate today = LocalDate.now();
         for (int i = 6; i >= 0; i--) {
-            java.time.LocalDate day = java.time.LocalDate.now().minusDays(i);
-            java.time.LocalDateTime dayStart = day.atStartOfDay();
-            java.time.LocalDateTime dayEnd = day.atTime(23, 59, 59);
-            long count = allRecords.stream()
-                    .filter(r -> r.getUpdateTime() != null
-                            && !r.getUpdateTime().isBefore(dayStart)
-                            && !r.getUpdateTime().isAfter(dayEnd))
-                    .count();
+            LocalDate day = today.minusDays(i);
             Map<String, Object> d = new LinkedHashMap<>();
             d.put("date", day.toString());
-            d.put("studyCount", count);
+            d.put("studyCount", countsByDay.getOrDefault(day, 0L));
             studyTrend.add(d);
         }
-        result.put("studyTrend", studyTrend);
+        return studyTrend;
+    }
 
-        // 薄弱知识点排行（按正确率升序）
+    private List<Map<String, Object>> buildWeakRank(List<KnowledgeNode> nodes,
+                                                    Map<Integer, List<StudyRecord>> recordsByNode) {
         List<Map<String, Object>> weakRank = new ArrayList<>();
         for (KnowledgeNode node : nodes) {
-            double nodeAvg = allRecords.stream()
-                    .filter(r -> r.getNodeId().equals(node.getId()) && r.getCorrectRate() != null)
-                    .mapToDouble(r -> r.getCorrectRate().doubleValue())
-                    .average()
-                    .orElse(100);
+            // 无有效记录的节点视为 100 分，排在末尾
+            double nodeAvg = avgCorrectRate(recordsByNode.getOrDefault(node.getId(), List.of()), 100);
             Map<String, Object> wr = new LinkedHashMap<>();
             wr.put("nodeName", node.getName());
             wr.put("correctRate", (int) Math.round(nodeAvg));
-            wr.put("studentCount", allRecords.stream().filter(r -> r.getNodeId().equals(node.getId())).count());
+            wr.put("studentCount", recordsByNode.getOrDefault(node.getId(), List.of()).size());
             weakRank.add(wr);
         }
         weakRank.sort((a, b) -> Integer.compare((int) a.get("correctRate"), (int) b.get("correctRate")));
-        result.put("weakRank", weakRank.size() > 10 ? weakRank.subList(0, 10) : weakRank);
+        return weakRank.size() > 10 ? new ArrayList<>(weakRank.subList(0, 10)) : weakRank;
+    }
 
-        // 章节掌握度（按章节分组的平均正确率）
-        List<Chapter> chapters = chapterMapper.selectList(
-                new LambdaQueryWrapper<Chapter>().eq(Chapter::getCourseId, courseId).orderByAsc(Chapter::getSort));
-        List<Map<String, Object>> chapterMastery = new ArrayList<>();
-        Map<Integer, List<StudyRecord>> chapterRecords = new HashMap<>();
+    private List<Map<String, Object>> buildChapterMastery(List<Chapter> chapters,
+                                                          List<KnowledgeNode> nodes,
+                                                          Map<Integer, List<StudyRecord>> recordsByNode) {
+        Map<Integer, List<StudyRecord>> recordsByChapter = new HashMap<>();
         for (KnowledgeNode node : nodes) {
             if (node.getChapterId() != null) {
-                chapterRecords.computeIfAbsent(node.getChapterId(), k -> new ArrayList<>());
-                allRecords.stream().filter(r -> r.getNodeId().equals(node.getId()))
-                        .forEach(r -> chapterRecords.get(node.getChapterId()).add(r));
+                recordsByChapter.computeIfAbsent(node.getChapterId(), k -> new ArrayList<>())
+                        .addAll(recordsByNode.getOrDefault(node.getId(), List.of()));
             }
         }
+        List<Map<String, Object>> chapterMastery = new ArrayList<>();
         for (Chapter ch : chapters) {
-            List<StudyRecord> crs = chapterRecords.getOrDefault(ch.getId(), Collections.emptyList());
-            double avg = crs.stream().filter(r -> r.getCorrectRate() != null)
-                    .mapToDouble(r -> r.getCorrectRate().doubleValue()).average().orElse(0);
+            List<StudyRecord> crs = recordsByChapter.getOrDefault(ch.getId(), Collections.emptyList());
             Map<String, Object> item = new LinkedHashMap<>();
             item.put("chapterId", ch.getId());
             item.put("chapterName", ch.getChapterName());
             item.put("chapterSort", ch.getSort());
-            item.put("avgCorrectRate", (int) Math.round(avg));
+            item.put("avgCorrectRate", (int) Math.round(avgCorrectRate(crs, 0)));
             item.put("studentCount", crs.stream().map(StudyRecord::getUserId).distinct().count());
             chapterMastery.add(item);
         }
-        result.put("chapterMastery", chapterMastery);
-
-        return result;
+        return chapterMastery;
     }
 
     @Override
