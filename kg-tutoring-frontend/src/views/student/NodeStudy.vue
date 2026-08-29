@@ -126,11 +126,10 @@
                   :class="msg.role === 'user' ? 'qa-user' : 'qa-assistant'"
                 >
                   <div class="qa-avatar">{{ msg.role === 'user' ? '我' : 'AI' }}</div>
-                  <div
-                    v-if="msg.role === 'assistant'"
-                    class="qa-bubble markdown-body"
-                    v-html="renderAiMarkdown(msg.content)"
-                  ></div>
+                  <div v-if="msg.role === 'assistant'" class="qa-bubble-wrap">
+                    <div v-if="msg.fallback" class="ai-fallback-tip">AI 服务繁忙，以下为系统提示</div>
+                    <div class="qa-bubble markdown-body" v-html="renderAiMarkdown(msg.content)"></div>
+                  </div>
                   <div v-else class="qa-bubble">{{ msg.content }}</div>
                 </div>
                 <div v-if="qaLoading" class="qa-message qa-assistant">
@@ -178,6 +177,7 @@
           <el-icon class="is-loading" :size="28" style="margin-bottom:16px"><Loading /></el-icon>
           <div>{{ loadingTip }}</div>
         </div>
+        <div v-if="aiSummaryFallback && aiSummaryContent" class="ai-fallback-tip">AI 服务繁忙，以下为系统提示</div>
         <div v-if="aiSummaryContent" class="ai-summary-body markdown-body" v-html="formattedAiSummary"></div>
       </div>
       <template #footer>
@@ -267,6 +267,7 @@ const aiSummaryVisible = ref(false)
 const aiSummaryLoading = ref(false)
 const aiSummaryTitle = ref('')
 const aiSummaryContent = ref('')
+const aiSummaryFallback = ref(false)
 const formattedAiSummary = computed(() => renderMarkdown(aiSummaryContent.value))
 const renderAiMarkdown = (content) => renderMarkdown(content)
 const loadingTip = ref('')
@@ -311,12 +312,14 @@ const showAiSummary = async () => {
   aiSummaryVisible.value = true
   aiSummaryTitle.value = 'AI 正在生成总结...'
   aiSummaryContent.value = ''
+  aiSummaryFallback.value = false
   startTipRotation(summaryTips)
   try {
     const res = await aiNodeSummary({ nodeId })
     if (res) {
       aiSummaryTitle.value = res.title || 'AI 学习总结'
       aiSummaryContent.value = res.summary || ''
+      aiSummaryFallback.value = !!res.aiFallback
     }
   } catch {
     aiSummaryContent.value = 'AI 总结生成失败，请稍后重试'
@@ -342,7 +345,11 @@ const sendQuestion = async () => {
   const nodeId = node.value?.nodeId || node.value?.id
   try {
     const res = await aiChat({ nodeId, question: text })
-    qaMessages.value.push({ role: 'assistant', content: res?.answer || '抱歉，AI 暂时无法回答，请稍后重试。' })
+    qaMessages.value.push({
+      role: 'assistant',
+      content: res?.answer || '抱歉，AI 暂时无法回答，请稍后重试。',
+      fallback: !!res?.aiFallback
+    })
   } catch {
     qaMessages.value.push({ role: 'assistant', content: '请求失败，请检查网络后重试。' })
   } finally {
@@ -750,6 +757,17 @@ watch(() => route.params.nodeId, () => {
 .qa-assistant .qa-bubble {
   background: var(--bg-hover);
   border-bottom-left-radius: 4px;
+}
+.qa-bubble-wrap {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.ai-fallback-tip {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
 }
 .markdown-body :deep(p) {
   margin: 0 0 8px;

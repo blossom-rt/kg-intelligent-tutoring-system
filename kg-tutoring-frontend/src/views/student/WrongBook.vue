@@ -96,6 +96,7 @@
     <!-- AI 讲解弹窗 -->
     <el-dialog v-model="aiDialogVisible" title="AI 错题讲解" width="600px" destroy-on-close>
       <div v-loading="aiLoading">
+        <div v-if="aiFallback && aiContent" class="ai-fallback-tip">AI 服务繁忙，以下为系统提示</div>
         <div v-if="aiContent" class="ai-content markdown-body" v-html="formattedAiContent"></div>
         <el-empty v-if="!aiLoading && !aiContent" description="暂无讲解内容" :image-size="60" />
       </div>
@@ -134,6 +135,7 @@ const paginatedWrongList = computed(() => {
 const aiDialogVisible = ref(false)
 const aiLoading = ref(false)
 const aiContent = ref('')
+const aiFallback = ref(false)
 
 // localStorage 记录已复习的错题: { questionId: timestamp }
 const getReviewed = () => {
@@ -177,9 +179,11 @@ const handleAiExplain = async (row) => {
   aiDialogVisible.value = true
   aiLoading.value = true
   aiContent.value = ''
+  aiFallback.value = false
   try {
     const res = await aiWrongExplain({ questionId: row.questionId || row.id })
     aiContent.value = res?.aiExplain || res?.explanation || res || '暂无讲解'
+    aiFallback.value = !!res?.aiFallback
   } catch {
     ElMessage.error('AI讲解请求失败')
   } finally {
@@ -247,4 +251,7 @@ onMounted(fetchWrongList)
   font-size: 15px; color: var(--text-primary); line-height: 1.9; min-height: 120px;
 }
 .ai-content :deep(br) { display: block; content: ''; margin-bottom: 6px; }
+.ai-fallback-tip {
+  font-size: 12px; color: var(--text-muted); margin-bottom: 6px;
+}
 </style>
