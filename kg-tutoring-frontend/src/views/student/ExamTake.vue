@@ -39,7 +39,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ArrowLeft, Loading } from '@element-plus/icons-vue'
@@ -113,6 +113,7 @@ const handleSubmit = async () => {
     ElMessage.success('测评提交成功')
     router.push('/student/exams')
   } catch {
+    ElMessage.error('测评提交失败，请重试')
   } finally {
     if (submitTipTimer) { clearInterval(submitTipTimer); submitTipTimer = null }
     submitLoading.value = false
@@ -120,6 +121,10 @@ const handleSubmit = async () => {
 }
 
 onMounted(loadPaper)
+
+onUnmounted(() => {
+  if (submitTipTimer) { clearInterval(submitTipTimer); submitTipTimer = null }
+})
 </script>
 
 <style scoped>
