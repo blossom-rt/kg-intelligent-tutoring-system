@@ -3,6 +3,7 @@ package com.cupk.ai;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -29,13 +30,34 @@ public class DeepSeekService {
     private final RestTemplate restTemplate;
 
     /**
-     * 调用 DeepSeek 生成内容
+     * AI 生成结果：content 为回复文本，fallback 标识该文本是否来自本地兜底模板
+     */
+    public record AiResult(String content, boolean fallback) {
+    }
+
+    /**
+     * 调用 DeepSeek 生成内容（仅返回文本，不区分真 AI 与兜底响应）
      *
      * @param systemPrompt 系统提示词
      * @param userPrompt   用户提示词
      * @return AI 生成的文本
      */
     public String generate(String systemPrompt, String userPrompt) {
+        return generateWithStatus(systemPrompt, userPrompt).content();
+    }
+
+    /**
+     * 调用 DeepSeek 生成内容，并携带是否为兜底响应的标识
+     *
+     * @param systemPrompt 系统提示词
+     * @param userPrompt   用户提示词
+     * @return AI 生成的文本及兜底标识
+     */
+    public AiResult generateWithStatus(String systemPrompt, String userPrompt) {
+        if (apiKey == null || apiKey.isBlank()) {
+            log.warn("DeepSeek API key 未配置，使用本地兜底响应");
+            return new AiResult(fallbackResponse(systemPrompt, userPrompt), true);
+        }
         try {
             Map<String, Object> requestBody = new LinkedHashMap<>();
             requestBody.put("model", model);
@@ -53,7 +75,9 @@ public class DeepSeekService {
 
             HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
             log.info("调用 DeepSeek API, model={}", model);
-            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(apiUrl, HttpMethod.POST, entity, (Class<Map<String, Object>>) (Class<?>) Map.class);
+            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
+                    apiUrl, HttpMethod.POST, entity, new ParameterizedTypeReference<Map<String, Object>>() {
+                    });
             log.info("DeepSeek API 响应状态: {}", response.getStatusCode());
 
             if (response.getBody() != null && response.getBody().containsKey("choices")) {
@@ -65,16 +89,16 @@ public class DeepSeekService {
                         if (msgObj instanceof Map) {
                             Map<String, Object> message = (Map<String, Object>) msgObj;
                             Object content = message.get("content");
-                            if (content instanceof String) return (String) content;
+                            if (content instanceof String) return new AiResult((String) content, false);
                         }
                     }
                 }
             }
             log.warn("DeepSeek API 返回异常: {}", response.getBody());
-            return fallbackResponse(systemPrompt, userPrompt);
+            return new AiResult(fallbackResponse(systemPrompt, userPrompt), true);
         } catch (Exception e) {
             log.error("DeepSeek API 调用失败", e);
-            return fallbackResponse(systemPrompt, userPrompt);
+            return new AiResult(fallbackResponse(systemPrompt, userPrompt), true);
         }
     }
 

@@ -45,14 +45,15 @@ public class StudentAiController {
                 + "内容描述：" + (node.getDescription() != null ? node.getDescription() : "无") + "\n"
                 + "建议时长：" + (node.getExpectedMinutes() != null ? node.getExpectedMinutes() : 30) + " 分钟";
 
-        String aiResult = deepSeekService.generate("你是一个专业的学科教师，擅长用通俗易懂的方式总结知识点，帮助学生快速理解和掌握。", userPrompt);
-        saveLog("node-summary", userPrompt, aiResult, start);
+        DeepSeekService.AiResult aiResult = deepSeekService.generateWithStatus("你是一个专业的学科教师，擅长用通俗易懂的方式总结知识点，帮助学生快速理解和掌握。", userPrompt);
+        saveLog("node-summary", userPrompt, aiResult.content(), start);
 
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("nodeId", node.getId());
         result.put("title", node.getName() + " - AI 学习总结");
-        result.put("summary", aiResult);
+        result.put("summary", aiResult.content());
         result.put("difficulty", node.getDifficulty());
+        if (aiResult.fallback()) result.put("aiFallback", true);
         return Result.success(result);
     }
 
@@ -70,15 +71,16 @@ public class StudentAiController {
                 + "题型：" + (question.getQuestionType() != null ? question.getQuestionType() : "未知") + "\n"
                 + "难度：" + (question.getDifficulty() != null ? question.getDifficulty() : "中等");
 
-        String aiResult = deepSeekService.generate("你是一个耐心的学科辅导老师，擅长帮助学生分析错题原因，用易于理解的方式讲解题目。", userPrompt);
-        saveLog("wrong-explain", userPrompt, aiResult, start);
+        DeepSeekService.AiResult aiResult = deepSeekService.generateWithStatus("你是一个耐心的学科辅导老师，擅长帮助学生分析错题原因，用易于理解的方式讲解题目。", userPrompt);
+        saveLog("wrong-explain", userPrompt, aiResult.content(), start);
 
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("title", "AI 错题讲解");
         result.put("questionContent", question.getContent());
         result.put("correctAnswer", question.getAnswer());
         result.put("analysis", question.getAnalysis());
-        result.put("aiExplain", aiResult);
+        result.put("aiExplain", aiResult.content());
+        if (aiResult.fallback()) result.put("aiFallback", true);
         return Result.success(result);
     }
 
@@ -101,11 +103,12 @@ public class StudentAiController {
         }
 
         String userPrompt = "请回答学生的以下问题，要求讲解清晰、通俗易懂。不要使用 LaTeX 语法（反斜杠加符号的形式），数学符号用 Unicode 或普通文本表示。" + nodeContext + "\n\n学生提问：" + question;
-        String aiResult = deepSeekService.generate("你是一名称职的学科辅导老师，耐心细致，善于用通俗易懂的方式解答学生疑问。", userPrompt);
-        saveLog("chat", userPrompt, aiResult, start);
+        DeepSeekService.AiResult aiResult = deepSeekService.generateWithStatus("你是一名称职的学科辅导老师，耐心细致，善于用通俗易懂的方式解答学生疑问。", userPrompt);
+        saveLog("chat", userPrompt, aiResult.content(), start);
 
         Map<String, Object> result = new LinkedHashMap<>();
-        result.put("answer", aiResult);
+        result.put("answer", aiResult.content());
+        if (aiResult.fallback()) result.put("aiFallback", true);
         return Result.success(result);
     }
 

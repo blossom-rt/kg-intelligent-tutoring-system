@@ -9,6 +9,7 @@ import com.cupk.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -28,7 +29,15 @@ public class QuestionServiceImpl implements QuestionService {
             wrapper.eq(Question::getNodeId, nodeId);
         }
         if (courseId != null) {
-            wrapper.inSql(Question::getNodeId, "SELECT id FROM knowledge_node WHERE course_id = " + courseId);
+            List<Integer> nodeIds = knowledgeNodeMapper.selectList(
+                            new LambdaQueryWrapper<KnowledgeNode>()
+                                    .select(KnowledgeNode::getId)
+                                    .eq(KnowledgeNode::getCourseId, courseId))
+                    .stream().map(KnowledgeNode::getId).toList();
+            if (nodeIds.isEmpty()) {
+                return Collections.emptyList();
+            }
+            wrapper.in(Question::getNodeId, nodeIds);
         }
         if (difficulty != null) {
             wrapper.eq(Question::getDifficulty, difficulty);
